@@ -8,13 +8,13 @@
 <body>
     <script type="text/javascript">
         "use strict";
-		var sendAjax = function (path, param, callback, async) {
+        var sendAjax = (path, param, callback, async) => {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', window.location.href + path, async);
             xhr.setRequestHeader("Content-Type", "application/json");
-            if (callback != null) {
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4) {
+            if (callback !== null) {
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4) {
                         callback(xhr.responseText);
                     }
                 };
@@ -23,6 +23,6 @@
         };
     </script>
 <p>Hello World, this page was served by node.js.</p>
-<button type="button" onclick="sendAjax('helloworld', '{}', (response)=>alert(response), true)">Send asynchronous request</button>
+<button type="button" onclick="sendAjax('helloworld', '{}', (response) => alert(response), true)">Send asynchronous request</button>
 </body>
 </html>

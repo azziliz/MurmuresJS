@@ -4,7 +4,7 @@ function log(txt) {
     console.log(''.concat((new Date()).toISOString(), ' - ', txt));
 }
 
-require('http').createServer(function (request, response) {
+require('http').createServer((request, response) => {
     if (request.url === '/favicon.ico') {
         response.writeHead(204); // No content
         response.end();
@@ -15,11 +15,11 @@ require('http').createServer(function (request, response) {
     }
     else {
         let buffer = "";
-        request.on('data', function (chunk) {
+        request.on('data', (chunk) => {
             buffer = buffer.concat(chunk.toString());
             if (buffer.length > 1e6) request.connection.destroy(); // Prevent buffer overflow attacks
         });
-        request.on('end', function () {
+        request.on('end', () => {
             if (request.url === '/helloworld') {
                 let postData = JSON.parse(buffer);
                 if (postData === null) {
@@ -28,7 +28,7 @@ require('http').createServer(function (request, response) {
                 }
                 else {
 					response.writeHead(200, { 'Content-Type': 'text/plain' });
-					setTimeout(function() {response.end("XHR successfully received and parsed by server. Hello client.");}, 2000);	// Simulate 2 seconds delay
+					setTimeout(() => {response.end("XHR successfully received and parsed by server. Hello client.");}, 2000);	// Simulate 2 seconds delay
                 }
             }
             else {
