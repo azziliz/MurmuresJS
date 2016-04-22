@@ -1,10 +1,8 @@
-"use strict";
+'use strict';
 
-function log(txt) {
-    console.log(''.concat((new Date()).toISOString(), ' - ', txt));
-}
+var murmures = require('./src/murmures');
 
-require('http').createServer((request, response) => {
+require('http').createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
         response.writeHead(204); // No content
         response.end();
@@ -15,11 +13,11 @@ require('http').createServer((request, response) => {
     }
     else {
         let buffer = "";
-        request.on('data', (chunk) => {
+        request.on('data', function (chunk) {
             buffer = buffer.concat(chunk.toString());
             if (buffer.length > 1e6) request.connection.destroy(); // Prevent buffer overflow attacks
         });
-        request.on('end', () => {
+        request.on('end', function () {
             if (request.url === '/helloworld') {
                 let postData = JSON.parse(buffer);
                 if (postData === null) {
@@ -27,8 +25,8 @@ require('http').createServer((request, response) => {
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
                 else {
-					response.writeHead(200, { 'Content-Type': 'text/plain' });
-					setTimeout(() => {response.end("XHR successfully received and parsed by server. Hello client.");}, 2000);	// Simulate 2 seconds delay
+                    response.writeHead(200, { 'Content-Type': 'text/plain' });
+                    setTimeout(function () {response.end('XHR successfully received and parsed by server. Hello client.');}, 2000);	// Simulate 2 seconds delay
                 }
             }
             else {
@@ -39,5 +37,7 @@ require('http').createServer((request, response) => {
     }
 }).listen(15881);
 
-log('Server running at http://127.0.0.1:15881/');
+murmures.log('Server running at http://127.0.0.1:15881/');
 
+let firstHero = new murmures.character();
+murmures.log('A hero has ' + firstHero.hitPoints + ' hit points by default.');
