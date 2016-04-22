@@ -7,6 +7,8 @@ let murmures = {
 };
 
 (function load() {
+    murmures.C = require('./constants');
+    murmures.level = require('./level');
     murmures.character = require('./character');
     // murmures.player = require('./player');
     // ...

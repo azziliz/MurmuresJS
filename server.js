@@ -9,7 +9,7 @@ require('http').createServer(function (request, response) {
     }
     else if (request.url === '/') {
         response.writeHead(200, { 'Content-Type': 'text/html' });
-        response.end(require('fs').readFileSync('client.html'));
+        response.end(require('fs').readFileSync('client.html').toString());
     }
     else {
         let buffer = "";
@@ -41,3 +41,5 @@ murmures.log('Server running at http://127.0.0.1:15881/');
 
 let firstHero = new murmures.character();
 murmures.log('A hero has ' + firstHero.hitPoints + ' hit points by default.');
+let levelX = new murmures.level();
+let level1 = JSON.parse(require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, ''));
