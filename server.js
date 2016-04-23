@@ -12,6 +12,7 @@ require('http').createServer(function (request, response) {
         response.end(require('fs').readFileSync('client.html').toString());
     }
     else if (request.url.startsWith('/static/')) {
+        //#region Static Pages
         try {
             let fileName = './src/'.concat(request.url.substr(8));
             let fileContent = require('fs').readFileSync(fileName).toString();
@@ -24,13 +25,14 @@ require('http').createServer(function (request, response) {
                 response.end(fileContent);
             }
             else {
-                response.writeHead(200, { 'Content-Type': 'text/plain' });
-                response.end(fileContent);
+                response.writeHead(400); // Bad Request
+                response.end();
             }
         } catch (e) {
             response.writeHead(404);
             response.end();
         }
+        //#endregion
     }
     else {
         let buffer = '';
@@ -47,7 +49,20 @@ require('http').createServer(function (request, response) {
                 }
                 else {
                     response.writeHead(200, { 'Content-Type': 'text/plain' });
-                    setTimeout(function () {response.end('XHR successfully received and parsed by server. Hello client.');}, 2000);	// Simulate 2 seconds delay
+                    setTimeout(function () { response.end('XHR successfully received and parsed by server. Hello client.'); }, 2000);	// Simulate 2 seconds delay
+                }
+            }
+            else if (request.url === '/getLevel') {
+                let postData = JSON.parse(buffer);
+                if ((postData === null)
+                    || (postData.id === null)) {
+                    response.writeHead(200, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify({ error: 'Wrong request.' }));
+                }
+                else {
+                    let level1 = JSON.parse(require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, ''));
+                    response.writeHead(200, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify(level1));
                 }
             }
             else {
@@ -63,4 +78,4 @@ murmures.log('Server running at http://127.0.0.1:15881/');
 let firstHero = new murmures.character();
 murmures.log('A hero has ' + firstHero.hitPoints + ' hit points by default.');
 let levelX = new murmures.level();
-let level1 = JSON.parse(require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, ''));
+

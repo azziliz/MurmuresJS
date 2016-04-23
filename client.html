@@ -10,7 +10,7 @@
     <script src="static/level.js"></script>
     <script type="text/javascript">
         'use strict';
-        alert(new character().hitPoints);
+
         var sendAjax = (path, param, callback, async) => {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', window.location.href + path, async);
@@ -24,8 +24,21 @@
             }
             xhr.send(param);
         };
+
+
+
+
+        var renderLevel = (level) => {
+
+            alert(level);
+            // TODO
+
+        };
+
+
+
     </script>
 <p>Hello World, this page was served by node.js.</p>
-<button type="button" onclick="sendAjax('helloworld', '{}', (response) => alert(response), true)">Send asynchronous request</button>
+<button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(response), true)">Get level 1</button>
 </body>
 </html>

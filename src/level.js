@@ -3,7 +3,7 @@
 (function (client) {
 
     var level = function () {
-        this.code = '';
+        this.id = '';
         this.layout = '';
         this.width = 0;
         this.height = 0;
