@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MurmuresJS</title>
+    <link rel="stylesheet" href="static/client.css" media="screen">
 </head>
 <body>
     <script src="static/character.js"></script>
@@ -11,7 +12,7 @@
     <script type="text/javascript">
         'use strict';
 
-        var sendAjax = (path, param, callback, async) => {
+        function sendAjax(path, param, callback, async) {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', window.location.href + path, async);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -23,22 +24,82 @@
                 };
             }
             xhr.send(param);
-        };
+        }
 
+        function renderLevel(level) {
+            let allCanvas = document.getElementsByTagName("canvas");
+            for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
+                allCanvas[canvasIter].width = 1401; // This is a hard reset of all canvas and is quite time consumming.
+                allCanvas[canvasIter].height = 841;
+                let context = allCanvas[canvasIter].getContext('2d');
+                context.translate(0.5, 0.5); // translation prevents anti-aliasing.
+            }
+            drawGrid(level);
+            drawTiles(level);
+        }
 
+        function drawGrid(level) {
+            let layer = document.getElementById('gridLayer');
+            let context = layer.getContext('2d');
+            context.clearRect(-0.5, -0.5, layer.width, layer.height);
+            for (let x = 0; x < level.width; x++) {
+                for (let y = 0; y < level.height; y++) {
+                    drawOneSquare(context, x, y, "#ccc", false); // light gray
+                }
+            }
+        }
 
+        function drawOneSquare(context, x, y, color, filled) {
+            context.beginPath();
+            if (filled || y === 0) {
+                context.moveTo(70 * x, 70 * y);
+                context.lineTo(70 * x + 70, 70 * y);
+            }
+            else {
+                context.moveTo(70 * x + 70, 70 * y);
+            }
+            context.lineTo(70 * x + 70, 70 * y + 70);
+            context.lineTo(70 * x, 70 * y + 70);
+            if (filled || x === 0) {
+                context.lineTo(70 * x, 70 * y);
+            }
+            context.strokeStyle = color;
+            context.stroke();
+            if (filled) {
+                context.closePath();
+                context.fillStyle = color;
+                context.fill();
+            }
+        }
 
-        var renderLevel = (level) => {
+        function drawTiles(level) {
+            let layer = document.getElementById('tilesLayer');
+            let context = layer.getContext('2d');
+            context.clearRect(-0.5, -0.5, layer.width, layer.height);
+            for (let x = 0; x < level.width; x++) {
+                for (let y = 0; y < level.height; y++) {
+                    drawOneTile(context, level, x, y, "#003");
+                }
+            }
+        }
 
-            alert(level);
-            // TODO
-
-        };
-
-
+        function drawOneTile(context, level, x, y, color) {
+            if ((x === 0) || (y === 0) || (x === level.width - 1) || (y === level.height - 1)) {
+                drawOneSquare(context, x, y, color, true);
+            }
+            else {
+                if (level.tiles[y][x] === 1) {
+                    drawOneSquare(context, x, y, color, true);
+                }
+            }
+        }
 
     </script>
-<p>Hello World, this page was served by node.js.</p>
-<button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(response), true)">Get level 1</button>
+    <p>Hello World, this page was served by node.js.</p>
+    <button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(JSON.parse(response)), true)">Get level</button>
+
+    <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
+    <canvas id="gridLayer" width="1400" height="840" style="z-index: 15"></canvas>
+
 </body>
 </html>

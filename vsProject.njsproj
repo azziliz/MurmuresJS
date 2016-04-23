@@ -26,6 +26,7 @@
     <Content Include="data\level1.json" />
     <Content Include="README.md" />
     <Compile Include="server.js" />
+    <Content Include="src\client.css" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
