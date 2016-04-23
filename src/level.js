@@ -1,12 +1,20 @@
 ﻿'use strict';
 
-let C = require('./constants');
+(function (client) {
 
-module.exports = function () {
-    this.code = '';
-    this.layout = C.SQUARE_TILES_LAYOUT;
-    this.width = 0;
-    this.height = 0;
-    this.tiles = {};
-    // ...
-};
+    var level = function () {
+        this.code = '';
+        this.layout = '';
+        this.width = 0;
+        this.height = 0;
+        this.tiles = {};
+        // ...
+    };
+
+    if (typeof module === "object" && module && typeof module.exports === "object") {
+        module.exports = level;
+    }
+    else {
+        client.level = level;
+    }
+})(this);

@@ -6,8 +6,11 @@
     <title>MurmuresJS</title>
 </head>
 <body>
+    <script src="static/character.js"></script>
+    <script src="static/level.js"></script>
     <script type="text/javascript">
         'use strict';
+        alert(new character().hitPoints);
         var sendAjax = (path, param, callback, async) => {
             let xhr = new XMLHttpRequest();
             xhr.open('POST', window.location.href + path, async);

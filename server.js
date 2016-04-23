@@ -11,8 +11,29 @@ require('http').createServer(function (request, response) {
         response.writeHead(200, { 'Content-Type': 'text/html' });
         response.end(require('fs').readFileSync('client.html').toString());
     }
+    else if (request.url.startsWith('/static/')) {
+        try {
+            let fileName = './src/'.concat(request.url.substr(8));
+            let fileContent = require('fs').readFileSync(fileName).toString();
+            if (fileName.endsWith('.js')) {
+                response.writeHead(200, { 'Content-Type': 'application/javascript' });
+                response.end(fileContent);
+            }
+            else if (fileName.endsWith('.css')) {
+                response.writeHead(200, { 'Content-Type': 'text/css' });
+                response.end(fileContent);
+            }
+            else {
+                response.writeHead(200, { 'Content-Type': 'text/plain' });
+                response.end(fileContent);
+            }
+        } catch (e) {
+            response.writeHead(404);
+            response.end();
+        }
+    }
     else {
-        let buffer = "";
+        let buffer = '';
         request.on('data', function (chunk) {
             buffer = buffer.concat(chunk.toString());
             if (buffer.length > 1e6) request.connection.destroy(); // Prevent buffer overflow attacks
