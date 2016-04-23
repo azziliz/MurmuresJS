@@ -89,13 +89,29 @@
             }
             else {
                 if (level.tiles[y][x] === 1) {
-                    drawOneSquare(context, x, y, color, true);
+                    context.beginPath();
+                    context.arc(70 * x + 35, 70 * y + 35, 35, 0, 2 * Math.PI);
+                    context.strokeStyle = color;
+                    context.stroke();
+                    context.fillStyle = color;
+                    context.fill();
+                    if (level.tiles[y + 1][x] === 1) {
+                        drawOneSquare(context, x, y + 0.5, color, true);
+                    }
+                    if (level.tiles[y - 1][x] === 1) {
+                        drawOneSquare(context, x, y - 0.5, color, true);
+                    }
+                    if (level.tiles[y][x + 1] === 1) {
+                        drawOneSquare(context, x + 0.5, y, color, true);
+                    }
+                    if (level.tiles[y][x - 1] === 1) {
+                        drawOneSquare(context, x - 0.5, y, color, true);
+                    }
                 }
             }
         }
 
     </script>
-    <p>Hello World, this page was served by node.js.</p>
     <button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(JSON.parse(response)), true)">Get level</button>
 
     <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
