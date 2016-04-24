@@ -44,24 +44,24 @@
             context.clearRect(-0.5, -0.5, layer.width, layer.height);
             for (let x = 0; x < level.width; x++) {
                 for (let y = 0; y < level.height; y++) {
-                    drawOneSquare(context, x, y, "#ccc", false); // light gray
+                    drawOneSquare(context, level, x, y, "#ccc", false); // light gray
                 }
             }
         }
 
-        function drawOneSquare(context, x, y, color, filled) {
+        function drawOneSquare(context, level, x, y, color, filled) {
             context.beginPath();
             if (filled || y === 0) {
-                context.moveTo(70 * x, 70 * y);
-                context.lineTo(70 * x + 70, 70 * y);
+                context.moveTo(level.tileSize * x, level.tileSize * y);
+                context.lineTo(level.tileSize * x + level.tileSize, level.tileSize * y);
             }
             else {
-                context.moveTo(70 * x + 70, 70 * y);
+                context.moveTo(level.tileSize * x + level.tileSize, level.tileSize * y);
             }
-            context.lineTo(70 * x + 70, 70 * y + 70);
-            context.lineTo(70 * x, 70 * y + 70);
+            context.lineTo(level.tileSize * x + level.tileSize, level.tileSize * y + level.tileSize);
+            context.lineTo(level.tileSize * x, level.tileSize * y + level.tileSize);
             if (filled || x === 0) {
-                context.lineTo(70 * x, 70 * y);
+                context.lineTo(level.tileSize * x, level.tileSize * y);
             }
             context.strokeStyle = color;
             context.stroke();
@@ -85,11 +85,11 @@
 
         function drawOneTile(context, level, x, y, color) {
             if ((x === 0) || (y === 0) || (x === level.width - 1) || (y === level.height - 1)) {
-                drawOneSquare(context, x, y, color, true);
+                drawOneSquare(context, level, x, y, color, true);
             }
             else {
                 if (level.tiles[y][x] === 1) {
-                    drawOneSquare(context, x, y, color, true);
+                    drawOneSquare(context, level, x, y, color, true);
                 }
             }
         }
