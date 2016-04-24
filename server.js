@@ -1,7 +1,7 @@
 'use strict';
 
 var murmures = require('./src/murmures');
-
+var playerConnected = null;
 require('http').createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
         response.writeHead(204); // No content
@@ -10,6 +10,8 @@ require('http').createServer(function (request, response) {
     else if (request.url === '/') {
         response.writeHead(200, { 'Content-Type': 'text/html' });
         response.end(require('fs').readFileSync('client.html').toString());
+        playerConnected = new murmures.player();
+        console.log(playerConnected);
     }
     else if (request.url.startsWith('/static/')) {
         //#region Static Pages
@@ -65,6 +67,19 @@ require('http').createServer(function (request, response) {
                     response.end(JSON.stringify(level1));
                 }
             }
+            else if(request.url === '/getInitPosition'){
+              let postData = JSON.parse(buffer);
+              if ((postData === null)
+                  || (postData.id === null)) {
+                  response.writeHead(200, { 'Content-Type': 'application/json' });
+                  response.end(JSON.stringify({ error: 'Wrong request.' }));
+              }
+              else {
+                  response.writeHead(200, { 'Content-Type': 'application/json' });
+                  response.end(JSON.stringify(level1));
+              }
+
+            }
             else {
                 response.writeHead(404);
                 response.end();
@@ -78,4 +93,3 @@ murmures.log('Server running at http://127.0.0.1:15881/');
 let firstHero = new murmures.character();
 murmures.log('A hero has ' + firstHero.hitPoints + ' hit points by default.');
 let levelX = new murmures.level();
-
