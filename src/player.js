@@ -5,7 +5,7 @@
     var player = function () {
         this.id = null;
         this.name = null;
-        this.character = [];
+        this.character = null;
     };
 
     if (typeof module === "object" && module && typeof module.exports === "object") {

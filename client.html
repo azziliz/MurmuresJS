@@ -38,6 +38,17 @@
             drawTiles(level);
         }
 
+        function renderPosition(pos){
+          let layer = document.getElementById('gridLayer');
+          let context = layer.getContext('2d');
+          let img = new Image();
+          img.onload = function () {
+              context.drawImage(img, 64, 64, pos.position.y*64, pos.position.y*64);
+          }
+          img.src = pos.img;
+          console.log(pos);
+        }
+
         function drawGrid(level) {
             let layer = document.getElementById('gridLayer');
             let context = layer.getContext('2d');
@@ -97,7 +108,7 @@
     </script>
     <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#cfc; z-index:-2"></div>
     <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:white; z-index:-1"></div>
-    <button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(JSON.parse(response)), true)">Get level</button>
+    <button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(JSON.parse(response)), true);sendAjax('getPosition', '{&quot;id&quot;:&quot;1&quot;}', (response) => renderPosition(JSON.parse(response)), true)">Get level</button>
 
     <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
     <canvas id="gridLayer" width="1400" height="840" style="z-index: 15"></canvas>
