@@ -43,7 +43,7 @@
           let context = layer.getContext('2d');
           let img = new Image();
           img.onload = function () {
-              context.drawImage(img, pos.position.x*64, pos.position.y*64, 64, 64);
+              context.drawImage(img, pos.position.x*32, pos.position.y*32, 32, 32);
           }
           img.src = pos.img;
         //   context.drawImage(img, 64, 64, pos.position.x*64, pos.position.y*64);
