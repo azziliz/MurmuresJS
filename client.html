@@ -26,7 +26,9 @@
             xhr.send(param);
         }
 
-        function renderLevel(level) {
+        function renderLevel(srcJson) {
+            let level1 = new level();
+            level1.fromJson(JSON.parse(srcJson));
             let allCanvas = document.getElementsByTagName("canvas");
             for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
                 allCanvas[canvasIter].width = 1401; // This is a hard reset of all canvas and is quite time consumming.
@@ -34,8 +36,8 @@
                 let context = allCanvas[canvasIter].getContext('2d');
                 context.translate(0.5, 0.5); // translation prevents anti-aliasing.
             }
-            drawGrid(level);
-            drawTiles(level);
+            drawGrid(level1);
+            drawTiles(level1);
         }
 
         function renderPosition(pos) {
@@ -106,7 +108,7 @@
         }
 
         function initLevel() {
-            sendAjax('getLevel', '{"id":"level1"}', (response) => renderLevel(JSON.parse(response)), true);
+            sendAjax('getLevel', '{"id":"level1"}', (response) => renderLevel(response), true);
             sendAjax('getPosition', '{"id":"1"}', (response) => renderPosition(JSON.parse(response)), true)
         }
     </script>

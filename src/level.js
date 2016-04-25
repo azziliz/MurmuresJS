@@ -18,7 +18,13 @@
     level.prototype.tileSize = 0;
     level.prototype.tiles = {};
 
-    level.prototype.fromJson = function (srcJson) {
-    }
+    level.prototype.fromJson = function (src) {
+        this.id = src.id;
+        this.layout = src.layout;
+        this.width = src.width;
+        this.height = src.height;
+        this.tileSize = src.tileSize;
+        this.tiles = src.tiles;
+    };
 
 })(this);
