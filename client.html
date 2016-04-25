@@ -106,8 +106,11 @@
         }
 
     </script>
-    <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#cfc; z-index:-2"></div>
-    <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:white; z-index:-1"></div>
+    <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#eee; z-index:-20"></div>
+    <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#dfd; z-index:-10"></div>
+    <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:#ddf; z-index:-9"></div>
+    <div id="iPhone4" style="position:absolute; top:0; left:0; width:960px; height:640px; background-color:#fdd; z-index:-8"></div>
+    <div id="galaxyS3Mini" style="position:absolute; top:0; left:0; width:800px; height:480px; background-color:#fff; z-index:-7"></div>
     <button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(JSON.parse(response)), true);sendAjax('getPosition', '{&quot;id&quot;:&quot;1&quot;}', (response) => renderPosition(JSON.parse(response)), true)">Get level</button>
 
     <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
