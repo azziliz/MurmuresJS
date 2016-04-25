@@ -18,14 +18,14 @@ require('http').createServer(function (request, response) {
         //#region Static Pages
         try {
             let fileName = './src/'.concat(request.url.substr(8));
-            let fileContent = require('fs').readFileSync(fileName).toString();
+            let fileContent = require('fs').readFileSync(fileName);
             if (fileName.endsWith('.js')) {
                 response.writeHead(200, { 'Content-Type': 'application/javascript' });
-                response.end(fileContent);
+                response.end(fileContent.toString());
             }
             else if (fileName.endsWith('.css')) {
                 response.writeHead(200, { 'Content-Type': 'text/css' });
-                response.end(fileContent);
+                response.end(fileContent.toString());
             }
             else if (fileName.endsWith('.png')) {
                 response.writeHead(200, { 'Content-Type': 'image/png' });
