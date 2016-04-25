@@ -38,15 +38,15 @@
             drawTiles(level);
         }
 
-        function renderPosition(pos){
-          let layer = document.getElementById('gridLayer');
-          let context = layer.getContext('2d');
-          let img = new Image();
-          img.onload = function () {
-              context.drawImage(img, pos.position.x*32, pos.position.y*32, 32, 32);
-          }
-          img.src = pos.img;
-        //   context.drawImage(img, 64, 64, pos.position.x*64, pos.position.y*64);
+        function renderPosition(pos) {
+            let layer = document.getElementById('gridLayer');
+            let context = layer.getContext('2d');
+            let img = new Image();
+            img.onload = function () {
+                context.drawImage(img, pos.position.x * 32, pos.position.y * 32, 32, 32);
+            }
+            img.src = pos.img;
+            //   context.drawImage(img, 64, 64, pos.position.x*64, pos.position.y*64);
         }
 
         function drawGrid(level) {
@@ -111,6 +111,31 @@
     <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:#ddf; z-index:-9"></div>
     <div id="iPhone4" style="position:absolute; top:0; left:0; width:960px; height:640px; background-color:#fdd; z-index:-8"></div>
     <div id="galaxyS3Mini" style="position:absolute; top:0; left:0; width:800px; height:480px; background-color:#fff; z-index:-7"></div>
+
+    <div id="targetResolution1" style="position:absolute; top:0; left:0; width:1136px; height:640px; z-index:-1">
+        <div id="p1" style="clear:right; float:right; width:240px; height:200px; border:1px solid #000; margin:2px">Rat</div>
+        <div id="p2" style="clear:right; float:right; width:240px; height:200px; border:1px solid #000; margin:2px">Chauve-souris</div>
+    </div>
+    <div id="targetResolution2" style="position:absolute; top:0; left:0; width:1136px; height:640px; z-index:-1">
+        <div id="p4" style="clear:left; float:left; width:240px; height:200px; border:1px solid #000; margin:2px">Rincevent</div>
+        <div id="p3" style="clear:left; float:left; width:240px; height:200px; border:1px solid #000; margin:2px; position:relative">
+            <div style="position:absolute; width:3px; left:2px; height:196px; top:2px; background-color:#888;"></div>
+            <div style="position:absolute; width:3px; left:2px; height:158px; top:40px; background-color:#d00;"></div>
+            <div style="position:absolute; width:64px; left:7px; height:64px; top:2px; background-color:#ccc;">
+                <img src="./static/perso.png">
+            </div>
+            <div style="position:absolute; width:150px; left:75px; height:64px; top:5px; font-size:20px; text-align: center;">Angharad</div>
+            <div style="position:absolute; width:150px; left:75px; height:64px; top:35px; font-size:14px; text-align: center;">12/26</div>
+            <div style="position:absolute; width:64px; left:7px; height:64px; top:68px; background-color:#ccf;"></div>
+            <div style="position:absolute; width:64px; left:7px; height:64px; top:134px; background-color:#ccf;"></div>
+            <div style="position:absolute; width:64px; left:88px; height:64px; top:68px; background-color:#ccf;"></div>
+            <div style="position:absolute; width:64px; left:88px; height:64px; top:134px; background-color:#ccf;"></div>
+            <div style="position:absolute; width:64px; left:169px; height:64px; top:68px; background-color:#ccf;"></div>
+            <div style="position:absolute; width:64px; left:169px; height:64px; top:134px; background-color:#ccf;"></div>
+        </div>
+        <div id="p5" style="clear:left; float:left; width:240px; height:200px; border:1px solid #000; margin:2px">Kerrigan</div>
+    </div>
+
     <button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(JSON.parse(response)), true);sendAjax('getPosition', '{&quot;id&quot;:&quot;1&quot;}', (response) => renderPosition(JSON.parse(response)), true)">Get level</button>
 
     <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
