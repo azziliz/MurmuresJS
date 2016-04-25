@@ -48,18 +48,7 @@ require('http').createServer(function (request, response) {
             if (buffer.length > 1e6) request.connection.destroy(); // Prevent buffer overflow attacks
         });
         request.on('end', function () {
-            if (request.url === '/helloworld') {
-                let postData = JSON.parse(buffer);
-                if (postData === null) {
-                    response.writeHead(200, { 'Content-Type': 'application/json' });
-                    response.end(JSON.stringify({ error: 'Wrong request.' }));
-                }
-                else {
-                    response.writeHead(200, { 'Content-Type': 'text/plain' });
-                    setTimeout(function () { response.end('XHR successfully received and parsed by server. Hello client.'); }, 2000);	// Simulate 2 seconds delay
-                }
-            }
-            else if (request.url === '/getLevel') {
+            if (request.url === '/getLevel') {
                 let postData = JSON.parse(buffer);
                 if ((postData === null)
                     || (postData.id === null)) {
@@ -67,24 +56,12 @@ require('http').createServer(function (request, response) {
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
                 else {
-                    let level1 = JSON.parse(require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, ''));
+                    let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
+                    let level1 = new murmures.level();
+                    level1.fromJson(JSON.parse(level1Txt));                    
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(level1));
                 }
-            }
-            else if(request.url === '/getPosition'){
-              let postData = JSON.parse(buffer);
-              if ((postData === null)
-                  || (postData.id === null)) {
-                  response.writeHead(200, { 'Content-Type': 'application/json' });
-                  response.end(JSON.stringify({ error: 'Wrong request.' }));
-              }
-              else {
-                  response.writeHead(200, { 'Content-Type': 'application/json' });
-                  let jsonReponse={'position':{'x':'1','y':'10'},'img':'./src/img/perso.png'};
-                  response.end(JSON.stringify(jsonReponse));
-              }
-
             }
             else {
                 response.writeHead(404);

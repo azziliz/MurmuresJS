@@ -27,8 +27,6 @@
         }
 
         function renderLevel(srcJson) {
-            let level1 = new level();
-            level1.fromJson(JSON.parse(srcJson));
             let allCanvas = document.getElementsByTagName("canvas");
             for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
                 allCanvas[canvasIter].width = 1401; // This is a hard reset of all canvas and is quite time consumming.
@@ -36,22 +34,26 @@
                 let context = allCanvas[canvasIter].getContext('2d');
                 context.translate(0.5, 0.5); // translation prevents anti-aliasing.
             }
+            let level1 = new level();
+            level1.fromJson(JSON.parse(srcJson));
             drawGrid(level1);
             drawTiles(level1);
+            drawCharacters(level1);
         }
 
-        function renderPosition(pos) {
-            let layer = document.getElementById('gridLayer');
+        function drawCharacters(level) {
+            /// <param name="level" type="level"/>
+            let layer = document.getElementById('tilesLayer');
             let context = layer.getContext('2d');
             let img = new Image();
             img.onload = function () {
-                context.drawImage(img, pos.position.x * 32, pos.position.y * 32, 32, 32);
+                context.drawImage(img, level.hero.position.x * level.tileSize, level.hero.position.y * level.tileSize, level.tileSize, level.tileSize);
             }
-            img.src = pos.img;
-            //   context.drawImage(img, 64, 64, pos.position.x*64, pos.position.y*64);
+            img.src = level.hero.img;
         }
 
         function drawGrid(level) {
+            /// <param name="level" type="level"/>
             let layer = document.getElementById('gridLayer');
             let context = layer.getContext('2d');
             context.clearRect(-0.5, -0.5, layer.width, layer.height);
@@ -63,6 +65,7 @@
         }
 
         function drawOneSquare(context, level, x, y, color, filled) {
+            /// <param name="level" type="level"/>
             context.beginPath();
             if (filled || y === 0) {
                 context.moveTo(level.tileSize * x, level.tileSize * y);
@@ -86,6 +89,7 @@
         }
 
         function drawTiles(level) {
+            /// <param name="level" type="level"/>
             let layer = document.getElementById('tilesLayer');
             let context = layer.getContext('2d');
             context.clearRect(-0.5, -0.5, layer.width, layer.height);
@@ -97,6 +101,7 @@
         }
 
         function drawOneTile(context, level, x, y, color) {
+            /// <param name="level" type="level"/>
             if ((x === 0) || (y === 0) || (x === level.width - 1) || (y === level.height - 1)) {
                 drawOneSquare(context, level, x, y, color, true);
             }
@@ -109,13 +114,12 @@
 
         function initLevel() {
             sendAjax('getLevel', '{"id":"level1"}', (response) => renderLevel(response), true);
-            sendAjax('getPosition', '{"id":"1"}', (response) => renderPosition(JSON.parse(response)), true)
         }
     </script>
-    <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#eee; z-index:-20"></div>
-    <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#dfd; z-index:-10"></div>
-    <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:#ddf; z-index:-9"></div>
-    <div id="iPhone4" style="position:absolute; top:0; left:0; width:960px; height:640px; background-color:#fdd; z-index:-8"></div>
+    <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#f8f8f8; z-index:-20"></div>
+    <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#f8fff8; z-index:-10"></div>
+    <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:#f8f8ff; z-index:-9"></div>
+    <div id="iPhone4" style="position:absolute; top:0; left:0; width:960px; height:640px; background-color:#fff8f8; z-index:-8"></div>
     <div id="galaxyS3Mini" style="position:absolute; top:0; left:0; width:800px; height:480px; background-color:#fff; z-index:-7"></div>
 
     <div id="targetResolution1" style="position:absolute; top:0; left:0; width:1136px; height:640px; z-index:-1">

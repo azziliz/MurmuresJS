@@ -11,8 +11,8 @@
         client.character = character;
     }
 
-    character.prototype.position = [1, 10];
+    character.prototype.position = {};
     character.prototype.hitPoints = 20;
-    character.prototype.img = "./data/img/perso.png";
+    character.prototype.img = '';
 
 })(this);
