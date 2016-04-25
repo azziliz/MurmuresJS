@@ -22,11 +22,13 @@
     <Compile Include="src\constants.js" />
     <Compile Include="src\level.js" />
     <Compile Include="src\murmures.js" />
+    <Compile Include="src\player.js" />
     <Content Include="client.html" />
     <Content Include="data\level1.json" />
     <Content Include="README.md" />
     <Compile Include="server.js" />
     <Content Include="src\client.css" />
+    <Content Include="src\perso.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
