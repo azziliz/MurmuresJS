@@ -27,6 +27,10 @@ require('http').createServer(function (request, response) {
                 response.writeHead(200, { 'Content-Type': 'text/css' });
                 response.end(fileContent);
             }
+            else if (fileName.endsWith('.png')) {
+                response.writeHead(200, { 'Content-Type': 'image/png' });
+                response.end(fileContent);
+            }
             else {
                 response.writeHead(400); // Bad Request
                 response.end();
@@ -77,7 +81,7 @@ require('http').createServer(function (request, response) {
               }
               else {
                   response.writeHead(200, { 'Content-Type': 'application/json' });
-                  let jsonReponse={'position':{'x':'1','y':'10'},'img':'./data/img/perso.png'};
+                  let jsonReponse={'position':{'x':'1','y':'10'},'img':'./static/perso.png'};
                   response.end(JSON.stringify(jsonReponse));
               }
 
