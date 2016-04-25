@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MurmuresJS</title>
-    <link rel="stylesheet" href="static/client.css" media="screen">
+    <link rel="stylesheet" href="src/css/client.css" media="screen">
 </head>
-<body>
-    <script src="static/character.js"></script>
-    <script src="static/level.js"></script>
+<body onload="initLevel()">
+    <script src="src/character.js"></script>
+    <script src="src/level.js"></script>
     <script type="text/javascript">
         'use strict';
 
@@ -105,6 +105,10 @@
             }
         }
 
+        function initLevel() {
+            sendAjax('getLevel', '{"id":"level1"}', (response) => renderLevel(JSON.parse(response)), true);
+            sendAjax('getPosition', '{"id":"1"}', (response) => renderPosition(JSON.parse(response)), true)
+        }
     </script>
     <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#eee; z-index:-20"></div>
     <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#dfd; z-index:-10"></div>
@@ -122,7 +126,7 @@
             <div style="position:absolute; width:3px; left:2px; height:196px; top:2px; background-color:#888;"></div>
             <div style="position:absolute; width:3px; left:2px; height:158px; top:40px; background-color:#d00;"></div>
             <div style="position:absolute; width:64px; left:7px; height:64px; top:2px; background-color:#ccc;">
-                <img src="./static/perso.png">
+                <img src="./src/img/perso.png">
             </div>
             <div style="position:absolute; width:150px; left:75px; height:64px; top:5px; font-size:20px; text-align: center;">Angharad</div>
             <div style="position:absolute; width:150px; left:75px; height:64px; top:35px; font-size:14px; text-align: center;">12/26</div>
@@ -136,7 +140,7 @@
         <div id="p5" style="clear:left; float:left; width:240px; height:200px; border:1px solid #000; margin:2px">Kerrigan</div>
     </div>
 
-    <button type="button" onclick="sendAjax('getLevel', '{&quot;id&quot;:&quot;level1&quot;}', (response) => renderLevel(JSON.parse(response)), true);sendAjax('getPosition', '{&quot;id&quot;:&quot;1&quot;}', (response) => renderPosition(JSON.parse(response)), true)">Get level</button>
+    <button type="button" onclick="initLevel()" style="display:none">Get level</button>
 
     <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
     <canvas id="gridLayer" width="1400" height="840" style="z-index: 15"></canvas>

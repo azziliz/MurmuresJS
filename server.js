@@ -14,11 +14,11 @@ require('http').createServer(function (request, response) {
         playerConnected.character = new murmures.character();
         //console.log(playerConnected);
     }
-    else if (request.url.startsWith('/static/')) {
+    else if (request.url.startsWith('/src/')) {
         //#region Static Pages
         try {
-            let fileName = './src/'.concat(request.url.substr(8));
-            let fileContent = require('fs').readFileSync(fileName);
+            let fileName = request.url;
+            let fileContent = require('fs').readFileSync('.'.concat(fileName));
             if (fileName.endsWith('.js')) {
                 response.writeHead(200, { 'Content-Type': 'application/javascript' });
                 response.end(fileContent.toString());
@@ -81,7 +81,7 @@ require('http').createServer(function (request, response) {
               }
               else {
                   response.writeHead(200, { 'Content-Type': 'application/json' });
-                  let jsonReponse={'position':{'x':'1','y':'10'},'img':'./static/perso.png'};
+                  let jsonReponse={'position':{'x':'1','y':'10'},'img':'./src/img/perso.png'};
                   response.end(JSON.stringify(jsonReponse));
               }
 

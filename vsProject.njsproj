@@ -27,12 +27,14 @@
     <Content Include="data\level1.json" />
     <Content Include="README.md" />
     <Compile Include="server.js" />
-    <Content Include="src\client.css" />
-    <Content Include="src\perso.png" />
+    <Content Include="src\css\client.css" />
+    <Content Include="src\img\perso.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
     <Folder Include="src\" />
+    <Folder Include="src\css\" />
+    <Folder Include="src\img\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->

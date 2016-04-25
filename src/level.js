@@ -18,4 +18,7 @@
     level.prototype.tileSize = 0;
     level.prototype.tiles = {};
 
+    level.prototype.fromJson = function (srcJson) {
+    }
+
 })(this);
