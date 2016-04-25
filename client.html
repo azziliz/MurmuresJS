@@ -34,8 +34,8 @@
                 let context = allCanvas[canvasIter].getContext('2d');
                 context.translate(0.5, 0.5); // translation prevents anti-aliasing.
             }
-            //drawGrid(level);
-            //drawTiles(level);
+            drawGrid(level);
+            drawTiles(level);
         }
 
         function renderPosition(pos){
@@ -43,10 +43,10 @@
           let context = layer.getContext('2d');
           let img = new Image();
           img.onload = function () {
-              context.drawImage(img, 64, 64, pos.position.y*64, pos.position.y*64);
+              context.drawImage(img, pos.position.x*64, pos.position.y*64, 64, 64);
           }
           img.src = pos.img;
-          context.drawImage(img, 64, 64, pos.position.x*64, pos.position.y*64);
+        //   context.drawImage(img, 64, 64, pos.position.x*64, pos.position.y*64);
         }
 
         function drawGrid(level) {
