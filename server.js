@@ -15,7 +15,7 @@ require('http').createServer(function (request, response) {
         //console.log(playerConnected);
     }
     else if (request.url.startsWith('/src/')) {
-        //#region Static Pages
+        // #region Static Pages
         try {
             let fileName = request.url;
             let fileContent = require('fs').readFileSync('.'.concat(fileName));
@@ -39,7 +39,7 @@ require('http').createServer(function (request, response) {
             response.writeHead(404);
             response.end();
         }
-        //#endregion
+        // #endregion
     }
     else {
         let buffer = '';
