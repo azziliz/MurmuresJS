@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="src/css/client.css" media="screen">
 </head>
 <body onload="initLevel()">
+    <div style="position:fixed; bottom:0; left:0; z-index:9999">
+        <div id="debugDiv"></div>
+    </div>
+
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
     <script type="text/javascript">
@@ -114,7 +118,45 @@
 
         function initLevel() {
             sendAjax('getLevel', '{"id":"level1"}', (response) => renderLevel(response), true);
+            registerEvents()
         }
+
+        function registerEvents() {
+            // IE11 returns decimal number for MouseEvent coordinates but Chrome43 always rounds down.
+            // --> using floor() for consistency.
+            // Also, rounding cancels the canvas shift (0.5 pixel)
+            // and retrieves the nearest pixel coordinates.
+            let topLayer = document.getElementById("topLayer");
+            let canvasCssTop = window.getComputedStyle(topLayer, null).getPropertyValue("top").slice(0, -2); // slice to remove the "px" part of the CSS property
+            let canvasCssLeft = window.getComputedStyle(topLayer, null).getPropertyValue("left").slice(0, -2);
+            topLayer.addEventListener("mousedown", function () {
+                event.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+                let mouseX = Math.floor(event.pageX) - parseInt(canvasCssLeft);
+                let mouseY = Math.floor(event.pageY) - parseInt(canvasCssTop);
+                topLayer_onClick(mouseX, mouseY, event.button == 2);
+            }, false);
+        }
+
+        /// If left click --> selects one unit on the grid.
+        /// If right click --> gives an order to the selected unit.
+        function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
+            if (!rightClick) {
+                // event is a left click
+                // find hovered tile
+                let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
+            }
+            else {
+                // event is a right click
+                let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
+            }
+        }
+
+        function getHoveredTile(mouseEventX, mouseEventY) {
+            let tileX = Math.floor(mouseEventX / 32.0);
+            let tileY = Math.floor(mouseEventY / 32.0);
+            document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
+        }
+
     </script>
     <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#f8f8f8; z-index:-20"></div>
     <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#f8fff8; z-index:-10"></div>
@@ -148,6 +190,7 @@
 
     <button type="button" onclick="initLevel()" style="display:none">Get level</button>
 
+    <canvas id="topLayer" width="1400" height="840" style="z-index: 999"></canvas>
     <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
     <canvas id="gridLayer" width="1400" height="840" style="z-index: 15"></canvas>
 
