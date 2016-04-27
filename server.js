@@ -15,6 +15,12 @@ require('http').createServer(function (request, response) {
         playerConnected.level=new murmures.level();
         let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         playerConnected.level.fromJson(JSON.parse(level1Txt));
+
+        let creature = new murmures.character();
+        creature.img='./src/img/skeleton.png';
+        creature.position.x=3;
+        creature.position.y=5;
+        playerConnected.level.creatures.push(creature);
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages
