@@ -12,7 +12,9 @@ require('http').createServer(function (request, response) {
         response.end(require('fs').readFileSync('client.html').toString());
         playerConnected = new murmures.player();
         playerConnected.character = new murmures.character();
-        //console.log(playerConnected);
+        playerConnected.level=new murmures.level();
+        let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        playerConnected.level.fromJson(JSON.parse(level1Txt));
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages
@@ -58,10 +60,23 @@ require('http').createServer(function (request, response) {
                 else {
                     let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
                     let level1 = new murmures.level();
-                    level1.fromJson(JSON.parse(level1Txt));                    
+                    level1.fromJson(JSON.parse(level1Txt));
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify(level1));
                 }
+            }else if(request.url === '/move'){
+              let postData = JSON.parse(buffer);
+              if ((postData === null)
+                  || (postData.x === null) || (postData.y === null)) {
+                  response.writeHead(200, { 'Content-Type': 'application/json' });
+                  response.end(JSON.stringify({ error: 'Wrong request.' }));
+              }
+              else {
+                  playerConnected.character.move(postData.x,postData.y);
+                  playerConnected.level.hero=playerConnected.character;
+                  response.writeHead(200, { 'Content-Type': 'application/json' });
+                  response.end(JSON.stringify(playerConnected.level));
+              }
             }
             else {
                 response.writeHead(404);

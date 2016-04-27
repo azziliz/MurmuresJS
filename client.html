@@ -32,6 +32,7 @@
 
         // #region Renderer
         function renderLevel(srcJson) {
+          
             let allCanvas = document.getElementsByTagName("canvas");
             for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
                 allCanvas[canvasIter].width = 1401; // This is a hard reset of all canvas and is quite time consumming.
@@ -145,6 +146,9 @@
                 // event is a left click
                 // find hovered tile
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
+                let tileX = Math.floor(mouseEventX / 32.0);
+                let tileY = Math.floor(mouseEventY / 32.0);
+                sendAjax('move', '{"x":"' + tileX +'","y":"'+tileY+'"}', (response) => renderLevel(response), true);
             }
             else {
                 // event is a right click
