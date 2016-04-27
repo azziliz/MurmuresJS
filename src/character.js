@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 (function (client) {
 
@@ -14,5 +14,6 @@
     character.prototype.position = {};
     character.prototype.hitPoints = 20;
     character.prototype.img = '';
+    character.prototype.name = '';
 
 })(this);
