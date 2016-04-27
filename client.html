@@ -13,6 +13,8 @@
 
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
+    <script src="src/order.js"></script>
+
     <script type="text/javascript">
         'use strict';
 
@@ -49,8 +51,9 @@
 
         function drawCharacters(level) {
             /// <param name="level" type="level"/>
-            let layer = document.getElementById('tilesLayer');
+            let layer = document.getElementById('characterLayer');
             let context = layer.getContext('2d');
+            context.clearRect(-0.5, -0.5, layer.width, layer.height);
             context.imageSmoothingEnabled = false;
             let img = new Image();
             img.onload = function () {
@@ -133,11 +136,19 @@
             let topLayer = document.getElementById("topLayer");
             let canvasCssTop = window.getComputedStyle(topLayer, null).getPropertyValue("top").slice(0, -2); // slice to remove the "px" part of the CSS property
             let canvasCssLeft = window.getComputedStyle(topLayer, null).getPropertyValue("left").slice(0, -2);
-            topLayer.addEventListener("mousedown", function () {
-                event.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
-                let mouseX = Math.floor(event.pageX) - parseInt(canvasCssLeft);
-                let mouseY = Math.floor(event.pageY) - parseInt(canvasCssTop);
-                topLayer_onClick(mouseX, mouseY, event.button == 2);
+            topLayer.addEventListener("mousedown", function (e) {
+                e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+                let mouseX = Math.floor(e.pageX) - parseInt(canvasCssLeft);
+                let mouseY = Math.floor(e.pageY) - parseInt(canvasCssTop);
+                topLayer_onClick(mouseX, mouseY, e.button == 2);
+            }, false);
+            window.addEventListener("keypress", function (e) {
+                let char = '';
+                if (e.which == null)
+                    char = String.fromCharCode(e.keyCode);
+                else
+                    char = String.fromCharCode(e.which);
+                onKeyPress(char);
             }, false);
         }
 
@@ -160,6 +171,9 @@
             let tileX = Math.floor(mouseEventX / 32.0);
             let tileY = Math.floor(mouseEventY / 32.0);
             document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
+        }
+
+        function onKeyPress(char) {
         }
 
     </script>
@@ -291,7 +305,8 @@
 
     <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
     <canvas id="gridLayer" width="1400" height="840" style="z-index: 25; opacity:0.2"></canvas>
-    <canvas id="tilesLayer" width="1400" height="840" style="z-index: 20"></canvas>
+    <canvas id="characterLayer" width="1400" height="840" style="z-index: 20"></canvas>
+    <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
 
 </body>
 </html>
