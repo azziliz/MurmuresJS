@@ -14,7 +14,7 @@
     player.prototype.id = null;
     player.prototype.name = null;
     player.prototype.character = null;
-    player.prototype.level = null; //array of levels (old and actual)
-    player.prototype.actualLevel = null; //int : on which level character is (it can down or up back)
+    player.prototype.level = null; //actual level
+    
 
 })(this);
