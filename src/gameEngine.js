@@ -19,12 +19,9 @@
     gameEngine.prototype.fromJson = function (src) {
         /// <param name="src" type="gameEngine"/>
         this.tileSize = src.tileSize;
-        this.id = src.id;
-        this.layout = src.layout;
-        this.width = src.width;
-        this.height = src.height;
-        this.tiles = src.tiles;
+        this.level = src.level;
         this.hero = src.hero;
+        this.mobs = src.mobs;
     };
 
 })(this);

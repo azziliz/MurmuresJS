@@ -1,7 +1,8 @@
 'use strict';
 
 var murmures = require('./src/murmures');
-var playerConnected = null;
+var gameEngine = null;
+
 require('http').createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
         response.writeHead(204); // No content
@@ -10,17 +11,25 @@ require('http').createServer(function (request, response) {
     else if (request.url === '/') {
         response.writeHead(200, { 'Content-Type': 'text/html' });
         response.end(require('fs').readFileSync('client.html').toString());
-        playerConnected = new murmures.player();
-        playerConnected.character = new murmures.character();
-        playerConnected.level=new murmures.level();
+        
+        gameEngine = new murmures.gameEngine();
+        gameEngine.tileSize = 32;
+        
+        gameEngine.hero = new murmures.character();
+        let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        gameEngine.hero.fromJson(JSON.parse(hero1Txt));
+        
+        gameEngine.level = new murmures.level();
         let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        playerConnected.level.fromJson(JSON.parse(level1Txt));
-
+        gameEngine.level.fromJson(JSON.parse(level1Txt));
+        gameEngine.hero.position = gameEngine.level.startingTile;
+        
         let creature = new murmures.character();
-        creature.img='./src/img/skeleton.png';
-        creature.position.x=3;
-        creature.position.y=5;
-        playerConnected.level.creatures.push(creature);
+        creature.img = './src/img/skeleton.png';
+        creature.position = new murmures.tile();
+        creature.position.x = 3;
+        creature.position.y = 5;
+        gameEngine.level.creatures.push(creature);
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages
@@ -58,31 +67,27 @@ require('http').createServer(function (request, response) {
         request.on('end', function () {
             if (request.url === '/getLevel') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null)
+                if ((postData === null) 
                     || (postData.id === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
                 else {
-                    let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-                    let level1 = new murmures.level();
-                    level1.fromJson(JSON.parse(level1Txt));
                     response.writeHead(200, { 'Content-Type': 'application/json' });
-                    response.end(JSON.stringify(level1));
+                    response.end(JSON.stringify(gameEngine));
                 }
-            }else if(request.url === '/move'){
-              let postData = JSON.parse(buffer);
-              if ((postData === null)
+            } else if (request.url === '/move') {
+                let postData = JSON.parse(buffer);
+                if ((postData === null) 
                   || (postData.x === null) || (postData.y === null)) {
-                  response.writeHead(200, { 'Content-Type': 'application/json' });
-                  response.end(JSON.stringify({ error: 'Wrong request.' }));
-              }
-              else {
-                  playerConnected.character.move(postData.x,postData.y);
-                  playerConnected.level.hero=playerConnected.character;
-                  response.writeHead(200, { 'Content-Type': 'application/json' });
-                  response.end(JSON.stringify(playerConnected.level));
-              }
+                    response.writeHead(200, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify({ error: 'Wrong request.' }));
+                }
+                else {
+                    gameEngine.hero.move(postData.x, postData.y);
+                    response.writeHead(200, { 'Content-Type': 'application/json' });
+                    response.end(JSON.stringify(gameEngine.hero));
+                }
             }
             else {
                 response.writeHead(404);
@@ -94,6 +99,3 @@ require('http').createServer(function (request, response) {
 
 murmures.log('Server running at http://127.0.0.1:15881/');
 
-let firstHero = new murmures.character();
-murmures.log('A hero has ' + firstHero.hitPoints + ' hit points by default.');
-let levelX = new murmures.level();

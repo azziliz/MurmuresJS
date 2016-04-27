@@ -9,7 +9,7 @@
         /// <field name="height" type="Number"/>
         /// <field name="tileSize" type="Number"/>
         /// <field name="tiles" type="Array"/>
-        /// <field name="hero" type="character"/>
+        /// <field name="startingTile" type="tile"/>
         this.creatures=[];
     };
 
@@ -30,7 +30,7 @@
         this.height = src.height;
         this.tileSize = src.tileSize;
         this.tiles = src.tiles;
-        this.hero = src.hero;
+        this.startingTile = src.startingTile;
     };
 
 })(this);

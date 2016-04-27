@@ -1,29 +1,32 @@
-'use strict';
+﻿'use strict';
 
 (function (client) {
-
+    
     var character = function () {
-        this.position={"x":10,"y":1};
-        this.hitpoints=20;
-        this.img='./src/img/perso.png';
-        this.name="rincevent";
-     };
-
+        /// <field name="position" type="tile"/>
+        /// <field name="hitPoints" type="Number"/>
+        /// <field name="img" type="String"/>
+        /// <field name="name" type="String"/>
+    };
+    
     if (typeof module === "object" && module && typeof module.exports === "object") {
         module.exports = character;
     }
     else {
         client.character = character;
     }
+    
+    character.prototype.fromJson = function (src) {
+        /// <param name="src" type="character"/>
+        this.position = src.position;
+        this.hitPoints = src.hitPoints;
+        this.img = src.img;
+        this.name = src.name;
+    };
 
-    character.prototype.position = {};
-    character.prototype.hitPoints = 20;
-    character.prototype.img = null;
-    character.prototype.name = null;
-
-    character.prototype.move = function(x,y){
-      this.position.x=x;
-      this.position.y=y;
+    character.prototype.move = function (x, y) {
+        this.position.x = x;
+        this.position.y = y;
     };
 
 })(this);

@@ -6,7 +6,7 @@
     <title>MurmuresJS</title>
     <link rel="stylesheet" href="src/css/client.css" media="screen">
 </head>
-<body onload="initLevel()">
+<body onload="init()">
     <div style="position:fixed; bottom:0; left:0; z-index:9999">
         <div id="debugDiv"></div>
     </div>
@@ -14,9 +14,12 @@
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
     <script src="src/order.js"></script>
+    <script src="src/gameEngine.js"></script>
 
     <script type="text/javascript">
         'use strict';
+
+        var murmures = new gameEngine();
 
         function sendAjax(path, param, callback, async) {
             let xhr = new XMLHttpRequest();
@@ -33,8 +36,8 @@
         }
 
         // #region Renderer
-        function renderLevel(srcJson) {
-          
+        function renderLevel(src) {          
+            /// <param name="src" type="level"/>
             let allCanvas = document.getElementsByTagName("canvas");
             for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
                 allCanvas[canvasIter].width = 1401; // This is a hard reset of all canvas and is quite time consumming.
@@ -43,23 +46,22 @@
                 context.translate(0.5, 0.5); // translation prevents anti-aliasing.
             }
             let level1 = new level();
-            level1.fromJson(JSON.parse(srcJson));
+            level1.fromJson(src);
             drawGrid(level1);
             drawTiles(level1);
-            drawCharacters(level1);
         }
 
-        function drawCharacters(level) {
-            /// <param name="level" type="level"/>
+        function drawCharacters(hero) {
+            /// <param name="hero" type="hero"/>
             let layer = document.getElementById('characterLayer');
             let context = layer.getContext('2d');
             context.clearRect(-0.5, -0.5, layer.width, layer.height);
             context.imageSmoothingEnabled = false;
             let img = new Image();
             img.onload = function () {
-                context.drawImage(img, level.hero.position.x * level.tileSize, level.hero.position.y * level.tileSize, level.tileSize, level.tileSize);
+                context.drawImage(img, hero.position.x * murmures.tileSize, hero.position.y * murmures.tileSize, murmures.tileSize, murmures.tileSize);
             };
-            img.src = level.hero.img;
+            img.src = hero.img;
         }
 
         function drawGrid(level) {
@@ -78,16 +80,16 @@
             /// <param name="level" type="level"/>
             context.beginPath();
             if (filled || y === 0) {
-                context.moveTo(level.tileSize * x, level.tileSize * y);
-                context.lineTo(level.tileSize * x + level.tileSize, level.tileSize * y);
+                context.moveTo(murmures.tileSize * x, murmures.tileSize * y);
+                context.lineTo(murmures.tileSize * x + murmures.tileSize, murmures.tileSize * y);
             }
             else {
-                context.moveTo(level.tileSize * x + level.tileSize, level.tileSize * y);
+                context.moveTo(murmures.tileSize * x + murmures.tileSize, murmures.tileSize * y);
             }
-            context.lineTo(level.tileSize * x + level.tileSize, level.tileSize * y + level.tileSize);
-            context.lineTo(level.tileSize * x, level.tileSize * y + level.tileSize);
+            context.lineTo(murmures.tileSize * x + murmures.tileSize, murmures.tileSize * y + murmures.tileSize);
+            context.lineTo(murmures.tileSize * x, murmures.tileSize * y + murmures.tileSize);
             if (filled || x === 0) {
-                context.lineTo(level.tileSize * x, level.tileSize * y);
+                context.lineTo(murmures.tileSize * x, murmures.tileSize * y);
             }
             context.strokeStyle = color;
             context.stroke();
@@ -123,9 +125,15 @@
         }
         // #endregion
 
-        function initLevel() {
-            sendAjax('getLevel', '{"id":"level1"}', (response) => renderLevel(response), true);
+        function init() {
+            sendAjax('getLevel', '{"id":"level1"}', loadEngine, true);
             registerEvents();
+        }
+
+        function loadEngine(engine) {
+            murmures.fromJson(JSON.parse(engine));
+            renderLevel(murmures.level);
+            drawCharacters(murmures.hero);
         }
 
         function registerEvents() {
@@ -157,9 +165,9 @@
                 // event is a left click
                 // find hovered tile
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
-                let tileX = Math.floor(mouseEventX / 32.0);
-                let tileY = Math.floor(mouseEventY / 32.0);
-                sendAjax('move', '{"x":"' + tileX +'","y":"'+tileY+'"}', (response) => renderLevel(response), true);
+                let tileX = Math.floor(mouseEventX / murmures.tileSize);
+                let tileY = Math.floor(mouseEventY / murmures.tileSize);
+                sendAjax('move', '{"x":"' + tileX + '","y":"' + tileY + '"}', (response) => drawCharacters(JSON.parse(response)), true);
             }
             else {
                 // event is a right click
@@ -168,8 +176,8 @@
         }
 
         function getHoveredTile(mouseEventX, mouseEventY) {
-            let tileX = Math.floor(mouseEventX / 32.0);
-            let tileY = Math.floor(mouseEventY / 32.0);
+            let tileX = Math.floor(mouseEventX / murmures.tileSize);
+            let tileY = Math.floor(mouseEventY / murmures.tileSize);
             document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
         }
 
@@ -301,7 +309,7 @@
         </div>
     </div>
 
-    <button type="button" onclick="initLevel()" style="display:none">Get level</button>
+    <button type="button" onclick="init()" style="display:none">Get level</button>
 
     <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
     <canvas id="gridLayer" width="1400" height="840" style="z-index: 25; opacity:0.2"></canvas>

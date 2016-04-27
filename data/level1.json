@@ -3,7 +3,6 @@
     "layout": "square",
     "width": 20,
     "height": 12,
-    "tileSize": 32,
     "tiles": [
         [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
         [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 ],
@@ -32,12 +31,8 @@
         "ff 00 00 ff 00 00 ff 00 00 00 00 ff 00 ff 00 00 00 00 00 ff",
         "ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
     ],
-    "hero": {
-        "name": "Angharad",
-        "position": {
-            "x": 1,
-            "y": 10
-        },
-        "img": "./src/img/perso.png"
+    "startingTile": {
+        "x": 1,
+        "y": 10
     }
 }
