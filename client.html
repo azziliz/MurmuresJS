@@ -54,7 +54,7 @@
             let img = new Image();
             img.onload = function () {
                 context.drawImage(img, level.hero.position.x * level.tileSize, level.hero.position.y * level.tileSize, level.tileSize, level.tileSize);
-            }
+            };
             img.src = level.hero.img;
         }
 
@@ -121,7 +121,7 @@
 
         function initLevel() {
             sendAjax('getLevel', '{"id":"level1"}', (response) => renderLevel(response), true);
-            registerEvents()
+            registerEvents();
         }
 
         function registerEvents() {
