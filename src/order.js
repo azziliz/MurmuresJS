@@ -19,7 +19,8 @@
         /// <param name="src" type="order"/>
         this.command = src.command;
         this.source = src.source;
-        this.target = src.target;
+        this.target = new murmures.tile();
+        this.target.fromJson(src.target);
     };
 
 })(this);

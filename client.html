@@ -181,11 +181,20 @@
                 // event is a left click
                 // find hovered tile
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
-                let moveOrder = new murmures.order();
-                moveOrder.command = "move";
-                moveOrder.source = gameEngine.hero;
-                moveOrder.target = hoveredTile;
-                launchOrder(moveOrder);
+                if (gameEngine.tileHasMob(hoveredTile)) {
+                    let attackOrder = new murmures.order();
+                    attackOrder.command = "attack";
+                    attackOrder.source = gameEngine.hero;
+                    attackOrder.target = hoveredTile;
+                    launchOrder(attackOrder);
+                }
+                else {
+                    let moveOrder = new murmures.order();
+                    moveOrder.command = "move";
+                    moveOrder.source = gameEngine.hero;
+                    moveOrder.target = hoveredTile;
+                    launchOrder(moveOrder);
+                }
             }
             else {
                 // event is a right click
@@ -231,7 +240,7 @@
                 sendAjax('order', JSON.stringify(order), updateCharacters, true);
             }
             else {
-                onScreenLog('<span style="color:#f66">' + 'ERROR - invalid order - ' + check.reason + '</span>');
+                onScreenLog('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
             }
         }
 

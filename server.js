@@ -29,11 +29,13 @@ require('http').createServer(function (request, response) {
         creature.position = new murmures.tile();
         creature.position.x = 3;
         creature.position.y = 5;
+        creature.hitPoints = 10;
         let creature2 = new murmures.character();
         creature2.img = './src/img/skeleton.png';
         creature2.position = new murmures.tile();
         creature2.position.x = 13;
         creature2.position.y = 2;
+        creature2.hitPoints = 10;
         gameEngine.mobs = new Array();
         gameEngine.mobs.push(creature);
         gameEngine.mobs.push(creature2);
@@ -95,8 +97,7 @@ require('http').createServer(function (request, response) {
                 else {
                     let check = gameEngine.checkOrder(postData);
                     if (check.valid) {
-                        if (postData.command === "move")
-                            gameEngine.hero.move(postData.target.x, postData.target.y);
+                        gameEngine.applyOrder(postData);
                         response.writeHead(200, { 'Content-Type': 'application/json' });
                         response.end(JSON.stringify(gameEngine));
                     }

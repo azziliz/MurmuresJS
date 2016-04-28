@@ -33,6 +33,7 @@
     <Compile Include="server.js" />
     <Content Include="src\css\client.css" />
     <Content Include="src\img\perso.png" />
+    <Content Include="src\img\skeleton.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
