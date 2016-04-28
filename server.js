@@ -29,7 +29,14 @@ require('http').createServer(function (request, response) {
         creature.position = new murmures.tile();
         creature.position.x = 3;
         creature.position.y = 5;
-        gameEngine.level.creatures.push(creature);
+        let creature2 = new murmures.character();
+        creature2.img = './src/img/skeleton.png';
+        creature2.position = new murmures.tile();
+        creature2.position.x = 13;
+        creature2.position.y = 2;
+        gameEngine.mobs = new Array();
+        gameEngine.mobs.push(creature);
+        gameEngine.mobs.push(creature2);
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages
@@ -86,7 +93,7 @@ require('http').createServer(function (request, response) {
                 else {
                     gameEngine.hero.move(postData.x, postData.y);
                     response.writeHead(200, { 'Content-Type': 'application/json' });
-                    response.end(JSON.stringify(gameEngine.hero));
+                    response.end(JSON.stringify(gameEngine));
                 }
             }
             else {

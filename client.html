@@ -51,12 +51,17 @@
             drawTiles(level1);
         }
 
-        function drawCharacters(hero) {
-            /// <param name="hero" type="hero"/>
+        function clearCharacterLayer() {
             let layer = document.getElementById('characterLayer');
             let context = layer.getContext('2d');
             context.clearRect(-0.5, -0.5, layer.width, layer.height);
             context.imageSmoothingEnabled = false;
+        }
+
+        function drawCharacters(hero) {
+            /// <param name="hero" type="hero"/>
+            let layer = document.getElementById('characterLayer');
+            let context = layer.getContext('2d');
             let img = new Image();
             img.onload = function () {
                 context.drawImage(img, hero.position.x * murmures.tileSize, hero.position.y * murmures.tileSize, murmures.tileSize, murmures.tileSize);
@@ -133,7 +138,9 @@
         function loadEngine(engine) {
             murmures.fromJson(JSON.parse(engine));
             renderLevel(murmures.level);
+            clearCharacterLayer();
             drawCharacters(murmures.hero);
+            murmures.mobs.forEach((mob) =>drawCharacters(mob));
         }
 
         function registerEvents() {
@@ -167,12 +174,21 @@
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
                 let tileX = Math.floor(mouseEventX / murmures.tileSize);
                 let tileY = Math.floor(mouseEventY / murmures.tileSize);
-                sendAjax('move', '{"x":"' + tileX + '","y":"' + tileY + '"}', (response) => drawCharacters(JSON.parse(response)), true);
+                sendAjax('move', '{"x":"' + tileX + '","y":"' + tileY + '"}', updateCharacters, true);
             }
             else {
                 // event is a right click
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
             }
+        }
+
+        function updateCharacters(response) {
+            let ge = JSON.parse(response);
+            murmures.hero = ge.hero;
+            murmures.mobs = ge.mobs;
+            clearCharacterLayer();
+            drawCharacters(murmures.hero);
+            murmures.mobs.forEach((mob) =>drawCharacters(mob));
         }
 
         function getHoveredTile(mouseEventX, mouseEventY) {
