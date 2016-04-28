@@ -21,7 +21,13 @@
 
         var murmures = new gameEngine();
 
+        function onScreenLog(txt) {
+            let now = new Date();
+            document.getElementById("onScreenLog").value = now.toLocaleTimeString() + '.' + ('00'+now.getMilliseconds().toString()).substr(-3) + ' ' + txt + '\n' + document.getElementById("onScreenLog").value;
+        }
+
         function sendAjax(path, param, callback, async) {
+            onScreenLog('--> ' + path);
             let xhr = new XMLHttpRequest();
             xhr.open('POST', window.location.href + path, async);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -36,7 +42,7 @@
         }
 
         // #region Renderer
-        function renderLevel(src) {          
+        function renderLevel(src) {
             /// <param name="src" type="level"/>
             let allCanvas = document.getElementsByTagName("canvas");
             for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
@@ -136,6 +142,7 @@
         }
 
         function loadEngine(engine) {
+            onScreenLog('<-- getLevel');
             murmures.fromJson(JSON.parse(engine));
             renderLevel(murmures.level);
             clearCharacterLayer();
@@ -149,12 +156,11 @@
             // Also, rounding cancels the canvas shift (0.5 pixel)
             // and retrieves the nearest pixel coordinates.
             let topLayer = document.getElementById("topLayer");
-            let canvasCssTop = window.getComputedStyle(topLayer, null).getPropertyValue("top").slice(0, -2); // slice to remove the "px" part of the CSS property
-            let canvasCssLeft = window.getComputedStyle(topLayer, null).getPropertyValue("left").slice(0, -2);
             topLayer.addEventListener("mousedown", function (e) {
                 e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
-                let mouseX = Math.floor(e.pageX) - parseInt(canvasCssLeft);
-                let mouseY = Math.floor(e.pageY) - parseInt(canvasCssTop);
+                console.log(e);
+                let mouseX = Math.floor(e.offsetX);
+                let mouseY = Math.floor(e.offsetY);
                 topLayer_onClick(mouseX, mouseY, e.button == 2);
             }, false);
             window.addEventListener("keypress", function (e) {
@@ -183,6 +189,7 @@
         }
 
         function updateCharacters(response) {
+            onScreenLog('<-- move');
             let ge = JSON.parse(response);
             murmures.hero = ge.hero;
             murmures.mobs = ge.mobs;
@@ -327,10 +334,14 @@
 
     <button type="button" onclick="init()" style="display:none">Get level</button>
 
-    <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
-    <canvas id="gridLayer" width="1400" height="840" style="z-index: 25; opacity:0.2"></canvas>
-    <canvas id="characterLayer" width="1400" height="840" style="z-index: 20"></canvas>
-    <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
+    <div style="float:left; position:relative;">
+        <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
+        <canvas id="gridLayer" width="1400" height="840" style="z-index: 25; opacity:0.2"></canvas>
+        <canvas id="characterLayer" width="1400" height="840" style="z-index: 20"></canvas>
+        <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
+        <textarea id="onScreenLog" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999"></textarea>
+    </div>
+
 
 </body>
 </html>
