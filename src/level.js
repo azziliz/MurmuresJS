@@ -16,7 +16,7 @@
         module.exports = level;
     }
     else {
-        client.level = level;
+        murmures.level = level;
     }
 
     level.prototype.fromJson = function (src) {
@@ -29,5 +29,11 @@
         this.tiles = src.tiles;
         this.startingTile = src.startingTile;
     };
+
+    level.prototype.isWall = function (tile) {
+        /// <param name="tile" type="tile"/>
+        return this.tiles[tile.y][tile.x] === 1;
+    }
+
 
 })(this);

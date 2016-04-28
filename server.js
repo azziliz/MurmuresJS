@@ -86,15 +86,24 @@ require('http').createServer(function (request, response) {
             } else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
                 if ((postData === null) 
-                  || (postData.command === null) || (postData.target === null)) {
+                  || (postData.command === null) 
+                  || (postData.source === null) 
+                  || (postData.target === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
                 else {
-                    if (postData.command === "move")
-                    gameEngine.hero.move(postData.target.x, postData.target.y);
-                    response.writeHead(200, { 'Content-Type': 'application/json' });
-                    response.end(JSON.stringify(gameEngine));
+                    let check = gameEngine.checkOrder(postData);
+                    if (check.valid) {
+                        if (postData.command === "move")
+                            gameEngine.hero.move(postData.target.x, postData.target.y);
+                        response.writeHead(200, { 'Content-Type': 'application/json' });
+                        response.end(JSON.stringify(gameEngine));
+                    }
+                    else {
+                        response.writeHead(200, { 'Content-Type': 'application/json' });
+                        response.end(JSON.stringify({ error: check.reason }));
+                    }
                 }
             }
             else {

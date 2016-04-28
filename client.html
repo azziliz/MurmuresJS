@@ -10,7 +10,10 @@
     <div style="position:fixed; bottom:0; left:0; z-index:9999">
         <div id="debugDiv"></div>
     </div>
-
+    <script type="text/javascript">
+        'use strict';
+        var murmures = {};
+    </script>
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
     <script src="src/order.js"></script>
@@ -19,12 +22,11 @@
 
     <script type="text/javascript">
         'use strict';
-
-        var murmures = new gameEngine();
+        var gameEngine = new gameEngine();
 
         function onScreenLog(txt) {
             let now = new Date();
-            document.getElementById("onScreenLog").value = now.toLocaleTimeString() + '.' + ('00'+now.getMilliseconds().toString()).substr(-3) + ' ' + txt + '\n' + document.getElementById("onScreenLog").value;
+            document.getElementById("onScreenLog").innerHTML = '<span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br/>' + document.getElementById("onScreenLog").innerHTML;
         }
 
         function sendAjax(path, param, callback, async) {
@@ -51,7 +53,7 @@
                 let context = allCanvas[canvasIter].getContext('2d');
                 context.translate(0.5, 0.5); // translation prevents anti-aliasing.
             }
-            let level1 = new level();
+            let level1 = new murmures.level();
             level1.fromJson(src);
             drawGrid(level1);
             drawTiles(level1);
@@ -70,7 +72,7 @@
             let context = layer.getContext('2d');
             let img = new Image();
             img.onload = function () {
-                context.drawImage(img, hero.position.x * murmures.tileSize, hero.position.y * murmures.tileSize, murmures.tileSize, murmures.tileSize);
+                context.drawImage(img, hero.position.x * gameEngine.tileSize, hero.position.y * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize);
             };
             img.src = hero.img;
         }
@@ -91,16 +93,16 @@
             /// <param name="level" type="level"/>
             context.beginPath();
             if (filled || y === 0) {
-                context.moveTo(murmures.tileSize * x, murmures.tileSize * y);
-                context.lineTo(murmures.tileSize * x + murmures.tileSize, murmures.tileSize * y);
+                context.moveTo(gameEngine.tileSize * x, gameEngine.tileSize * y);
+                context.lineTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y);
             }
             else {
-                context.moveTo(murmures.tileSize * x + murmures.tileSize, murmures.tileSize * y);
+                context.moveTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y);
             }
-            context.lineTo(murmures.tileSize * x + murmures.tileSize, murmures.tileSize * y + murmures.tileSize);
-            context.lineTo(murmures.tileSize * x, murmures.tileSize * y + murmures.tileSize);
+            context.lineTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y + gameEngine.tileSize);
+            context.lineTo(gameEngine.tileSize * x, gameEngine.tileSize * y + gameEngine.tileSize);
             if (filled || x === 0) {
-                context.lineTo(murmures.tileSize * x, murmures.tileSize * y);
+                context.lineTo(gameEngine.tileSize * x, gameEngine.tileSize * y);
             }
             context.strokeStyle = color;
             context.stroke();
@@ -137,18 +139,19 @@
         // #endregion
 
         function init() {
-            onScreenLog('--> getLevel');
+            onScreenLog('>> getLevel');
             sendAjax('getLevel', '{"id":"level1"}', loadEngine, true);
             registerEvents();
         }
 
         function loadEngine(engine) {
-            onScreenLog('<-- loadEngine');
-            murmures.fromJson(JSON.parse(engine));
-            renderLevel(murmures.level);
+            onScreenLog('<< loadEngine');
+            console.log(engine);
+            gameEngine.fromJson(JSON.parse(engine));
+            renderLevel(gameEngine.level);
             clearCharacterLayer();
-            drawCharacters(murmures.hero);
-            murmures.mobs.forEach((mob) =>drawCharacters(mob));
+            drawCharacters(gameEngine.hero);
+            gameEngine.mobs.forEach((mob) =>drawCharacters(mob));
         }
 
         function registerEvents() {
@@ -159,7 +162,6 @@
             let topLayer = document.getElementById("topLayer");
             topLayer.addEventListener("mousedown", function (e) {
                 e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
-                console.log(e);
                 let mouseX = Math.floor(e.offsetX);
                 let mouseY = Math.floor(e.offsetY);
                 topLayer_onClick(mouseX, mouseY, e.button == 2);
@@ -181,9 +183,16 @@
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
                 let moveOrder = new order();
                 moveOrder.command = "move";
+                moveOrder.source = gameEngine.hero;
                 moveOrder.target = hoveredTile;
-                onScreenLog('--> order (move)');
-                sendAjax('order', JSON.stringify(moveOrder), updateCharacters, true);
+                let check = gameEngine.checkOrder(moveOrder);
+                if (check.valid) {
+                    onScreenLog('>> order (move)');
+                    sendAjax('order', JSON.stringify(moveOrder), updateCharacters, true);
+                }
+                else {
+                    onScreenLog('<span style="color:#f66">' + 'ERROR - invalid order - ' + check.reason + '</span>');
+                }
             }
             else {
                 // event is a right click
@@ -192,18 +201,18 @@
         }
 
         function updateCharacters(response) {
-            onScreenLog('<-- updateCharacters');
+            onScreenLog('<< updateCharacters');
             let ge = JSON.parse(response);
-            murmures.hero = ge.hero;
-            murmures.mobs = ge.mobs;
+            gameEngine.hero = ge.hero;
+            gameEngine.mobs = ge.mobs;
             clearCharacterLayer();
-            drawCharacters(murmures.hero);
-            murmures.mobs.forEach((mob) =>drawCharacters(mob));
+            drawCharacters(gameEngine.hero);
+            gameEngine.mobs.forEach((mob) =>drawCharacters(mob));
         }
 
         function getHoveredTile(mouseEventX, mouseEventY) {
-            let tileX = Math.floor(mouseEventX / murmures.tileSize);
-            let tileY = Math.floor(mouseEventY / murmures.tileSize);
+            let tileX = Math.floor(mouseEventX / gameEngine.tileSize);
+            let tileY = Math.floor(mouseEventY / gameEngine.tileSize);
             document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
             let ret = new tile();
             ret.x = tileX;
@@ -346,7 +355,7 @@
         <canvas id="gridLayer" width="1400" height="840" style="z-index: 25; opacity:0.2"></canvas>
         <canvas id="characterLayer" width="1400" height="840" style="z-index: 20"></canvas>
         <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
-        <textarea id="onScreenLog" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999"></textarea>
+        <code id="onScreenLog" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>
     </div>
 
 
