@@ -14,6 +14,7 @@
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
     <script src="src/order.js"></script>
+    <script src="src/tile.js"></script>
     <script src="src/gameEngine.js"></script>
 
     <script type="text/javascript">
@@ -27,7 +28,6 @@
         }
 
         function sendAjax(path, param, callback, async) {
-            onScreenLog('--> ' + path);
             let xhr = new XMLHttpRequest();
             xhr.open('POST', window.location.href + path, async);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -137,12 +137,13 @@
         // #endregion
 
         function init() {
+            onScreenLog('--> getLevel');
             sendAjax('getLevel', '{"id":"level1"}', loadEngine, true);
             registerEvents();
         }
 
         function loadEngine(engine) {
-            onScreenLog('<-- getLevel');
+            onScreenLog('<-- loadEngine');
             murmures.fromJson(JSON.parse(engine));
             renderLevel(murmures.level);
             clearCharacterLayer();
@@ -178,9 +179,11 @@
                 // event is a left click
                 // find hovered tile
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
-                let tileX = Math.floor(mouseEventX / murmures.tileSize);
-                let tileY = Math.floor(mouseEventY / murmures.tileSize);
-                sendAjax('move', '{"x":"' + tileX + '","y":"' + tileY + '"}', updateCharacters, true);
+                let moveOrder = new order();
+                moveOrder.command = "move";
+                moveOrder.target = hoveredTile;
+                onScreenLog('--> order (move)');
+                sendAjax('order', JSON.stringify(moveOrder), updateCharacters, true);
             }
             else {
                 // event is a right click
@@ -189,7 +192,7 @@
         }
 
         function updateCharacters(response) {
-            onScreenLog('<-- move');
+            onScreenLog('<-- updateCharacters');
             let ge = JSON.parse(response);
             murmures.hero = ge.hero;
             murmures.mobs = ge.mobs;
@@ -202,6 +205,10 @@
             let tileX = Math.floor(mouseEventX / murmures.tileSize);
             let tileY = Math.floor(mouseEventY / murmures.tileSize);
             document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
+            let ret = new tile();
+            ret.x = tileX;
+            ret.y = tileY;
+            return ret;
         }
 
         function onKeyPress(char) {

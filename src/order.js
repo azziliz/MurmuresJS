@@ -3,7 +3,7 @@
 (function (client) {
     
     var order = function () {
-        /// <field name="type" type="String"/>
+        /// <field name="command" type="String"/>
         /// <field name="target" type="tile"/>
     };
     
@@ -16,7 +16,7 @@
     
     order.prototype.fromJson = function (src) {
         /// <param name="src" type="order"/>
-        this.type = src.type;
+        this.command = src.command;
         this.target = src.target;
     };
 
