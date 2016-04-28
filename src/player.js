@@ -8,7 +8,7 @@
         module.exports = player;
     }
     else {
-        client.player = player;
+        murmures.player = player;
     }
 
     player.prototype.id = null;

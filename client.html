@@ -12,7 +12,8 @@
     </div>
     <script type="text/javascript">
         'use strict';
-        var murmures = {};
+        // namespace
+        var murmures = {}; 
     </script>
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
@@ -22,7 +23,7 @@
 
     <script type="text/javascript">
         'use strict';
-        var gameEngine = new gameEngine();
+        var gameEngine = new murmures.gameEngine();
 
         function onScreenLog(txt) {
             let now = new Date();
@@ -146,7 +147,6 @@
 
         function loadEngine(engine) {
             onScreenLog('<< loadEngine');
-            console.log(engine);
             gameEngine.fromJson(JSON.parse(engine));
             renderLevel(gameEngine.level);
             clearCharacterLayer();
@@ -181,7 +181,7 @@
                 // event is a left click
                 // find hovered tile
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
-                let moveOrder = new order();
+                let moveOrder = new murmures.order();
                 moveOrder.command = "move";
                 moveOrder.source = gameEngine.hero;
                 moveOrder.target = hoveredTile;
@@ -214,7 +214,7 @@
             let tileX = Math.floor(mouseEventX / gameEngine.tileSize);
             let tileY = Math.floor(mouseEventY / gameEngine.tileSize);
             document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
-            let ret = new tile();
+            let ret = new murmures.tile();
             ret.x = tileX;
             ret.y = tileY;
             return ret;

@@ -13,7 +13,7 @@
         module.exports = character;
     }
     else {
-        client.character = character;
+        murmures.character = character;
     }
     
     character.prototype.fromJson = function (src) {

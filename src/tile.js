@@ -11,7 +11,7 @@
         module.exports = tile;
     }
     else {
-        client.tile = tile;
+        murmures.tile = tile;
     }
     
     tile.prototype.fromJson = function (src) {

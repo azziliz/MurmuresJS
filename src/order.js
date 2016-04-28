@@ -12,7 +12,7 @@
         module.exports = order;
     }
     else {
-        client.order = order;
+        murmures.order = order;
     }
     
     order.prototype.fromJson = function (src) {
