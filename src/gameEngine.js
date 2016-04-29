@@ -1,21 +1,21 @@
 ﻿'use strict';
 
 (function (client) {
-    
+
     var gameEngine = function () {
         /// <field name="tileSize" type="Number"/>
         /// <field name="level" type="level"/>
         /// <field name="hero" type="character"/>
         /// <field name="mobs" type="character"/>
     };
-    
+
     if (typeof module === "object" && module && typeof module.exports === "object") {
         module.exports = gameEngine;
     }
     else {
         murmures.gameEngine = gameEngine;
     }
-    
+
     gameEngine.prototype.fromJson = function (src) {
         /// <param name="src" type="gameEngine"/>
         this.tileSize = src.tileSize;
@@ -29,9 +29,29 @@
             charmob.fromJson(mob);
             mobsarray.push(charmob);
         });
+
         this.mobs = mobsarray;
+
     };
-    
+
+    gameEngine.prototype.loadMobs = function(murmures){
+      let mobsarray = new Array();
+      for (let i=0;i<this.level.width;i++){
+        for(let j=0;j<this.level.height;j++){
+          if(this.level.tiles[j][i]==3){
+            let creature = new murmures.character();
+            creature.img = './src/img/skeleton.png';
+            creature.position = new murmures.tile();
+            creature.position.x = i;
+            creature.position.y = j;
+            creature.hitPoints = 10;
+            mobsarray.push(creature);
+          }
+        }
+      }
+      this.mobs = mobsarray;
+    }
+
     gameEngine.prototype.checkOrder = function (order) {
         /// <param name="order" type="order"/>
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };

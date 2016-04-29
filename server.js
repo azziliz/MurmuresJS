@@ -11,34 +11,21 @@ require('http').createServer(function (request, response) {
     else if (request.url === '/') {
         response.writeHead(200, { 'Content-Type': 'text/html' });
         response.end(require('fs').readFileSync('client.html').toString());
-        
+
         gameEngine = new murmures.gameEngine();
         gameEngine.tileSize = 32;
-        
+
         gameEngine.hero = new murmures.character();
         let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.hero.fromJson(JSON.parse(hero1Txt));
-        
+
         gameEngine.level = new murmures.level();
         let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.level.fromJson(JSON.parse(level1Txt));
         gameEngine.hero.position = gameEngine.level.startingTile;
-        
-        let creature = new murmures.character();
-        creature.img = './src/img/skeleton.png';
-        creature.position = new murmures.tile();
-        creature.position.x = 3;
-        creature.position.y = 5;
-        creature.hitPoints = 10;
-        let creature2 = new murmures.character();
-        creature2.img = './src/img/skeleton.png';
-        creature2.position = new murmures.tile();
-        creature2.position.x = 13;
-        creature2.position.y = 2;
-        creature2.hitPoints = 10;
-        gameEngine.mobs = new Array();
-        gameEngine.mobs.push(creature);
-        gameEngine.mobs.push(creature2);
+
+        gameEngine.loadMobs(murmures);
+
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages
@@ -76,7 +63,7 @@ require('http').createServer(function (request, response) {
         request.on('end', function () {
             if (request.url === '/getLevel') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null) 
+                if ((postData === null)
                     || (postData.id === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
@@ -87,9 +74,9 @@ require('http').createServer(function (request, response) {
                 }
             } else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null) 
-                  || (postData.command === null) 
-                  || (postData.source === null) 
+                if ((postData === null)
+                  || (postData.command === null)
+                  || (postData.source === null)
                   || (postData.target === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
@@ -116,4 +103,3 @@ require('http').createServer(function (request, response) {
 }).listen(15881);
 
 murmures.log('Server running at http://127.0.0.1:15881/');
-
