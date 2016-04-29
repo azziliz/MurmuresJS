@@ -93,6 +93,17 @@
                 }
             });
         }
+        this.applyAI();
+    }
+
+    gameEngine.prototype.applyAI = function () {
+        let hero = this.hero;
+        this.mobs.forEach(function (mob) {
+            if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
+                hero.hitPoints -= 1;
+                if (hero.hitPoints < 0) hero.hitPoints = 0;
+            }
+        });
     }
 
 })(this);

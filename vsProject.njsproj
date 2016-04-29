@@ -29,10 +29,12 @@
     <Content Include="client.html" />
     <Content Include="data\hero1.json" />
     <Content Include="data\level1.json" />
+    <Content Include="data\rltiles-2d.json" />
     <Content Include="README.md" />
     <Compile Include="server.js" />
     <Content Include="src\css\client.css" />
     <Content Include="src\img\perso.png" />
+    <Content Include="src\img\rltiles-2d.png" />
     <Content Include="src\img\skeleton.png" />
   </ItemGroup>
   <ItemGroup>
