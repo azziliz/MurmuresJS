@@ -76,7 +76,7 @@
     gameEngine.prototype.tileHasMob = function (tile) {
         let ret = false;
         this.mobs.forEach(function (mob) {
-            if (mob.position.x === tile.x && mob.position.y === tile.y) ret = true;
+            if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) ret = true;
         });
         return ret;
     }

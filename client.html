@@ -252,7 +252,6 @@
 
         function updateCharacters() {
             clearCharacterLayer();
-            drawCharacters(gameEngine.hero);
             for (let i = 0; i < gameEngine.mobs.length; i++) {
                 document.getElementById('mob' + i + '-icon').src = gameEngine.mobs[i].img;
                 document.getElementById('mob' + i + '-name').innerHTML = 'Squelette';
@@ -265,6 +264,12 @@
                     drawCharacters(gameEngine.mobs[i]);
                 }
             }
+            let i = 0;
+            document.getElementById('hero' + i + '-icon').src = gameEngine.hero.img;
+            document.getElementById('hero' + i + '-name').innerHTML = gameEngine.hero.name;
+            let missingLife = (parseFloat(gameEngine.hero.hitPointsMax) - parseFloat(gameEngine.hero.hitPoints)) / parseFloat(gameEngine.hero.hitPointsMax) * 208.0;
+            document.getElementById('hero' + i + '-life').style.height = Math.round(missingLife).toString() + 'px';
+            drawCharacters(gameEngine.hero);
         }
 
     </script>
@@ -323,16 +328,16 @@
             </div>
         </div>
         <div id="leftCharacters" class="zUI" style="float:left">
-            <div id="perso1" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#2c3e50">
+            <div id="hero0-box" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#2c3e50">
                 <div style="float:left; margin:3px; width:5px; height:208px; background-color:#d00;">
-                    <div style="height:40px; background-color:#888; margin:0"></div>
+                    <div id="hero0-life" style="height:40px; background-color:#888; margin:0"></div>
                 </div>
                 <div style="float:left">
                     <div style="float:left; margin:3px; background-color:#000;">
-                        <img class="uiIcon" src="./src/img/perso.png">
+                        <img id="hero0-icon" class="uiIcon" src="./src/img/perso.png">
                     </div>
                     <div style="float:left; width: 192px; margin:3px; padding:5px;">
-                        <div style="margin:3px; text-align: center;">Angharad</div>
+                        <div id="hero0-name" style="margin:3px; text-align: center;">Angharad</div>
                         <div style="margin:3px; font-size:smaller; text-align: center;">12/26</div>
                     </div>
                     <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
