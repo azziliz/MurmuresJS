@@ -149,9 +149,7 @@
             onScreenLog('<< loadEngine');
             gameEngine.fromJson(JSON.parse(engine));
             renderLevel(gameEngine.level);
-            clearCharacterLayer();
-            drawCharacters(gameEngine.hero);
-            gameEngine.mobs.forEach((mob) =>drawCharacters(mob));
+            updateCharacters();
         }
 
         function registerEvents() {
@@ -237,21 +235,36 @@
             let check = gameEngine.checkOrder(order);
             if (check.valid) {
                 onScreenLog('>> order - ' + order.command);
-                sendAjax('order', JSON.stringify(order), updateCharacters, true);
+                sendAjax('order', JSON.stringify(order), onOrderResponse, true);
             }
             else {
                 onScreenLog('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
             }
         }
 
-        function updateCharacters(response) {
-            onScreenLog('<< updateCharacters');
+        function onOrderResponse(response) {
+            onScreenLog('<< onOrderResponse');
             let ge = JSON.parse(response);
             gameEngine.hero = ge.hero;
             gameEngine.mobs = ge.mobs;
+            updateCharacters();
+        }
+
+        function updateCharacters() {
             clearCharacterLayer();
             drawCharacters(gameEngine.hero);
-            gameEngine.mobs.forEach((mob) =>drawCharacters(mob));
+            for (let i = 0; i < gameEngine.mobs.length; i++) {
+                document.getElementById('mob' + i + '-icon').src = gameEngine.mobs[i].img;
+                document.getElementById('mob' + i + '-name').innerHTML = 'Squelette';
+                let missingLife = (parseFloat(gameEngine.mobs[i].hitPointsMax) - parseFloat(gameEngine.mobs[i].hitPoints)) / parseFloat(gameEngine.mobs[i].hitPointsMax) * 208.0;
+                document.getElementById('mob' + i + '-life').style.height = Math.round(missingLife).toString() + 'px';
+                if (gameEngine.mobs[i].hitPoints === 0) {
+                    document.getElementById('mob' + i + '-box').style.display = "none";
+                }
+                else {
+                    drawCharacters(gameEngine.mobs[i]);
+                }
+            }
         }
 
     </script>
@@ -264,16 +277,16 @@
     -->
     <div id="targetResolution" class="fullScreen">
         <div id="rightCharacters" class="zUI" style="float:right">
-            <div id="p1" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#4C2A2A">
+            <div id="mob0-box" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#4C2A2A">
                 <div style="float:left; margin:3px; width:5px; height:208px; background-color:#d00;">
-                    <div style="height:40px; background-color:#888; margin:0"></div>
+                    <div id="mob0-life" style="height:40px; background-color:#888; margin:0"></div>
                 </div>
                 <div style="float:left">
                     <div style="float:left; margin:3px; background-color:#000;">
-                        <img class="uiIcon" src="./src/img/perso.png">
+                        <img id="mob0-icon" class="uiIcon" src="./src/img/perso.png">
                     </div>
                     <div style="float:left; width: 192px; margin:3px; padding:5px;">
-                        <div style="margin:3px; text-align: center;">Rat</div>
+                        <div id="mob0-name" style="margin:3px; text-align: center;">Rat</div>
                         <div style="margin:3px; font-size:smaller; text-align: center;"></div>
                     </div>
                     <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
@@ -286,16 +299,16 @@
                     <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
                 </div>
             </div>
-            <div id="p2" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#4C2A2A">
+            <div id="mob1-box" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#4C2A2A">
                 <div style="float:left; margin:3px; width:5px; height:208px; background-color:#d00;">
-                    <div style="height:40px; background-color:#888; margin:0"></div>
+                    <div id="mob1-life" style="height:40px; background-color:#888; margin:0"></div>
                 </div>
                 <div style="float:left">
                     <div style="float:left; margin:3px; background-color:#000;">
-                        <img class="uiIcon" src="./src/img/perso.png">
+                        <img id="mob1-icon" class="uiIcon" src="./src/img/perso.png">
                     </div>
                     <div style="float:left; width: 192px; margin:3px; padding:5px;">
-                        <div style="margin:3px; text-align: center;">Chauve-souris</div>
+                        <div id="mob1-name" style="margin:3px; text-align: center;">Chauve-souris</div>
                         <div style="margin:3px; font-size:smaller; text-align: center;"></div>
                     </div>
                     <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
@@ -310,7 +323,7 @@
             </div>
         </div>
         <div id="leftCharacters" class="zUI" style="float:left">
-            <div id="p3" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#2c3e50">
+            <div id="perso1" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#2c3e50">
                 <div style="float:left; margin:3px; width:5px; height:208px; background-color:#d00;">
                     <div style="height:40px; background-color:#888; margin:0"></div>
                 </div>
@@ -320,50 +333,6 @@
                     </div>
                     <div style="float:left; width: 192px; margin:3px; padding:5px;">
                         <div style="margin:3px; text-align: center;">Angharad</div>
-                        <div style="margin:3px; font-size:smaller; text-align: center;">12/26</div>
-                    </div>
-                    <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                </div>
-            </div>
-            <div id="p4" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#2c3e50">
-                <div style="float:left; margin:3px; width:5px; height:208px; background-color:#d00;">
-                    <div style="height:40px; background-color:#888; margin:0"></div>
-                </div>
-                <div style="float:left">
-                    <div style="float:left; margin:3px; background-color:#000;">
-                        <img class="uiIcon" src="./src/img/perso.png">
-                    </div>
-                    <div style="float:left; width: 192px; margin:3px; padding:5px;">
-                        <div style="margin:3px; text-align: center;">Rincevent</div>
-                        <div style="margin:3px; font-size:smaller; text-align: center;">12/26</div>
-                    </div>
-                    <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                    <div style="float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>
-                </div>
-            </div>
-            <div id="p5" style="clear:left; float:left; border:1px solid #666; border-radius:4px; margin:2px; padding:3px; background-color:#2c3e50">
-                <div style="float:left; margin:3px; width:5px; height:208px; background-color:#d00;">
-                    <div style="height:40px; background-color:#888; margin:0"></div>
-                </div>
-                <div style="float:left">
-                    <div style="float:left; margin:3px; background-color:#000;">
-                        <img class="uiIcon" src="./src/img/perso.png">
-                    </div>
-                    <div style="float:left; width: 192px; margin:3px; padding:5px;">
-                        <div style="margin:3px; text-align: center;">Kerrigan</div>
                         <div style="margin:3px; font-size:smaller; text-align: center;">12/26</div>
                     </div>
                     <div style="clear:left; float:left; margin:3px; width:64px; height:64px; background-color:#ccf;"></div>

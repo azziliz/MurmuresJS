@@ -5,6 +5,7 @@
     var character = function () {
         /// <field name="position" type="tile"/>
         /// <field name="hitPoints" type="Number"/>
+        /// <field name="hitPointsMax" type="Number"/>
         /// <field name="img" type="String"/>
         /// <field name="name" type="String"/>
     };
@@ -20,6 +21,7 @@
         /// <param name="src" type="character"/>
         this.position = src.position;
         this.hitPoints = src.hitPoints;
+        this.hitPointsMax = src.hitPointsMax;
         this.img = src.img;
         this.name = src.name;
     };

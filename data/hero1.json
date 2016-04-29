@@ -1,5 +1,6 @@
 ﻿{
     "name": "Angharad",
     "img": "./src/img/perso.png",
-    "hitPoints": 20
+    "hitPoints": 20,
+    "hitPointsMax": 20
 }
