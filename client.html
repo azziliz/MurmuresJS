@@ -236,7 +236,7 @@
         function launchOrder(order) {
             let check = gameEngine.checkOrder(order);
             if (check.valid) {
-                onScreenLog('>> order (move)');
+                onScreenLog('>> order - ' + order.command);
                 sendAjax('order', JSON.stringify(order), updateCharacters, true);
             }
             else {
