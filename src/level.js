@@ -28,7 +28,7 @@
         this.height = src.height;
         this.tileSize = src.tileSize;
         this.tiles = src.tiles;
-        if (typeof require == "function"){
+        if (typeof require === "function"){
             let tile = require('./tile');
 
           for(let x=0;x<this.width;x++){
@@ -48,7 +48,7 @@
 
     level.prototype.isWall = function (tile) {
         /// <param name="tile" type="tile"/>
-        return this.tiles[tile.y][tile.x] === 1;
+        return this.tiles[tile.y][tile.x].content === 1;
     }
 
 

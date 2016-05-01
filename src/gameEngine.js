@@ -39,7 +39,7 @@
         let mobsarray = [];
         for (let i=0; i < this.level.width; i++) {
             for (let j=0; j < this.level.height; j++) {
-                if (this.level.tiles[j][i] === 3) {
+                if (this.level.tiles[j][i].content === 3) {
                     let creature = new murmures.character();
                     creature.img = './src/img/skeleton.png';
                     creature.position = new murmures.tile();
