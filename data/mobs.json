@@ -1,0 +1,29 @@
+﻿{
+    "version": "0.2",
+    "templates": [
+        {
+            "uniqueId": "rltiles_skeleton",
+            "name": "Squelette",
+
+            "tileset": "rltiles",
+            "tilesetReference": "skeleton",
+
+            "hitPointsMax": 10,
+            "range": 2,
+            "damageValue": 1,
+            "canMove": false
+        },
+        {
+            "uniqueId": "rltiles_sewer_rat",
+            "name": "Rat d'égout",
+
+            "tileset": "rltiles",
+            "tilesetReference": "sewer_rat",
+
+            "hitPointsMax": 5,
+            "range": 1,
+            "damageValue": 1,
+            "canMove": true
+        }
+    ]
+}

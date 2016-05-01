@@ -44,6 +44,10 @@ require('http').createServer(function (request, response) {
                 response.writeHead(200, { 'Content-Type': 'image/png' });
                 response.end(fileContent);
             }
+            else if (fileName.endsWith('.html')) {
+                response.writeHead(200, { 'Content-Type': 'text/html' });
+                response.end(fileContent.toString());
+            }
             else {
                 response.writeHead(400); // Bad Request
                 response.end();
