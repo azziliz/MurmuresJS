@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 (function (client) {
     
@@ -18,6 +18,7 @@
     
     gameEngine.prototype.fromJson = function (src) {
         /// <param name="src" type="gameEngine"/>
+      
         this.tileSize = src.tileSize;
         this.level = new murmures.level();
         this.level.fromJson(src.level);
@@ -35,7 +36,7 @@
     };
     
     gameEngine.prototype.loadMobs = function (murmures) {
-        let mobsarray = new Array();
+        let mobsarray = [];
         for (let i=0; i < this.level.width; i++) {
             for (let j=0; j < this.level.height; j++) {
                 if (this.level.tiles[j][i] === 3) {

@@ -1,4 +1,5 @@
-﻿'use strict';
+'use strict';
+
 
 (function (client) {
 
@@ -27,6 +28,21 @@
         this.height = src.height;
         this.tileSize = src.tileSize;
         this.tiles = src.tiles;
+        if (typeof require == "function"){
+            let tile = require('./tile');
+          
+          for(let x=0;x<this.width;x++){
+            for(let y=0;y<this.height;y++){
+              let tempTile = new tile();
+              tempTile.content = src.tiles[y][x];
+              tempTile.state = 1;
+              tempTile.x = x;
+              tempTile.y = y;
+              this.tiles[y][x] = tempTile;
+            }
+          }
+        }
+      
         this.startingTile = src.startingTile;
     };
 

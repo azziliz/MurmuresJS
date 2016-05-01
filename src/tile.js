@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 (function (client) {
     
@@ -13,11 +13,18 @@
     else {
         murmures.tile = tile;
     }
+  
+  tile.prototype.x = 0;
+  tile.prototype.y = 0;
+  tile.prototype.state = 0;
+  tile.prototype.content = 0;
     
     tile.prototype.fromJson = function (src) {
         /// <param name="src" type="tile"/>
         this.x = src.x;
         this.y = src.y;
+        this.state = 0;
+        this.content = 0;
     };
 
 })(this);
