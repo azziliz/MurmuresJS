@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 let murmures = {
     log: function (txt) {
@@ -8,10 +8,11 @@ let murmures = {
 
 (function load() {
     murmures.C = require('./constants');
+    murmures.tile = require('./tile');
     murmures.level = require('./level');
     murmures.character = require('./character');
     murmures.player = require('./player');
-    murmures.tile = require('./tile');
+    
     murmures.gameEngine = require('./gameEngine');
     // ...
 })();
