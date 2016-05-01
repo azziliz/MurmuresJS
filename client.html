@@ -28,11 +28,12 @@
         // #region Utils
         function screenLog(txt) {
             let now = new Date();
-            document.getElementById("screenLog").innerHTML = '<span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br/>' + document.getElementById("screenLog").innerHTML;
+            document.getElementById("screenLog").insertAdjacentHTML('afterbegin', '<span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br/>');
         }
 
         function sendAjax(path, param, callback, async) {
             let xhr = new XMLHttpRequest();
+            xhr.onerror = onXhrError;
             xhr.open('POST', window.location.href + path, async);
             xhr.setRequestHeader('Content-Type', 'application/json');
             if (callback !== null) {
@@ -40,9 +41,13 @@
                     if (xhr.readyState === 4) {
                         callback(xhr.responseText);
                     }
-                };
+                };                
             }
             xhr.send(param);
+        }
+
+        function onXhrError(e) {
+            alert('Vous avez été déconnecté du serveur');
         }
         // #endregion
 
