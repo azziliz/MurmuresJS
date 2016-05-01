@@ -35,7 +35,7 @@
             for(let y=0;y<this.height;y++){
               let tempTile = new tile();
               tempTile.content = src.tiles[y][x];
-              tempTile.state = 1;
+              tempTile.state = 0;
               tempTile.x = x;
               tempTile.y = y;
               this.tiles[y][x] = tempTile;

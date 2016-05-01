@@ -124,7 +124,7 @@
               
                 if (gameEngine.level.tiles[y][x].content === 1) {
                     console.log(gameEngine.level.tiles[y][x]);
-                    if (gameEngine.level.state == 0){
+                    if (gameEngine.level.tiles[y][x].state == 0){
                       drawOneSquare(context, x, y, "#000000", true);
                     }else{
                       drawOneSquare(context, x, y, color, true);
