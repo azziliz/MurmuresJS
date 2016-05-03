@@ -21,7 +21,7 @@ require('http').createServer(function (request, response) {
 
         gameEngine.level = new murmures.level();
         let level1Txt = require('fs').readFileSync('./data/level1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        gameEngine.level.fromJson(JSON.parse(level1Txt));
+        gameEngine.level.fromJson(JSON.parse(level1Txt),murmures);
         gameEngine.hero.position = gameEngine.level.startingTile;
 
         gameEngine.loadMobs(murmures);

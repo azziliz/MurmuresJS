@@ -13,7 +13,7 @@
     <script type="text/javascript">
         'use strict';
         // namespace
-        var murmures = {}; 
+        var murmures = {};
     </script>
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
@@ -41,7 +41,7 @@
                     if (xhr.readyState === 4) {
                         callback(xhr.responseText);
                     }
-                };                
+                };
             }
             xhr.send(param);
         }
@@ -126,8 +126,9 @@
                 drawOneSquare(context, x, y, color, true);
             }
             else {
-              
+                console.log(gameEngine.level.tiles[y][x]);
                 if (gameEngine.level.tiles[y][x].content === 1) {
+                  console.log(gameEngine.level.tiles[y][x].state);
                     if (gameEngine.level.tiles[y][x].state === 0){
                       drawOneSquare(context, x, y, "#000000", true);
                     }else{
@@ -191,7 +192,7 @@
 
         function loadEngine(engine) {
             screenLog('<< loadEngine');
-            gameEngine.fromJson(JSON.parse(engine));
+            gameEngine.fromJson(JSON.parse(engine),murmures);
             renderLevel();
         }
 
