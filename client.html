@@ -126,15 +126,17 @@
                 drawOneSquare(context, x, y, color, true);
             }
             else {
-                console.log(gameEngine.level.tiles[y][x]);
+              
+              if (gameEngine.level.tiles[y][x].state === 1){
                 if (gameEngine.level.tiles[y][x].content === 1) {
-                  console.log(gameEngine.level.tiles[y][x].state);
-                    if (gameEngine.level.tiles[y][x].state === 0){
-                      drawOneSquare(context, x, y, "#000000", true);
-                    }else{
-                      drawOneSquare(context, x, y, color, true);
-                     }
+                    drawOneSquare(context, x, y, color, true);
+                }else{
+                  drawOneSquare(context, x, y, "#555555", true);
                 }
+
+              }else{
+                drawOneSquare(context, x, y, "#000000", true);
+              }
             }
         }
         // #endregion
@@ -289,8 +291,10 @@
         function onOrderResponse(response) {
             screenLog('<< onOrderResponse');
             let ge = JSON.parse(response);
-            gameEngine.hero = ge.hero;
-            gameEngine.mobs = ge.mobs;
+          /*  gameEngine.hero = ge.hero;
+            gameEngine.mobs = ge.mobs;*/
+            gameEngine.fromJson(ge,murmures);
+            drawTiles();
             updateCharacters();
         }
 
