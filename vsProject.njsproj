@@ -24,6 +24,7 @@
     <Compile Include="src\level.js" />
     <Compile Include="src\murmures.js" />
     <Compile Include="src\order.js" />
+    <Compile Include="src\physicalGround.js" />
     <Compile Include="src\player.js" />
     <Compile Include="src\tile.js" />
     <Content Include="client.html" />
