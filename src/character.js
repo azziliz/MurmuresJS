@@ -32,13 +32,22 @@
     };
 
     character.prototype.setVision = function(level){
-      for(let i=-1;i<2;i++){
-        for(let j=-1;j<2;j++){
-          if((this.position.x+i>0) && (this.position.x+i<level.width) && (this.position.y+j>0) && (this.position.y+j<level.height)){
-              level.tiles[this.position.y+j][this.position.x+i].state=1;
+      for(let i=0;i<360;i++)
+      {
+        let x = Math.cos(i*0.01745);
+        let y = Math.sin(i*0.01745);
+        let ox = this.position.x+0.5;
+        let oy = this.position.y+0.5;
+        for(let j=0;j<5;j++){
+          level.tiles[Math.floor(oy)][Math.floor(ox)].state = 1;
+          if (level.tiles[Math.floor(oy)][Math.floor(ox)].content == 1){
+            break;
           }
+          ox += x;
+          oy += y;
         }
-      }
-    }
+      };
+
+    };
 
 })(this);
