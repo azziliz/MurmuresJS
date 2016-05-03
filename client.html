@@ -126,14 +126,18 @@
                 drawOneSquare(context, x, y, color, true);
             }
             else {
-              
+
               if (gameEngine.level.tiles[y][x].state === 1){
                 if (gameEngine.level.tiles[y][x].content === 1) {
                     drawOneSquare(context, x, y, color, true);
                 }else{
-                  drawOneSquare(context, x, y, "#555555", true);
+                  drawOneSquare(context, x, y, "#777777", true);
                 }
 
+              }else if(gameEngine.level.tiles[y][x].state === 2){
+                if (gameEngine.level.tiles[y][x].content !== 1) {
+                  drawOneSquare(context, x, y, "#333333", true);
+                }
               }else{
                 drawOneSquare(context, x, y, "#000000", true);
               }
@@ -181,13 +185,15 @@
 
         function drawCharacter(character) {
             /// <param name="character" type="character"/>
-            let layer = document.getElementById('characterLayer');
-            let context = layer.getContext('2d');
-            let img = new Image();
-            img.onload = function () {
-                context.drawImage(img, character.position.x * gameEngine.tileSize, character.position.y * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize);
-            };
-            img.src = character.img;
+            if (gameEngine.level.tiles[character.position.y][character.position.x].state==1){
+              let layer = document.getElementById('characterLayer');
+              let context = layer.getContext('2d');
+              let img = new Image();
+              img.onload = function () {
+                  context.drawImage(img, character.position.x * gameEngine.tileSize, character.position.y * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize);
+              };
+              img.src = character.img;
+            }
         }
         // #endregion
         // #endregion

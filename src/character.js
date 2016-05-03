@@ -35,8 +35,8 @@
       for(let xx=0;xx<level.width;xx++){
         for(let yy=0;yy<level.height;yy++){
           if(level.tiles[yy][xx].state==1){
-            if(level.tiles[yy][xx].content==0){
-                level.tiles[yy][xx].state=2;
+            if(level.tiles[yy][xx].content!=1){
+                level.tiles[yy][xx].state = 2;
             }
           }
         }
