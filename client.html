@@ -13,7 +13,7 @@
     <script type="text/javascript">
         'use strict';
         // namespace
-        var murmures = {}; 
+        var murmures = {};
     </script>
     <script src="src/character.js"></script>
     <script src="src/level.js"></script>
@@ -41,7 +41,7 @@
                     if (xhr.readyState === 4) {
                         callback(xhr.responseText);
                     }
-                };                
+                };
             }
             xhr.send(param);
         }
@@ -127,13 +127,16 @@
             }
             else {
               
+              if (gameEngine.level.tiles[y][x].state === 1){
                 if (gameEngine.level.tiles[y][x].content === 1) {
-                    if (gameEngine.level.tiles[y][x].state === 0){
-                      drawOneSquare(context, x, y, "#000000", true);
-                    }else{
-                      drawOneSquare(context, x, y, color, true);
-                     }
+                    drawOneSquare(context, x, y, color, true);
+                }else{
+                  drawOneSquare(context, x, y, "#555555", true);
                 }
+
+              }else{
+                drawOneSquare(context, x, y, "#000000", true);
+              }
             }
         }
         // #endregion
@@ -191,7 +194,7 @@
 
         function loadEngine(engine) {
             screenLog('<< loadEngine');
-            gameEngine.fromJson(JSON.parse(engine));
+            gameEngine.fromJson(JSON.parse(engine),murmures);
             renderLevel();
         }
 
@@ -288,8 +291,10 @@
         function onOrderResponse(response) {
             screenLog('<< onOrderResponse');
             let ge = JSON.parse(response);
-            gameEngine.hero = ge.hero;
-            gameEngine.mobs = ge.mobs;
+          /*  gameEngine.hero = ge.hero;
+            gameEngine.mobs = ge.mobs;*/
+            gameEngine.fromJson(ge,murmures);
+            drawTiles();
             updateCharacters();
         }
 

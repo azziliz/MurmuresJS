@@ -20,7 +20,7 @@
         murmures.level = level;
     }
 
-    level.prototype.fromJson = function (src) {
+    level.prototype.fromJson = function (src, murmures) {
         /// <param name="src" type="level"/>
         this.id = src.id;
         this.layout = src.layout;
@@ -28,20 +28,20 @@
         this.height = src.height;
         this.tileSize = src.tileSize;
         this.tiles = src.tiles;
-        if (typeof require === "function"){
-            let tile = require('./tile');
-
+        // console.log(this.tiles);
+        if(typeof this.tiles[0][0] == "number"){
           for(let x=0;x<this.width;x++){
             for(let y=0;y<this.height;y++){
-              let tempTile = new tile();
+              let tempTile = new murmures.tile();
               tempTile.content = src.tiles[y][x];
-              tempTile.state = 1;
+              tempTile.state = 0;
               tempTile.x = x;
               tempTile.y = y;
               this.tiles[y][x] = tempTile;
             }
           }
         }
+
 
         this.startingTile = src.startingTile;
     };

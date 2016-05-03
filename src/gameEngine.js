@@ -1,40 +1,41 @@
 'use strict';
 
 (function (client) {
-    
+
     var gameEngine = function () {
         /// <field name="tileSize" type="Number"/>
         /// <field name="level" type="level"/>
         /// <field name="hero" type="character"/>
         /// <field name="mobs" type="character"/>
     };
-    
+
     if (typeof module === "object" && module && typeof module.exports === "object") {
         module.exports = gameEngine;
     }
     else {
         murmures.gameEngine = gameEngine;
     }
-    
-    gameEngine.prototype.fromJson = function (src) {
+
+    gameEngine.prototype.fromJson = function (src,murmures) {
         /// <param name="src" type="gameEngine"/>
-      
+
         this.tileSize = src.tileSize;
         this.level = new murmures.level();
-        this.level.fromJson(src.level);
+        this.level.fromJson(src.level,murmures);
         this.hero = new murmures.character();
         this.hero.fromJson(src.hero);
+        this.hero.setVision(this.level);
         let mobsarray = new Array();
         src.mobs.forEach(function (mob) {
             let charmob = new murmures.character();
             charmob.fromJson(mob);
             mobsarray.push(charmob);
         });
-        
+
         this.mobs = mobsarray;
 
     };
-    
+
     gameEngine.prototype.loadMobs = function (murmures) {
         let mobsarray = [];
         for (let i=0; i < this.level.width; i++) {
@@ -53,7 +54,7 @@
         }
         this.mobs = mobsarray;
     }
-    
+
     gameEngine.prototype.checkOrder = function (order) {
         /// <param name="order" type="order"/>
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
@@ -73,7 +74,7 @@
         else if (order.command === 'move' && this.tileHasMob(order.target)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     }
-    
+
     gameEngine.prototype.tileHasMob = function (tile) {
         let ret = false;
         this.mobs.forEach(function (mob) {
@@ -81,10 +82,11 @@
         });
         return ret;
     }
-    
+
     gameEngine.prototype.applyOrder = function (order) {
         if (order.command === "move") {
             this.hero.move(order.target.x, order.target.y);
+            this.hero.setVision(this.level);
         }
         else {
             this.mobs.forEach(function (mob) {
