@@ -135,7 +135,7 @@
                 }
 
               }else if(gameEngine.level.tiles[y][x].state === 2){
-                if (gameEngine.level.tiles[y][x].content === 0) {
+                if (gameEngine.level.tiles[y][x].content !== 1) {
                   drawOneSquare(context, x, y, "#333333", true);
                 }
               }else{
@@ -185,7 +185,6 @@
 
         function drawCharacter(character) {
             /// <param name="character" type="character"/>
-            console.log(gameEngine.level.tiles[character.position.y][character.position.x].state);
             if (gameEngine.level.tiles[character.position.y][character.position.x].state==1){
               let layer = document.getElementById('characterLayer');
               let context = layer.getContext('2d');
