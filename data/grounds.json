@@ -1,0 +1,10 @@
+﻿{
+    "uniqueId": "",
+    "tileset": "",
+    "tilesetReference": "",
+    "allowFlying": false,
+    "allowTerrestrial": false,
+    "allowAquatic": false,
+    "allowUnderground": false,
+    "allowEthereal": false
+}

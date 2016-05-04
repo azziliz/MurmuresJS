@@ -2,6 +2,8 @@
 
 var murmures = require('./src/murmures');
 var gameEngine = null;
+//var phy = new murmures.physicalGround();
+//var txt = JSON.stringify(phy);
 
 require('http').createServer(function (request, response) {
     if (request.url === '/favicon.ico') {

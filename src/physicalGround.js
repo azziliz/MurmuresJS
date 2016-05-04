@@ -8,4 +8,7 @@ var physicalGround = function () {
     this.allowTerrestrial = false;
     this.allowAquatic = false;
     this.allowUnderground = false;
+    this.allowEthereal = false;
 };
+
+module.exports = physicalGround;

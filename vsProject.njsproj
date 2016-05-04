@@ -28,6 +28,7 @@
     <Compile Include="src\player.js" />
     <Compile Include="src\tile.js" />
     <Content Include="client.html" />
+    <Content Include="data\grounds.json" />
     <Content Include="data\hero1.json" />
     <Content Include="data\level1.json" />
     <Content Include="data\level2.json" />
