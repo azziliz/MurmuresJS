@@ -7,8 +7,12 @@
         /// <field name="y" type="Number"/>
         this.x = 0;
         this.y = 0;
+        // state == 0 --> not discovered yet
+        // state == 1 --> highlighted (visible)
+        // state == 2 --> fog of war
         this.state = 0;
-        this.physicalGroundId = '';
+        this.groundId = '';
+        this.propId = '';
     };
     
     if (typeof module === "object" && module && typeof module.exports === "object") {

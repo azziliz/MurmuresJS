@@ -48,7 +48,7 @@
         }
 
         function onXhrError(e) {
-            alert('Vous avez été déconnecté du serveur');
+            screenLog('<span style="color:#f66">' + 'ERROR - Vous avez été déconnecté du serveur</span>');
         }
         // #endregion
 
@@ -67,12 +67,17 @@
                 allCanvas[canvasIter].height = 1 + gameEngine.level.height * gameEngine.tileSize;
                 let context = allCanvas[canvasIter].getContext('2d');
                 context.translate(0.5, 0.5); // translation prevents anti-aliasing.
+                context.imageSmoothingEnabled = false;
             }
             document.getElementById("screenLog").style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
-            drawGrid();
-            drawTiles();
-            initUI();
-            updateCharacters();
+            //drawGrid();
+            let img = new Image();
+            img.onload = function () {
+                drawTiles();
+                initUI();
+                updateCharacters();
+            }
+            img.src = "/src/img/rltiles-2d.png";
         }
 
         // #region Grid
@@ -113,36 +118,26 @@
 
         // #region Tiles
         function drawTiles() {
-            let layer = document.getElementById('tilesLayer');
-            let context = layer.getContext('2d');
-            context.clearRect(-0.5, -0.5, layer.width, layer.height);
+            //document.getElementById('tilesLayer').getContext('2d').clearRect(-0.5, -0.5, 1 + gameEngine.level.width * gameEngine.tileSize, 1 + gameEngine.level.height * gameEngine.tileSize);
+            document.getElementById('fogOfWarLayer').getContext('2d').clearRect(-0.5, -0.5, 1 + gameEngine.level.width * gameEngine.tileSize, 1 + gameEngine.level.height * gameEngine.tileSize);
             for (let x = 0; x < gameEngine.level.width; x++) {
                 for (let y = 0; y < gameEngine.level.height; y++) {
-                    drawOneTile(context, x, y, "#2D1E19");
+                    drawOneTile(x, y, "#2D1E19");
                 }
             }
         }
 
-        function drawOneTile(context, x, y, color) {
-            if ((x === 0) || (y === 0) || (x === gameEngine.level.width - 1) || (y === gameEngine.level.height - 1)) {
-                drawOneSquare(context, x, y, color, true);
+        function drawOneTile(x, y, color) {
+            let img = new Image();
+            img.src = "/src/img/rltiles-2d.png";
+            let tilesetCoord = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].tilesetCoord;
+            if (gameEngine.level.tiles[y][x].state !== 0) {
+                document.getElementById('tilesLayer').getContext('2d').drawImage(img,
+                    tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
             }
-            else {
-
-              if (gameEngine.level.tiles[y][x].state === 1){
-                if (gameEngine.level.tiles[y][x].content === 1) {
-                    drawOneSquare(context, x, y, color, true);
-                }else{
-                  drawOneSquare(context, x, y, "#777777", true);
-                }
-
-              }else if(gameEngine.level.tiles[y][x].state === 2){
-                if (gameEngine.level.tiles[y][x].content !== 1) {
-                  drawOneSquare(context, x, y, "#333333", true);
-                }
-              }else{
-                drawOneSquare(context, x, y, "#000000", true);
-              }
+            if (gameEngine.level.tiles[y][x].state === 2) {
+                drawOneSquare(document.getElementById('fogOfWarLayer').getContext('2d'), x, y, "#000000", true);
             }
         }
         // #endregion
@@ -182,7 +177,6 @@
             let layer = document.getElementById('characterLayer');
             let context = layer.getContext('2d');
             context.clearRect(-0.5, -0.5, layer.width, layer.height);
-            context.imageSmoothingEnabled = false;
         }
 
         function drawCharacter(character) {
@@ -308,8 +302,8 @@
             let ge = JSON.parse(response);
           /*  gameEngine.hero = ge.hero;
             gameEngine.mobs = ge.mobs;*/
-            gameEngine.fromJson(ge,murmures);
-            drawTiles();
+            gameEngine.fromJson(ge, murmures);
+            window.requestAnimationFrame(drawTiles);
             updateCharacters();
         }
 
@@ -319,7 +313,7 @@
         <div id="template-box" class="characterBox bgColorMob">
             <div>
                 <div>
-                    <img id="template-icon" class="uiIcon" src=".">
+                    <img id="template-icon" class="uiIcon">
                 </div>
                 <div class="characterName">
                     <div id="template-name">Chauve-souris</div>
@@ -352,6 +346,7 @@
             <a href="/src/rltilesbrowser.html" style="float:left">rltiles browser</a>
         </div>
     </div>
+    <img id="rltiles" src="/src/img/rltiles-2d.png" style="display:none">
 
     <button type="button" onclick="init()" style="display:none">Get level</button>
 
@@ -359,6 +354,7 @@
         <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
         <canvas id="characterLayer" width="1400" height="840" style="z-index: 30"></canvas>
         <canvas id="gridLayer" width="1400" height="840" style="z-index: 25; opacity:0.2"></canvas>
+        <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 20; opacity:0.5"></canvas>
         <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
         <code id="screenLog" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>
     </div>

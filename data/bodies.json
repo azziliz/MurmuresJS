@@ -1,0 +1,31 @@
+﻿{
+    "version": "0.2",
+    "templates": [
+        {
+            "uniqueId": "rltiles_dngn_stone_wall",
+            "tileset": "rltiles",
+            "tilesetReference": "dngn_stone_wall",
+            "tilesetCoord": [ 16, 45 ],
+            "layer": "ground",
+            "allowFlying": false,
+            "allowTerrestrial": false,
+            "allowAquatic": false,
+            "allowUnderground": false,
+            "allowEthereal": false,
+            "behavior": { }
+        },
+        {
+            "uniqueId": "rltiles_floor_of_a_room",
+            "tileset": "rltiles",
+            "tilesetReference": "floor_of_a_room",
+            "tilesetCoord": [ 28, 45 ],
+            "layer": "ground",
+            "allowFlying": true,
+            "allowTerrestrial": true,
+            "allowAquatic": false,
+            "allowUnderground": true,
+            "allowEthereal": true,
+            "behavior": { }
+        }
+    ]
+}

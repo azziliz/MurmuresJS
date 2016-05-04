@@ -12,7 +12,7 @@ let murmures = {
     murmures.level = require('./level');
     murmures.character = require('./character');
     murmures.player = require('./player');
-    murmures.physicalGround = require('./physicalGround');
+    murmures.physicalBody = require('./physicalBody');
     
     murmures.gameEngine = require('./gameEngine');
     // ...

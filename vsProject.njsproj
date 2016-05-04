@@ -24,14 +24,15 @@
     <Compile Include="src\level.js" />
     <Compile Include="src\murmures.js" />
     <Compile Include="src\order.js" />
-    <Compile Include="src\physicalGround.js" />
+    <Compile Include="src\physicalBody.js" />
     <Compile Include="src\player.js" />
     <Compile Include="src\tile.js" />
     <Content Include="client.html" />
-    <Content Include="data\grounds.json" />
+    <Content Include="data\bodies.json" />
     <Content Include="data\hero1.json" />
     <Content Include="data\level1.json" />
     <Content Include="data\level2.json" />
+    <Content Include="data\level3.json" />
     <Content Include="data\mobs.json" />
     <Content Include="data\rltiles-2d.json" />
     <Content Include="README.md" />

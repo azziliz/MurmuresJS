@@ -2,8 +2,7 @@
 
 var murmures = require('./src/murmures');
 var gameEngine = null;
-//var phy = new murmures.physicalGround();
-//var txt = JSON.stringify(phy);
+
 
 require('http').createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
@@ -16,7 +15,18 @@ require('http').createServer(function (request, response) {
 
         gameEngine = new murmures.gameEngine();
         gameEngine.tileSize = 32;
-
+        
+        let bodiesJson = require('fs').readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let bodiesReference = JSON.parse(bodiesJson).templates;
+        gameEngine.bodies = {};
+        bodiesReference.forEach(function (body) { gameEngine.bodies[body.uniqueId] = body; });
+        
+        let mobsJson = require('fs').readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let mobsReference = JSON.parse(mobsJson).templates;
+        gameEngine.mobsReference = {};
+        mobsReference.forEach(function (mob) { gameEngine.mobsReference[mob.uniqueId] = mob; });
+        var txt = JSON.stringify(gameEngine.mobsReference);
+        
         gameEngine.hero = new murmures.character();
         let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.hero.fromJson(JSON.parse(hero1Txt));

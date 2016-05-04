@@ -4,6 +4,8 @@
 
     var gameEngine = function () {
         /// <field name="tileSize" type="Number"/>
+        /// <field name="bodies" type="physicalBody"/>
+        /// <field name="mobsReference" type="character"/>
         /// <field name="level" type="level"/>
         /// <field name="hero" type="character"/>
         /// <field name="mobs" type="character"/>
@@ -18,8 +20,9 @@
 
     gameEngine.prototype.fromJson = function (src,murmures) {
         /// <param name="src" type="gameEngine"/>
-
         this.tileSize = src.tileSize;
+        this.bodies = src.bodies;
+        this.mobsReference = src.mobsReference;
         this.level = new murmures.level();
         this.level.fromJson(src.level,murmures);
         this.hero = new murmures.character();
