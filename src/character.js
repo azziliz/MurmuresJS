@@ -42,19 +42,24 @@
         }
       }
 
-      for(let i=0;i<360;i++)
-      {
+      for(let i=0;i<360;i++){
         let x = Math.cos(i*0.01745);
         let y = Math.sin(i*0.01745);
         let ox = this.position.x+0.5;
         let oy = this.position.y+0.5;
         for(let j=0;j<5;j++){
-          level.tiles[Math.floor(oy)][Math.floor(ox)].state = 1;
-          if (level.tiles[Math.floor(oy)][Math.floor(ox)].content == 1){
-            break;
+          let oxx = 0;
+          oxx = Math.floor(ox);
+          let oyy = 0;
+          oyy = Math.floor(oy);
+          if((oxx>=0) && (oxx<level.width) && (oyy>=0) && (oyy<level.height)){
+            level.tiles[oyy][oxx].state = 1;
+            if (level.tiles[oyy][oxx].content == 1){
+              break;
+            }
+            ox += x;
+            oy += y;
           }
-          ox += x;
-          oy += y;
         }
       };
 
