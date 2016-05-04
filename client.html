@@ -24,6 +24,7 @@
     <script type="text/javascript">
         'use strict';
         var gameEngine = new murmures.gameEngine();
+        gameEngine.allowOrders = true;
 
         // #region Utils
         function screenLog(txt) {
@@ -67,6 +68,7 @@
                 let context = allCanvas[canvasIter].getContext('2d');
                 context.translate(0.5, 0.5); // translation prevents anti-aliasing.
             }
+            document.getElementById("screenLog").style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
             drawGrid();
             drawTiles();
             initUI();
@@ -285,17 +287,24 @@
 
         function launchOrder(order) {
             let check = gameEngine.checkOrder(order);
-            if (check.valid) {
-                screenLog('>> order - ' + order.command);
-                sendAjax('order', JSON.stringify(order), onOrderResponse, true);
+            if (gameEngine.allowOrders) {
+                if (check.valid) {
+                    screenLog('>> order - ' + order.command);
+                    sendAjax('order', JSON.stringify(order), onOrderResponse, true);
+                    gameEngine.allowOrders = false;
+                }
+                else {
+                    screenLog('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
+                }
             }
             else {
-                screenLog('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
+                screenLog('<span style="color:#f66">' + 'WARNING - Order was discarded - Waiting for server response </span>');
             }
         }
 
         function onOrderResponse(response) {
             screenLog('<< onOrderResponse');
+            gameEngine.allowOrders = true;
             let ge = JSON.parse(response);
           /*  gameEngine.hero = ge.hero;
             gameEngine.mobs = ge.mobs;*/

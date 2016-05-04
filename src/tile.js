@@ -8,7 +8,7 @@
         this.x = 0;
         this.y = 0;
         this.state = 0;
-        this.physics = 0;
+        this.physicalGroundId = '';
     };
     
     if (typeof module === "object" && module && typeof module.exports === "object") {
