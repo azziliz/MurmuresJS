@@ -63,10 +63,10 @@
         function renderLevel() {
             let allCanvas = document.getElementsByTagName("canvas");
             for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
-                allCanvas[canvasIter].width = 1 + gameEngine.level.width * gameEngine.tileSize; // This is a hard reset of all canvas and is quite time consumming.
-                allCanvas[canvasIter].height = 1 + gameEngine.level.height * gameEngine.tileSize;
+                allCanvas[canvasIter].width = gameEngine.level.width * gameEngine.tileSize; // This is a hard reset of all canvas and is quite time consumming.
+                allCanvas[canvasIter].height = gameEngine.level.height * gameEngine.tileSize;
                 let context = allCanvas[canvasIter].getContext('2d');
-                context.translate(0.5, 0.5); // translation prevents anti-aliasing.
+                //context.translate(0.5, 0.5); // translation prevents anti-aliasing.
                 context.imageSmoothingEnabled = false;
             }
             document.getElementById("screenLog").style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
@@ -84,7 +84,7 @@
         function drawGrid() {
             let layer = document.getElementById('gridLayer');
             let context = layer.getContext('2d');
-            context.clearRect(-0.5, -0.5, layer.width, layer.height);
+            context.clearRect(0, 0, layer.width, layer.height);
             for (let x = 0; x < gameEngine.level.width; x++) {
                 for (let y = 0; y < gameEngine.level.height; y++) {
                     drawOneSquare(context, x, y, "#ccc", false); // light gray
@@ -118,8 +118,7 @@
 
         // #region Tiles
         function drawTiles() {
-            //document.getElementById('tilesLayer').getContext('2d').clearRect(-0.5, -0.5, 1 + gameEngine.level.width * gameEngine.tileSize, 1 + gameEngine.level.height * gameEngine.tileSize);
-            document.getElementById('fogOfWarLayer').getContext('2d').clearRect(-0.5, -0.5, 1 + gameEngine.level.width * gameEngine.tileSize, 1 + gameEngine.level.height * gameEngine.tileSize);
+            document.getElementById('fogOfWarLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
             for (let x = 0; x < gameEngine.level.width; x++) {
                 for (let y = 0; y < gameEngine.level.height; y++) {
                     drawOneTile(x, y, "#2D1E19");
@@ -176,7 +175,7 @@
         function clearCharacterLayer() {
             let layer = document.getElementById('characterLayer');
             let context = layer.getContext('2d');
-            context.clearRect(-0.5, -0.5, layer.width, layer.height);
+            context.clearRect(0, 0, layer.width, layer.height);
         }
 
         function drawCharacter(character) {
@@ -203,7 +202,6 @@
         function registerEvents() {
             // IE11 returns decimal number for MouseEvent coordinates but Chrome43 always rounds down.
             // --> using floor() for consistency.
-            // Also, rounding cancels the canvas shift (0.5 pixel)
             // and retrieves the nearest pixel coordinates.
             let topLayer = document.getElementById("topLayer");
             topLayer.addEventListener("mousedown", function (e) {

@@ -5,7 +5,7 @@
             "uniqueId": "rltiles_dngn_stone_wall",
             "tileset": "rltiles",
             "tilesetReference": "dngn_stone_wall",
-            "tilesetCoord": [ 16, 45 ],
+            "tilesetCoord": [ 15, 45 ],
             "layer": "ground",
             "allowFlying": false,
             "allowTerrestrial": false,
