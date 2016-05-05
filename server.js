@@ -3,6 +3,20 @@
 var murmures = require('./src/murmures');
 var gameEngine = null;
 
+// Tries to compress (gzip) the response, if the client browser allows it
+function compressAndSend(request, response, contType, txt) {
+    var acceptEncoding = request.headers['accept-encoding'];
+    if (!acceptEncoding) {
+        acceptEncoding = '';
+    }
+    if (acceptEncoding.match(/\bgzip\b/)) {
+        response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
+        response.end(require('zlib').gzipSync(txt));
+    } else {
+        response.writeHead(200, { 'Content-Type': contType });
+        response.end(txt);
+    }
+}
 
 require('http').createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
@@ -10,8 +24,7 @@ require('http').createServer(function (request, response) {
         response.end();
     }
     else if (request.url === '/') {
-        response.writeHead(200, { 'Content-Type': 'text/html' });
-        response.end(require('fs').readFileSync('client.html').toString());
+        compressAndSend(request, response, 'text/html', require('fs').readFileSync('client.html').toString());
 
         gameEngine = new murmures.gameEngine();
         gameEngine.tileSize = 32;
@@ -45,20 +58,16 @@ require('http').createServer(function (request, response) {
             let fileName = request.url;
             let fileContent = require('fs').readFileSync('.'.concat(fileName));
             if (fileName.endsWith('.js')) {
-                response.writeHead(200, { 'Content-Type': 'application/javascript' });
-                response.end(fileContent.toString());
+                compressAndSend(request, response, 'application/javascript', fileContent.toString());
             }
             else if (fileName.endsWith('.css')) {
-                response.writeHead(200, { 'Content-Type': 'text/css' });
-                response.end(fileContent.toString());
+                compressAndSend(request, response, 'text/css', fileContent.toString());
             }
             else if (fileName.endsWith('.png')) {
-                response.writeHead(200, { 'Content-Type': 'image/png' });
-                response.end(fileContent);
+                compressAndSend(request, response, 'image/png', fileContent);
             }
             else if (fileName.endsWith('.html')) {
-                response.writeHead(200, { 'Content-Type': 'text/html' });
-                response.end(fileContent.toString());
+                compressAndSend(request, response, 'text/html', fileContent.toString());
             }
             else {
                 response.writeHead(400); // Bad Request
@@ -85,8 +94,7 @@ require('http').createServer(function (request, response) {
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
                 else {
-                    response.writeHead(200, { 'Content-Type': 'application/json' });
-                    response.end(JSON.stringify(gameEngine));
+                    compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
                 }
             } else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
@@ -101,12 +109,10 @@ require('http').createServer(function (request, response) {
                     let check = gameEngine.checkOrder(postData);
                     if (check.valid) {
                         gameEngine.applyOrder(postData);
-                        response.writeHead(200, { 'Content-Type': 'application/json' });
-                        response.end(JSON.stringify(gameEngine));
+                        compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
                     }
                     else {
-                        response.writeHead(200, { 'Content-Type': 'application/json' });
-                        response.end(JSON.stringify({ error: check.reason }));
+                        compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
                     }
                 }
             }

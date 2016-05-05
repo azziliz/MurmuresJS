@@ -19,6 +19,10 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
     <Compile Include="src\character.js" />
+    <Compile Include="src\clientScript.js">
+      <SubType>Code</SubType>
+      <TestFramework>ExportRunner</TestFramework>
+    </Compile>
     <Compile Include="src\constants.js" />
     <Compile Include="src\gameEngine.js" />
     <Compile Include="src\level.js" />
@@ -37,6 +41,7 @@
     <Content Include="data\rltiles-2d.json" />
     <Content Include="README.md" />
     <Compile Include="server.js" />
+    <Content Include="src\bodyeditor.html" />
     <Content Include="src\css\client.css" />
     <Content Include="src\img\perso.png" />
     <Content Include="src\img\rltiles-2d.png" />
