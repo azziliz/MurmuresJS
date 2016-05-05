@@ -27,7 +27,7 @@
         this.level.fromJson(src.level,murmures);
         this.hero = new murmures.character();
         this.hero.fromJson(src.hero);
-        this.hero.setVision(this.level);
+        
         let mobsarray = new Array();
         src.mobs.forEach(function (mob) {
             let charmob = new murmures.character();
@@ -36,6 +36,8 @@
         });
 
         this.mobs = mobsarray;
+      
+        this.hero.setVision(this);
 
     };
 
@@ -89,7 +91,7 @@
     gameEngine.prototype.applyOrder = function (order) {
         if (order.command === "move") {
             this.hero.move(order.target.x, order.target.y);
-            this.hero.setVision(this.level);
+            this.hero.setVision(this);
         }
         else {
             this.mobs.forEach(function (mob) {
