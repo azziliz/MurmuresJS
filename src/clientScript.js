@@ -5,13 +5,13 @@ gameEngine.allowOrders = true;
 // #region Utils
 function screenLog(txt) {
     let now = new Date();
-    document.getElementById("screenLog").insertAdjacentHTML('afterbegin', '<span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br/>');
+    document.getElementById("screenLog").insertAdjacentHTML('afterbegin', '<span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br>');
 }
 
 function sendAjax(path, param, callback, async) {
     let xhr = new XMLHttpRequest();
     xhr.onerror = onXhrError;
-    xhr.open('POST', window.location.href + path, async);
+    xhr.open('POST', path, async);
     xhr.setRequestHeader('Content-Type', 'application/json');
     if (callback !== null) {
         xhr.onreadystatechange = function () {
@@ -28,12 +28,19 @@ function onXhrError(e) {
 }
 // #endregion
 
+// #region Init
 function init() {
     screenLog('>> getLevel');
-    sendAjax('getLevel', '{"id":"level1"}', loadEngine, true);
+    sendAjax('/getLevel', '{"id":"level1"}', loadEngine, true);
     registerEvents();
 }
 
+function loadEngine(engine) {
+    screenLog('<< loadEngine');
+    gameEngine.fromJson(JSON.parse(engine), murmures);
+    renderLevel();
+}
+// #endregion
 
 // #region Renderer
 function renderLevel() {
@@ -46,7 +53,6 @@ function renderLevel() {
         context.imageSmoothingEnabled = false;
     }
     document.getElementById("screenLog").style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
-    //drawGrid();
     let img = new Image();
     img.onload = function () {
         drawTiles();
@@ -56,15 +62,27 @@ function renderLevel() {
     img.src = "/src/img/rltiles-2d.png";
 }
 
-// #region Grid
-function drawGrid() {
-    let layer = document.getElementById('gridLayer');
-    let context = layer.getContext('2d');
-    context.clearRect(0, 0, layer.width, layer.height);
+// #region Tiles
+function drawTiles() {
+    document.getElementById('fogOfWarLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     for (let x = 0; x < gameEngine.level.width; x++) {
         for (let y = 0; y < gameEngine.level.height; y++) {
-            drawOneSquare(context, x, y, "#ccc", false); // light gray
+            drawOneTile(x, y, "#2D1E19");
         }
+    }
+}
+
+function drawOneTile(x, y, color) {
+    let img = new Image();
+    img.src = "/src/img/rltiles-2d.png";
+    let tilesetCoord = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].tilesetCoord;
+    if (gameEngine.level.tiles[y][x].state !== 0) {
+        document.getElementById('tilesLayer').getContext('2d').drawImage(img,
+                    tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+    }
+    if (gameEngine.level.tiles[y][x].state === 2) {
+        drawOneSquare(document.getElementById('fogOfWarLayer').getContext('2d'), x, y, "#000000", true);
     }
 }
 
@@ -88,31 +106,6 @@ function drawOneSquare(context, x, y, color, filled) {
         context.closePath();
         context.fillStyle = color;
         context.fill();
-    }
-}
-// #endregion
-
-// #region Tiles
-function drawTiles() {
-    document.getElementById('fogOfWarLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
-    for (let x = 0; x < gameEngine.level.width; x++) {
-        for (let y = 0; y < gameEngine.level.height; y++) {
-            drawOneTile(x, y, "#2D1E19");
-        }
-    }
-}
-
-function drawOneTile(x, y, color) {
-    let img = new Image();
-    img.src = "/src/img/rltiles-2d.png";
-    let tilesetCoord = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].tilesetCoord;
-    if (gameEngine.level.tiles[y][x].state !== 0) {
-        document.getElementById('tilesLayer').getContext('2d').drawImage(img,
-                    tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
-                    gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-    }
-    if (gameEngine.level.tiles[y][x].state === 2) {
-        drawOneSquare(document.getElementById('fogOfWarLayer').getContext('2d'), x, y, "#000000", true);
     }
 }
 // #endregion
@@ -156,7 +149,7 @@ function clearCharacterLayer() {
 
 function drawCharacter(character) {
     /// <param name="character" type="character"/>
-    if (gameEngine.level.tiles[character.position.y][character.position.x].state == 1) {
+    if (gameEngine.level.tiles[character.position.y][character.position.x].state === 1) {
         let layer = document.getElementById('characterLayer');
         let context = layer.getContext('2d');
         let img = new Image();
@@ -169,12 +162,7 @@ function drawCharacter(character) {
 // #endregion
 // #endregion
 
-function loadEngine(engine) {
-    screenLog('<< loadEngine');
-    gameEngine.fromJson(JSON.parse(engine), murmures);
-    renderLevel();
-}
-
+// #region Events
 function registerEvents() {
     // IE11 returns decimal number for MouseEvent coordinates but Chrome43 always rounds down.
     // --> using floor() for consistency.
@@ -252,13 +240,15 @@ function onKeyPress(char) {
         screenLog('<span style="color:#f66">' + 'ERROR - This is not a valid key</span>');
     }
 }
+// #endregion
 
+// #region Ajax
 function launchOrder(order) {
     let check = gameEngine.checkOrder(order);
     if (gameEngine.allowOrders) {
         if (check.valid) {
             screenLog('>> order - ' + order.command);
-            sendAjax('order', JSON.stringify(order), onOrderResponse, true);
+            sendAjax('/order', JSON.stringify(order), onOrderResponse, true);
             gameEngine.allowOrders = false;
         }
         else {
@@ -280,4 +270,5 @@ function onOrderResponse(response) {
     window.requestAnimationFrame(drawTiles);
     updateCharacters();
 }
+// #endregion
 

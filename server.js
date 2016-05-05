@@ -30,15 +30,13 @@ require('http').createServer(function (request, response) {
         gameEngine.tileSize = 32;
         
         let bodiesJson = require('fs').readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        let bodiesReference = JSON.parse(bodiesJson).templates;
-        gameEngine.bodies = {};
-        bodiesReference.forEach(function (body) { gameEngine.bodies[body.uniqueId] = body; });
+        gameEngine.bodies = JSON.parse(bodiesJson);
+        //var txt = JSON.stringify(gameEngine.bodies);
         
         let mobsJson = require('fs').readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
         let mobsReference = JSON.parse(mobsJson).templates;
         gameEngine.mobsReference = {};
         mobsReference.forEach(function (mob) { gameEngine.mobsReference[mob.uniqueId] = mob; });
-        var txt = JSON.stringify(gameEngine.mobsReference);
         
         gameEngine.hero = new murmures.character();
         let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');

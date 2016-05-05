@@ -57,17 +57,15 @@
         <div id="rightCharacters" class="zUI" style="float:right">
         </div>
         <div id="leftCharacters" class="zUI" style="float:left">
-            <a href="/src/rltilesbrowser.html" style="float:left">rltiles browser</a>
+            <a href="/src/rltilesbrowser.html" style="float:left">rltiles browser</a><br>
+            <a href="/src/bodyeditor.html" style="float:left">body editor</a>
         </div>
     </div>
     <img id="rltiles" src="/src/img/rltiles-2d.png" style="display:none">
 
-    <button type="button" onclick="init()" style="display:none">Get level</button>
-
     <div style="float:left; position:relative;">
         <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
         <canvas id="characterLayer" width="1400" height="840" style="z-index: 30"></canvas>
-        <canvas id="gridLayer" width="1400" height="840" style="z-index: 25; opacity:0.2"></canvas>
         <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 20; opacity:0.5"></canvas>
         <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
         <code id="screenLog" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>
