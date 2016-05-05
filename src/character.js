@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 (function (client) {
 
@@ -8,6 +8,7 @@
         /// <field name="hitPointsMax" type="Number"/>
         /// <field name="img" type="String"/>
         /// <field name="name" type="String"/>
+        this.charSpotted=false;
     };
 
     if (typeof module === "object" && module && typeof module.exports === "object") {
@@ -16,6 +17,8 @@
     else {
         murmures.character = character;
     }
+  
+    
 
     character.prototype.fromJson = function (src) {
         /// <param name="src" type="character"/>
@@ -31,7 +34,9 @@
         this.position.y = y;
     };
 
-    character.prototype.setVision = function(level){
+    character.prototype.setVision = function(gameEngine){
+      let level = gameEngine.level;
+      
       for(let xx=0;xx<level.width;xx++){
         for(let yy=0;yy<level.height;yy++){
           if(level.tiles[yy][xx].state==1){
@@ -54,6 +59,12 @@
           oyy = Math.floor(oy);
           if((oxx>=0) && (oxx<level.width) && (oyy>=0) && (oyy<level.height)){
             level.tiles[oyy][oxx].state = 1;
+            for(let itMob=0;itMob<gameEngine.mobs.length;itMob++){
+                let mob = gameEngine.mobs[itMob];
+                if(mob.position.x==oxx && mob.position.y == oyy){
+                  mob.charSpotted = true;
+                }
+              }
             if (level.tiles[oyy][oxx].content == 1){
               break;
             }
@@ -61,8 +72,7 @@
             oy += y;
           }
         }
-      };
-
+      }
     };
 
 })(this);
