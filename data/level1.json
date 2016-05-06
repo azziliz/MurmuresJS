@@ -1,4 +1,4 @@
-﻿{
+﻿/* OBSOLETE {
     "id": "level1",
     "layout": "square",
     "width": 20,
@@ -36,3 +36,4 @@
         "y": 10
     }]
 }
+*/

@@ -57,7 +57,7 @@ function renderLevel() {
     img.onload = function () {
         drawTiles();
         initUI();
-        updateCharacters();
+        updateUI();
     }
     img.src = "/src/img/rltiles-2d.png";
 }
@@ -114,16 +114,17 @@ function drawOneSquare(context, x, y, color, filled) {
 function initUI() {
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     let templateStr = /template/g;
-    document.getElementById('rightCharacters').innerHTML += characterUiTemplate.replace(templateStr, 'mob0');
-    document.getElementById('rightCharacters').innerHTML += characterUiTemplate.replace(templateStr, 'mob1');
-    document.getElementById('leftCharacters').innerHTML += characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero');
+    document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob0'));
+    document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob1'));
+    document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
 }
 
-function updateCharacters() {
+function updateUI() {
     clearCharacterLayer();
     for (let i = 0; i < gameEngine.mobs.length; i++) {
-        document.getElementById('mob' + i + '-icon').src = gameEngine.mobs[i].img;
-        document.getElementById('mob' + i + '-name').innerHTML = 'Squelette';
+        let ref = gameEngine.mobsReference[gameEngine.mobs[i].mobTemplate];
+        document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+        document.getElementById('mob' + i + '-name').innerHTML = ref.name;
         let missingLife = parseFloat(gameEngine.mobs[i].hitPoints) / parseFloat(gameEngine.mobs[i].hitPointsMax) * 100.0;
         document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
         if (gameEngine.mobs[i].hitPoints === 0) {
@@ -134,8 +135,10 @@ function updateCharacters() {
         }
     }
     let i = 0;
-    document.getElementById('hero' + i + '-icon').src = gameEngine.hero.img;
-    document.getElementById('hero' + i + '-name').innerHTML = gameEngine.hero.name;
+    //document.getElementById('hero' + i + '-icon').style.background = '#000 url("/src/img/rltiles-2d.png") 0 0 no-repeat';
+    let ref = gameEngine.mobsReference[gameEngine.hero.mobTemplate];
+    document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+    document.getElementById('hero' + i + '-name').innerHTML = ref.name;
     let missingLife = parseFloat(gameEngine.hero.hitPoints) / parseFloat(gameEngine.hero.hitPointsMax) * 100.0;
     document.getElementById('hero' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
     drawCharacter(gameEngine.hero);
@@ -149,15 +152,15 @@ function clearCharacterLayer() {
 
 function drawCharacter(character) {
     /// <param name="character" type="character"/>
+    let img = new Image();
+    img.src = "/src/img/rltiles-2d.png";
+    let tilesetCoord = gameEngine.mobsReference[character.mobTemplate].tilesetCoord;
     if (gameEngine.level.tiles[character.position.y][character.position.x].state === 1) {
-        let layer = document.getElementById('characterLayer');
-        let context = layer.getContext('2d');
-        let img = new Image();
-        img.onload = function () {
-            context.drawImage(img, character.position.x * gameEngine.tileSize, character.position.y * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize);
-        };
-        img.src = character.img;
+        document.getElementById('characterLayer').getContext('2d').drawImage(img,
+                    tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);
     }
+
 }
 // #endregion
 // #endregion
@@ -268,7 +271,7 @@ function onOrderResponse(response) {
             gameEngine.mobs = ge.mobs;*/
             gameEngine.fromJson(ge, murmures);
     window.requestAnimationFrame(drawTiles);
-    updateCharacters();
+    updateUI();
 }
 // #endregion
 

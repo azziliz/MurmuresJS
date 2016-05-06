@@ -8,6 +8,7 @@
         /// <field name="hitPointsMax" type="Number"/>
         /// <field name="img" type="String"/>
         /// <field name="name" type="String"/>
+        /// <field name="mobTemplate" type="String"/>
         this.charSpotted=false;
     };
 
@@ -27,6 +28,7 @@
         this.hitPointsMax = src.hitPointsMax;
         this.img = src.img;
         this.name = src.name;
+        this.mobTemplate = src.mobTemplate;
     };
 
     character.prototype.move = function (x, y) {

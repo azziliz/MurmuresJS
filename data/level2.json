@@ -1949,8 +1949,22 @@
             }
         ]
     ],
-    "heroStartingTiles": [{
-        "x": 1,
-        "y": 10
-    }]
+    "heroStartingTiles": [
+        {
+            "x": 1,
+            "y": 10
+        }
+    ],
+    "mobStartingTiles": [
+        {
+            "x": 18,
+            "y": 1,
+            "mobTemplate": "rltiles_skeleton"
+        },
+        {
+            "x": 3,
+            "y": 5,
+            "mobTemplate": "rltiles_sewer_rat"
+        }
+    ]
 }

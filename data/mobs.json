@@ -1,9 +1,20 @@
 ﻿{
+    "rltiles_jessica": {
+        "uniqueId": "rltiles_jessica",
+        "tileset": "rltiles",
+        "tilesetReference": "jessica",
+        "tilesetCoord": [15,2],
+        "name": "Angharad",
+        "hitPointsMax": 20,
+        "range": 3,
+        "damageValue": 3,
+        "canMove": true
+    },
     "rltiles_skeleton": {
         "uniqueId": "rltiles_skeleton",
         "tileset": "rltiles",
         "tilesetReference": "skeleton",
-        "tilesetCoord": [ 16, 45 ],
+        "tilesetCoord": [6,7],
         "name": "Squelette",
         "hitPointsMax": 10,
         "range": 2,
@@ -14,7 +25,7 @@
         "uniqueId": "rltiles_sewer_rat",
         "tileset": "rltiles",
         "tilesetReference": "sewer_rat",
-        "tilesetCoord": [ 16, 45 ],
+        "tilesetCoord": [2,10],
         "name": "Rat d'égout",
         "hitPointsMax": 5,
         "range": 1,

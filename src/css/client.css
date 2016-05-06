@@ -37,7 +37,12 @@ canvas {
     width: 32px;
     height: 32px;
     display: block;
-    background-color:#000;
+    background-color:#222;
+}
+
+.charIcon {
+    background-image: url("/src/img/rltiles-2d.png");
+    background-repeat: no-repeat;
 }
 
 

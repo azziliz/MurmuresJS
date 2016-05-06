@@ -28,35 +28,30 @@
         this.hero = new murmures.character();
         this.hero.fromJson(src.hero);
         
-        let mobsarray = new Array();
+        let mobsarray = [];
         src.mobs.forEach(function (mob) {
             let charmob = new murmures.character();
             charmob.fromJson(mob);
             mobsarray.push(charmob);
         });
-
         this.mobs = mobsarray;
       
         this.hero.setVision(this);
-
     };
 
     gameEngine.prototype.loadMobs = function (murmures) {
         let mobsarray = [];
-        for (let i=0; i < this.level.width; i++) {
-            for (let j=0; j < this.level.height; j++) {
-                if (this.level.tiles[j][i].content === 3) {
-                    let creature = new murmures.character();
-                    creature.img = './src/img/skeleton.png';
-                    creature.position = new murmures.tile();
-                    creature.position.x = i;
-                    creature.position.y = j;
-                    creature.hitPoints = 10;
-                    creature.hitPointsMax = 10;
-                    mobsarray.push(creature);
-                }
-            }
-        }
+        this.level.mobStartingTiles.forEach(function (startingTile) {
+            let creature = new murmures.character();
+            creature.img = './src/img/skeleton.png';
+            creature.position = new murmures.tile();
+            creature.position.x = startingTile.x;
+            creature.position.y = startingTile.y;
+            creature.mobTemplate = startingTile.mobTemplate;
+            creature.hitPoints = 10;
+            creature.hitPointsMax = 10;
+            mobsarray.push(creature);
+        });
         this.mobs = mobsarray;
     }
 
