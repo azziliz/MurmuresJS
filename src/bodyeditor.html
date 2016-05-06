@@ -110,24 +110,45 @@
                     document.getElementById('behavior').value = '{}';
                 }
             });
+            saveButton.addEventListener('mousedown', function (event) {
+                let body = {};
+                body.uniqueId = document.getElementById('uniqueId').value;
+                body.tileset = document.getElementById('tileset').value;
+                body.tilesetReference = document.getElementById('tilesetReference').value;
+                body.tilesetCoord = JSON.parse(document.getElementById('tilesetCoord').value);
+                body.layer = document.getElementById('layer').value;
+                body.allowFlying = document.getElementById('allowFlying').checked;
+                body.allowTerrestrial = document.getElementById('allowTerrestrial').checked;
+                body.allowAquatic = document.getElementById('allowAquatic').checked;
+                body.allowUnderground = document.getElementById('allowUnderground').checked;
+                body.allowEthereal = document.getElementById('allowEthereal').checked;
+                body.behavior = JSON.parse(document.getElementById('behavior').value);
+                gameEngine.bodies[body.uniqueId] = body;
+                screenLog('>> bodies.json');
+                screenLog(JSON.stringify(gameEngine.bodies));
+            });
         }
 
 
     </script>
 
     <div id="targetResolution" class="fullScreen">
-        <div id="rightCharacters" class="zUI" style="float:right; display: table;">
-            <p><label>uniqueId</label><input type="text" id="uniqueId"></p>
-            <p><label>tileset</label><input type="text" id="tileset" value="rltiles"></p>
-            <p><label>tilesetReference</label><input type="text" id="tilesetReference"></p>
-            <p><label>tilesetCoord</label><input type="text" id="tilesetCoord" readonly></p>
-            <p><label>layer</label><input type="text" id="layer"></p>
-            <p><label>allowFlying</label><input type="checkbox" id="allowFlying"></p>
-            <p><label>allowTerrestrial</label><input type="checkbox" id="allowTerrestrial"></p>
-            <p><label>allowAquatic</label><input type="checkbox" id="allowAquatic"></p>
-            <p><label>allowUnderground</label><input type="checkbox" id="allowUnderground"></p>
-            <p><label>allowEthereal</label><input type="checkbox" id="allowEthereal"></p>
-            <p><label>behavior</label><input type="text" id="behavior"></p>
+        <div id="rightCharacters" class="zUI" style="float:right;">
+            <div style="display: table;">
+                <p><label>uniqueId</label><input type="text" id="uniqueId" readonly></p>
+                <p><label>tileset</label><input type="text" id="tileset" value="rltiles" readonly></p>
+                <p><label>tilesetReference</label><input type="text" id="tilesetReference" readonly></p>
+                <p><label>tilesetCoord</label><input type="text" id="tilesetCoord" readonly></p>
+                <p><label>layer</label><input type="text" id="layer"></p>
+                <p><label>allowFlying</label><input type="checkbox" id="allowFlying"></p>
+                <p><label>allowTerrestrial</label><input type="checkbox" id="allowTerrestrial"></p>
+                <p><label>allowAquatic</label><input type="checkbox" id="allowAquatic"></p>
+                <p><label>allowUnderground</label><input type="checkbox" id="allowUnderground"></p>
+                <p><label>allowEthereal</label><input type="checkbox" id="allowEthereal"></p>
+                <p><label>behavior</label><input type="text" id="behavior"></p>
+            </div>
+            <button id="saveButton">Save</button>
+            <button id="deleteButton">Delete</button>
         </div>
     </div>
     <h3 id="title">(move the mouse over the tiles)</h3>
