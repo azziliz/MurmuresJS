@@ -2,6 +2,7 @@
 
 var murmures = require('./src/murmures');
 var gameEngine = null;
+//var txt = JSON.stringify(gameEngine.mobsReference);
 
 // Tries to compress (gzip) the response, if the client browser allows it
 function compressAndSend(request, response, contType, txt) {
@@ -31,13 +32,10 @@ require('http').createServer(function (request, response) {
         
         let bodiesJson = require('fs').readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.bodies = JSON.parse(bodiesJson);
-        //var txt = JSON.stringify(gameEngine.bodies);
         
         let mobsJson = require('fs').readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        let mobsReference = JSON.parse(mobsJson).templates;
-        gameEngine.mobsReference = {};
-        mobsReference.forEach(function (mob) { gameEngine.mobsReference[mob.uniqueId] = mob; });
-        
+        gameEngine.mobsReference = JSON.parse(mobsJson);
+
         gameEngine.hero = new murmures.character();
         let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.hero.fromJson(JSON.parse(hero1Txt));
@@ -45,7 +43,7 @@ require('http').createServer(function (request, response) {
         gameEngine.level = new murmures.level();
         let level1Txt = require('fs').readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.level.fromJson(JSON.parse(level1Txt),murmures);
-        gameEngine.hero.position = gameEngine.level.startingTile;
+        gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
 
         gameEngine.loadMobs(murmures);
 

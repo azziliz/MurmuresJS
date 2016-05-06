@@ -10,7 +10,7 @@
         /// <field name="height" type="Number"/>
         /// <field name="tileSize" type="Number"/>
         /// <field name="tiles" type="Array"/>
-        /// <field name="startingTile" type="tile"/>
+        /// <field name="heroStartingTiles" type="tile"/>
     };
 
     if (typeof module === "object" && module && typeof module.exports === "object") {
@@ -28,7 +28,7 @@
         this.height = src.height;
         this.tileSize = src.tileSize;
         this.tiles = src.tiles;
-        this.startingTile = src.startingTile;
+        this.heroStartingTiles = src.heroStartingTiles;
     };
 
     level.prototype.isWall = function (tile) {

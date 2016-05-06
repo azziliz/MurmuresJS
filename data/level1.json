@@ -31,8 +31,8 @@
         "ff 00 00 ff 00 00 ff 00 00 00 00 ff 00 ff 00 00 00 00 00 ff",
         "ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
     ],
-    "startingTile": {
+    "heroStartingTiles": [{
         "x": 1,
         "y": 10
-    }
+    }]
 }
