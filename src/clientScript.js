@@ -180,11 +180,11 @@ function registerEvents() {
         e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
         let mouseX = Math.floor(e.offsetX);
         let mouseY = Math.floor(e.offsetY);
-        topLayer_onClick(mouseX, mouseY, e.button == 2);
+        topLayer_onClick(mouseX, mouseY, e.button === 2);
     }, false);
     window.addEventListener("keypress", function (e) {
         let char = '';
-        if (e.which == null)
+        if (e.which === null)
             char = String.fromCharCode(e.keyCode);
         else
             char = String.fromCharCode(e.which);

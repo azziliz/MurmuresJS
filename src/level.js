@@ -8,7 +8,6 @@
         /// <field name="layout" type="String"/>
         /// <field name="width" type="Number"/>
         /// <field name="height" type="Number"/>
-        /// <field name="tileSize" type="Number"/>
         /// <field name="tiles" type="Array"/>
         /// <field name="heroStartingTiles" type="tile"/>
         /// <field name="mobStartingTiles" type="tile"/>
@@ -27,15 +26,24 @@
         this.layout = src.layout;
         this.width = src.width;
         this.height = src.height;
-        this.tileSize = src.tileSize;
-        this.tiles = src.tiles;
+        this.tiles = [];
+        for (let y = 0; y < this.height; y++) {
+            this.tiles[y] = [];
+            for (let x = 0; x < this.width; x++) {
+                this.tiles[y][x] = new murmures.tile();
+                this.tiles[y][x].fromJson(src.tiles[y][x], x, y)
+            }
+        }
         this.heroStartingTiles = src.heroStartingTiles;
         this.mobStartingTiles = src.mobStartingTiles;
     };
 
-    level.prototype.isWall = function (tile) {
+    level.prototype.isWall = function (tile, bodies) {
         /// <param name="tile" type="tile"/>
-        return this.tiles[tile.y][tile.x].content === 1;
+        let allowTerrestrialGround = (this.tiles[tile.y][tile.x].groundId === "") ? true : bodies[this.tiles[tile.y][tile.x].groundId].allowTerrestrial;
+        let allowTerrestrialProp = (this.tiles[tile.y][tile.x].propId === "") ? true : bodies[this.tiles[tile.y][tile.x].propId].allowTerrestrial;
+
+        return !allowTerrestrialGround || !allowTerrestrialProp;
     }
 
 

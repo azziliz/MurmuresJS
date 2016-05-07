@@ -26,7 +26,7 @@ require('http').createServer(function (request, response) {
     }
     else if (request.url === '/') {
         compressAndSend(request, response, 'text/html', require('fs').readFileSync('client.html').toString());
-
+        
         gameEngine = new murmures.gameEngine();
         gameEngine.tileSize = 32;
         
@@ -35,17 +35,17 @@ require('http').createServer(function (request, response) {
         
         let mobsJson = require('fs').readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.mobsReference = JSON.parse(mobsJson);
-
+        
         gameEngine.hero = new murmures.character();
         let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.hero.fromJson(JSON.parse(hero1Txt));
         gameEngine.hero.instanciate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
-
+        
         gameEngine.level = new murmures.level();
         let level1Txt = require('fs').readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        gameEngine.level.fromJson(JSON.parse(level1Txt),murmures);
+        gameEngine.level.fromJson(JSON.parse(level1Txt), murmures);
         gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
-
+        
         gameEngine.loadMobs(murmures);
 
     }
@@ -53,7 +53,7 @@ require('http').createServer(function (request, response) {
         // #region Static Pages
         try {
             let fileName = request.url;
-            let fileContent = require('fs').readFileSync('.'.concat(fileName));
+            let fileContent = require('fs').readFileSync('.' + fileName);
             if (fileName.endsWith('.js')) {
                 compressAndSend(request, response, 'application/javascript', fileContent.toString());
             }
@@ -85,7 +85,7 @@ require('http').createServer(function (request, response) {
         request.on('end', function () {
             if (request.url === '/getLevel') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null)
+                if ((postData === null) 
                     || (postData.id === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
@@ -95,9 +95,9 @@ require('http').createServer(function (request, response) {
                 }
             } else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null)
-                  || (postData.command === null)
-                  || (postData.source === null)
+                if ((postData === null) 
+                  || (postData.command === null) 
+                  || (postData.source === null) 
                   || (postData.target === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));

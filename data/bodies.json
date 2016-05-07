@@ -240,7 +240,7 @@
         "tilesetCoord": [ 22, 45 ],
         "layer": "prop",
         "allowFlying": false,
-        "allowTerrestrial": true,
+        "allowTerrestrial": false,
         "allowAquatic": false,
         "allowUnderground": true,
         "allowEthereal": true,
