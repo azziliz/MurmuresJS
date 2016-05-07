@@ -43,9 +43,7 @@
     <Compile Include="server.js" />
     <Content Include="src\bodyeditor.html" />
     <Content Include="src\css\client.css" />
-    <Content Include="src\img\perso.png" />
     <Content Include="src\img\rltiles-2d.png" />
-    <Content Include="src\img\skeleton.png" />
     <Content Include="src\rltilesbrowser.html" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,3 @@
 ﻿{
-    "name": "Angharad",
-    "img": "./src/img/perso.png",
-    "hitPoints": 20,
-    "hitPointsMax": 20,
     "mobTemplate": "rltiles_jessica"
 }

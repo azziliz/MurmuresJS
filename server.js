@@ -39,6 +39,7 @@ require('http').createServer(function (request, response) {
         gameEngine.hero = new murmures.character();
         let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.hero.fromJson(JSON.parse(hero1Txt));
+        gameEngine.hero.instanciate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
 
         gameEngine.level = new murmures.level();
         let level1Txt = require('fs').readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');

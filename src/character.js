@@ -6,8 +6,6 @@
         /// <field name="position" type="tile"/>
         /// <field name="hitPoints" type="Number"/>
         /// <field name="hitPointsMax" type="Number"/>
-        /// <field name="img" type="String"/>
-        /// <field name="name" type="String"/>
         /// <field name="mobTemplate" type="String"/>
         this.charSpotted=false;
     };
@@ -26,10 +24,13 @@
         this.position = src.position;
         this.hitPoints = src.hitPoints;
         this.hitPointsMax = src.hitPointsMax;
-        this.img = src.img;
-        this.name = src.name;
         this.mobTemplate = src.mobTemplate;
     };
+    
+    character.prototype.instanciate = function (mobReference) {
+        this.hitPointsMax = mobReference.hitPointsMax;
+        this.hitPoints = mobReference.hitPointsMax;
+    }
 
     character.prototype.move = function (x, y) {
         this.position.x = x;

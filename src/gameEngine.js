@@ -43,15 +43,13 @@
         let mobsarray = [];
         this.level.mobStartingTiles.forEach(function (startingTile) {
             let creature = new murmures.character();
-            creature.img = './src/img/skeleton.png';
             creature.position = new murmures.tile();
             creature.position.x = startingTile.x;
             creature.position.y = startingTile.y;
             creature.mobTemplate = startingTile.mobTemplate;
-            creature.hitPoints = 10;
-            creature.hitPointsMax = 10;
+            creature.instanciate(this.mobsReference[startingTile.mobTemplate]);
             mobsarray.push(creature);
-        });
+        }, this);
         this.mobs = mobsarray;
     }
 

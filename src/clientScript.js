@@ -135,7 +135,6 @@ function updateUI() {
         }
     }
     let i = 0;
-    //document.getElementById('hero' + i + '-icon').style.background = '#000 url("/src/img/rltiles-2d.png") 0 0 no-repeat';
     let ref = gameEngine.mobsReference[gameEngine.hero.mobTemplate];
     document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
     document.getElementById('hero' + i + '-name').innerHTML = ref.name;
