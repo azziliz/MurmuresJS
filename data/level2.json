@@ -276,7 +276,7 @@
                 "y": 1,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_large_box",
                 "content": 0
             },
             {
@@ -292,7 +292,7 @@
                 "y": 1,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -358,7 +358,7 @@
                 "y": 2,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_blue_fountain",
                 "content": 0
             },
             {
@@ -560,7 +560,7 @@
                 "y": 3,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -584,7 +584,7 @@
                 "y": 3,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -632,7 +632,7 @@
                 "y": 3,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -682,7 +682,7 @@
                 "y": 4,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -868,7 +868,7 @@
                 "y": 5,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -940,7 +940,7 @@
                 "y": 5,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_silver_statue",
                 "content": 0
             },
             {
@@ -1078,7 +1078,7 @@
                 "y": 6,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -1208,7 +1208,7 @@
                 "y": 7,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -1338,7 +1338,7 @@
                 "y": 8,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -1426,7 +1426,7 @@
                 "y": 8,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -1476,7 +1476,7 @@
                 "y": 9,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_staircase_up",
                 "content": 0
             },
             {
@@ -1492,7 +1492,7 @@
                 "y": 9,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -1556,7 +1556,7 @@
                 "y": 9,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_dngn_open_door",
                 "content": 0
             },
             {
@@ -1612,7 +1612,7 @@
                 "y": 9,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_staircase_down",
                 "content": 0
             },
             {
@@ -1726,7 +1726,7 @@
                 "y": 10,
                 "state": 0,
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "",
+                "propId": "rltiles_chest",
                 "content": 0
             },
             {
