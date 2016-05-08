@@ -1,20 +1,17 @@
 'use strict';
 
-(function (client) {
+//debugger;
 
-    var player = function () { };
+murmures.Player = function () {
+};
 
-    if (typeof module === "object" && module && typeof module.exports === "object") {
-        module.exports = player;
+murmures.Player.prototype = {
+    fromJson : function (src) {
+        /// <param name="src" type="Player"/>
+        this.id = src.id;
+        this.name = src.name;
+        this.character = src.character;
+        this.level = src.level;
     }
-    else {
-        murmures.player = player;
-    }
+};
 
-    player.prototype.id = null;
-    player.prototype.name = null;
-    player.prototype.character = null;
-    player.prototype.level = null; //actual level
-    
-
-})(this);

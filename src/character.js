@@ -1,50 +1,42 @@
 'use strict';
 
-(function (client) {
-    
-    var character = function () {
-        /// <field name="position" type="tile"/>
-        /// <field name="hitPoints" type="Number"/>
-        /// <field name="hitPointsMax" type="Number"/>
-        /// <field name="mobTemplate" type="String"/>
-        this.charSpotted = false;
-    };
-    
-    if (typeof module === "object" && module && typeof module.exports === "object") {
-        module.exports = character;
-    }
-    else {
-        murmures.character = character;
-    }
-    
-    
-    
-    character.prototype.fromJson = function (src) {
-        /// <param name="src" type="character"/>
+//debugger;
+
+murmures.Character = function () {
+    /// <field name="position" type="Tile"/>
+    /// <field name="hitPoints" type="Number"/>
+    /// <field name="hitPointsMax" type="Number"/>
+    /// <field name="mobTemplate" type="String"/>
+    this.charSpotted = false;
+};
+
+murmures.Character.prototype = {
+    fromJson : function (src) {
+        /// <param name="src" type="Character"/>
         this.position = src.position;
         this.hitPoints = src.hitPoints;
         this.hitPointsMax = src.hitPointsMax;
         this.mobTemplate = src.mobTemplate;
-    };
+    },
     
-    character.prototype.instanciate = function (mobReference) {
+    instanciate : function (mobReference) {
         this.hitPointsMax = mobReference.hitPointsMax;
         this.hitPoints = mobReference.hitPointsMax;
-    }
+    },
     
-    character.prototype.move = function (x, y) {
+    move : function (x, y) {
         this.position.x = x;
         this.position.y = y;
-    };
+    },
     
-    character.prototype.setVision = function (gameEngine) {
+    setVision : function (gameEngine) {
         let level = gameEngine.level;
         
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
                 if (level.tiles[yy][xx].state === 1) {
                     //if (level.tiles[yy][xx].content != 1) {
-                        level.tiles[yy][xx].state = 2;
+                    level.tiles[yy][xx].state = 2;
                     //}
                 }
             }
@@ -70,7 +62,7 @@
                     }
                     let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
                     let propLight = (level.tiles[oyy][oxx].propId === "") ? true : gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
-                    if ((!groundLight || !propLight) && (j>0)) {
+                    if ((!groundLight || !propLight) && (j > 0)) {
                         break;
                     }
                     ox += x;
@@ -78,6 +70,7 @@
                 }
             }
         }
-    };
+    }
+};
 
-})(this);
+

@@ -1,6 +1,8 @@
-﻿
+﻿'use strict';
 
-var physicalBody = function () {
+//debugger;
+
+murmures.PhysicalBody = function () {
     this.uniqueId = '';
     this.tileset = '';
     this.tilesetReference = '';
@@ -13,4 +15,3 @@ var physicalBody = function () {
     this.behavior = {};
 };
 
-module.exports = physicalBody;

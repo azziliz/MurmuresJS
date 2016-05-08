@@ -1,5 +1,6 @@
 ﻿'use strict';
-var gameEngine = new murmures.gameEngine();
+
+var gameEngine = new murmures.GameEngine();
 gameEngine.allowOrders = true;
 
 // #region Utils
@@ -37,7 +38,7 @@ function init() {
 
 function loadEngine(engine) {
     screenLog('<< loadEngine');
-    gameEngine.fromJson(JSON.parse(engine), murmures);
+    gameEngine.fromJson(JSON.parse(engine));
     renderLevel();
 }
 // #endregion
@@ -156,7 +157,7 @@ function clearCharacterLayer() {
 }
 
 function drawCharacter(character) {
-    /// <param name="character" type="character"/>
+    /// <param name="character" type="Character"/>
     let img = new Image();
     img.src = "/src/img/rltiles-2d.png";
     let tilesetCoord = gameEngine.mobsReference[character.mobTemplate].tilesetCoord;
@@ -198,14 +199,14 @@ function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
         // find hovered tile
         let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
         if (gameEngine.tileHasMob(hoveredTile)) {
-            let attackOrder = new murmures.order();
+            let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
             attackOrder.source = gameEngine.hero;
             attackOrder.target = hoveredTile;
             launchOrder(attackOrder);
         }
         else {
-            let moveOrder = new murmures.order();
+            let moveOrder = new murmures.Order();
             moveOrder.command = "move";
             moveOrder.source = gameEngine.hero;
             moveOrder.target = hoveredTile;
@@ -222,7 +223,7 @@ function getHoveredTile(mouseEventX, mouseEventY) {
     let tileX = Math.floor(mouseEventX / gameEngine.tileSize);
     let tileY = Math.floor(mouseEventY / gameEngine.tileSize);
     document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
-    let ret = new murmures.tile();
+    let ret = new murmures.Tile();
     ret.x = tileX;
     ret.y = tileY;
     return ret;
@@ -231,10 +232,10 @@ function getHoveredTile(mouseEventX, mouseEventY) {
 function onKeyPress(char) {
     let allowedChars = '12346789';
     if (allowedChars.indexOf(char) >= 0) {
-        let moveOrder = new murmures.order();
+        let moveOrder = new murmures.Order();
         moveOrder.command = "move";
         moveOrder.source = gameEngine.hero;
-        let target = new murmures.tile();
+        let target = new murmures.Tile();
         if (char === '9' || char === '6' || char === '3') target.x = gameEngine.hero.position.x + 1;
         if (char === '7' || char === '4' || char === '1') target.x = gameEngine.hero.position.x - 1;
         if (char === '8' || char === '2') target.x = gameEngine.hero.position.x;
@@ -271,10 +272,7 @@ function launchOrder(order) {
 function onOrderResponse(response) {
     screenLog('<< onOrderResponse');
     gameEngine.allowOrders = true;
-    let ge = JSON.parse(response);
-    /*  gameEngine.hero = ge.hero;
-            gameEngine.mobs = ge.mobs;*/
-            gameEngine.fromJson(ge, murmures);
+    gameEngine.fromJson(JSON.parse(response));
     window.requestAnimationFrame(drawTiles);
     updateUI();
 }

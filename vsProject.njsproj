@@ -26,7 +26,6 @@
     <Compile Include="src\constants.js" />
     <Compile Include="src\gameEngine.js" />
     <Compile Include="src\level.js" />
-    <Compile Include="src\murmures.js" />
     <Compile Include="src\order.js" />
     <Compile Include="src\physicalBody.js" />
     <Compile Include="src\player.js" />
