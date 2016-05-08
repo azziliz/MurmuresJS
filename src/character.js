@@ -29,7 +29,7 @@ murmures.Character.prototype = {
         this.position.y = y;
     },
     
-    setVision : function (gameEngine) {
+    setVision : function () {
         let level = gameEngine.level;
         
         for (let xx=0; xx < level.width; xx++) {

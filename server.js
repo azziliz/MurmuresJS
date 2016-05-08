@@ -9,11 +9,20 @@ var murmures = {
     }
 };
 
-(function load() {    
+var gameEngine = {};
+
+// Load
+(function () {    
     const ctx = {
-        murmures: murmures
+        murmures: murmures,
+        gameEngine: {}
     };
     vm.createContext(ctx);
+
+    let gameEnginejs = fs.readFileSync('./src/gameEngine.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(gameEnginejs, ctx, { filename: 'gameEngine.js' });
+    
+    ctx.gameEngine = new murmures.GameEngine();
 
     let constantsjs = fs.readFileSync('./src/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(constantsjs, ctx, { filename: 'constants.js' });
@@ -29,11 +38,10 @@ var murmures = {
     vm.runInContext(orderjs, ctx, { filename: 'order.js' });
     let physicalBodyjs = fs.readFileSync('./src/physicalBody.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalBody.js' });
-    let gameEnginejs = fs.readFileSync('./src/gameEngine.js', 'utf8').toString().replace(/^\uFEFF/, '');
-    vm.runInContext(gameEnginejs, ctx, { filename: 'gameEngine.js' });
+
+    gameEngine = ctx.gameEngine;
 })();
 
-var gameEngine = new murmures.GameEngine();
 
 //var txt = JSON.stringify(gameEngine.mobsReference);
 

@@ -31,10 +31,10 @@ murmures.Level.prototype = {
         this.mobStartingTiles = src.mobStartingTiles;
     },
 
-    isWall : function (tile, bodies) {
+    isWall : function (tile) {
         /// <param name="tile" type="Tile"/>
-        let allowTerrestrialGround = (this.tiles[tile.y][tile.x].groundId === "") ? true : bodies[this.tiles[tile.y][tile.x].groundId].allowTerrestrial;
-        let allowTerrestrialProp = (this.tiles[tile.y][tile.x].propId === "") ? true : bodies[this.tiles[tile.y][tile.x].propId].allowTerrestrial;
+        let allowTerrestrialGround = (this.tiles[tile.y][tile.x].groundId === "") ? true : gameEngine.bodies[this.tiles[tile.y][tile.x].groundId].allowTerrestrial;
+        let allowTerrestrialProp = (this.tiles[tile.y][tile.x].propId === "") ? true : gameEngine.bodies[this.tiles[tile.y][tile.x].propId].allowTerrestrial;
         return !allowTerrestrialGround || !allowTerrestrialProp;
     }
 };
