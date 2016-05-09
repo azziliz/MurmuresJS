@@ -1,39 +1,353 @@
-﻿/* OBSOLETE {
+﻿{
     "id": "level1",
     "layout": "square",
     "width": 20,
     "height": 12,
     "tiles": [
-        [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
-        [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 3, 1 ],
-        [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1 ],
-        [ 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1 ],
-        [ 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 ],
-        [ 1, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 ],
-        [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-        [ 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1 ],
-        [ 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1 ],
-        [ 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ],
-        [ 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1 ],
-        [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_large_box"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_skeleton"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_blue_fountain"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_sewer_rat"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_silver_statue"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_staircase_up"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_staircase_down"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_jessica"
+            },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_chest"
+            },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_floor_of_a_room" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ],
+        [
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" },
+            { "groundId": "rltiles_dngn_stone_wall" }
+        ]
     ],
-    "tilesString": [
-        "ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff",
-        "ff 00 00 00 00 00 ff 00 00 00 00 00 ff 00 00 00 00 00 00 ff",
-        "ff 00 00 00 00 00 ff 00 00 00 00 00 ff 00 00 ff 00 00 00 ff",
-        "ff 00 00 00 00 00 ff ff 00 ff ff 00 ff ff ff ff ff 00 ff ff",
-        "ff ff ff 00 ff ff ff 00 00 ff 00 00 ff 00 00 00 00 00 00 ff",
-        "ff 00 00 00 00 00 00 00 00 ff 00 00 ff 00 00 00 00 00 00 ff",
-        "ff 00 00 00 00 00 ff 00 00 ff 00 00 00 00 00 00 00 00 00 ff",
-        "ff ff ff ff 00 00 ff ff 00 ff 00 00 ff 00 00 00 ff ff ff ff",
-        "ff 00 00 ff 00 ff ff 00 00 ff ff ff ff ff ff 00 ff 00 00 ff",
-        "ff 00 00 00 00 00 ff 00 00 00 00 00 00 ff 00 00 00 00 00 ff",
-        "ff 00 00 ff 00 00 ff 00 00 00 00 ff 00 ff 00 00 00 00 00 ff",
-        "ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff"
+    "heroStartingTiles": [
+        {
+            "x": 1,
+            "y": 10
+        }
     ],
-    "heroStartingTiles": [{
-        "x": 1,
-        "y": 10
-    }]
+    "mobStartingTiles": [
+        {
+            "x": 18,
+            "y": 1,
+            "mobTemplate": "rltiles_skeleton"
+        },
+        {
+            "x": 3,
+            "y": 5,
+            "mobTemplate": "rltiles_sewer_rat"
+        }
+    ]
 }
-*/

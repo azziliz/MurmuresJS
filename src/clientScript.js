@@ -39,6 +39,7 @@ function init() {
 function loadEngine(engine) {
     screenLog('<< loadEngine');
     gameEngine.fromJson(JSON.parse(engine));
+    initUI();
     renderLevel();
 }
 // #endregion
@@ -57,7 +58,6 @@ function renderLevel() {
     let img = new Image();
     img.onload = function () {
         drawTiles();
-        initUI();
         updateUI();
     }
     img.src = "/src/img/rltiles-2d.png";
@@ -222,11 +222,8 @@ function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
 function getHoveredTile(mouseEventX, mouseEventY) {
     let tileX = Math.floor(mouseEventX / gameEngine.tileSize);
     let tileY = Math.floor(mouseEventY / gameEngine.tileSize);
-    document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
-    let ret = new murmures.Tile();
-    ret.x = tileX;
-    ret.y = tileY;
-    return ret;
+    //document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
+    return gameEngine.level.tiles[tileY][tileX];
 }
 
 function onKeyPress(char) {

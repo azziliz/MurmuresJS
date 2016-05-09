@@ -30,7 +30,7 @@
         }
     </style>
 </head>
-<body onload="initBodyEditor()">
+<body onload="initLevelEditor()">
     <div style="position:fixed; bottom:0; left:0; z-index:9999">
         <div id="debugDiv"></div>
     </div>
@@ -49,15 +49,20 @@
     <script type="text/javascript">
         'use strict';
 
-        function initBodyEditor() {
-            screenLog('>> getLevel');
+        var selectedBrush = {
+            id: 'rltiles_floor_of_a_room',
+            layer: 'ground'
+        };
+
+        function initLevelEditor() {
             sendAjax('/getLevel', '{"id":"level1"}', loadEngineLevelEditor, true);
+            registerEventsLevelEditor();
         }
 
         function loadEngineLevelEditor(engine) {
-            screenLog('<< loadEngine');
             gameEngine.fromJson(JSON.parse(engine));
             highlightLevel();
+            initUILevelEditor();
             renderLevel();
         }
 
@@ -69,8 +74,7 @@
             }
         }
 
-        //override
-        function initUI() {
+        function initUILevelEditor() {
             let tileUiTemplate = document.getElementById('tileUiTemplate').innerHTML;
             let templateStr = /template/g;
             document.getElementById('leftCharacters').innerHTML = '';
@@ -80,6 +84,11 @@
                 if (ref.layer === 'ground') {
                     document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'grnd-' + groundId));
                     document.getElementById('grnd-' + groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                    document.getElementById('grnd-' + groundId + '-icon').addEventListener("mousedown", function (e) {
+                        selectedBrush.id = groundId;
+                        selectedBrush.layer = 'ground';
+                        document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                    }, false);
                 }
             }
             document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><h3>Props</h3>');
@@ -88,6 +97,11 @@
                 if (ref.layer === 'prop') {
                     document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'prop-' + groundId));
                     document.getElementById('prop-' + groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                    document.getElementById('prop-' + groundId + '-icon').addEventListener("mousedown", function (e) {
+                        selectedBrush.id = groundId;
+                        selectedBrush.layer = 'prop';
+                        document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                    }, false);
                 }
             }
             document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><h3>Characters</h3>');
@@ -95,9 +109,26 @@
                 let ref = gameEngine.mobsReference[mobId];
                 document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'char-' + mobId));
                 document.getElementById('char-' + mobId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                document.getElementById('char-' + mobId + '-icon').addEventListener("mousedown", function (e) {
+                    selectedBrush.id = mobId;
+                    selectedBrush.layer = 'char';
+                    document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                }, false);
             }
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><h3>Selected</h3>');
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'selectedBrush'));
+            let ref = gameEngine.bodies[selectedBrush.id];
+            document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><br><button id="exportButton">Export</button>');
+            document.getElementById('exportButton').addEventListener("mousedown", function (e) {
+                gameEngine.level.clean();
+                document.getElementById("screenLog").innerHTML = '';
+                screenLog(JSON.stringify(gameEngine.level));
+                loadEngineLevelEditor(JSON.stringify(gameEngine));
+            }, false);
         }
 
+        //override
         function updateUI() {
             clearCharacterLayer();
             for (let i = 0; i < gameEngine.mobs.length; i++) {
@@ -105,6 +136,40 @@
             }
             drawCharacter(gameEngine.hero);
         }
+
+        function registerEventsLevelEditor() {
+            let topLayer = document.getElementById("topLayer");
+            topLayer.addEventListener("mousedown", function (e) {
+                e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+                let mouseX = Math.floor(e.offsetX);
+                let mouseY = Math.floor(e.offsetY);
+                topLayer_onClickLevelEditor(mouseX, mouseY, e.button === 2);
+            }, false);
+            topLayer.addEventListener("contextmenu", function () { // mouse right click
+                event.preventDefault();
+            }, false);
+
+        }
+
+        function topLayer_onClickLevelEditor(mouseEventX, mouseEventY, rightClick) {
+            if (!rightClick) {
+                // event is a left click
+                // find hovered tile
+                let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
+                if (selectedBrush.layer === 'char') hoveredTile.charId = selectedBrush.id;
+                else if (selectedBrush.layer === 'prop') hoveredTile.propId = selectedBrush.id;
+                else if (selectedBrush.layer === 'ground') hoveredTile.groundId = selectedBrush.id;
+            }
+            else {
+                // event is a right click
+                let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
+                if (selectedBrush.layer === 'char') hoveredTile.charId = '';
+                else if (selectedBrush.layer === 'prop') hoveredTile.propId = '';
+                else if (selectedBrush.layer === 'ground') hoveredTile.groundId = '';
+            }
+            window.requestAnimationFrame(renderLevel);
+        }
+
 
     </script>
 

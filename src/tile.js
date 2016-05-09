@@ -16,8 +16,9 @@ murmures.Tile.prototype = {
         this.x = (src.x === undefined) ? x : src.x;
         this.y = (src.y === undefined) ? y : src.y;
         this.state = (src.state === undefined) ? murmures.C.TILE_NOT_DISCOVERED : src.state;
-        this.groundId = src.groundId;
-        this.propId = src.propId;
+        this.groundId = (src.groundId === undefined) ? '' : src.groundId;
+        this.propId = (src.propId === undefined) ? '' : src.propId;
+        this.charId = (src.charId === undefined) ? '' : src.charId;
     }
 };
 
