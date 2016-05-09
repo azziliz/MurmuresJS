@@ -19,13 +19,13 @@ var gameEngine = {};
     };
     vm.createContext(ctx);
 
+    let constantsjs = fs.readFileSync('./src/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(constantsjs, ctx, { filename: 'constants.js' });
     let gameEnginejs = fs.readFileSync('./src/gameEngine.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(gameEnginejs, ctx, { filename: 'gameEngine.js' });
     
     ctx.gameEngine = new murmures.GameEngine();
 
-    let constantsjs = fs.readFileSync('./src/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
-    vm.runInContext(constantsjs, ctx, { filename: 'constants.js' });
     let playerjs = fs.readFileSync('./src/player.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(playerjs, ctx, { filename: 'player.js' });
     let tilejs = fs.readFileSync('./src/tile.js', 'utf8').toString().replace(/^\uFEFF/, '');

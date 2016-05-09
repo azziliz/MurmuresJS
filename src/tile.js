@@ -15,7 +15,7 @@ murmures.Tile.prototype = {
         /// <param name="src" type="Tile"/>
         this.x = (src.x === undefined) ? x : src.x;
         this.y = (src.y === undefined) ? y : src.y;
-        this.state = (src.state === undefined) ? 0 : src.state;
+        this.state = (src.state === undefined) ? murmures.C.TILE_NOT_DISCOVERED : src.state;
         this.groundId = src.groundId;
         this.propId = src.propId;
     }

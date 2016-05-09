@@ -76,7 +76,7 @@ function drawTiles() {
 function drawOneTile(x, y, color) {
     let img = new Image();
     img.src = "/src/img/rltiles-2d.png";
-    if (gameEngine.level.tiles[y][x].state !== 0) {
+    if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
         if (gameEngine.level.tiles[y][x].groundId !== "") {
             let tilesetCoord = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].tilesetCoord;
             document.getElementById('tilesLayer').getContext('2d').drawImage(img,
@@ -90,7 +90,7 @@ function drawOneTile(x, y, color) {
                     gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         }
     }
-    if (gameEngine.level.tiles[y][x].state === 2) {
+    if (gameEngine.level.tiles[y][x].state === murmures.C.TILE_FOG_OF_WAR) {
         drawOneSquare(document.getElementById('fogOfWarLayer').getContext('2d'), x, y, "#000000", true);
     }
 }
@@ -161,7 +161,7 @@ function drawCharacter(character) {
     let img = new Image();
     img.src = "/src/img/rltiles-2d.png";
     let tilesetCoord = gameEngine.mobsReference[character.mobTemplate].tilesetCoord;
-    if (gameEngine.level.tiles[character.position.y][character.position.x].state === 1) {
+    if (gameEngine.level.tiles[character.position.y][character.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
         document.getElementById('characterLayer').getContext('2d').drawImage(img,
                     tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);

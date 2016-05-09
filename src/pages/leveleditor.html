@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MurmuresJS</title>
+    <link rel="stylesheet" href="/src/css/client.css" media="screen">
+    <style>
+        body {
+            background: #666;
+            font-family: sans-serif;
+        }
+
+        #container {
+            max-height: 60vh;
+            overflow-y: scroll;
+            width: 1000px;
+        }
+
+        p {
+            display: table-row;
+        }
+
+        label {
+            display: table-cell;
+        }
+
+        input {
+            display: table-cell;
+        }
+    </style>
+</head>
+<body onload="initBodyEditor()">
+    <div style="position:fixed; bottom:0; left:0; z-index:9999">
+        <div id="debugDiv"></div>
+    </div>
+    <script type="text/javascript">
+        'use strict';
+        // namespace
+        var murmures = {};
+    </script>
+    <script src="/src/constants.js"></script>
+    <script src="/src/character.js"></script>
+    <script src="/src/level.js"></script>
+    <script src="/src/order.js"></script>
+    <script src="/src/tile.js"></script>
+    <script src="/src/gameEngine.js"></script>
+    <script src="/src/clientScript.js"></script>
+    <script type="text/javascript">
+        'use strict';
+
+        function initBodyEditor() {
+            screenLog('>> getLevel');
+            sendAjax('/getLevel', '{"id":"level1"}', loadEngineLevelEditor, true);
+        }
+
+        function loadEngineLevelEditor(engine) {
+            screenLog('<< loadEngine');
+            gameEngine.fromJson(JSON.parse(engine));
+            highlightLevel();
+            renderLevel();
+        }
+
+        function highlightLevel() {
+            for (let x = 0; x < gameEngine.level.width; x++) {
+                for (let y = 0; y < gameEngine.level.height; y++) {
+                    gameEngine.level.tiles[y][x].state = murmures.C.TILE_HIGHLIGHTED;
+                }
+            }
+        }
+
+        //override
+        function initUI() {
+            let tileUiTemplate = document.getElementById('tileUiTemplate').innerHTML;
+            let templateStr = /template/g;
+            document.getElementById('leftCharacters').innerHTML = '';
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<h3>Grounds</h3>');
+            for (let groundId in gameEngine.bodies) {
+                let ref = gameEngine.bodies[groundId];
+                if (ref.layer === 'ground') {
+                    document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'grnd-' + groundId));
+                    document.getElementById('grnd-' + groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                }
+            }
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><h3>Props</h3>');
+            for (let groundId in gameEngine.bodies) {
+                let ref = gameEngine.bodies[groundId];
+                if (ref.layer === 'prop') {
+                    document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'prop-' + groundId));
+                    document.getElementById('prop-' + groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+                }
+            }
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><h3>Characters</h3>');
+            for (let mobId in gameEngine.mobsReference) {
+                let ref = gameEngine.mobsReference[mobId];
+                document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'char-' + mobId));
+                document.getElementById('char-' + mobId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
+            }
+        }
+
+        function updateUI() {
+            clearCharacterLayer();
+            for (let i = 0; i < gameEngine.mobs.length; i++) {
+                drawCharacter(gameEngine.mobs[i]);
+            }
+            drawCharacter(gameEngine.hero);
+        }
+
+    </script>
+
+    <script type="text/html" id="tileUiTemplate">
+        <div id="template-tileContainer" style="float:left">
+            <div id="template-icon" class="uiIcon charIcon">
+            </div>
+        </div>
+    </script>
+
+    <div id="targetResolution" class="fullScreen">
+        <div id="rightCharacters" class="zUI" style="float:right">
+        </div>
+        <div id="leftCharacters" class="zUI" style="float:left; width:166px">
+        </div>
+    </div>
+    <img id="rltiles" src="/src/img/rltiles-2d.png" style="display:none">
+
+    <div style="float:left; position:relative;">
+        <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
+        <canvas id="characterLayer" width="1400" height="840" style="z-index: 30"></canvas>
+        <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas>
+        <canvas id="propsLayer" width="1400" height="840" style="z-index: 20"></canvas>
+        <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
+        <code id="screenLog" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>
+    </div>
+    <code id="screenLog" style="position:relative; top:0; margin:2px 7px; width:636px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>
+
+
+</body>
+</html>
