@@ -331,23 +331,5 @@
             { "groundId": "rltiles_dngn_stone_wall" },
             { "groundId": "rltiles_dngn_stone_wall" }
         ]
-    ],
-    "heroStartingTiles": [
-        {
-            "x": 1,
-            "y": 10
-        }
-    ],
-    "mobStartingTiles": [
-        {
-            "x": 18,
-            "y": 1,
-            "mobTemplate": "rltiles_skeleton"
-        },
-        {
-            "x": 3,
-            "y": 5,
-            "mobTemplate": "rltiles_sewer_rat"
-        }
     ]
 }

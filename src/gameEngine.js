@@ -39,8 +39,8 @@ murmures.GameEngine.prototype = {
             creature.position = new murmures.Tile();
             creature.position.x = startingTile.x;
             creature.position.y = startingTile.y;
-            creature.mobTemplate = startingTile.mobTemplate;
-            creature.instanciate(this.mobsReference[startingTile.mobTemplate]);
+            creature.mobTemplate = startingTile.charId;
+            creature.instanciate(this.mobsReference[startingTile.charId]);
             mobsarray.push(creature);
         }, this);
         this.mobs = mobsarray;
