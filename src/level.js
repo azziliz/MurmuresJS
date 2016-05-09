@@ -46,13 +46,13 @@ murmures.Level.prototype = {
                 delete this.tiles[y][x].x;
                 delete this.tiles[y][x].y;
                 delete this.tiles[y][x].state;
-                delete this.tiles[y][x].heroStartingTiles;
-                delete this.tiles[y][x].mobStartingTiles;
                 if (this.tiles[y][x].groundId === '') delete this.tiles[y][x].groundId;
                 if (this.tiles[y][x].propId === '') delete this.tiles[y][x].propId;
                 if (this.tiles[y][x].charId === '') delete this.tiles[y][x].charId;
             }
         }
+        delete this.heroStartingTiles;
+        delete this.mobStartingTiles;
     },
     
     isWall : function (tile) {
