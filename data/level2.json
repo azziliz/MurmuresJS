@@ -100,10 +100,7 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            {
-                "groundId": "rltiles_floor_of_a_room",
-                "charId": "rltiles_sewer_rat"
-            },
+            { "groundId": "rltiles_floor_of_a_room" },
             {
                 "groundId": "rltiles_floor_of_a_room",
                 "charId": "rltiles_sewer_rat"
@@ -189,7 +186,10 @@
             { "groundId": "rltiles_dngn_shallow_water" },
             { "groundId": "rltiles_dngn_rock_wall_08" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_sewer_rat"
+            },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_lava" },
@@ -244,7 +244,10 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_sewer_rat"
+            },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_shallow_water" },
@@ -345,10 +348,7 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            {
-                "groundId": "rltiles_floor_of_a_room",
-                "charId": "rltiles_sewer_rat"
-            },
+            { "groundId": "rltiles_floor_of_a_room" },
             {
                 "groundId": "rltiles_floor_of_a_room",
                 "charId": "rltiles_sewer_rat"
@@ -488,9 +488,9 @@
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_lava" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
@@ -540,11 +540,11 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -575,7 +575,10 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_rock_wall_00" },
-            { "groundId": "rltiles_dngn_rock_wall_00" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_open_door"
+            },
             { "groundId": "rltiles_dngn_rock_wall_00" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -649,11 +652,11 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -703,9 +706,9 @@
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_lava" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_dngn_rock_wall_15" },
+            { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_lava" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
@@ -717,7 +720,10 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_sewer_rat"
+            },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_rock_wall_08" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -736,11 +742,11 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_floor_of_a_room" },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_open_door"
+                "charId": "rltiles_sewer_rat"
             },
+            { "groundId": "rltiles_dngn_rock_wall_00" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             {
@@ -789,10 +795,7 @@
             { "groundId": "rltiles_dngn_deep_water" },
             { "groundId": "rltiles_dngn_shallow_water" },
             { "groundId": "rltiles_floor_of_a_room" },
-            {
-                "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_return"
-            },
+            { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_shallow_water" },
             { "groundId": "rltiles_dngn_shallow_water" },
@@ -844,6 +847,7 @@
             { "groundId": "rltiles_dngn_shallow_water" },
             {
                 "groundId": "rltiles_floor_of_a_room",
+                "propId": "rltiles_dngn_return",
                 "charId": "rltiles_jessica"
             },
             { "groundId": "rltiles_dngn_shallow_water" },
@@ -853,7 +857,10 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_dngn_rock_wall_00" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_skeleton"
+            },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -920,7 +927,10 @@
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
-            { "groundId": "rltiles_floor_of_a_room" },
+            {
+                "groundId": "rltiles_floor_of_a_room",
+                "charId": "rltiles_sewer_rat"
+            },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -964,7 +974,7 @@
             { "groundId": "rltiles_dngn_rock_wall_00" },
             { "groundId": "rltiles_dngn_rock_wall_00" },
             { "groundId": "rltiles_dngn_rock_wall_00" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
+            { "groundId": "rltiles_dngn_shallow_water" },
             { "groundId": "rltiles_dngn_rock_wall_00" },
             { "groundId": "rltiles_dngn_rock_wall_00" },
             { "groundId": "rltiles_dngn_rock_wall_00" },
@@ -1013,9 +1023,9 @@
             { "groundId": "rltiles_dngn_deep_water" },
             { "groundId": "rltiles_dngn_shallow_water" },
             { "groundId": "rltiles_dngn_shallow_water" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
+            { "groundId": "rltiles_dngn_shallow_water" },
+            { "groundId": "rltiles_dngn_shallow_water" },
+            { "groundId": "rltiles_dngn_shallow_water" },
             { "groundId": "rltiles_dngn_rock_wall_08" },
             { "groundId": "rltiles_dngn_rock_wall_08" },
             { "groundId": "rltiles_dngn_rock_wall_08" },
@@ -1063,10 +1073,10 @@
             { "groundId": "rltiles_dngn_deep_water" },
             { "groundId": "rltiles_dngn_deep_water" },
             { "groundId": "rltiles_dngn_shallow_water" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
-            { "groundId": "rltiles_dngn_rock_wall_08" },
+            { "groundId": "rltiles_dngn_shallow_water" },
+            { "groundId": "rltiles_dngn_shallow_water" },
+            { "groundId": "rltiles_dngn_shallow_water" },
+            { "groundId": "rltiles_dngn_shallow_water" },
             { "groundId": "rltiles_dngn_rock_wall_08" },
             { "groundId": "rltiles_dngn_rock_wall_08" },
             { "groundId": "rltiles_dngn_rock_wall_08" },

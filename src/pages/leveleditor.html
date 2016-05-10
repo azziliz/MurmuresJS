@@ -79,6 +79,7 @@
             let tileUiTemplate = document.getElementById('tileUiTemplate').innerHTML;
             let templateStr = /template/g;
             document.getElementById('leftCharacters').innerHTML = '';
+            document.getElementById('rightCharacters').innerHTML = '';
             document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<h3>Grounds</h3>');
             for (let groundId in gameEngine.bodies) {
                 let ref = gameEngine.bodies[groundId];
@@ -125,6 +126,31 @@
                 gameEngine.level.clean();
                 document.getElementById("screenLog").innerHTML = '';
                 screenLog(JSON.stringify(gameEngine.level));
+                loadEngineLevelEditor(JSON.stringify(gameEngine));
+            }, false);
+            document.getElementById('rightCharacters').insertAdjacentHTML('beforeend',
+                '<p><label>Id</label><input type="text" id="levelId"></p>' +
+                '<p><label>Width</label><input type="text" id="levelWidth"></p>' +
+                '<p><label>Height</label><input type="text" id="levelHeight"></p>' +
+                '<br><button id="newLevel">New level</button>');
+            document.getElementById('newLevel').addEventListener("mousedown", function (e) {
+                let newLvl = new murmures.Level();
+                newLvl.id = document.getElementById('levelId').value;
+                newLvl.width = parseInt(document.getElementById('levelWidth').value);
+                newLvl.height = parseInt(document.getElementById('levelHeight').value);
+                newLvl.tileSize = gameEngine.level.tileSize;
+                newLvl.layout = gameEngine.level.layout;
+                newLvl.tiles = [];
+                for (let y = 0; y < newLvl.height; y++) {
+                    newLvl.tiles[y] = [];
+                    for (let x = 0; x < newLvl.width; x++) {
+                        newLvl.tiles[y][x] = new murmures.Tile();
+                        if (selectedBrush.layer === 'char') newLvl.tiles[y][x].charId = selectedBrush.id;
+                        else if (selectedBrush.layer === 'prop') newLvl.tiles[y][x].propId = selectedBrush.id;
+                        else if (selectedBrush.layer === 'ground') newLvl.tiles[y][x].groundId = selectedBrush.id;
+                    }
+                }
+                gameEngine.level = newLvl;
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             }, false);
         }
