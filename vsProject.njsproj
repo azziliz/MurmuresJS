@@ -36,6 +36,7 @@
     <Content Include="data\level1.json" />
     <Content Include="data\level2.json" />
     <Content Include="data\level3.json" />
+    <Content Include="data\level5.json" />
     <Content Include="data\mobs.json" />
     <Content Include="data\rltiles-2d.json" />
     <Content Include="README.md" />
