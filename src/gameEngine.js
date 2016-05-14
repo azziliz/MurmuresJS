@@ -21,17 +21,17 @@ murmures.GameEngine.prototype = {
         this.level.fromJson(src.level);
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
-        
+
         let mobsarray = [];
         src.mobs.forEach(function (mob) {
             let charmob = new murmures.Character();
             charmob.fromJson(mob);
             mobsarray.push(charmob);
         });
-        this.mobs = mobsarray;        
+        this.mobs = mobsarray;
         this.hero.setVision();
     },
-    
+
     loadMobs : function () {
         let mobsarray = [];
         this.level.mobStartingTiles.forEach(function (startingTile) {
@@ -45,7 +45,7 @@ murmures.GameEngine.prototype = {
         }, this);
         this.mobs = mobsarray;
     },
-    
+
     checkOrder : function (order) {
         /// <param name="order" type="Order"/>
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
@@ -65,7 +65,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && this.tileHasMob(order.target)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     },
-    
+
     tileHasMob : function (tile) {
         let ret = false;
         this.mobs.forEach(function (mob) {
@@ -73,7 +73,7 @@ murmures.GameEngine.prototype = {
         });
         return ret;
     },
-    
+
     applyOrder : function (order) {
         if (order.command === "move") {
             this.hero.move(order.target.x, order.target.y);
@@ -89,13 +89,36 @@ murmures.GameEngine.prototype = {
         }
         this.applyAI();
     },
-    
+
     applyAI : function () {
         let hero = this.hero;
+        let level = this.level;
+        let bodies = this.bodies;
         this.mobs.forEach(function (mob) {
             if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
+              let enableToHit = false;
+              let stop = false;
+              let x = mob.position.x;
+              let y = mob.position.y;
+              while((!stop) && (!enableToHit)){
+                x = x>hero.position.x?x-1:(x<hero.position.x?x+1:x);
+                y = y>hero.position.y?y-1:(y<hero.position.y?y+1:y);
+
+                let groundLight = (level.tiles[y][x].groundId === "") ? true : bodies[level.tiles[y][x].groundId].allowFlying;
+                let propLight = (level.tiles[y][x].propId === "") ? true : bodies[level.tiles[y][x].propId].allowFlying;
+                if ((!groundLight || !propLight) ) {
+                    stop=true;
+                }else{
+                  if((x == hero.position.x) && (y == hero.position.y)){
+                    enableToHit=true;
+                  }
+                }
+              }
+
+              if (enableToHit == true){
                 hero.hitPoints -= 1;
                 if (hero.hitPoints < 0) hero.hitPoints = 0;
+              }
             }
         });
     }
