@@ -95,29 +95,33 @@ murmures.GameEngine.prototype = {
         let level = this.level;
         let bodies = this.bodies;
         this.mobs.forEach(function (mob) {
-            if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
-              let enableToHit = false;
-              let stop = false;
-              let x = mob.position.x;
-              let y = mob.position.y;
-              while((!stop) && (!enableToHit)){
-                x = x>hero.position.x?x-1:(x<hero.position.x?x+1:x);
-                y = y>hero.position.y?y-1:(y<hero.position.y?y+1:y);
+            if (mob.charSpotted == true){
+              if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
+                let enableToHit = false;
+                let stop = false;
+                let x = mob.position.x;
+                let y = mob.position.y;
+                while((!stop) && (!enableToHit)){
+                  x = x>hero.position.x?x-1:(x<hero.position.x?x+1:x);
+                  y = y>hero.position.y?y-1:(y<hero.position.y?y+1:y);
 
-                let groundLight = (level.tiles[y][x].groundId === "") ? true : bodies[level.tiles[y][x].groundId].allowFlying;
-                let propLight = (level.tiles[y][x].propId === "") ? true : bodies[level.tiles[y][x].propId].allowFlying;
-                if ((!groundLight || !propLight) ) {
-                    stop=true;
-                }else{
-                  if((x == hero.position.x) && (y == hero.position.y)){
-                    enableToHit=true;
+                  let groundLight = (level.tiles[y][x].groundId === "") ? true : bodies[level.tiles[y][x].groundId].allowFlying;
+                  let propLight = (level.tiles[y][x].propId === "") ? true : bodies[level.tiles[y][x].propId].allowFlying;
+                  if ((!groundLight || !propLight) ) {
+                      stop=true;
+                  }else{
+                    if((x == hero.position.x) && (y == hero.position.y)){
+                      enableToHit=true;
+                    }
                   }
                 }
-              }
 
-              if (enableToHit == true){
-                hero.hitPoints -= 1;
-                if (hero.hitPoints < 0) hero.hitPoints = 0;
+                if (enableToHit == true){
+                  hero.hitPoints -= 1;
+                  if (hero.hitPoints < 0) hero.hitPoints = 0;
+                }
+              }else{
+                // TODO : move to hero
               }
             }
         });
