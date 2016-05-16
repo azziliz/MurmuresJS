@@ -82,7 +82,7 @@ require('http').createServer(function (request, response) {
         gameEngine.hero.instanciate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
         
         gameEngine.level = new murmures.Level();
-        let level1Txt = require('fs').readFileSync('./data/level5.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let level1Txt = require('fs').readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.level.fromJson(JSON.parse(level1Txt));
         gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
         
@@ -143,9 +143,11 @@ require('http').createServer(function (request, response) {
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
                 else {
-                    let check = gameEngine.checkOrder(postData);
+                    let clientOrder = new murmures.Order();
+                    clientOrder.fromJsonSafe(postData);
+                    let check = gameEngine.checkOrder(clientOrder);
                     if (check.valid) {
-                        gameEngine.applyOrder(postData);
+                        gameEngine.applyOrder(clientOrder);
                         compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
                     }
                     else {

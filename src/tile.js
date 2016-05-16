@@ -34,6 +34,13 @@ murmures.Tile.prototype = {
         if (this.groundId === '') delete this.groundId;
         if (this.propId === '') delete this.propId;
         if (this.charId === '') delete this.charId;
+    },
+
+    isWall : function () {
+        let allowTerrestrialGround = (this.groundId === "") ? true : gameEngine.bodies[this.groundId].allowTerrestrial;
+        let allowTerrestrialProp = (this.propId === "") ? true : gameEngine.bodies[this.propId].allowTerrestrial;
+        return !allowTerrestrialGround || !allowTerrestrialProp;
     }
+
 };
 

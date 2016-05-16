@@ -53,7 +53,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === null) return { valid: false, reason: 'Order command is not defined' };
         else if (order.command !== 'move' && order.command !== 'attack') return { valid: false, reason: 'Order contains an unknown command' };
         else if ((order.source.position.x !== this.hero.position.x) || (order.source.position.y !== this.hero.position.y)) return { valid: false, reason: 'You can only give orders to your own hero' };
-        else if (this.level.isWall(order.target)) return { valid: false, reason: 'You cannot target a wall' };
+        else if (order.target.isWall()) return { valid: false, reason: 'You cannot target a wall' };
 
         else if (order.command === 'attack' && Math.abs(order.target.x - this.hero.position.x) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
         else if (order.command === 'attack' && Math.abs(order.target.y - this.hero.position.y) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };

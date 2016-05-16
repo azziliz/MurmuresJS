@@ -3,6 +3,7 @@
 //debugger;
 
 murmures.Character = function () {
+    /// <field name="guid" type="String"/>
     /// <field name="position" type="Tile"/>
     /// <field name="hitPoints" type="Number"/>
     /// <field name="hitPointsMax" type="Number"/>
@@ -14,6 +15,7 @@ murmures.Character = function () {
 murmures.Character.prototype = {
     fromJson : function (src) {
         /// <param name="src" type="Character"/>
+        this.guid = src.guid;
         this.position = src.position;
         this.hitPoints = src.hitPoints;
         this.hitPointsMax = src.hitPointsMax;
@@ -21,6 +23,7 @@ murmures.Character.prototype = {
     },
     
     instanciate : function (mobReference) {
+        this.guid = Math.random().toString();
         this.hitPointsMax = mobReference.hitPointsMax;
         this.hitPoints = mobReference.hitPointsMax;
     },

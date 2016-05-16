@@ -48,13 +48,6 @@ murmures.Level.prototype = {
         }
         delete this.heroStartingTiles;
         delete this.mobStartingTiles;
-    },
-    
-    isWall : function (tile) {
-        /// <param name="tile" type="Tile"/>
-        let allowTerrestrialGround = (this.tiles[tile.y][tile.x].groundId === "") ? true : gameEngine.bodies[this.tiles[tile.y][tile.x].groundId].allowTerrestrial;
-        let allowTerrestrialProp = (this.tiles[tile.y][tile.x].propId === "") ? true : gameEngine.bodies[this.tiles[tile.y][tile.x].propId].allowTerrestrial;
-        return !allowTerrestrialGround || !allowTerrestrialProp;
-    }
+    }    
 };
 
