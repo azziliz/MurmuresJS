@@ -81,7 +81,7 @@ murmures.GameEngine.prototype = {
         }
         else {
             this.mobs.forEach(function (mob) {
-                if (mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                if (mob.onVision == true && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     mob.hitPoints -= 3;
                     if (mob.hitPoints < 0) mob.hitPoints = 0;
                 }
@@ -103,7 +103,7 @@ murmures.GameEngine.prototype = {
                       fireOnHero = true;
                       if (hero.hitPoints < 0) hero.hitPoints = 0;
                  }
-                
+
               }
               if (fireOnHero == false) {
                 // TODO : move to hero
