@@ -13,7 +13,11 @@
     <script type="text/javascript">
         'use strict';
         // namespace
-        var murmures = {};
+        var murmures = {
+            serverLog: function (txt) {
+                console.log(''.concat((new Date()).toISOString(), ' - ', txt));
+            }
+        };
     </script>
     <script src="src/constants.js"></script>
     <script src="src/character.js"></script>
