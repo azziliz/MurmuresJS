@@ -5,9 +5,15 @@
 murmures.Tile = function () {
     /// <field name="x" type="Number"/>
     /// <field name="y" type="Number"/>
-    // state == 0 --> not discovered yet
-    // state == 1 --> highlighted (visible)
-    // state == 2 --> fog of war
+
+    /// <field name="groundId" type="String"/>
+    /// <field name="groundDeco" type="String"/>
+    /// <field name="propId" type="String"/>
+    /// <field name="propDeco" type="String"/>
+    /// <field name="itemId" type="String"/>
+    /// <field name="charId" type="String"/>
+    /// <field name="charDeco" type="String"/>
+    /// <field name="effectId" type="String"/>
 };
 
 murmures.Tile.prototype = {
@@ -19,6 +25,15 @@ murmures.Tile.prototype = {
         this.groundId = (src.groundId === undefined) ? '' : src.groundId;
         this.propId = (src.propId === undefined) ? '' : src.propId;
         this.charId = (src.charId === undefined) ? '' : src.charId;
+    },
+    
+    clean: function () {
+        delete this.x;
+        delete this.y;
+        delete this.state;
+        if (this.groundId === '') delete this.groundId;
+        if (this.propId === '') delete this.propId;
+        if (this.charId === '') delete this.charId;
     }
 };
 

@@ -43,12 +43,7 @@ murmures.Level.prototype = {
     clean : function () {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
-                delete this.tiles[y][x].x;
-                delete this.tiles[y][x].y;
-                delete this.tiles[y][x].state;
-                if (this.tiles[y][x].groundId === '') delete this.tiles[y][x].groundId;
-                if (this.tiles[y][x].propId === '') delete this.tiles[y][x].propId;
-                if (this.tiles[y][x].charId === '') delete this.tiles[y][x].charId;
+                this.tiles[y][x].clean();
             }
         }
         delete this.heroStartingTiles;
