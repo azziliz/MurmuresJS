@@ -7,7 +7,8 @@ murmures.Character = function () {
     /// <field name="hitPoints" type="Number"/>
     /// <field name="hitPointsMax" type="Number"/>
     /// <field name="mobTemplate" type="String"/>
-    this.charSpotted = false;
+    this.charSpotted = false; // hero is known because seen at least once
+    this.onVision = false; // hero is in isght of view
 };
 
 murmures.Character.prototype = {
@@ -41,6 +42,10 @@ murmures.Character.prototype = {
                 }
             }
         }
+      
+        for (let itMob=0;itMob<gameEngine.mobs.size;itMob++){
+          gameEngine.mobs[itMob].onVision = false;
+        }
         
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
@@ -58,6 +63,7 @@ murmures.Character.prototype = {
                         let mob = gameEngine.mobs[itMob];
                         if (mob.position.x === oxx && mob.position.y === oyy) {
                             mob.charSpotted = true;
+                            mob.onVision = true;
                         }
                     }
                     let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
