@@ -1,7 +1,20 @@
 'use strict';
-
 //debugger;
 
+/**
+ * @file Tile class. Part of the MurmuresJS project.
+ * @author github.com/azziliz
+ * @author github.com/thyshimrod
+ * @license MIT
+ */
+
+/**
+ * A tile is a square on the game grid.
+ * It is rendered on client side by drawing several overlapping layers, each layer being one PNG image from the murmures tileset.
+ * For static levels (created by the editor), each layer is initialized with a reference to the "PhysicalBody" that is present on the tile.
+ * A tile may contain at most one character.
+ * @class
+ */
 murmures.Tile = function () {
     /// <field name="x" type="Number"/>
     /// <field name="y" type="Number"/>
