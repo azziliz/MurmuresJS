@@ -22,21 +22,21 @@ murmures.Character.prototype = {
         this.mobTemplate = src.mobTemplate;
         this.onVision = src.onVision;
     },
-
+    
     instanciate : function (mobReference) {
         this.guid = Math.random().toString();
         this.hitPointsMax = mobReference.hitPointsMax;
         this.hitPoints = mobReference.hitPointsMax;
     },
-
+    
     move : function (x, y) {
         this.position.x = x;
         this.position.y = y;
     },
-
+    
     setVision : function () {
         let level = gameEngine.level;
-
+        
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
                 if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
@@ -44,11 +44,11 @@ murmures.Character.prototype = {
                 }
             }
         }
-
-        for (let itMob=0;itMob<gameEngine.mobs.length;itMob++){
-          gameEngine.mobs[itMob].onVision = false;
+        
+        for (let itMob=0; itMob < gameEngine.mobs.length; itMob++) {
+            gameEngine.mobs[itMob].onVision = false;
         }
-
+        
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);

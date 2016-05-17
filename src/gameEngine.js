@@ -21,7 +21,7 @@ murmures.GameEngine.prototype = {
         this.level.fromJson(src.level);
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
-
+        
         let mobsarray = [];
         src.mobs.forEach(function (mob) {
             let charmob = new murmures.Character();
@@ -31,7 +31,7 @@ murmures.GameEngine.prototype = {
         this.mobs = mobsarray;
         this.hero.setVision();
     },
-
+    
     loadMobs : function () {
         let mobsarray = [];
         this.level.mobStartingTiles.forEach(function (startingTile) {
@@ -45,7 +45,7 @@ murmures.GameEngine.prototype = {
         }, this);
         this.mobs = mobsarray;
     },
-
+    
     checkOrder : function (order) {
         /// <param name="order" type="Order"/>
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
@@ -57,28 +57,28 @@ murmures.GameEngine.prototype = {
 
         else if (order.command === 'attack' && Math.abs(order.target.x - this.hero.position.x) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
         else if (order.command === 'attack' && Math.abs(order.target.y - this.hero.position.y) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
-        else if (order.command === 'attack' && (this.tileHasMob(order.target).code==false)) return { valid: false, reason: 'You cannot attack an empty tile' };
-        else if (order.command === 'attack' && (this.tileHasMob(order.target).code==true) && (this.tileHasMob(order.target).mob.onVision == false)) return { valid: false, reason: 'You cannot attack over an obstacle' };
+        else if (order.command === 'attack' && (this.tileHasMob(order.target).code == false)) return { valid: false, reason: 'You cannot attack an empty tile' };
+        else if (order.command === 'attack' && (this.tileHasMob(order.target).code == true) && (this.tileHasMob(order.target).mob.onVision == false)) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') return { valid: true, hasMob: true };
 
         else if (order.command === 'move' && Math.abs(order.target.x - this.hero.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - this.hero.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
-        else if (order.command === 'move' && (this.tileHasMob(order.target).code==true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
+        else if (order.command === 'move' && (this.tileHasMob(order.target).code == true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     },
-
+    
     tileHasMob : function (tile) {
         let ret = false;
         let retMob = null;
         this.mobs.forEach(function (mob) {
-            if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0){
-              retMob = mob;
-              ret = true;
+            if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
+                retMob = mob;
+                ret = true;
             }
         });
-        return {code :ret, mob :retMob};
+        return { code : ret, mob : retMob };
     },
-
+    
     applyOrder : function (order) {
         if (order.command === "move") {
             this.hero.move(order.target.x, order.target.y);
@@ -94,25 +94,25 @@ murmures.GameEngine.prototype = {
         }
         this.applyAI();
     },
-
+    
     applyAI : function () {
         let hero = this.hero;
         let level = this.level;
         let bodies = this.bodies;
         this.mobs.forEach(function (mob) {
-            if (mob.charSpotted == true){
-              let fireOnHero = false;
-              if (mob.onVision == true){
-                if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
-                      hero.hitPoints -= 1;
-                      fireOnHero = true;
-                      if (hero.hitPoints < 0) hero.hitPoints = 0;
-                 }
+            if (mob.charSpotted == true) {
+                let fireOnHero = false;
+                if (mob.onVision == true) {
+                    if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
+                        hero.hitPoints -= 1;
+                        fireOnHero = true;
+                        if (hero.hitPoints < 0) hero.hitPoints = 0;
+                    }
 
-              }
-              if (fireOnHero == false) {
+                }
+                if (fireOnHero == false) {
                 // TODO : move to hero
-              }
+                }
             }
         });
     }

@@ -1,7 +1,24 @@
 'use strict';
-
 //debugger;
 
+/**
+ * @file Level class. Part of the MurmuresJS project.
+ * @author github.com/azziliz
+ * @author github.com/thyshimrod
+ * @license MIT
+ */
+
+/**
+ * Level is a class that contains all necessary information to build a new game area.
+ * 
+ * This includes the area topology, defined by an array of [tiles]{@link murmures.Tile}, as well as the starting points for all [characters]{@link murmures.Character}.
+ * 
+ * Static levels created by the editor are stored in JSON files, usually named /data/levelXX.json.
+ * These files are in a "clean" state that contains only non-empty properties. 
+ * Missing tile layers and starting points are calculated when the level is instantiated.
+ * 
+ * @class
+ */
 murmures.Level = function () {
         /// <field name="id" type="String"/>
         /// <field name="layout" type="String"/>
