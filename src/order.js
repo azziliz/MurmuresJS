@@ -16,6 +16,9 @@
  * Currently allowed commands are: "move" and "attack".
  * The list of allowed commands is expected to grow in the future.
  * 
+ * Orders validity is enforced by a GameEngine method called "checkOrder".
+ * Every time an existing command is modified or a new command is created, the checkOrder method should be updated.
+ * 
  * The server responds to an order by sending the new gameEngine state, after the command is executed.
  * 
  * @class

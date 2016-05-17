@@ -1,7 +1,28 @@
 'use strict';
-
 //debugger;
 
+/**
+ * @file Character class. Part of the MurmuresJS project.
+ * @author github.com/azziliz
+ * @author github.com/thyshimrod
+ * @license MIT
+ */
+
+/**
+ * Characters are entities that live, move and act inside a [level]{@link murmures.Level}.
+ * 
+ * Heroes are characters managed by the players. They can be given [orders]{@link murmures.Order} on client side.
+ * Mobs are characters managed by the AI. The AI methods to control them are defined in the [game engine]{@link murmures.GameEngine} class.
+ * 
+ * Three steps are mandatory to create a valid character:
+ * 1. Load all character templates from mobs.json.
+ * 2. Select templates that are needed for the current level.
+ * 2. Use the "instantiate" method in the Character class to create new instances.
+ * Step 1 is performed by the game engine during the server startup.
+ * Step 2 and 3 are performed together by the server and the game engine when a level is loaded.
+ * 
+ * @class
+ */
 murmures.Character = function () {
     /// <field name="guid" type="String"/>
     /// <field name="position" type="Tile"/>
@@ -23,7 +44,7 @@ murmures.Character.prototype = {
         this.onVision = src.onVision;
     },
     
-    instanciate : function (mobReference) {
+    instantiate : function (mobReference) {
         this.guid = Math.random().toString();
         this.hitPointsMax = mobReference.hitPointsMax;
         this.hitPoints = mobReference.hitPointsMax;

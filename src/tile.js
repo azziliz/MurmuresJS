@@ -12,7 +12,8 @@
  * A tile is a square on the game grid.
  * 
  * It is rendered on client side by drawing several overlapping layers, each layer being one PNG image from the murmures tileset.
- * For static levels (created by the editor), each layer is initialized with a reference to the [physical body]{@link murmures.PhysicalBody} that is present on the tile.
+ * For static levels created by the editor, each tile of a given layer is initialized with a reference to the [physical body]{@link murmures.PhysicalBody} that is present on the tile.
+ * The physical properties of these bodies may restrict movement and actions on the tile.
  * 
  * A tile may contain at most one character.
  * 
@@ -58,6 +59,5 @@ murmures.Tile.prototype = {
         let allowTerrestrialProp = (this.propId === "") ? true : gameEngine.bodies[this.propId].allowTerrestrial;
         return !allowTerrestrialGround || !allowTerrestrialProp;
     }
-
 };
 

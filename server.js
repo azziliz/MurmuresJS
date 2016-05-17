@@ -1,7 +1,9 @@
 'use strict';
 
-const vm = require('vm');
-const fs = require('fs');
+var vm = require('vm');
+var fs = require('fs');
+var zlib = require('zlib');
+var http = require('http');
 
 /**
  *  The main namespace. All classes should be created behind it.
@@ -57,36 +59,36 @@ function compressAndSend(request, response, contType, txt) {
     }
     if (acceptEncoding.match(/\bgzip\b/)) {
         response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
-        response.end(require('zlib').gzipSync(txt));
+        response.end(zlib.gzipSync(txt));
     } else {
         response.writeHead(200, { 'Content-Type': contType });
         response.end(txt);
     }
 }
 
-require('http').createServer(function (request, response) {
+http.createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
         response.writeHead(204); // No content
         response.end();
     }
     else if (request.url === '/') {
-        compressAndSend(request, response, 'text/html', require('fs').readFileSync('client.html').toString());
+        compressAndSend(request, response, 'text/html', fs.readFileSync('client.html').toString());
         
         gameEngine.tileSize = 32;
         
-        let bodiesJson = require('fs').readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.bodies = JSON.parse(bodiesJson);
         
-        let mobsJson = require('fs').readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let mobsJson = fs.readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.mobsReference = JSON.parse(mobsJson);
         
         gameEngine.hero = new murmures.Character();
-        let hero1Txt = require('fs').readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.hero.fromJson(JSON.parse(hero1Txt));
-        gameEngine.hero.instanciate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
+        gameEngine.hero.instantiate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
         
         gameEngine.level = new murmures.Level();
-        let level1Txt = require('fs').readFileSync('./data/level5.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let level1Txt = fs.readFileSync('./data/level5.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.level.fromJson(JSON.parse(level1Txt));
         gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
         
@@ -97,7 +99,7 @@ require('http').createServer(function (request, response) {
         // #region Static Pages
         try {
             let fileName = request.url;
-            let fileContent = require('fs').readFileSync('.' + fileName);
+            let fileContent = fs.readFileSync('.' + fileName);
             if (fileName.endsWith('.js')) {
                 compressAndSend(request, response, 'application/javascript', fileContent.toString());
             }

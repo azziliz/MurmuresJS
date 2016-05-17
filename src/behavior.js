@@ -1,5 +1,4 @@
 ﻿'use strict';
-
 //debugger;
 
 murmures.Behavior = function () {
