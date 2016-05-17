@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 var gameEngine = new murmures.GameEngine();
 gameEngine.allowOrders = true;
@@ -141,7 +141,7 @@ function updateUI() {
         document.getElementById('mob' + i + '-name').innerHTML = ref.name;
         let missingLife = parseFloat(gameEngine.mobs[i].hitPoints) / parseFloat(gameEngine.mobs[i].hitPointsMax) * 100.0;
         document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
-        if (gameEngine.mobs[i].hitPoints === 0 || !gameEngine.mobs[i].charSpotted) {
+        if (gameEngine.mobs[i].hitPoints === 0 || !gameEngine.mobs[i].onVision) {
             document.getElementById('mob' + i + '-box').style.display = "none";
         }
         else {
