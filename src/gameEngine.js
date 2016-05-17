@@ -1,7 +1,25 @@
 'use strict';
-
 //debugger;
 
+/**
+ * @file GameEngine class. Part of the MurmuresJS project.
+ * @author github.com/azziliz
+ * @author github.com/thyshimrod
+ * @license MIT
+ */
+
+/**
+ * GameEngine is the main manager for all game objects.
+ * 
+ * A single instance of this class is created when Node starts and is kept alive at all time afterwards.
+ * This instance is in the global scope and can be accessed from any other class.
+ * During startup, it loads all references data stored in JSON files. 
+ * This includes bodies.json (list of all existing physical bodies) and mobs.json (list of all available character templates).
+ * 
+ * This class is also in charge of applying client orders to the game and calling AI methods.
+ * 
+ * @class
+ */
 murmures.GameEngine = function () {
         /// <field name="tileSize" type="Number"/>
         /// <field name="bodies" type="PhysicalBody"/>

@@ -1,7 +1,25 @@
 ﻿'use strict';
-
 //debugger;
 
+/**
+ * @file Order class. Part of the MurmuresJS project.
+ * @author github.com/azziliz
+ * @author github.com/thyshimrod
+ * @license MIT
+ */
+
+/**
+ * An order is a player-generated instruction or event.
+ * 
+ * It is sent from the client to the server by an asynchronous request.
+ * It contains a "command" field, which describes the type of the order, and various parameters.
+ * Currently allowed commands are: "move" and "attack".
+ * The list of allowed commands is expected to grow in the future.
+ * 
+ * The server responds to an order by sending the new gameEngine state, after the command is executed.
+ * 
+ * @class
+ */
 murmures.Order = function () {
         /// <field name="command" type="String"/>
         /// <field name="source" type="Character"/>
