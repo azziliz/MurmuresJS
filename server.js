@@ -17,7 +17,7 @@ var murmures = {
 
 var gameEngine = {};
 
-// Load
+// Load classes
 (function () {    
     const ctx = {
         murmures: murmures,
@@ -50,6 +50,28 @@ var gameEngine = {};
     gameEngine = ctx.gameEngine;
 })();
 
+// Initializes game
+(function () {
+    gameEngine.tileSize = 32;
+    
+    let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.bodies = JSON.parse(bodiesJson);
+    
+    let mobsJson = fs.readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.mobsReference = JSON.parse(mobsJson);
+    
+    gameEngine.hero = new murmures.Character();
+    let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.hero.fromJson(JSON.parse(hero1Txt));
+    gameEngine.hero.instantiate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
+    
+    gameEngine.level = new murmures.Level();
+    let level1Txt = fs.readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.level.fromJson(JSON.parse(level1Txt));
+    gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
+    
+    gameEngine.loadMobs();
+})();
 
 //var txt = JSON.stringify(gameEngine.mobsReference);
 
@@ -75,27 +97,6 @@ http.createServer(function (request, response) {
     }
     else if (request.url === '/') {
         compressAndSend(request, response, 'text/html', fs.readFileSync('client.html').toString());
-        
-        gameEngine.tileSize = 32;
-        
-        let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        gameEngine.bodies = JSON.parse(bodiesJson);
-        
-        let mobsJson = fs.readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        gameEngine.mobsReference = JSON.parse(mobsJson);
-        
-        gameEngine.hero = new murmures.Character();
-        let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        gameEngine.hero.fromJson(JSON.parse(hero1Txt));
-        gameEngine.hero.instantiate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
-        
-        gameEngine.level = new murmures.Level();
-        let level1Txt = fs.readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        gameEngine.level.fromJson(JSON.parse(level1Txt));
-        gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
-        
-        gameEngine.loadMobs();
-
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages

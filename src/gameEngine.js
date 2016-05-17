@@ -13,7 +13,8 @@
  * 
  * A single instance of this class is created when Node starts and is kept alive at all time afterwards.
  * This instance is in the global scope and can be accessed from any other class.
- * During startup, it loads all references data stored in JSON files. 
+ * This is the only variable of the murmures project in the global scope.
+ * During startup, the server loads all references data -stored in JSON files- into the engine instance. 
  * This includes bodies.json (list of all existing physical bodies) and mobs.json (list of all available character templates).
  * 
  * This class is also in charge of applying client orders to the game and calling AI methods.
