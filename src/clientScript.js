@@ -77,6 +77,10 @@ function drawOneTile(x, y, color) {
     let img = new Image();
     img.src = "/src/img/rltiles-2d.png";
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
+        if (gameEngine.level.tiles[y][x].needsClientUpdate) {
+            document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
+            document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
+        }
         if (gameEngine.level.tiles[y][x].groundId !== "") {
             let tilesetCoord = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].tilesetCoord;
             document.getElementById('tilesLayer').getContext('2d').drawImage(img,

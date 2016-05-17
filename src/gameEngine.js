@@ -98,9 +98,14 @@ murmures.GameEngine.prototype = {
     },
     
     applyOrder : function (order) {
-        if (order.command === "move") {
-            this.hero.move(order.target.x, order.target.y);
-            this.hero.setVision();
+        if (order.command === 'move') {
+            if (typeof order.target.behavior !== 'undefined' && typeof order.target.behavior.move !== "undefined") {
+                murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
+            }
+            else {
+                this.hero.move(order.target.x, order.target.y);
+                this.hero.setVision();
+            }
         }
         else {
             this.mobs.forEach(function (mob) {

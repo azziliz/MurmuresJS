@@ -122,11 +122,11 @@
         "tilesetReference": "dngn_closed_door",
         "tilesetCoord": [ 17, 45 ],
         "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
+        "allowFlying": false,
+        "allowTerrestrial": false,
         "allowAquatic": false,
-        "allowUnderground": true,
-        "allowEthereal": true,
+        "allowUnderground": false,
+        "allowEthereal": false,
         "behavior": {
             "move": {
                 "callback": "openDoor",

@@ -43,21 +43,30 @@ murmures.Tile.prototype = {
         this.groundId = (src.groundId === undefined) ? '' : src.groundId;
         this.propId = (src.propId === undefined) ? '' : src.propId;
         this.charId = (src.charId === undefined) ? '' : src.charId;
+        if (src.propId !== undefined && src.propId !== '') {
+            this.behavior = gameEngine.bodies[src.propId].behavior;
+        }
+        else {
+            this.behavior = {};
+        }
+        this.needsClientUpdate = (src.needsClientUpdate === undefined) ? false : src.needsClientUpdate;;
     },
     
     clean: function () {
         delete this.x;
         delete this.y;
         delete this.state;
+        delete this.needsClientUpdate;
         if (this.groundId === '') delete this.groundId;
         if (this.propId === '') delete this.propId;
         if (this.charId === '') delete this.charId;
     },
-
+    
     isWall : function () {
         let allowTerrestrialGround = (this.groundId === "") ? true : gameEngine.bodies[this.groundId].allowTerrestrial;
         let allowTerrestrialProp = (this.propId === "") ? true : gameEngine.bodies[this.propId].allowTerrestrial;
-        return !allowTerrestrialGround || !allowTerrestrialProp;
+        let hasMoveBehavior = (typeof this.behavior.move !== "undefined");
+        return (!allowTerrestrialGround || !allowTerrestrialProp) && !hasMoveBehavior;
     }
 };
 

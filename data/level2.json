@@ -215,7 +215,7 @@
             { "groundId": "rltiles_floor_of_a_room" },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_open_door"
+                "propId": "rltiles_dngn_closed_door"
             },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -270,7 +270,7 @@
             { "groundId": "rltiles_dngn_rock_wall_15" },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_open_door"
+                "propId": "rltiles_dngn_closed_door"
             },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_rock_wall_15" },
@@ -591,7 +591,7 @@
             { "groundId": "rltiles_floor_of_a_room" },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_open_door"
+                "propId": "rltiles_dngn_closed_door"
             },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -609,7 +609,7 @@
             { "groundId": "rltiles_floor_of_a_room" },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_open_door"
+                "propId": "rltiles_dngn_closed_door"
             },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -757,7 +757,7 @@
             { "groundId": "rltiles_floor_of_a_room" },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_open_door"
+                "propId": "rltiles_dngn_closed_door"
             },
             { "groundId": "rltiles_floor_of_a_room" },
             { "groundId": "rltiles_floor_of_a_room" },
@@ -940,7 +940,7 @@
             { "groundId": "rltiles_dngn_rock_wall_15" },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_open_door"
+                "propId": "rltiles_dngn_closed_door"
             },
             { "groundId": "rltiles_dngn_rock_wall_15" },
             { "groundId": "rltiles_dngn_rock_wall_15" },

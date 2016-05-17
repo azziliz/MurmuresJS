@@ -44,6 +44,8 @@ var gameEngine = {};
     vm.runInContext(orderjs, ctx, { filename: 'order.js' });
     let physicalBodyjs = fs.readFileSync('./src/physicalBody.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalBody.js' });
+    let behaviorjs = fs.readFileSync('./src/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(behaviorjs, ctx, { filename: 'behavior.js' });
 
     gameEngine = ctx.gameEngine;
 })();
@@ -88,7 +90,7 @@ http.createServer(function (request, response) {
         gameEngine.hero.instantiate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
         
         gameEngine.level = new murmures.Level();
-        let level1Txt = fs.readFileSync('./data/level5.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        let level1Txt = fs.readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.level.fromJson(JSON.parse(level1Txt));
         gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
         
