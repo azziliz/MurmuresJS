@@ -127,7 +127,7 @@ function drawOneSquare(context, x, y, color, filled) {
 function initUI() {
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     let templateStr = /template/g;
-    for (let i = 0; i < gameEngine.mobs.length; i++) {
+    for (let i = 0; i < gameEngine.level.mobs.length; i++) {
         document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + i));
     }
     document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
@@ -135,18 +135,18 @@ function initUI() {
 
 function updateUI() {
     clearCharacterLayer();
-    for (let i = 0; i < gameEngine.mobs.length; i++) {
-        let ref = gameEngine.mobsReference[gameEngine.mobs[i].mobTemplate];
+    for (let i = 0; i < gameEngine.level.mobs.length; i++) {
+        let ref = gameEngine.mobsReference[gameEngine.level.mobs[i].mobTemplate];
         document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
         document.getElementById('mob' + i + '-name').innerHTML = ref.name;
-        let missingLife = parseFloat(gameEngine.mobs[i].hitPoints) / parseFloat(gameEngine.mobs[i].hitPointsMax) * 100.0;
+        let missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
         document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
-        if (gameEngine.mobs[i].hitPoints === 0 || !gameEngine.mobs[i].onVision) {
+        if (gameEngine.level.mobs[i].hitPoints === 0 || !gameEngine.level.mobs[i].onVision) {
             document.getElementById('mob' + i + '-box').style.display = "none";
         }
         else {
             document.getElementById('mob' + i + '-box').style.display = "block";
-            drawCharacter(gameEngine.mobs[i]);
+            drawCharacter(gameEngine.level.mobs[i]);
         }
     }
     let i = 0;

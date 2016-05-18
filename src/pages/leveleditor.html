@@ -61,7 +61,7 @@
 
         function loadEngineLevelEditor(engine) {
             gameEngine.fromJson(JSON.parse(engine));
-            gameEngine.loadMobs();
+            gameEngine.level.instantiateCharacters();
             highlightLevel();
             initUILevelEditor();
             window.requestAnimationFrame(renderLevel);
@@ -158,8 +158,8 @@
         //override
         function updateUI() {
             clearCharacterLayer();
-            for (let i = 0; i < gameEngine.mobs.length; i++) {
-                drawCharacter(gameEngine.mobs[i]);
+            for (let i = 0; i < gameEngine.level.mobs.length; i++) {
+                drawCharacter(gameEngine.level.mobs[i]);
             }
             drawCharacter(gameEngine.hero);
         }

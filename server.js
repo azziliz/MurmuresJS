@@ -68,9 +68,7 @@ var gameEngine = {};
     gameEngine.level = new murmures.Level();
     let level1Txt = fs.readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.level.fromJson(JSON.parse(level1Txt));
-    gameEngine.hero.position = gameEngine.level.heroStartingTiles[0];
-    
-    gameEngine.loadMobs();
+    gameEngine.level.instantiateCharacters();
 })();
 
 //var txt = JSON.stringify(gameEngine.mobsReference);

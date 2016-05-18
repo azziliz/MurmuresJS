@@ -12,7 +12,9 @@
  * Characters are entities that live, move and act inside a [level]{@link murmures.Level}.
  * 
  * Heroes are characters managed by the players. They can be given [orders]{@link murmures.Order} on client side.
+ * They can move from one level to another.
  * Mobs are characters managed by the AI. The AI methods to control them are defined in the [game engine]{@link murmures.GameEngine} class.
+ * They cannot change level.
  * 
  * Three steps are mandatory to create a valid character:
  * 1. Load all character templates from mobs.json.
@@ -66,8 +68,8 @@ murmures.Character.prototype = {
             }
         }
         
-        for (let itMob=0; itMob < gameEngine.mobs.length; itMob++) {
-            gameEngine.mobs[itMob].onVision = false;
+        for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+            gameEngine.level.mobs[itMob].onVision = false;
         }
         
         for (let i=0; i < 360; i++) {
@@ -82,8 +84,8 @@ murmures.Character.prototype = {
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
                     level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
-                    for (let itMob=0; itMob < gameEngine.mobs.length; itMob++) {
-                        let mob = gameEngine.mobs[itMob];
+                    for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+                        let mob = gameEngine.level.mobs[itMob];
                         if (mob.position.x === oxx && mob.position.y === oyy) {
                             mob.charSpotted = true;
                             mob.onVision = true;

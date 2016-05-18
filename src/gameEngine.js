@@ -27,7 +27,6 @@ murmures.GameEngine = function () {
         /// <field name="mobsReference" type="Character"/>
         /// <field name="level" type="Level"/>
         /// <field name="hero" type="Character"/>
-        /// <field name="mobs" type="Character"/>
 };
 
 murmures.GameEngine.prototype = {
@@ -41,28 +40,7 @@ murmures.GameEngine.prototype = {
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
         
-        let mobsarray = [];
-        src.mobs.forEach(function (mob) {
-            let charmob = new murmures.Character();
-            charmob.fromJson(mob);
-            mobsarray.push(charmob);
-        });
-        this.mobs = mobsarray;
         this.hero.setVision();
-    },
-    
-    loadMobs : function () {
-        let mobsarray = [];
-        this.level.mobStartingTiles.forEach(function (startingTile) {
-            let creature = new murmures.Character();
-            creature.position = new murmures.Tile();
-            creature.position.x = startingTile.x;
-            creature.position.y = startingTile.y;
-            creature.mobTemplate = startingTile.charId;
-            creature.instantiate(this.mobsReference[startingTile.charId]);
-            mobsarray.push(creature);
-        }, this);
-        this.mobs = mobsarray;
     },
     
     checkOrder : function (order) {
@@ -76,20 +54,20 @@ murmures.GameEngine.prototype = {
 
         else if (order.command === 'attack' && Math.abs(order.target.x - this.hero.position.x) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
         else if (order.command === 'attack' && Math.abs(order.target.y - this.hero.position.y) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
-        else if (order.command === 'attack' && (this.tileHasMob(order.target).code == false)) return { valid: false, reason: 'You cannot attack an empty tile' };
-        else if (order.command === 'attack' && (this.tileHasMob(order.target).code == true) && (this.tileHasMob(order.target).mob.onVision == false)) return { valid: false, reason: 'You cannot attack over an obstacle' };
+        else if (order.command === 'attack' && (this.tileHasMob(order.target).code === false)) return { valid: false, reason: 'You cannot attack an empty tile' };
+        else if (order.command === 'attack' && (this.tileHasMob(order.target).code === true) && (this.tileHasMob(order.target).mob.onVision === false)) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') return { valid: true, hasMob: true };
 
         else if (order.command === 'move' && Math.abs(order.target.x - this.hero.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - this.hero.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
-        else if (order.command === 'move' && (this.tileHasMob(order.target).code == true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
+        else if (order.command === 'move' && (this.tileHasMob(order.target).code === true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     },
     
     tileHasMob : function (tile) {
         let ret = false;
         let retMob = null;
-        this.mobs.forEach(function (mob) {
+        this.level.mobs.forEach(function (mob) {
             if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
                 retMob = mob;
                 ret = true;
@@ -109,8 +87,8 @@ murmures.GameEngine.prototype = {
             }
         }
         else {
-            this.mobs.forEach(function (mob) {
-                if (mob.onVision == true && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+            this.level.mobs.forEach(function (mob) {
+                if (mob.onVision && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     mob.hitPoints -= 3;
                     if (mob.hitPoints < 0) mob.hitPoints = 0;
                 }
@@ -123,10 +101,10 @@ murmures.GameEngine.prototype = {
         let hero = this.hero;
         let level = this.level;
         let bodies = this.bodies;
-        this.mobs.forEach(function (mob) {
-            if (mob.charSpotted == true) {
+        this.level.mobs.forEach(function (mob) {
+            if (mob.charSpotted) {
                 let fireOnHero = false;
-                if (mob.onVision == true) {
+                if (mob.onVision) {
                     if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
                         hero.hitPoints -= 1;
                         fireOnHero = true;
@@ -134,7 +112,7 @@ murmures.GameEngine.prototype = {
                     }
 
                 }
-                if (fireOnHero == false) {
+                if (!fireOnHero) {
                 // TODO : move to hero
                 }
             }

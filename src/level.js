@@ -25,8 +25,7 @@ murmures.Level = function () {
         /// <field name="width" type="Number"/>
         /// <field name="height" type="Number"/>
         /// <field name="tiles" type="Array"/>
-        /// <field name="heroStartingTiles" type="Tile"/>
-        /// <field name="mobStartingTiles" type="Tile"/>
+        /// <field name="mobs" type="Array"/>
 };
 
 murmures.Level.prototype = {
@@ -36,21 +35,41 @@ murmures.Level.prototype = {
         this.layout = src.layout;
         this.width = src.width;
         this.height = src.height;
-        this.heroStartingTiles = [];
-        this.mobStartingTiles = [];
-        this.tiles = [];
+
+        this.tiles = [];        
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
             for (let x = 0; x < this.width; x++) {
                 this.tiles[y][x] = new murmures.Tile();
                 this.tiles[y][x].fromJson(src.tiles[y][x], x, y);
+            }
+        }
+
+        this.mobs = [];
+        if (typeof src.mobs !== "undefined") {
+            // mobs array is only defined after the first call to instantiateCharacters
+            src.mobs.forEach(function (mob) {
+                let charmob = new murmures.Character();
+                charmob.fromJson(mob);
+                this.mobs.push(charmob);
+            }, this);
+        }
+    },
+    
+    instantiateCharacters : function () {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
                 if (this.tiles[y][x].charId !== '') {
                     let ref = gameEngine.mobsReference[this.tiles[y][x].charId];
                     if (ref.isHero) {
-                        this.heroStartingTiles.push(this.tiles[y][x]);
+                        gameEngine.hero.position = this.tiles[y][x];
                     } 
                     else {
-                        this.mobStartingTiles.push(this.tiles[y][x]);
+                        let mob = new murmures.Character();
+                        mob.position = this.tiles[y][x];
+                        mob.mobTemplate = this.tiles[y][x].charId;
+                        mob.instantiate(gameEngine.mobsReference[this.tiles[y][x].charId]);
+                        this.mobs.push(mob);
                     }
                 }
             }
@@ -63,8 +82,6 @@ murmures.Level.prototype = {
                 this.tiles[y][x].clean();
             }
         }
-        delete this.heroStartingTiles;
-        delete this.mobStartingTiles;
     }    
 };
 
