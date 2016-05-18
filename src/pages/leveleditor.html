@@ -61,7 +61,7 @@
 
         function loadEngineLevelEditor(engine) {
             gameEngine.fromJson(JSON.parse(engine));
-            gameEngine.level.instantiateCharacters();
+            gameEngine.level.instantiateMobs();
             highlightLevel();
             initUILevelEditor();
             window.requestAnimationFrame(renderLevel);

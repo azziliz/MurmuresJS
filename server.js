@@ -1,19 +1,25 @@
 'use strict';
 
+console.log(''); // new line
 var vm = require('vm');
 var fs = require('fs');
 var zlib = require('zlib');
 var http = require('http');
 
 /**
- *  The main namespace. All classes should be created behind it.
+ *  The main namespace. All classes should be prefixed with it.
  *  @namespace
  */
 var murmures = {
+    startTime: process.hrtime(),
+
     serverLog: function (txt) {
-        console.log(''.concat((new Date()).toISOString(), ' - ', txt));
+        var diff = process.hrtime(this.startTime);
+        console.log((diff[0] + diff[1] / 1e9).toFixed(6) + ' - ' + txt);
     }
 };
+
+murmures.serverLog('Loading classes');
 
 var gameEngine = {};
 
@@ -50,6 +56,8 @@ var gameEngine = {};
     gameEngine = ctx.gameEngine;
 })();
 
+murmures.serverLog('Initializing game');
+
 // Initializes game
 (function () {
     gameEngine.tileSize = 32;
@@ -64,14 +72,24 @@ var gameEngine = {};
     let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.hero.fromJson(JSON.parse(hero1Txt));
     gameEngine.hero.instantiate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
-    
-    gameEngine.level = new murmures.Level();
-    let level1Txt = fs.readFileSync('./data/level2.json', 'utf8').toString().replace(/^\uFEFF/, '');
-    gameEngine.level.fromJson(JSON.parse(level1Txt));
-    gameEngine.level.instantiateCharacters();
+        
+    gameEngine.levels = [];
+    gameEngine.levelIds = ["level2", "level1", "level5"];
+    gameEngine.levelIds.forEach(function (levelName) {
+        let level1 = new murmures.Level();
+        let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
+        level1.fromJson(JSON.parse(level1Txt));
+        level1.instantiateMobs();
+        gameEngine.levels.push(level1);
+    }, this);
+    gameEngine.activeLevel = 0;
+    gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
+    gameEngine.levels[0].moveHeroToStartingPoint();
+
+    gameEngine.hero.setVision();
 })();
 
-//var txt = JSON.stringify(gameEngine.mobsReference);
+murmures.serverLog('Starting HTTP server');
 
 // Tries to compress (gzip) the response, if the client browser allows it
 function compressAndSend(request, response, contType, txt) {
@@ -150,16 +168,20 @@ http.createServer(function (request, response) {
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
                 else {
+                    murmures.serverLog('Request received');
                     let clientOrder = new murmures.Order();
                     clientOrder.fromJsonSafe(postData);
                     let check = gameEngine.checkOrder(clientOrder);
+                    murmures.serverLog('Order checked');
                     if (check.valid) {
                         gameEngine.applyOrder(clientOrder);
+                        murmures.serverLog('Order applied');
                         compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
                     }
                     else {
                         compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
                     }
+                    murmures.serverLog('Response sent');
                 }
             }
             else {
@@ -170,4 +192,4 @@ http.createServer(function (request, response) {
     }
 }).listen(15881);
 
-murmures.serverLog('Server running at http://127.0.0.1:15881/');
+murmures.serverLog('Listening on http://127.0.0.1:15881/');

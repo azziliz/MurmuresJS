@@ -35,8 +35,8 @@ murmures.Level.prototype = {
         this.layout = src.layout;
         this.width = src.width;
         this.height = src.height;
-
-        this.tiles = [];        
+        
+        this.tiles = [];
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
             for (let x = 0; x < this.width; x++) {
@@ -44,10 +44,10 @@ murmures.Level.prototype = {
                 this.tiles[y][x].fromJson(src.tiles[y][x], x, y);
             }
         }
-
+        
         this.mobs = [];
         if (typeof src.mobs !== "undefined") {
-            // mobs array is only defined after the first call to instantiateCharacters
+            // mobs array is only defined after the first call to instantiateMobs
             src.mobs.forEach(function (mob) {
                 let charmob = new murmures.Character();
                 charmob.fromJson(mob);
@@ -56,15 +56,12 @@ murmures.Level.prototype = {
         }
     },
     
-    instantiateCharacters : function () {
+    instantiateMobs : function () {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 if (this.tiles[y][x].charId !== '') {
                     let ref = gameEngine.mobsReference[this.tiles[y][x].charId];
-                    if (ref.isHero) {
-                        gameEngine.hero.position = this.tiles[y][x];
-                    } 
-                    else {
+                    if (!ref.isHero) {
                         let mob = new murmures.Character();
                         mob.position = this.tiles[y][x];
                         mob.mobTemplate = this.tiles[y][x].charId;
@@ -76,12 +73,24 @@ murmures.Level.prototype = {
         }
     },
     
+    moveHeroToStartingPoint: function () {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (this.tiles[y][x].charId !== '') {
+                    let ref = gameEngine.mobsReference[this.tiles[y][x].charId];
+                    if (ref.isHero) {
+                        gameEngine.hero.position = this.tiles[y][x];
+                    } 
+                }
+            }
+        }
+    },
+    
     clean : function () {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 this.tiles[y][x].clean();
             }
         }
-    }    
+    }
 };
-

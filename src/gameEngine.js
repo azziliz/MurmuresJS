@@ -25,22 +25,29 @@ murmures.GameEngine = function () {
         /// <field name="tileSize" type="Number"/>
         /// <field name="bodies" type="PhysicalBody"/>
         /// <field name="mobsReference" type="Character"/>
+        /// <field name="levels" type="Array"/>
+        /// <field name="levelIds" type="Array"/>
+        /// <field name="activeLevel" type="Number"/>
         /// <field name="level" type="Level"/>
         /// <field name="hero" type="Character"/>
 };
 
 murmures.GameEngine.prototype = {
     fromJson : function (src) {
-        /// <param name="src" type="GameEngine"/>
+        // this function is only called on client side
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
         this.mobsReference = src.mobsReference;
-        this.level = new murmures.Level();
-        this.level.fromJson(src.level);
+        this.levels = [];
+        for (let i = 0; i < src.levels.length; i++) {
+            this.levels[i] = new murmures.Level();
+            this.levels[i].fromJson(src.levels[i]);
+        }
+        this.levelIds = src.levelIds;
+        this.activeLevel = src.activeLevel;
+        this.level = this.levels[this.activeLevel];
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
-        
-        this.hero.setVision();
     },
     
     checkOrder : function (order) {
@@ -77,13 +84,13 @@ murmures.GameEngine.prototype = {
     },
     
     applyOrder : function (order) {
+        // This function is only called by the server
         if (order.command === 'move') {
             if (typeof order.target.behavior !== 'undefined' && typeof order.target.behavior.move !== "undefined") {
                 murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
             }
             else {
                 this.hero.move(order.target.x, order.target.y);
-                this.hero.setVision();
             }
         }
         else {
@@ -94,7 +101,11 @@ murmures.GameEngine.prototype = {
                 }
             });
         }
+        murmures.serverLog('Moves / attacks done');
         this.applyAI();
+        murmures.serverLog('AI done');
+        this.hero.setVision();
+        murmures.serverLog('Vision done');
     },
     
     applyAI : function () {
