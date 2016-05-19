@@ -245,7 +245,7 @@ function onKeyPress(char) {
         if (char === '9' || char === '8' || char === '7') target.y = gameEngine.hero.position.y - 1;
         if (char === '3' || char === '2' || char === '1') target.y = gameEngine.hero.position.y + 1;
         if (char === '4' || char === '6') target.y = gameEngine.hero.position.y;
-        moveOrder.target = target;
+        moveOrder.target = gameEngine.level.tiles[target.y][target.x];
         launchOrder(moveOrder);
     }
     else {

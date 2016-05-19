@@ -84,7 +84,7 @@ murmures.serverLog('Initializing game');
     }, this);
     gameEngine.activeLevel = 0;
     gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-    gameEngine.levels[0].moveHeroToStartingPoint();
+    gameEngine.level.moveHeroToStartingPoint();
 
     gameEngine.hero.setVision();
 })();
