@@ -23,7 +23,7 @@ murmures.serverLog('Loading classes');
 
 var gameEngine = {};
 
-// Load classes
+// Loads classes
 (function () {    
     const ctx = {
         murmures: murmures,

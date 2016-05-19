@@ -230,7 +230,7 @@
             },
             {
                 "groundId": "rltiles_floor_of_a_room",
-                "propId": "rltiles_dngn_enter"
+                "propId": "rltiles_staircase_down"
             },
             { "groundId": "rltiles_dngn_rock_wall_08" }
         ],

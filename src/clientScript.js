@@ -125,6 +125,8 @@ function drawOneSquare(context, x, y, color, filled) {
 
 // #region Characters
 function initUI() {
+    document.getElementById('rightCharacters').innerHTML = '';
+    document.getElementById('leftCharacters').innerHTML = '<a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br><a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a>';
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     let templateStr = /template/g;
     for (let i = 0; i < gameEngine.level.mobs.length; i++) {
@@ -275,8 +277,16 @@ function launchOrder(order) {
 function onOrderResponse(response) {
     screenLog('<< onOrderResponse');
     gameEngine.allowOrders = true;
-    gameEngine.fromJson(JSON.parse(response));
-    window.requestAnimationFrame(drawTiles);
-    updateUI();
+    let ge = JSON.parse(response);
+    let isNewLevel = gameEngine.activeLevel !== ge.activeLevel;
+    gameEngine.fromJson(ge);
+    if (isNewLevel) {
+        initUI();
+        renderLevel();
+    }
+    else {
+        window.requestAnimationFrame(drawTiles);
+        updateUI();
+    }
 }
 // #endregion

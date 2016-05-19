@@ -158,7 +158,12 @@
         "allowAquatic": false,
         "allowUnderground": false,
         "allowEthereal": true,
-        "behavior": { }
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": ""
+            }
+        }
     },
     "rltiles_staircase_up": {
         "uniqueId": "rltiles_staircase_up",

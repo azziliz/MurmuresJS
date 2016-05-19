@@ -48,7 +48,11 @@ murmures.Behavior = {
      * @static
      */
     jumpToNextLevel: function (source, target, cb_params) {
-        //TODO
+        if (gameEngine.activeLevel < gameEngine.levelIds.length - 1) {
+            gameEngine.activeLevel++;
+            gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
+            gameEngine.level.moveHeroToStartingPoint();
+        }
     },
     
     /**
