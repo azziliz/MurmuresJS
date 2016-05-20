@@ -93,15 +93,18 @@ murmures.serverLog('Starting HTTP server');
 
 // Tries to compress (gzip) the response, if the client browser allows it
 function compressAndSend(request, response, contType, txt) {
-    var acceptEncoding = request.headers['accept-encoding'];
+    let acceptEncoding = request.headers['accept-encoding'];
     if (!acceptEncoding) {
         acceptEncoding = '';
     }
-    if (acceptEncoding.match(/\bgzip\b/)) {
-        response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
-        response.end(zlib.gzipSync(txt));
+    if (acceptEncoding.match(/\bgzip\b/) && contType != 'image/png') {
+        let zipped = zlib.gzipSync(txt);
+        let contentlength = Buffer.byteLength(zipped);
+        response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip', 'Content-Length': contentlength });
+        response.end(zipped);
     } else {
-        response.writeHead(200, { 'Content-Type': contType });
+        let contentlength = Buffer.byteLength(txt);
+        response.writeHead(200, { 'Content-Type': contType, 'Content-Length': contentlength });
         response.end(txt);
     }
 }

@@ -11,7 +11,8 @@ function screenLog(txt) {
 
 function sendAjax(path, param, callback, async) {
     let xhr = new XMLHttpRequest();
-    xhr.onerror = onXhrError;
+    xhr.addEventListener("error", onXhrError);
+    xhr.addEventListener("abort", onXhrError);
     xhr.open('POST', path, async);
     xhr.setRequestHeader('Content-Type', 'application/json');
     if (callback !== null) {
@@ -31,6 +32,30 @@ function onXhrError(e) {
 
 // #region Init
 function init() {
+    let xhr = new XMLHttpRequest();
+    xhr.addEventListener("error", onXhrError);
+    xhr.addEventListener("abort", onXhrError);
+    xhr.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+            let percentComplete = parseInt(100.0 * evt.loaded / evt.total);
+            document.getElementById('tilesetLoadProgress').style.width = percentComplete + '%';
+        }
+    });
+    xhr.addEventListener("load", function (evt) {
+        document.getElementById('tilesetLoadBg').style.display = 'none';
+        gameEngine.tileset = window.URL.createObjectURL(this.response);
+        let img = new Image();
+        img.onload = function () {
+            tilesetLoaded();
+        }
+        img.src = gameEngine.tileset;
+    });
+    xhr.open('GET', '/src/img/murmures.png', true);
+    xhr.responseType = "blob";
+    xhr.send(null);
+}
+
+function tilesetLoaded() {
     screenLog('>> getLevel');
     sendAjax('/getLevel', '{"id":"level1"}', loadEngine, true);
     registerEvents();
@@ -46,7 +71,7 @@ function loadEngine(engine) {
 
 // #region Renderer
 function renderLevel() {
-    let allCanvas = document.getElementsByTagName("canvas");
+    let allCanvas = document.getElementsByTagName('canvas');
     for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
         allCanvas[canvasIter].width = gameEngine.level.width * gameEngine.tileSize; // This is a hard reset of all canvas and is quite time consumming.
         allCanvas[canvasIter].height = gameEngine.level.height * gameEngine.tileSize;
@@ -54,13 +79,9 @@ function renderLevel() {
         //context.translate(0.5, 0.5); // translation prevents anti-aliasing.
         context.imageSmoothingEnabled = false;
     }
-    document.getElementById("screenLog").style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
-    let img = new Image();
-    img.onload = function () {
-        drawTiles();
-        updateUI();
-    }
-    img.src = "/src/img/rltiles-2d.png";
+    document.getElementById('screenLog').style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
+    drawTiles();
+    updateUI();
 }
 
 // #region Tiles
@@ -68,14 +89,14 @@ function drawTiles() {
     document.getElementById('fogOfWarLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     for (let x = 0; x < gameEngine.level.width; x++) {
         for (let y = 0; y < gameEngine.level.height; y++) {
-            drawOneTile(x, y, "#2D1E19");
+            drawOneTile(x, y, '#2D1E19');
         }
     }
 }
 
 function drawOneTile(x, y, color) {
     let img = new Image();
-    img.src = "/src/img/rltiles-2d.png";
+    img.src = gameEngine.tileset;
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
         if (gameEngine.level.tiles[y][x].needsClientUpdate) {
             document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
@@ -139,6 +160,7 @@ function updateUI() {
     clearCharacterLayer();
     for (let i = 0; i < gameEngine.level.mobs.length; i++) {
         let ref = gameEngine.mobsReference[gameEngine.level.mobs[i].mobTemplate];
+        document.getElementById('mob' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
         document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
         document.getElementById('mob' + i + '-name').innerHTML = ref.name;
         let missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
@@ -153,6 +175,7 @@ function updateUI() {
     }
     let i = 0;
     let ref = gameEngine.mobsReference[gameEngine.hero.mobTemplate];
+    document.getElementById('hero' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
     document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
     document.getElementById('hero' + i + '-name').innerHTML = ref.name;
     let missingLife = parseFloat(gameEngine.hero.hitPoints) / parseFloat(gameEngine.hero.hitPointsMax) * 100.0;
@@ -167,7 +190,7 @@ function clearCharacterLayer() {
 function drawCharacter(character) {
     /// <param name="character" type="Character"/>
     let img = new Image();
-    img.src = "/src/img/rltiles-2d.png";
+    img.src = gameEngine.tileset;
     let tilesetCoord = gameEngine.mobsReference[character.mobTemplate].tilesetCoord;
     if (gameEngine.level.tiles[character.position.y][character.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
         document.getElementById('characterLayer').getContext('2d').drawImage(img,

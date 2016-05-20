@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="src/css/client.css" media="screen">
 </head>
 <body onload="init()">
+    <div id="tilesetLoadBg" class="tilesetLoad">
+        <div id="tilesetLoadProgress"></div>
+    </div>
     <div style="position:fixed; bottom:0; left:0; z-index:9999">
         <div id="debugDiv"></div>
     </div>
@@ -65,7 +68,6 @@
             <a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a>
         </div>
     </div>
-    <img id="rltiles" src="/src/img/rltiles-2d.png" style="display:none">
 
     <div style="float:left; position:relative;">
         <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
@@ -75,7 +77,6 @@
         <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
         <code id="screenLog" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>
     </div>
-
 
 </body>
 </html>

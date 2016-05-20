@@ -6,6 +6,23 @@
     image-rendering: pixelated;
 }
 
+.tilesetLoad {
+    position: fixed;
+    background-color: #888;
+    width: 300px;
+    height: 20px;
+    top: calc(50% - 10px);
+    left: calc(50% - 150px);
+    z-index: 9999;
+}
+
+    .tilesetLoad div {
+        background-color: #080;
+        width: 0;
+        height: 20px;
+        margin: 0;
+    }
+
 canvas {
     position: absolute;
     top: 0;
@@ -37,11 +54,10 @@ canvas {
     width: 32px;
     height: 32px;
     display: block;
-    background-color:#222;
+    background-color: #222;
 }
 
 .charIcon {
-    background-image: url("/src/img/rltiles-2d.png");
     background-repeat: no-repeat;
 }
 
@@ -69,7 +85,7 @@ canvas {
     }
 
         .characterBox div div {
-            margin:3px;
+            margin: 3px;
         }
 
             .characterBox div div div {

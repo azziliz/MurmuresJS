@@ -1,69 +1,4 @@
 ﻿{
-    "rltiles_dngn_stone_wall": {
-        "uniqueId": "rltiles_dngn_stone_wall",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_stone_wall",
-        "tilesetCoord": [ 16, 45 ],
-        "layer": "ground",
-        "allowFlying": false,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": false,
-        "behavior": { }
-    },
-    "rltiles_floor_of_a_room": {
-        "uniqueId": "rltiles_floor_of_a_room",
-        "tileset": "rltiles",
-        "tilesetReference": "floor_of_a_room",
-        "tilesetCoord": [ 28, 45 ],
-        "layer": "ground",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": true,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_dngn_shallow_water": {
-        "uniqueId": "rltiles_dngn_shallow_water",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_shallow_water",
-        "tilesetCoord": [ 27, 45 ],
-        "layer": "ground",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": true,
-        "allowUnderground": true,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_dngn_deep_water": {
-        "uniqueId": "rltiles_dngn_deep_water",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_deep_water",
-        "tilesetCoord": [ 26, 45 ],
-        "layer": "ground",
-        "allowFlying": true,
-        "allowTerrestrial": false,
-        "allowAquatic": true,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_dngn_lava": {
-        "uniqueId": "rltiles_dngn_lava",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_lava",
-        "tilesetCoord": [ 25, 45 ],
-        "layer": "ground",
-        "allowFlying": true,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": { }
-    },
     "rltiles_dngn_rock_wall_15": {
         "uniqueId": "rltiles_dngn_rock_wall_15",
         "tileset": "rltiles",
@@ -130,7 +65,7 @@
         "behavior": {
             "move": {
                 "callback": "openDoor",
-                "params": "rltiles_dngn_open_door"
+                "params": "_b1_12_dngn_open_door.rl2"
             }
         }
     },
@@ -1582,9 +1517,9 @@
         "tilesetCoord": [ 19, 1 ],
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": true,
+        "allowTerrestrial": false,
+        "allowAquatic": true,
+        "allowUnderground": false,
         "allowEthereal": true,
         "behavior": { }
     },
@@ -1663,7 +1598,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
-        "allowAquatic": false,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true,
         "behavior": { }
@@ -6318,9 +6253,9 @@
         "tilesetCoord": [ 59, 5 ],
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
+        "allowTerrestrial": false,
         "allowAquatic": false,
-        "allowUnderground": true,
+        "allowUnderground": false,
         "allowEthereal": true,
         "behavior": { }
     },
@@ -22714,7 +22649,17 @@
         "layer": "12-gate",
         "rank": 1528,
         "tilesetCoord": [ 56, 23 ],
-        "behavior": { }
+        "allowFlying": false,
+        "allowTerrestrial": false,
+        "allowAquatic": false,
+        "allowUnderground": false,
+        "allowEthereal": false,
+        "behavior": {
+            "move": {
+                "callback": "openDoor",
+                "params": "_b1_12_dngn_open_door.rl2"
+            }
+        }
     },
     "_b1_12_dngn_detected_secret_door": {
         "uniqueId": "_b1_12_dngn_detected_secret_door",
@@ -22894,6 +22839,11 @@
         "layer": "12-gate",
         "rank": 1546,
         "tilesetCoord": [ 10, 24 ],
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": true,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_12_dngn_return_hell": {
