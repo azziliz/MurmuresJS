@@ -108,14 +108,17 @@
                     delete body.tilesetReference;
                     delete body.layer;
                     delete body.tilesetCoord;
-                    if (['01', '06', '11', '12', '13', '14', '15', ].indexOf(body.layerId) >= 0) body.hasPhysics = true;
-                    if (['11', '12', '13', '14', '15', ].indexOf(body.layerId) >= 0) {
-                        body.allowFlying = true;
-                        body.allowTerrestrial = true;
-                        body.allowAquatic = true;
-                        body.allowUnderground = true;
-                        body.allowEthereal = true;
-                    }
+                    //if (['01', '06', ].indexOf(body.layerId) >= 0) {
+                    //    body.hasPhysics = true;
+                    //}
+                    //else {
+                    //    body.hasPhysics = false;
+                    //    body.allowFlying = false;
+                    //    body.allowTerrestrial = false;
+                    //    body.allowAquatic = false;
+                    //    body.allowUnderground = false;
+                    //    body.allowEthereal = false;
+                    //}
                     if (!body.hasPhysics) delete body.hasPhysics;
                     if (!body.allowFlying) delete body.allowFlying;
                     if (!body.allowTerrestrial) delete body.allowTerrestrial;
@@ -155,7 +158,7 @@
     <div id="container">
         <img id="rltiles" src="/src/img/murmures.png" style="width: 1536px;" />
     </div>
-    <div id="screenLog" style="position:fixed; right:0; top:300px; margin:2px 7px; width:300px; height:calc(100vh - 300px); z-index:9999; color:#fff; overflow:auto; display: block;"></div>
+    <div id="screenLog" style="position:fixed; right:0; top:350px; margin:2px 7px; width:300px; height:calc(100vh - 350px); z-index:9999; color:#fff; overflow:auto; display: block;"></div>
 
 
 </body>

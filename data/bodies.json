@@ -10253,24 +10253,15 @@
     },
     "_b1_11_dngn_enter.rl2": {
         "layerId": "11",
-        "rank": 1507,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowEthereal": true
+        "rank": 1507
     },
     "_b1_11_dngn_return.rl2": {
         "layerId": "11",
-        "rank": 1508,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowEthereal": true
+        "rank": 1508
     },
     "_b1_11_dngn_rock_stairs_down.conv": {
         "layerId": "11",
         "rank": 1509,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowEthereal": true,
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
@@ -10280,10 +10271,7 @@
     },
     "_b1_11_dngn_rock_stairs_up.conv": {
         "layerId": "11",
-        "rank": 1510,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowEthereal": true
+        "rank": 1510
     },
     "_b1_11_escape_hatch_down": {
         "layerId": "11",
@@ -10356,6 +10344,9 @@
     "_b1_12_dngn_closed_door.rl1": {
         "layerId": "12",
         "rank": 1528,
+        "hasPhysics": true,
+        "allowUnderground": true,
+        "allowEthereal": true,
         "behavior": {
             "move": {
                 "callback": "openDoor",
@@ -10433,11 +10424,7 @@
     },
     "_b1_12_dngn_open_door.rl2": {
         "layerId": "12",
-        "rank": 1546,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
-        "allowEthereal": true
+        "rank": 1546
     },
     "_b1_12_dngn_return_hell": {
         "layerId": "12",
@@ -11309,7 +11296,8 @@
     },
     "_b1_13_dngn_silver_statue.rl3": {
         "layerId": "13",
-        "rank": 1764,
+        "rank": 1764
+        "hasPhysics": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -11879,10 +11867,7 @@
     },
     "_b1_14_chest": {
         "layerId": "14",
-        "rank": 1906,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowEthereal": true
+        "rank": 1906
     },
     "_b1_14_chest2_closed": {
         "layerId": "14",
@@ -11926,10 +11911,7 @@
     },
     "_b1_14_large_box.rl2": {
         "layerId": "14",
-        "rank": 1917,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowEthereal": true
+        "rank": 1917
     },
     "_b1_15_altar_ashenzari": {
         "layerId": "15",
@@ -11945,11 +11927,7 @@
     },
     "_b1_15_blue_fountain": {
         "layerId": "15",
-        "rank": 1921,
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
-        "allowEthereal": true
+        "rank": 1921
     },
     "_b1_15_blue_fountain2": {
         "layerId": "15",
