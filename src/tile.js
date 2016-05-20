@@ -63,9 +63,9 @@ murmures.Tile.prototype = {
     },
     
     isWall : function () {
-        let allowTerrestrialGround = (this.groundId === "") ? true : gameEngine.bodies[this.groundId].allowTerrestrial;
-        let allowTerrestrialProp = (this.propId === "") ? true : gameEngine.bodies[this.propId].allowTerrestrial;
-        let hasMoveBehavior = (typeof this.behavior.move !== "undefined");
+        let allowTerrestrialGround = (this.groundId === "") ? true : !gameEngine.bodies[this.groundId].hasPhysics ? true : !!gameEngine.bodies[this.groundId].allowTerrestrial;
+        let allowTerrestrialProp = (this.propId === "") ? true : !gameEngine.bodies[this.propId].hasPhysics ? true : !!gameEngine.bodies[this.propId].allowTerrestrial;
+        let hasMoveBehavior = (typeof this.behavior !== "undefined" && typeof this.behavior.move !== "undefined");
         return (!allowTerrestrialGround || !allowTerrestrialProp) && !hasMoveBehavior;
     }
 };

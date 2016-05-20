@@ -91,8 +91,8 @@ murmures.Character.prototype = {
                             mob.onVision = true;
                         }
                     }
-                    let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
-                    let propLight = (level.tiles[oyy][oxx].propId === "") ? true : gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
+                    let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
+                    let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
                     if ((!groundLight || !propLight) && (j > 0)) {
                         break;
                     }

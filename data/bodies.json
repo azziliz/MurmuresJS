@@ -11296,7 +11296,7 @@
     },
     "_b1_13_dngn_silver_statue.rl3": {
         "layerId": "13",
-        "rank": 1764
+        "rank": 1764,
         "hasPhysics": true,
         "allowUnderground": true,
         "allowEthereal": true

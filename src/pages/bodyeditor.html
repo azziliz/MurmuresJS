@@ -108,16 +108,11 @@
                     delete body.tilesetReference;
                     delete body.layer;
                     delete body.tilesetCoord;
-                    //if (['01', '06', ].indexOf(body.layerId) >= 0) {
-                    //    body.hasPhysics = true;
+                    //if (['31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44'].indexOf(body.layerId) >= 0) {
+                    //    body.isMob = true;
                     //}
-                    //else {
-                    //    body.hasPhysics = false;
-                    //    body.allowFlying = false;
-                    //    body.allowTerrestrial = false;
-                    //    body.allowAquatic = false;
-                    //    body.allowUnderground = false;
-                    //    body.allowEthereal = false;
+                    //if (['56', ].indexOf(body.layerId) >= 0) {
+                    //    body.isHero = true;
                     //}
                     if (!body.hasPhysics) delete body.hasPhysics;
                     if (!body.allowFlying) delete body.allowFlying;

@@ -102,15 +102,19 @@ function drawOneTile(x, y, color) {
             document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
         }
         if (gameEngine.level.tiles[y][x].groundId !== "") {
-            let tilesetCoord = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].tilesetCoord;
+            let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].rank;
+            let tilesetX = tilesetRank % 64;
+            let tilesetY = (tilesetRank - tilesetX) / 64;
             document.getElementById('tilesLayer').getContext('2d').drawImage(img,
-                    tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         }
         if (gameEngine.level.tiles[y][x].propId !== "") {
-            let tilesetCoord = gameEngine.bodies[gameEngine.level.tiles[y][x].propId].tilesetCoord;
+            let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].propId].rank;
+            let tilesetX = tilesetRank % 64;
+            let tilesetY = (tilesetRank - tilesetX) / 64;
             document.getElementById('propsLayer').getContext('2d').drawImage(img,
-                    tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         }
     }
