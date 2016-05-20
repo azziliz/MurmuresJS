@@ -76,10 +76,9 @@ function renderLevel() {
         allCanvas[canvasIter].width = gameEngine.level.width * gameEngine.tileSize; // This is a hard reset of all canvas and is quite time consumming.
         allCanvas[canvasIter].height = gameEngine.level.height * gameEngine.tileSize;
         let context = allCanvas[canvasIter].getContext('2d');
-        //context.translate(0.5, 0.5); // translation prevents anti-aliasing.
         context.imageSmoothingEnabled = false;
     }
-    document.getElementById('screenLog').style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
+    //document.getElementById('screenLog').style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
     drawTiles();
     updateUI();
 }
@@ -147,7 +146,10 @@ function drawOneSquare(context, x, y, color, filled) {
 // #region Characters
 function initUI() {
     document.getElementById('rightCharacters').innerHTML = '';
-    document.getElementById('leftCharacters').innerHTML = '<a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br><a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a>';
+    document.getElementById('leftCharacters').innerHTML = 
+    '<a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br>' +
+    '<a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br>' +
+    '<code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:136px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>';
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     let templateStr = /template/g;
     for (let i = 0; i < gameEngine.level.mobs.length; i++) {
@@ -225,6 +227,7 @@ function registerEvents() {
 }
 
 function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
+    screenLog('mouseEvent');
     if (!rightClick) {
         // event is a left click
         // find hovered tile
@@ -258,6 +261,7 @@ function getHoveredTile(mouseEventX, mouseEventY) {
 }
 
 function onKeyPress(char) {
+    screenLog('keyboardEvent');
     let allowedChars = '12346789';
     if (allowedChars.indexOf(char) >= 0) {
         let moveOrder = new murmures.Order();
@@ -281,6 +285,7 @@ function onKeyPress(char) {
 
 // #region Ajax
 function launchOrder(order) {
+    screenLog('checkOrder');
     let check = gameEngine.checkOrder(order);
     if (gameEngine.allowOrders) {
         if (check.valid) {
@@ -308,8 +313,11 @@ function onOrderResponse(response) {
         renderLevel();
     }
     else {
-        window.requestAnimationFrame(drawTiles);
+        drawTiles();
         updateUI();
     }
+    screenLog('UI updated');
 }
 // #endregion
+
+

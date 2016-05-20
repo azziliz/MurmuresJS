@@ -1,196 +1,4 @@
 ﻿{
-    "rltiles_dngn_rock_wall_15": {
-        "uniqueId": "rltiles_dngn_rock_wall_15",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_rock_wall_15",
-        "tilesetCoord": [ 15, 45 ],
-        "layer": "ground",
-        "allowFlying": false,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": false,
-        "behavior": { }
-    },
-    "rltiles_dngn_rock_wall_08": {
-        "uniqueId": "rltiles_dngn_rock_wall_08",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_rock_wall_08",
-        "tilesetCoord": [ 8, 45 ],
-        "layer": "ground",
-        "allowFlying": false,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": false,
-        "behavior": { }
-    },
-    "rltiles_dngn_rock_wall_07": {
-        "uniqueId": "rltiles_dngn_rock_wall_07",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_rock_wall_07",
-        "tilesetCoord": [ 7, 45 ],
-        "layer": "ground",
-        "allowFlying": false,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": false,
-        "behavior": { }
-    },
-    "rltiles_dngn_rock_wall_00": {
-        "uniqueId": "rltiles_dngn_rock_wall_00",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_rock_wall_00",
-        "tilesetCoord": [ 0, 45 ],
-        "layer": "ground",
-        "allowFlying": false,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": false,
-        "behavior": { }
-    },
-    "rltiles_dngn_closed_door": {
-        "uniqueId": "rltiles_dngn_closed_door",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_closed_door",
-        "tilesetCoord": [ 17, 45 ],
-        "layer": "prop",
-        "allowFlying": false,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": false,
-        "behavior": {
-            "move": {
-                "callback": "openDoor",
-                "params": "_b1_12_dngn_open_door.rl2"
-            }
-        }
-    },
-    "rltiles_dngn_open_door": {
-        "uniqueId": "rltiles_dngn_open_door",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_open_door",
-        "tilesetCoord": [ 0, 46 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": true,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_staircase_down": {
-        "uniqueId": "rltiles_staircase_down",
-        "tileset": "rltiles",
-        "tilesetReference": "staircase_down",
-        "tilesetCoord": [ 1, 46 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": {
-            "move": {
-                "callback": "jumpToNextLevel",
-                "params": ""
-            }
-        }
-    },
-    "rltiles_staircase_up": {
-        "uniqueId": "rltiles_staircase_up",
-        "tileset": "rltiles",
-        "tilesetReference": "staircase_up",
-        "tilesetCoord": [ 7, 46 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_dngn_enter": {
-        "uniqueId": "rltiles_dngn_enter",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_enter",
-        "tilesetCoord": [ 17, 46 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_dngn_return": {
-        "uniqueId": "rltiles_dngn_return",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_return",
-        "tilesetCoord": [ 18, 46 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_chest": {
-        "uniqueId": "rltiles_chest",
-        "tileset": "rltiles",
-        "tilesetReference": "chest",
-        "tilesetCoord": [ 9, 40 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_large_box": {
-        "uniqueId": "rltiles_large_box",
-        "tileset": "rltiles",
-        "tilesetReference": "large_box",
-        "tilesetCoord": [ 8, 40 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": false,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_dngn_blue_fountain": {
-        "uniqueId": "rltiles_dngn_blue_fountain",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_blue_fountain",
-        "tilesetCoord": [ 1, 47 ],
-        "layer": "prop",
-        "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowAquatic": false,
-        "allowUnderground": true,
-        "allowEthereal": true,
-        "behavior": { }
-    },
-    "rltiles_dngn_silver_statue": {
-        "uniqueId": "rltiles_dngn_silver_statue",
-        "tileset": "rltiles",
-        "tilesetReference": "dngn_silver_statue",
-        "tilesetCoord": [ 22, 45 ],
-        "layer": "prop",
-        "allowFlying": false,
-        "allowTerrestrial": false,
-        "allowAquatic": false,
-        "allowUnderground": true,
-        "allowEthereal": true,
-        "behavior": { }
-    },
     "_b1_00_0": {
         "uniqueId": "_b1_00_0",
         "tileset": "murmures",
@@ -22439,6 +22247,11 @@
         "layer": "11-stairs",
         "rank": 1507,
         "tilesetCoord": [ 35, 23 ],
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": false,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_11_dngn_return.rl2": {
@@ -22449,6 +22262,11 @@
         "layer": "11-stairs",
         "rank": 1508,
         "tilesetCoord": [ 36, 23 ],
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": false,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_11_dngn_rock_stairs_down.conv": {
@@ -22459,7 +22277,17 @@
         "layer": "11-stairs",
         "rank": 1509,
         "tilesetCoord": [ 37, 23 ],
-        "behavior": { }
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": false,
+        "allowEthereal": true,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": ""
+            }
+        }
     },
     "_b1_11_dngn_rock_stairs_up.conv": {
         "uniqueId": "_b1_11_dngn_rock_stairs_up.conv",
@@ -22469,6 +22297,11 @@
         "layer": "11-stairs",
         "rank": 1510,
         "tilesetCoord": [ 38, 23 ],
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": false,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_11_escape_hatch_down": {
@@ -25024,6 +24857,11 @@
         "layer": "13-altar",
         "rank": 1764,
         "tilesetCoord": [ 36, 27 ],
+        "allowFlying": false,
+        "allowTerrestrial": false,
+        "allowAquatic": false,
+        "allowUnderground": true,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_13_earth_elementalist_statue": {
@@ -26444,6 +26282,11 @@
         "layer": "14-chest",
         "rank": 1906,
         "tilesetCoord": [ 50, 29 ],
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": false,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_14_chest2_closed": {
@@ -26554,6 +26397,11 @@
         "layer": "14-chest",
         "rank": 1917,
         "tilesetCoord": [ 61, 29 ],
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": false,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_15_altar_ashenzari": {
@@ -26594,6 +26442,11 @@
         "layer": "15-propmisc",
         "rank": 1921,
         "tilesetCoord": [ 1, 30 ],
+        "allowFlying": true,
+        "allowTerrestrial": true,
+        "allowAquatic": false,
+        "allowUnderground": true,
+        "allowEthereal": true,
         "behavior": { }
     },
     "_b1_15_blue_fountain2": {
