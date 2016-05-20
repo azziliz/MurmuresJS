@@ -65,13 +65,10 @@ murmures.serverLog('Initializing game');
     let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.bodies = JSON.parse(bodiesJson);
     
-    let mobsJson = fs.readFileSync('./data/mobs.json', 'utf8').toString().replace(/^\uFEFF/, '');
-    gameEngine.mobsReference = JSON.parse(mobsJson);
-    
     gameEngine.hero = new murmures.Character();
     let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.hero.fromJson(JSON.parse(hero1Txt));
-    gameEngine.hero.instantiate(gameEngine.mobsReference[gameEngine.hero.mobTemplate]);
+    gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
         
     gameEngine.levels = [];
     gameEngine.levelIds = ["level2", "level1", "level5"];

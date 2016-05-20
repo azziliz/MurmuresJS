@@ -1,6 +1,8 @@
 ﻿{
-    "rltiles_jessica": {
-        "uniqueId": "rltiles_jessica",
+    "_b1_56_jessica.rl2": {
+        "layerId": "56",
+        "rank": 4777,
+        "uniqueId": "_b1_56_jessica.rl2",
         "tileset": "rltiles",
         "tilesetReference": "jessica",
         "tilesetCoord": [ 41, 74 ],
@@ -11,8 +13,10 @@
         "damageValue": 3,
         "canMove": true
     },
-    "rltiles_skeleton": {
-        "uniqueId": "rltiles_skeleton",
+    "_b1_44_skeleton.rl3": {
+        "layerId": "44",
+        "rank": 4446,
+        "uniqueId": "_b1_44_skeleton.rl3",
         "tileset": "rltiles",
         "tilesetReference": "skeleton",
         "tilesetCoord": [ 30, 69 ],
@@ -23,8 +27,10 @@
         "damageValue": 1,
         "canMove": false
     },
-    "rltiles_sewer_rat": {
-        "uniqueId": "rltiles_sewer_rat",
+    "_b1_32_rat.rl2": {
+        "layerId": "32",
+        "rank": 2949,
+        "uniqueId": "_b1_32_rat.rl2",
         "tileset": "rltiles",
         "tilesetReference": "sewer_rat",
         "tilesetCoord": [ 5, 46 ],

@@ -53,7 +53,7 @@
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             {
                 "groundId": "_b1_01_floor_of_a_room.rl1",
-                "charId": "rltiles_skeleton"
+                "charId": "_b1_44_skeleton.rl3"
             },
             { "groundId": "_b1_06_dngn_stone_wall.rl1" }
         ],
@@ -144,7 +144,7 @@
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             {
                 "groundId": "_b1_01_floor_of_a_room.rl1",
-                "charId": "rltiles_sewer_rat"
+                "charId": "_b1_32_rat.rl2"
             },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
@@ -285,7 +285,7 @@
             { "groundId": "_b1_06_dngn_stone_wall.rl1" },
             {
                 "groundId": "_b1_01_floor_of_a_room.rl1",
-                "charId": "rltiles_jessica"
+                "charId": "_b1_56_jessica.rl2"
             },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_06_dngn_stone_wall.rl1" },

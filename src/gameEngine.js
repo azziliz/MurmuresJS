@@ -15,7 +15,7 @@
  * This instance is in the global scope and can be accessed from any other class.
  * This is the only variable of the murmures project in the global scope.
  * During startup, the server loads all references data -stored in JSON files- into the engine instance. 
- * This includes bodies.json (list of all existing physical bodies) and mobs.json (list of all available character templates).
+ * This includes bodies.json (list of all physical bodies and character templates).
  * 
  * This class is also in charge of applying client orders to the game and calling AI methods.
  * 
@@ -24,7 +24,6 @@
 murmures.GameEngine = function () {
         /// <field name="tileSize" type="Number"/>
         /// <field name="bodies" type="PhysicalBody"/>
-        /// <field name="mobsReference" type="Character"/>
         /// <field name="levels" type="Array"/>
         /// <field name="levelIds" type="Array"/>
         /// <field name="activeLevel" type="Number"/>
@@ -37,7 +36,6 @@ murmures.GameEngine.prototype = {
         // this function is only called on client side
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
-        this.mobsReference = src.mobsReference;
         this.levels = [];
         for (let i = 0; i < src.levels.length; i++) {
             this.levels[i] = new murmures.Level();

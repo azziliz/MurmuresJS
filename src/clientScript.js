@@ -165,10 +165,13 @@ function initUI() {
 function updateUI() {
     clearCharacterLayer();
     for (let i = 0; i < gameEngine.level.mobs.length; i++) {
-        let ref = gameEngine.mobsReference[gameEngine.level.mobs[i].mobTemplate];
+        let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
+        let tilesetRank = ref.rank;
+        let tilesetX = tilesetRank % 64;
+        let tilesetY = (tilesetRank - tilesetX) / 64;
         document.getElementById('mob' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
-        document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
-        document.getElementById('mob' + i + '-name').innerHTML = ref.name;
+        document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+        document.getElementById('mob' + i + '-name').innerHTML = ref.name || 'NameError';
         let missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
         document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
         if (gameEngine.level.mobs[i].hitPoints === 0 || !gameEngine.level.mobs[i].onVision) {
@@ -180,10 +183,13 @@ function updateUI() {
         }
     }
     let i = 0;
-    let ref = gameEngine.mobsReference[gameEngine.hero.mobTemplate];
+    let ref = gameEngine.bodies[gameEngine.hero.mobTemplate];
+    let tilesetRank = ref.rank;
+    let tilesetX = tilesetRank % 64;
+    let tilesetY = (tilesetRank - tilesetX) / 64;
     document.getElementById('hero' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
-    document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * ref.tilesetCoord[0] + 'px -' + gameEngine.tileSize * ref.tilesetCoord[1] + 'px';
-    document.getElementById('hero' + i + '-name').innerHTML = ref.name;
+    document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+    document.getElementById('hero' + i + '-name').innerHTML = ref.name || 'NameError';
     let missingLife = parseFloat(gameEngine.hero.hitPoints) / parseFloat(gameEngine.hero.hitPointsMax) * 100.0;
     document.getElementById('hero' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
     drawCharacter(gameEngine.hero);
@@ -197,10 +203,12 @@ function drawCharacter(character) {
     /// <param name="character" type="Character"/>
     let img = new Image();
     img.src = gameEngine.tileset;
-    let tilesetCoord = gameEngine.mobsReference[character.mobTemplate].tilesetCoord;
+    let tilesetRank = gameEngine.bodies[character.mobTemplate].rank;
+    let tilesetX = tilesetRank % 64;
+    let tilesetY = (tilesetRank - tilesetX) / 64;
     if (gameEngine.level.tiles[character.position.y][character.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
         document.getElementById('characterLayer').getContext('2d').drawImage(img,
-                    tilesetCoord[0] * gameEngine.tileSize, tilesetCoord[1] * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);
     }
 

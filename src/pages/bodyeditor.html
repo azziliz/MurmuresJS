@@ -55,20 +55,15 @@
 
         function loadEngineBodyEditor(engine) {
             gameEngine.fromJson(JSON.parse(engine));
-            rltiles.addEventListener('mousedown', function (event) {
+            tileset.addEventListener('mousedown', function (event) {
                 let x = Math.floor(event.offsetX / gameEngine.tileSize / 0.75);
                 let y = Math.floor(event.offsetY / gameEngine.tileSize / 0.75);
                 let i = x + y * 64;
                 for (let key in gameEngine.bodies) {
                     if (gameEngine.bodies[key].rank === i) {
                         let body = gameEngine.bodies[key];
-                        document.getElementById('uniqueId').value = key;
-                        document.getElementById('tileset').value = body.tileset;
-                        document.getElementById('tilesetReference').value = body.tilesetReference;
                         document.getElementById('layerId').value = body.layerId;
-                        document.getElementById('layer').value = body.layer;
                         document.getElementById('rank').value = body.rank;
-                        document.getElementById('tilesetCoord').value = JSON.stringify(body.tilesetCoord);
                         document.getElementById('hasPhysics').checked = body.hasPhysics;
                         document.getElementById('allowFlying').checked = body.allowFlying;
                         document.getElementById('allowTerrestrial').checked = body.allowTerrestrial;
@@ -81,13 +76,8 @@
             });
             saveButton.addEventListener('mousedown', function (event) {
                 let body = {};
-                body.uniqueId = document.getElementById('uniqueId').value;
-                body.tileset = document.getElementById('tileset').value;
-                body.tilesetReference = document.getElementById('tilesetReference').value;
                 body.layerId = document.getElementById('layerId').value;
-                body.layer = document.getElementById('layer').value;
                 body.rank = parseInt(document.getElementById('rank').value);
-                body.tilesetCoord = JSON.parse(document.getElementById('tilesetCoord').value);
                 body.hasPhysics = document.getElementById('hasPhysics').checked;
                 if (body.hasPhysics) {
                     body.allowFlying = document.getElementById('allowFlying').checked;
@@ -103,11 +93,6 @@
                 //cleanup
                 for (let key in gameEngine.bodies) {
                     let body = gameEngine.bodies[key];
-                    delete body.uniqueId;
-                    delete body.tileset;
-                    delete body.tilesetReference;
-                    delete body.layer;
-                    delete body.tilesetCoord;
                     //if (['31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44'].indexOf(body.layerId) >= 0) {
                     //    body.isMob = true;
                     //}
@@ -131,13 +116,8 @@
     <div id="targetResolution" class="fullScreen">
         <div id="rightCharacters" style="position: fixed;right: 0; z-index:9999;">
             <div style="display: table;">
-                <p><label>uniqueId</label><input type="text" id="uniqueId" readonly></p>
-                <p><label>tileset</label><input type="text" id="tileset" value="rltiles" readonly></p>
-                <p><label>tilesetReference</label><input type="text" id="tilesetReference" readonly></p>
                 <p><label>layerId</label><input type="text" id="layerId"></p>
-                <p><label>layer</label><input type="text" id="layer"></p>
                 <p><label>rank</label><input type="text" id="rank" readonly></p>
-                <p><label>tilesetCoord</label><input type="text" id="tilesetCoord" readonly></p>
                 <p><label>hasPhysics</label><input type="checkbox" id="hasPhysics"></p>
                 <p><label>allowFlying</label><input type="checkbox" id="allowFlying"></p>
                 <p><label>allowTerrestrial</label><input type="checkbox" id="allowTerrestrial"></p>
@@ -151,7 +131,7 @@
         </div>
     </div>
     <div id="container">
-        <img id="rltiles" src="/src/img/murmures.png" style="width: 1536px;" />
+        <img id="tileset" src="/src/img/murmures.png" style="width: 1536px;" />
     </div>
     <div id="screenLog" style="position:fixed; right:0; top:350px; margin:2px 7px; width:300px; height:calc(100vh - 350px); z-index:9999; color:#fff; overflow:auto; display: block;"></div>
 

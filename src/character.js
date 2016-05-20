@@ -48,8 +48,8 @@ murmures.Character.prototype = {
     
     instantiate : function (mobReference) {
         this.guid = Math.random().toString();
-        this.hitPointsMax = mobReference.hitPointsMax;
-        this.hitPoints = mobReference.hitPointsMax;
+        this.hitPointsMax = mobReference.hitPointsMax || (mobReference.layerId === "56" ? 20 : 10);
+        this.hitPoints = this.hitPointsMax;
     },
     
     move : function (x, y) {
