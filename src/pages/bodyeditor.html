@@ -62,7 +62,7 @@
                 for (let key in gameEngine.bodies) {
                     if (gameEngine.bodies[key].rank === i) {
                         let body = gameEngine.bodies[key];
-                        document.getElementById('uniqueId').value = body.uniqueId;
+                        document.getElementById('uniqueId').value = key;
                         document.getElementById('tileset').value = body.tileset;
                         document.getElementById('tilesetReference').value = body.tilesetReference;
                         document.getElementById('layerId').value = body.layerId;
@@ -100,6 +100,30 @@
                 gameEngine.bodies[body.uniqueId] = body;
             });
             dumpButton.addEventListener('mousedown', function (event) {
+                //cleanup
+                for (let key in gameEngine.bodies) {
+                    let body = gameEngine.bodies[key];
+                    delete body.uniqueId;
+                    delete body.tileset;
+                    delete body.tilesetReference;
+                    delete body.layer;
+                    delete body.tilesetCoord;
+                    if (['01', '06', '11', '12', '13', '14', '15', ].indexOf(body.layerId) >= 0) body.hasPhysics = true;
+                    if (['11', '12', '13', '14', '15', ].indexOf(body.layerId) >= 0) {
+                        body.allowFlying = true;
+                        body.allowTerrestrial = true;
+                        body.allowAquatic = true;
+                        body.allowUnderground = true;
+                        body.allowEthereal = true;
+                    }
+                    if (!body.hasPhysics) delete body.hasPhysics;
+                    if (!body.allowFlying) delete body.allowFlying;
+                    if (!body.allowTerrestrial) delete body.allowTerrestrial;
+                    if (!body.allowAquatic) delete body.allowAquatic;
+                    if (!body.allowUnderground) delete body.allowUnderground;
+                    if (!body.allowEthereal) delete body.allowEthereal;
+                    if (JSON.stringify(body.behavior) === '{}') delete body.behavior;
+                }
                 document.getElementById("screenLog").innerHTML = JSON.stringify(gameEngine.bodies);
             });
         }
