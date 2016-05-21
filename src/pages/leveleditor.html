@@ -82,31 +82,75 @@
             }
         }
 
-        function initUILevelEditor() {
+        function paintIcons(title, layerId) {
             let tileUiTemplate = document.getElementById('tileUiTemplate').innerHTML;
             let templateStr = /template/g;
-            document.getElementById('leftCharacters').innerHTML = '';
-
-            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<h3>Grounds</h3>'); //TODO
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div class="collapsible">' + title + '</div>');
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div class="collapsiblepanel" id="subpanel.' + layerId[0] + '"></div>');
             for (let groundId in gameEngine.bodies) {
                 let ref = gameEngine.bodies[groundId];
-                if (ref.layerId === '01') { //TODO
+                if (layerId.indexOf(ref.layerId) >= 0) {
                     let tilesetRank = ref.rank;
                     let tilesetX = tilesetRank % 64;
                     let tilesetY = (tilesetRank - tilesetX) / 64;
-                    document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, groundId));
+                    document.getElementById('subpanel.' + layerId[0]).insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, groundId));
                     document.getElementById(groundId + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
                     document.getElementById(groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
                     document.getElementById(groundId + '-icon').addEventListener("mousedown", function (e) {
+                        e.preventDefault();
                         selectedBrush.id = groundId;
-                        selectedBrush.layerId = '01'; //TODO
+                        selectedBrush.layerId = ref.layerId;
                         document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
                         document.getElementById("leftCharacters").style.display = "none";
                     }, false);
                 }
             }
+        }
 
-            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><h3>Selected</h3>');
+        function initUILevelEditor() {
+            let tileUiTemplate = document.getElementById('tileUiTemplate').innerHTML;
+            let templateStr = /template/g;
+            document.getElementById('leftCharacters').innerHTML = '';
+
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Grounds</b></div>');
+            paintIcons('Surfaces', ['01']);
+            paintIcons('Walls', ['06']);
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Ground addons</b></div>');
+            paintIcons('Decorations', ['02', '07']);
+            paintIcons('Traps and marks', ['03', '04']);
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Props</b></div>');
+            paintIcons('Stairs and gates', ['11', '12']);
+            paintIcons('Other props', ['13', '14', '15']);
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Items</b></div>');
+            paintIcons('Various items', ['25']);
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Mobs</b></div>');
+            paintIcons('Aberrations', ['31']);
+            paintIcons('Beasts', ['32']);
+            paintIcons('Celestials', ['33']);
+            paintIcons('Constructs', ['34']);
+            paintIcons('Dragons', ['35']);
+            paintIcons('Elemental', ['36']);
+            paintIcons('Fey', ['37']);
+            paintIcons('Fiends', ['38']);
+            paintIcons('Giants', ['39']);
+            paintIcons('Humanoids', ['40']);
+            paintIcons('Monstrosities', ['41']);
+            paintIcons('Oozes', ['42']);
+            paintIcons('Plants', ['43']);
+            paintIcons('Undead', ['44']);
+            paintIcons('Heroes', ['56']);
+
+            let panels = document.getElementsByClassName("collapsible");
+            for (let i = 0; i < panels.length; i++) {
+                panels[i].addEventListener("mousedown", function () { 
+                    //for (let j = 0; j < panels.length; j++) {
+                    //    panels[j].nextElementSibling.classList.remove("show");
+                    //}
+                    this.nextElementSibling.classList.toggle("show");
+                }, false);
+            }
+
+            document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><div>Selected</div>');
             document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'selectedBrush'));
             let ref = gameEngine.bodies[selectedBrush.id];
             let tilesetRank = ref.rank;
@@ -119,7 +163,7 @@
                 gameEngine.level.clean();
                 document.getElementById("screenLog").innerHTML = JSON.stringify(gameEngine.level);
                 document.getElementById("screenLog").style.display = "block";
-                setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 8000);
+                setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 10000);
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             }, false);
             document.getElementById('leftCharacters').insertAdjacentHTML('beforeend',
@@ -204,15 +248,17 @@
     </script>
 
     <div id="targetResolution" class="fullScreen">
-        <div id="leftPopup" style="float:left; width:20px; height:calc(100vh - 8px); border:2px solid #fff; margin:2px; z-index: -10;">
+        <div id="filer" style="float:left; width:10px; height:1px; margin:4px; z-index: -10;">
         </div>
-        <div id="leftCharacters" style="position:fixed; width:100%; height:100vh; z-index: 101; background: #666; display:none;">
+        <div id="leftPopup" style="position:fixed; width:4px; height:calc(100vh - 6px); border:3px solid #fff; z-index: 95;">
+        </div>
+        <div id="leftCharacters" style="position:fixed; width:100%; height:100vh; z-index: 101; background: #666; display:none; overflow-y: scroll; padding-left: 15px;">
         </div>
         <code id="screenLog" style="position:fixed; width:100%; height:100vh; z-index:100; background: #000; color:white; overflow:auto; display: none;"></code>
     </div>
 
     <div style="float:left; position:relative;">
-        <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
+        <canvas id="topLayer" width="1400" height="840" style="z-index: 90"></canvas>
         <canvas id="characterLayer" width="1400" height="840" style="z-index: 30"></canvas>
         <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas>
         <canvas id="propsLayer" width="1400" height="840" style="z-index: 20"></canvas>

@@ -121,3 +121,18 @@ canvas {
 #leftCharacters br {
     clear: left;
 }
+
+div.collapsible {
+    cursor: pointer;
+    padding-left: 30px;
+}
+
+div.collapsiblepanel {
+    max-height: 0;
+    overflow: hidden;
+    /*transition: 0.5s ease-out;*/
+}
+
+    div.collapsiblepanel.show {
+    max-height: 5000px;  
+    }

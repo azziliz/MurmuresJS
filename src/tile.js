@@ -56,6 +56,7 @@ murmures.Tile.prototype = {
         delete this.x;
         delete this.y;
         delete this.state;
+        delete this.behavior;
         delete this.needsClientUpdate;
         if (this.groundId === '') delete this.groundId;
         if (this.propId === '') delete this.propId;
