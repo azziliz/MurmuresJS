@@ -94,14 +94,17 @@ function compressAndSend(request, response, contType, txt) {
     if (!acceptEncoding) {
         acceptEncoding = '';
     }
-    if (acceptEncoding.match(/\bgzip\b/) && contType != 'image/png') {
+    if (acceptEncoding.match(/\bgzip\b/) && contType !== 'image/png') {
         let zipped = zlib.gzipSync(txt);
-        let contentlength = Buffer.byteLength(zipped);
-        response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip', 'Content-Length': contentlength });
+        //let contentlength = Buffer.byteLength(zipped);
+        response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
         response.end(zipped);
+    } else if (contType === 'image/png') {
+        let stats = fs.statSync('./src/img/murmures.png');
+        response.writeHead(200, { 'Content-Type': contType, 'Content-Length': stats["size"] });
+        response.end(txt);
     } else {
-        let contentlength = Buffer.byteLength(txt);
-        response.writeHead(200, { 'Content-Type': contType, 'Content-Length': contentlength });
+        response.writeHead(200, { 'Content-Type': contType });
         response.end(txt);
     }
 }
