@@ -193,6 +193,6 @@ http.createServer(function (request, response) {
             }
         });
     }
-}).listen(15881);
+}).listen(process.env.PORT || 15881);
 
-murmures.serverLog('Listening on http://127.0.0.1:15881/');
+murmures.serverLog('Listening on http://127.0.0.1:' + (process.env.PORT || 15881).toString() + '/');

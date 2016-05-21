@@ -62,7 +62,7 @@ murmures.Level.prototype = {
             for (let x = 0; x < this.width; x++) {
                 if (this.tiles[y][x].charId !== '') {
                     let ref = gameEngine.bodies[this.tiles[y][x].charId];
-                    if (ref.layerId !== "56") {
+                    if (murmures.C.LAYERS[ref.layerId][0] !== 'Hero') {
                         let mob = new murmures.Character();
                         mob.position = this.tiles[y][x];
                         mob.mobTemplate = this.tiles[y][x].charId;
@@ -79,7 +79,7 @@ murmures.Level.prototype = {
             for (let x = 0; x < this.width; x++) {
                 if (this.tiles[y][x].charId !== '') {
                     let ref = gameEngine.bodies[this.tiles[y][x].charId];
-                    if (ref.layerId === "56") {
+                    if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') {
                         gameEngine.hero.position = this.tiles[y][x];
                     } 
                 }

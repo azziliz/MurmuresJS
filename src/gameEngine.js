@@ -32,8 +32,14 @@ murmures.GameEngine = function () {
 };
 
 murmures.GameEngine.prototype = {
+    /**
+     * Synchronization method called on client side only.
+     * Creates a full GameEngine objects from a JSON string sent by the server.
+     * Sub-classes are also synchronized recursively.
+     * 
+     * @param {string} src - A string received from the server, containing a stringified version of the remote gameEngine instance.
+     */
     fromJson : function (src) {
-        // this function is only called on client side
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
         this.levels = [];
@@ -46,6 +52,9 @@ murmures.GameEngine.prototype = {
         this.level = this.levels[this.activeLevel];
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
+    },
+    
+    getMinimal : function () {
     },
     
     checkOrder : function (order) {
@@ -82,7 +91,7 @@ murmures.GameEngine.prototype = {
     },
     
     applyOrder : function (order) {
-        // This function is only called by the server
+        // This function is only called on server side
         if (order.command === 'move') {
             if (typeof order.target.behavior !== 'undefined' && typeof order.target.behavior.move !== "undefined") {
                 murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
