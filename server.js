@@ -89,19 +89,18 @@ murmures.serverLog('Initializing game');
 murmures.serverLog('Starting HTTP server');
 
 // Tries to compress (gzip) the response, if the client browser allows it
-function compressAndSend(request, response, contType, txt) {
+function compressAndSend(request, response, contType, txt, callback) {
     let acceptEncoding = request.headers['accept-encoding'];
     if (!acceptEncoding) {
         acceptEncoding = '';
     }
     if (acceptEncoding.match(/\bgzip\b/) && contType !== 'image/png') {
         let zipped = zlib.gzipSync(txt);
-        //let contentlength = Buffer.byteLength(zipped);
         response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
-        response.end(zipped);
+        response.end(zipped, 'utf8', callback);
     } else if (contType === 'image/png') {
         let stats = fs.statSync('./src/img/murmures.png');
-        response.writeHead(200, { 'Content-Type': contType, 'Content-Length': stats["size"] });
+        response.writeHead(200, { 'Content-Type': contType, 'Content-Length': stats['size'] });
         response.end(txt);
     } else {
         response.writeHead(200, { 'Content-Type': contType });
@@ -179,12 +178,12 @@ http.createServer(function (request, response) {
                     if (check.valid) {
                         gameEngine.applyOrder(clientOrder);
                         murmures.serverLog('Order applied');
-                        compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
+                        compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine), function () { murmures.serverLog('Response sent'); });
                     }
                     else {
                         compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
                     }
-                    murmures.serverLog('Response sent');
+                    murmures.serverLog('Response sending');
                 }
             }
             else {
