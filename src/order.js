@@ -37,7 +37,7 @@ murmures.Order.prototype = {
         this.target = new murmures.Tile();
         this.target.fromJson(src.target);
     }, 
-
+    
     fromJsonSafe : function (src) {
         /// <param name="src" type="Order"/>
         this.command = src.command;
@@ -49,6 +49,11 @@ murmures.Order.prototype = {
             throw "Tech Error - Guid does not match - " + src.source.guid + " - " + gameEngine.hero.guid;
         }
         this.target = gameEngine.level.tiles[src.target.y][src.target.x];
+    },
+    
+    clean: function () {
+        this.source = { guid: this.source.guid };
+        this.target = { x: this.target.x, y: this.target.y };
     }
 };
 

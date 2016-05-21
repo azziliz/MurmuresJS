@@ -302,6 +302,7 @@ function launchOrder(order) {
     if (gameEngine.allowOrders) {
         if (check.valid) {
             screenLog('>> order - ' + order.command);
+            order.clean();
             sendAjax('/order', JSON.stringify(order), onOrderResponse, true);
             gameEngine.allowOrders = false;
         }
