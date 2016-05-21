@@ -49,6 +49,9 @@
     <script type="text/javascript">
         'use strict';
 
+        var mouseIsDown = false;
+        var justDrawn = { x: 0, y: 0 };
+
         var selectedBrush = {
             id: '_b1_01_floor_of_a_room.rl1',
             layerId: '01'
@@ -71,7 +74,8 @@
             gameEngine.level.instantiateMobs();
             gameEngine.level.moveHeroToStartingPoint();
             highlightLevel();
-            renderLevel();
+            drawTiles();
+            updateUI();
             document.getElementById("leftCharacters").style.display = "none";
         }
 
@@ -79,6 +83,7 @@
             for (let x = 0; x < gameEngine.level.width; x++) {
                 for (let y = 0; y < gameEngine.level.height; y++) {
                     gameEngine.level.tiles[y][x].state = murmures.C.TILE_HIGHLIGHTED;
+                    gameEngine.level.tiles[y][x].needsClientUpdate = true;
                 }
             }
         }
@@ -188,6 +193,7 @@
                 }
                 gameEngine.levels[gameEngine.activeLevel] = newLvl;
                 gameEngine.fromJson(JSON.parse(JSON.stringify(gameEngine)));
+                renderLevel();
                 gameEngine.hero.position = gameEngine.levels[gameEngine.activeLevel].tiles[0][0];
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             }, false);
@@ -205,10 +211,29 @@
         function registerEventsLevelEditor() {
             let topLayer = document.getElementById("topLayer");
             topLayer.addEventListener("mousedown", function (e) {
-                e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+                e.preventDefault();
+                mouseIsDown = true;
                 let mouseX = Math.floor(e.offsetX);
                 let mouseY = Math.floor(e.offsetY);
+                justDrawn.x = mouseX;
+                justDrawn.y = mouseY;
                 topLayer_onClickLevelEditor(mouseX, mouseY, e.button === 2);
+            }, false);
+            topLayer.addEventListener("mousemove", function (e) {
+                e.preventDefault();
+                if (mouseIsDown) {
+                    let mouseX = Math.floor(e.offsetX);
+                    let mouseY = Math.floor(e.offsetY);
+                    if (justDrawn.x !== mouseX || justDrawn.y !== mouseY) {
+                        justDrawn.x = mouseX;
+                        justDrawn.y = mouseY;
+                        topLayer_onClickLevelEditor(mouseX, mouseY, e.button === 2);
+                    }
+                }
+            }, false);
+            topLayer.addEventListener("mouseup", function (e) {
+                e.preventDefault();
+                mouseIsDown = false;
             }, false);
             topLayer.addEventListener("contextmenu", function () { // mouse right click
                 event.preventDefault();
