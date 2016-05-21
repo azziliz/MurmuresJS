@@ -46,7 +46,6 @@
     <Content Include="src\img\murmures.png" />
     <Content Include="src\pages\bodyeditor.html" />
     <Content Include="src\css\client.css" />
-    <Content Include="src\img\rltiles-2d.png" />
     <Content Include="src\pages\leveleditor.html" />
   </ItemGroup>
   <ItemGroup>
