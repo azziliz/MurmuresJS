@@ -57,6 +57,7 @@ murmures.Level.prototype = {
     },
     
     instantiateMobs : function () {
+        this.mobs = [];
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 if (this.tiles[y][x].charId !== '') {
@@ -87,6 +88,7 @@ murmures.Level.prototype = {
     },
     
     clean : function () {
+        delete this.mobs;
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 this.tiles[y][x].clean();
