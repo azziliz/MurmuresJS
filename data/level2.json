@@ -413,7 +413,10 @@
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
-            { "groundId": "_b1_01_floor_of_a_room.rl1" },
+            {
+                "groundId": "_b1_01_floor_of_a_room.rl1",
+                "charId": "_b1_31_dissolution"
+            },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },

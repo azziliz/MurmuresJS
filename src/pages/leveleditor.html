@@ -69,6 +69,7 @@
         function loadEngineLevelEditor(engine) {
             gameEngine.fromJson(JSON.parse(engine));
             gameEngine.level.instantiateMobs();
+            gameEngine.level.moveHeroToStartingPoint();
             highlightLevel();
             renderLevel();
             document.getElementById("leftCharacters").style.display = "none";
@@ -176,19 +177,18 @@
                 newLvl.id = document.getElementById('levelId').value;
                 newLvl.width = parseInt(document.getElementById('levelWidth').value);
                 newLvl.height = parseInt(document.getElementById('levelHeight').value);
-                newLvl.tileSize = gameEngine.level.tileSize;
                 newLvl.layout = gameEngine.level.layout;
                 newLvl.tiles = [];
                 for (let y = 0; y < newLvl.height; y++) {
                     newLvl.tiles[y] = [];
                     for (let x = 0; x < newLvl.width; x++) {
                         newLvl.tiles[y][x] = new murmures.Tile();
-                        if (selectedBrush.layerId === 'char') newLvl.tiles[y][x].charId = selectedBrush.id;
-                        else if (selectedBrush.layerId === 'prop') newLvl.tiles[y][x].propId = selectedBrush.id;
-                        else if (selectedBrush.layerId === '01') newLvl.tiles[y][x].groundId = selectedBrush.id;
+                        newLvl.tiles[y][x][murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
                     }
                 }
                 gameEngine.levels[gameEngine.activeLevel] = newLvl;
+                gameEngine.fromJson(JSON.parse(JSON.stringify(gameEngine)));
+                gameEngine.hero.position = gameEngine.levels[gameEngine.activeLevel].tiles[0][0];
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             }, false);
         }
@@ -223,16 +223,12 @@
                 // event is a left click
                 // find hovered tile
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
-                if (selectedBrush.layerId === 'char') hoveredTile.charId = selectedBrush.id;
-                else if (selectedBrush.layerId === 'prop') hoveredTile.propId = selectedBrush.id;
-                else if (selectedBrush.layerId === '01') hoveredTile.groundId = selectedBrush.id;
+                hoveredTile[murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
             }
             else {
                 // event is a right click
                 let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
-                if (selectedBrush.layerId === 'char') hoveredTile.charId = '';
-                else if (selectedBrush.layerId === 'prop') hoveredTile.propId = '';
-                else if (selectedBrush.layerId === '01') hoveredTile.groundId = '';
+                hoveredTile[murmures.C.LAYERS[selectedBrush.layerId][1]] = '';
             }
             loadEngineLevelEditor(JSON.stringify(gameEngine));            
         }
