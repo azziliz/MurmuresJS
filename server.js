@@ -14,7 +14,7 @@ var murmures = {
     startTime: process.hrtime(),
 
     serverLog: function (txt) {
-        var diff = process.hrtime(this.startTime);
+        let diff = process.hrtime(this.startTime);
         console.log((diff[0] + diff[1] / 1e9).toFixed(6) + ' - ' + txt);
     }
 };
@@ -100,7 +100,7 @@ function compressAndSend(request, response, contType, txt, callback) {
         response.end(zipped, 'utf8', callback);
     } else if (contType === 'image/png') {
         let stats = fs.statSync('./src/img/murmures.png');
-        response.writeHead(200, { 'Content-Type': contType, 'Content-Length': stats['size'] });
+        response.writeHead(200, { 'Content-Type': contType, 'Content-Length': stats.size });
         response.end(txt);
     } else {
         response.writeHead(200, { 'Content-Type': contType });
@@ -152,8 +152,8 @@ http.createServer(function (request, response) {
         request.on('end', function () {
             if (request.url === '/getLevel') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null) 
-                    || (postData.id === null)) {
+                if ((postData === null) || 
+                    (postData.id === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }
@@ -162,10 +162,10 @@ http.createServer(function (request, response) {
                 }
             } else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null) 
-                  || (postData.command === null) 
-                  || (postData.source === null) 
-                  || (postData.target === null)) {
+                if ((postData === null) || 
+                    (postData.command === null) || 
+                    (postData.source === null) || 
+                    (postData.target === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
                 }

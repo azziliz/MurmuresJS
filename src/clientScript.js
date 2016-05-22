@@ -244,7 +244,7 @@ function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
         // event is a left click
         // find hovered tile
         let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
-        if (gameEngine.tileHasMob(hoveredTile).code==true) {
+        if (gameEngine.tileHasMob(hoveredTile).code === true) {
             let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
             attackOrder.source = gameEngine.hero;

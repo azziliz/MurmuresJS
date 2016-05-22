@@ -49,7 +49,7 @@ murmures.Tile.prototype = {
         else {
             this.behavior = {};
         }
-        this.needsClientUpdate = (src.needsClientUpdate === undefined) ? false : src.needsClientUpdate;;
+        this.needsClientUpdate = (src.needsClientUpdate === undefined) ? false : src.needsClientUpdate;
     },
     
     clean: function () {
