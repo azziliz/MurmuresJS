@@ -55,6 +55,7 @@ murmures.GameEngine.prototype = {
     },
     
     getMinimal : function () {
+        return this;
     },
     
     checkOrder : function (order) {

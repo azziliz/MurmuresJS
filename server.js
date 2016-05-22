@@ -7,23 +7,38 @@ var zlib = require('zlib');
 var http = require('http');
 
 /**
- *  The main namespace. All classes should be prefixed with it.
- *  @namespace
+ * The main namespace. All classes should be prefixed with it.
+ * @namespace
  */
 var murmures = {
+    /**
+     * Startup time.
+     * @private
+     */
     startTime: process.hrtime(),
-
+    
+    /**
+     * Writes timestamped log to the console.
+     * @public
+     */
     serverLog: function (txt) {
         let diff = process.hrtime(this.startTime);
         console.log((diff[0] + diff[1] / 1e9).toFixed(6) + ' - ' + txt);
     }
 };
 
-murmures.serverLog('Loading classes');
-
+/**
+ * Declares the gameEngine variable for a later use.
+ * This variable will be set to an instance of murmures.GameEngine after all classes are loaded.
+ * @instance
+ */
 var gameEngine = {};
 
-// Loads classes
+murmures.serverLog('Loading classes');
+
+/**
+ * Loads classes into the murmures namespace
+ */
 (function () {    
     const ctx = {
         murmures: murmures,
@@ -58,7 +73,9 @@ var gameEngine = {};
 
 murmures.serverLog('Initializing game');
 
-// Initializes game
+/**
+ * Initializes game
+ */
 (function () {
     gameEngine.tileSize = 32;
     
@@ -71,7 +88,7 @@ murmures.serverLog('Initializing game');
     gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
         
     gameEngine.levels = [];
-    gameEngine.levelIds = ["level4", "level2", "level1", "level5"];
+    gameEngine.levelIds = ["level2", "level1", "level4", "level5"];
     gameEngine.levelIds.forEach(function (levelName) {
         let level1 = new murmures.Level();
         let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -95,9 +112,11 @@ function compressAndSend(request, response, contType, txt, callback) {
         acceptEncoding = '';
     }
     if (acceptEncoding.match(/\bgzip\b/) && contType !== 'image/png') {
-        let zipped = zlib.gzipSync(txt);
-        response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
-        response.end(zipped, 'utf8', callback);
+        zlib.gzip(txt, function (err, zipped) {
+            if (err) throw err;
+            response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
+            response.end(zipped, 'utf8', callback);
+        });
     } else if (contType === 'image/png') {
         let stats = fs.statSync('./src/img/murmures.png');
         response.writeHead(200, { 'Content-Type': contType, 'Content-Length': stats.size });
@@ -120,23 +139,25 @@ http.createServer(function (request, response) {
         // #region Static Pages
         try {
             let fileName = request.url;
-            let fileContent = fs.readFileSync('.' + fileName);
-            if (fileName.endsWith('.js')) {
-                compressAndSend(request, response, 'application/javascript', fileContent.toString());
-            }
-            else if (fileName.endsWith('.css')) {
-                compressAndSend(request, response, 'text/css', fileContent.toString());
-            }
-            else if (fileName.endsWith('.png')) {
-                compressAndSend(request, response, 'image/png', fileContent);
-            }
-            else if (fileName.endsWith('.html')) {
-                compressAndSend(request, response, 'text/html', fileContent.toString());
-            }
-            else {
-                response.writeHead(400); // Bad Request
-                response.end();
-            }
+            fs.readFile('.' + fileName, function (err, fileContent) {
+                if (err) throw err;
+                if (fileName.endsWith('.js')) {
+                    compressAndSend(request, response, 'application/javascript', fileContent.toString());
+                }
+                else if (fileName.endsWith('.css')) {
+                    compressAndSend(request, response, 'text/css', fileContent.toString());
+                }
+                else if (fileName.endsWith('.png')) {
+                    compressAndSend(request, response, 'image/png', fileContent);
+                }
+                else if (fileName.endsWith('.html')) {
+                    compressAndSend(request, response, 'text/html', fileContent.toString());
+                }
+                else {
+                    response.writeHead(400); // Bad Request
+                    response.end();
+                }
+            });
         } catch (e) {
             response.writeHead(404);
             response.end();
@@ -178,7 +199,9 @@ http.createServer(function (request, response) {
                     if (check.valid) {
                         gameEngine.applyOrder(clientOrder);
                         murmures.serverLog('Order applied');
-                        compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine), function () { murmures.serverLog('Response sent'); });
+                        let res = JSON.stringify(gameEngine.getMinimal());
+                        murmures.serverLog('Response stringified');
+                        compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });
                     }
                     else {
                         compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
