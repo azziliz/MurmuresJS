@@ -10,19 +10,19 @@
 
 /**
  * Characters are entities that live, move and act inside a [level]{@link murmures.Level}.
- * 
+ *
  * Heroes are characters managed by the players. They can be given [orders]{@link murmures.Order} on client side.
  * They can move from one level to another.
  * Mobs are characters managed by the AI. The AI methods to control them are defined in the [game engine]{@link murmures.GameEngine} class.
  * They cannot change level.
- * 
+ *
  * Three steps are mandatory to create a valid character:
  * 1. Load all character templates from mobs.json.
  * 2. Select templates that are needed for the current level.
  * 2. Use the "instantiate" method in the Character class to create new instances.
  * Step 1 is performed by the game engine during the server startup.
  * Step 2 and 3 are performed together by the server and the game engine when a level is loaded.
- * 
+ *
  * @class
  */
 murmures.Character = function () {
@@ -45,21 +45,21 @@ murmures.Character.prototype = {
         this.mobTemplate = src.mobTemplate;
         this.onVision = src.onVision;
     },
-    
+
     instantiate : function (mobReference) {
         this.guid = Math.random().toString();
         this.hitPointsMax = mobReference.hitPointsMax || (mobReference.layerId === "56" ? 20 : 10);
         this.hitPoints = this.hitPointsMax;
     },
-    
+
     move : function (x, y) {
         this.position.x = x;
         this.position.y = y;
     },
-    
+
     setVision : function () {
         let level = gameEngine.level;
-        
+
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
                 if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
@@ -67,17 +67,17 @@ murmures.Character.prototype = {
                 }
             }
         }
-        
+
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             gameEngine.level.mobs[itMob].onVision = false;
         }
-        
+
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);
             let ox = this.position.x + 0.5;
             let oy = this.position.y + 0.5;
-            for (let j=0; j < 20; j++) {
+            for (let j=0; j < murmures.C.DEFAULT_RANGE_SOV; j++) {
                 let oxx = 0;
                 oxx = Math.floor(ox);
                 let oyy = 0;
