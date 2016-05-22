@@ -40,7 +40,6 @@
     <Content Include="data\level4.json" />
     <Content Include="data\level5.json" />
     <Content Include="data\mobs.json" />
-    <Content Include="data\rltiles-2d.json" />
     <Content Include="README.md" />
     <Compile Include="server.js" />
     <Content Include="src\img\murmures.png" />
