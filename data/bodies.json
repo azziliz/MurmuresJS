@@ -10253,7 +10253,13 @@
     },
     "_b1_11_dngn_enter.rl2": {
         "layerId": "11",
-        "rank": 1507
+        "rank": 1507,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": ""
+            }
+        }
     },
     "_b1_11_dngn_return.rl2": {
         "layerId": "11",
