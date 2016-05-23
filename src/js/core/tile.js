@@ -10,13 +10,13 @@
 
 /**
  * A tile is a square on the game grid.
- * 
+ *
  * It is rendered on client side by drawing several overlapping layers, each layer being one PNG image from the murmures tileset.
  * For static levels created by the editor, each tile of a given layer is initialized with a reference to the [physical body]{@link murmures.PhysicalBody} that is present on the tile.
  * The physical properties of these bodies may restrict movement and actions on the tile.
- * 
+ *
  * A tile may contain at most one character.
- * 
+ *
  * @class
  */
 murmures.Tile = function () {
@@ -32,6 +32,7 @@ murmures.Tile = function () {
     /// <field name="charDeco" type="String"/>
     /// <field name="effectId" type="String"/>
     /// <field name="needsClientUpdate" type="bool"/>
+    /// <field name="toUpdate" type="bool"/>
 };
 
 murmures.Tile.prototype = {
@@ -51,7 +52,7 @@ murmures.Tile.prototype = {
         }
         this.needsClientUpdate = (src.needsClientUpdate === undefined) ? false : src.needsClientUpdate;
     },
-    
+
     clean: function () {
         delete this.x;
         delete this.y;
@@ -62,7 +63,7 @@ murmures.Tile.prototype = {
         if (this.propId === '') delete this.propId;
         if (this.charId === '') delete this.charId;
     },
-    
+
     isWall : function () {
         let allowTerrestrialGround = (this.groundId === "") ? true : !gameEngine.bodies[this.groundId].hasPhysics ? true : !!gameEngine.bodies[this.groundId].allowTerrestrial;
         let allowTerrestrialProp = (this.propId === "") ? true : !gameEngine.bodies[this.propId].hasPhysics ? true : !!gameEngine.bodies[this.propId].allowTerrestrial;
@@ -70,4 +71,3 @@ murmures.Tile.prototype = {
         return (!allowTerrestrialGround || !allowTerrestrialProp) && !hasMoveBehavior;
     }
 };
-

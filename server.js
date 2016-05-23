@@ -16,7 +16,7 @@ var murmures = {
      * @private
      */
     startTime: process.hrtime(),
-    
+
     /**
      * Writes timestamped log to the console.
      * @public
@@ -39,7 +39,7 @@ murmures.serverLog('Loading classes');
 /**
  * Loads classes into the murmures namespace
  */
-(function () {    
+(function () {
     const ctx = {
         murmures: murmures,
         gameEngine: {}
@@ -50,7 +50,7 @@ murmures.serverLog('Loading classes');
     vm.runInContext(constantsjs, ctx, { filename: 'constants.js' });
     let gameEnginejs = fs.readFileSync('./src/js/core/gameEngine.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(gameEnginejs, ctx, { filename: 'gameEngine.js' });
-    
+
     ctx.gameEngine = new murmures.GameEngine();
 
     let playerjs = fs.readFileSync('./src/js/core/player.js', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -78,17 +78,17 @@ murmures.serverLog('Initializing game');
  */
 (function () {
     gameEngine.tileSize = 32;
-    
+
     let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.bodies = JSON.parse(bodiesJson);
-    
+
     gameEngine.hero = new murmures.Character();
     let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.hero.fromJson(JSON.parse(hero1Txt));
     gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
-        
+
     gameEngine.levels = [];
-    gameEngine.levelIds = ["level2", "level1", "level4", "level5"];
+    gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
     gameEngine.levelIds.forEach(function (levelName) {
         let level1 = new murmures.Level();
         let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -174,7 +174,7 @@ http.createServer(function (request, response) {
         request.on('end', function () {
             if (request.url === '/getLevel') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null) || 
+                if ((postData === null) ||
                     (postData.id === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
@@ -184,9 +184,9 @@ http.createServer(function (request, response) {
                 }
             } else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
-                if ((postData === null) || 
-                    (postData.command === null) || 
-                    (postData.source === null) || 
+                if ((postData === null) ||
+                    (postData.command === null) ||
+                    (postData.source === null) ||
                     (postData.target === null)) {
                     response.writeHead(200, { 'Content-Type': 'application/json' });
                     response.end(JSON.stringify({ error: 'Wrong request.' }));
