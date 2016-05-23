@@ -23,7 +23,11 @@ var murmures = {
      */
     serverLog: function (txt) {
         let diff = process.hrtime(this.startTime);
-        console.log((diff[0] + diff[1] / 1e9).toFixed(6) + ' - ' + txt);
+        let fdiff = diff[0] + diff[1] / 1e9;
+        if (typeof txt !== 'undefined') {
+            console.log(fdiff.toFixed(6) + ' - ' + txt);
+        }
+        return fdiff;
     }
 };
 
@@ -63,11 +67,16 @@ murmures.serverLog('Loading classes');
     vm.runInContext(characterjs, ctx, { filename: 'character.js' });
     let orderjs = fs.readFileSync('./src/js/core/order.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(orderjs, ctx, { filename: 'order.js' });
-    let physicalBodyjs = fs.readFileSync('./src/js/core/physicalBody.js', 'utf8').toString().replace(/^\uFEFF/, '');
-    vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalBody.js' });
+    let physicalBodyjs = fs.readFileSync('./src/js/core/physicalbody.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalbody.js' });
     let behaviorjs = fs.readFileSync('./src/js/core/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(behaviorjs, ctx, { filename: 'behavior.js' });
 
+    let vmperfjs = fs.readFileSync('./src/js/test/vmperf.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(vmperfjs, ctx, { filename: 'vmperf.js' });
+    let servertestjs = fs.readFileSync('./src/js/test/servertest.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(servertestjs, ctx, { filename: 'servertest.js' });
+    
     gameEngine = ctx.gameEngine;
 })();
 
@@ -182,7 +191,8 @@ http.createServer(function (request, response) {
                 else {
                     compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
                 }
-            } else if (request.url === '/order') {
+            } 
+            else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
                 if ((postData === null) || 
                     (postData.command === null) || 
@@ -210,7 +220,12 @@ http.createServer(function (request, response) {
                     murmures.serverLog('Response sending');
                 }
             }
-            else {
+            else if (request.url === '/test') {
+                let test = new murmures.ServerTest();
+                test.run(require);
+                response.writeHead(204); // No content
+                response.end();
+            } else {
                 response.writeHead(404);
                 response.end();
             }

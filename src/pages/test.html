@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MurmuresJS</title>
+    <link rel="stylesheet" href="/src/css/client.css" media="screen">
+    <style>
+        body {
+            background: #666;
+            font-family: sans-serif;
+        }
+
+        #container {
+            max-height: 60vh;
+            overflow-y: scroll;
+            width: 1000px;
+        }
+
+        p {
+            display: table-row;
+        }
+
+        label {
+            display: table-cell;
+        }
+
+        input {
+            display: table-cell;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div id="tilesetLoadBg" class="tilesetLoad">
+        <div id="tilesetLoadProgress"></div>
+    </div>
+    <script type="text/javascript">
+        'use strict';
+        // namespace
+        var murmures = {};
+    </script>
+    <script src="/src/js/core/constants.js"></script>
+    <script src="/src/js/core/character.js"></script>
+    <script src="/src/js/core/level.js"></script>
+    <script src="/src/js/core/order.js"></script>
+    <script src="/src/js/core/tile.js"></script>
+    <script src="/src/js/core/gameEngine.js"></script>
+    <script src="/src/js/clientScript.js"></script>
+    <script type="text/javascript">
+        'use strict';
+
+        //override
+        function tilesetLoaded() {
+            sendAjax('/test', '{}', null, true);
+        }
+
+
+    </script>
+
+
+
+</body>
+</html>

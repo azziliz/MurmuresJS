@@ -28,9 +28,12 @@
     <Compile Include="src\js\core\gameEngine.js" />
     <Compile Include="src\js\core\level.js" />
     <Compile Include="src\js\core\order.js" />
-    <Compile Include="src\js\core\physicalBody.js" />
+    <Compile Include="src\js\core\physicalbody.js" />
     <Compile Include="src\js\core\player.js" />
     <Compile Include="src\js\core\tile.js" />
+    <Compile Include="src\js\test\moduleperf.js" />
+    <Compile Include="src\js\test\servertest.js" />
+    <Compile Include="src\js\test\vmperf.js" />
     <Content Include="src\pages\client.html" />
     <Content Include="data\bodies.json" />
     <Content Include="data\hero1.json" />
@@ -46,6 +49,7 @@
     <Content Include="src\pages\bodyeditor.html" />
     <Content Include="src\css\client.css" />
     <Content Include="src\pages\leveleditor.html" />
+    <Content Include="src\pages\test.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />

@@ -153,6 +153,7 @@ function initUI() {
     document.getElementById('leftCharacters').innerHTML = 
     '<a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br>' +
     '<a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br>' +
+    '<a href="/src/pages/test.html" style="float:left; clear: left;">test</a><br>' +
     '<code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:136px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>';
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     let templateStr = /template/g;
