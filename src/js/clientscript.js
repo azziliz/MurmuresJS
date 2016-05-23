@@ -6,7 +6,8 @@ gameEngine.allowOrders = true;
 // #region Utils
 function screenLog(txt) {
     let now = new Date();
-    document.getElementById("screenLog").insertAdjacentHTML('afterbegin', '<span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br>');
+    document.getElementById("screenLog").insertAdjacentHTML('afterbegin', 
+        '<span class="channel-debug"><span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br></span>');
 }
 
 function sendAjax(path, param, callback, async) {
@@ -56,13 +57,11 @@ function init() {
 }
 
 function tilesetLoaded() {
-    screenLog('>> getLevel');
     sendAjax('/getLevel', '{"id":"level1"}', loadEngine, true);
     registerEvents();
 }
 
 function loadEngine(engine) {
-    screenLog('<< loadEngine');
     gameEngine.fromJson(JSON.parse(engine));
     initUI();
     renderLevel();

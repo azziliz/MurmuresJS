@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="/src/css/client.css" media="screen">
 </head>
 <body onload="init()">
+    <header>
+
+    </header>
     <div id="tilesetLoadBg" class="tilesetLoad">
         <div id="tilesetLoadProgress"></div>
     </div>
@@ -61,24 +64,17 @@
     <div id="galaxyS3Mini" style="position:absolute; top:0; left:0; width:800px; height:480px; background-color:#fff; z-index:-7"></div>
     -->
     <div id="targetResolution" class="fullScreen">
+        <div id="leftCharacters" class="zUI" style="float:left">
+        </div>
+        <div style="position:relative; float:left;">
+            <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
+            <canvas id="propsLayer" width="1400" height="840" style="z-index: 20"></canvas>
+            <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas>
+            <canvas id="characterLayer" width="1400" height="840" style="z-index: 30"></canvas>
+            <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
+        </div>
         <div id="rightCharacters" class="zUI" style="float:right">
         </div>
-        <div id="leftCharacters" class="zUI" style="float:left">
-            <a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br>
-            <a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br>
-            <a href="/src/pages/test.html" style="float:left; clear: left;">test</a><br>
-            <code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:236px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>
-        </div>
     </div>
-
-    <div style="float:left; position:relative;">
-        <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
-        <canvas id="characterLayer" width="1400" height="840" style="z-index: 30"></canvas>
-        <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas>
-        <canvas id="propsLayer" width="1400" height="840" style="z-index: 20"></canvas>
-        <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
-        <!--<code id="screenLog2" style="position:relative; top:400px; margin:2px 7px; width:636px; height:300px; z-index:9999; color:white; overflow:auto; display: none;"></code>-->
-    </div>
-
 </body>
 </html>

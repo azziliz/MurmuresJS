@@ -99,12 +99,13 @@
                     let tilesetRank = ref.rank;
                     let tilesetX = tilesetRank % 64;
                     let tilesetY = (tilesetRank - tilesetX) / 64;
+                    let groundCopy = groundId;
                     document.getElementById('subpanel.' + layerId[0]).insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, groundId));
                     document.getElementById(groundId + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
                     document.getElementById(groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
                     document.getElementById(groundId + '-icon').addEventListener("mousedown", function (e) {
                         e.preventDefault();
-                        selectedBrush.id = groundId;
+                        selectedBrush.id = groundCopy;
                         selectedBrush.layerId = ref.layerId;
                         document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
                         document.getElementById("leftCharacters").style.display = "none";

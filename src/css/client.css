@@ -6,6 +6,10 @@
     image-rendering: pixelated;
 }
 
+header {
+    height: 40px;
+}
+
 .tilesetLoad {
     position: fixed;
     background-color: #888;
