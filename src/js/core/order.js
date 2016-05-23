@@ -45,10 +45,11 @@ murmures.Order.prototype = {
             this.source = gameEngine.hero;
         }
         else {
-            // TODO : handle this properly - client is propably out of sync or cheating  --> kick it out of the game
-            throw "Tech Error - Guid does not match - " + src.source.guid + " - " + gameEngine.hero.guid;
+            murmures.serverLog("Tech Error - Guid does not match - " + src.source.guid + " - " + gameEngine.hero.guid);
+            return { valid: false, reason: 'Technical error - Guid does not match - Please refresh the page' };
         }
         this.target = gameEngine.level.tiles[src.target.y][src.target.x];
+        return { valid: true };
     },
     
     clean: function () {

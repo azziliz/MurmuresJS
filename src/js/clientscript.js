@@ -320,17 +320,22 @@ function onOrderResponse(response) {
     screenLog('<< onOrderResponse');
     gameEngine.allowOrders = true;
     let ge = JSON.parse(response);
-    let isNewLevel = gameEngine.activeLevel !== ge.activeLevel;
-    gameEngine.fromJsonMerge(ge);
-    if (isNewLevel) {
-        initUI();
-        renderLevel();
+    if (typeof ge.error != 'undefined') {
+        screenLog('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
     }
     else {
-        drawTiles();
-        updateUI();
+        let isNewLevel = gameEngine.activeLevel !== ge.activeLevel;
+        gameEngine.fromJsonMerge(ge);
+        if (isNewLevel) {
+            initUI();
+            renderLevel();
+        }
+        else {
+            drawTiles();
+            updateUI();
+        }
+        screenLog('UI updated');
     }
-    screenLog('UI updated');
 }
 // #endregion
 

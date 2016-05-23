@@ -25,7 +25,7 @@
       <TestFramework>ExportRunner</TestFramework>
     </Compile>
     <Compile Include="src\js\core\constants.js" />
-    <Compile Include="src\js\core\gameEngine.js" />
+    <Compile Include="src\js\core\gameengine.js" />
     <Compile Include="src\js\core\level.js" />
     <Compile Include="src\js\core\order.js" />
     <Compile Include="src\js\core\physicalbody.js" />
