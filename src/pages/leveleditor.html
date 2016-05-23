@@ -191,10 +191,10 @@
                         newLvl.tiles[y][x][murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
                     }
                 }
-                gameEngine.levels[gameEngine.activeLevel] = newLvl;
+                gameEngine.level = newLvl;
                 gameEngine.fromJson(JSON.parse(JSON.stringify(gameEngine)));
+                gameEngine.hero.position = gameEngine.level.tiles[0][0];
                 renderLevel();
-                gameEngine.hero.position = gameEngine.levels[gameEngine.activeLevel].tiles[0][0];
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             }, false);
         }

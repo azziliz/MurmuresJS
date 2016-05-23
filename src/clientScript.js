@@ -320,7 +320,7 @@ function onOrderResponse(response) {
     gameEngine.allowOrders = true;
     let ge = JSON.parse(response);
     let isNewLevel = gameEngine.activeLevel !== ge.activeLevel;
-    gameEngine.fromJson(ge);
+    gameEngine.fromJsonMerge(ge);
     if (isNewLevel) {
         initUI();
         renderLevel();

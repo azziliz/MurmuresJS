@@ -36,28 +36,52 @@ murmures.GameEngine.prototype = {
      * Synchronization method called on client side only.
      * Creates a full GameEngine objects from a JSON string sent by the server.
      * Sub-classes are also synchronized recursively.
+     * This function expects a full GameEngine object as input and is intended to overwrite the client instance completely.
      * 
      * @param {string} src - A string received from the server, containing a stringified version of the remote gameEngine instance.
      */
     fromJson : function (src) {
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
-        this.levels = [];
-        for (let i = 0; i < src.levels.length; i++) {
-            this.levels[i] = new murmures.Level();
-            this.levels[i].fromJson(src.levels[i]);
-        }
-        this.levelIds = src.levelIds;
+        //this.levels = [];
+        //for (let i = 0; i < src.levels.length; i++) {
+        //    this.levels[i] = new murmures.Level();
+        //    this.levels[i].fromJson(src.levels[i]);
+        //}
+        //this.levelIds = src.levelIds;
         this.activeLevel = src.activeLevel;
-        this.level = this.levels[this.activeLevel];
+        //this.level = this.levels[this.activeLevel];
+        this.level = new murmures.Level();
+        this.level.fromJson(src.level);
+        this.hero = new murmures.Character();
+        this.hero.fromJson(src.hero);
+    },
+    
+    /**
+     * This function receives a partial GameEngine as input and merges it into the client instance.
+     */
+    fromJsonMerge: function (src) {
+        this.activeLevel = src.activeLevel;
+        this.level = new murmures.Level();
+        this.level.fromJson(src.level);
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
     },
     
     getMinimal : function () {
-        return this;
+        //return this;
+        return {
+            activeLevel: this.activeLevel,
+            level: this.level,
+            hero: this.hero
+        };
     },
     
+    /**
+     * This function is called on client and server side.
+     * If the order is deemed valid on client side, it is then sent to the server by an XHR.
+     * The server will check it again and, if it's still valid, call applyOrder().
+     */
     checkOrder : function (order) {
         /// <param name="order" type="Order"/>
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
@@ -79,6 +103,7 @@ murmures.GameEngine.prototype = {
         else return { valid: true, hasMob: false };
     },
     
+    // TODO move this function to the tile class
     tileHasMob : function (tile) {
         let ret = false;
         let retMob = null;
