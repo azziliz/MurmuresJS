@@ -204,18 +204,23 @@ http.createServer(function (request, response) {
                 else {
                     murmures.serverLog('Request received');
                     let clientOrder = new murmures.Order();
-                    clientOrder.fromJsonSafe(postData);
-                    let check = gameEngine.checkOrder(clientOrder);
-                    murmures.serverLog('Order checked');
-                    if (check.valid) {
-                        gameEngine.applyOrder(clientOrder);
-                        murmures.serverLog('Order applied');
-                        let res = JSON.stringify(gameEngine.getMinimal());
-                        murmures.serverLog('Response stringified');
-                        compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });
+                    let parsing = clientOrder.fromJsonSafe(postData);
+                    if (parsing.valid) {
+                        let check = gameEngine.checkOrder(clientOrder);
+                        if (check.valid) {
+                            murmures.serverLog('Order checked');
+                            gameEngine.applyOrder(clientOrder);
+                            murmures.serverLog('Order applied');
+                            let res = JSON.stringify(gameEngine.getMinimal());
+                            murmures.serverLog('Response stringified');
+                            compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });
+                        }
+                        else {
+                            compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
+                        }
                     }
                     else {
-                        compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
+                        compressAndSend(request, response, 'application/json', JSON.stringify({ error: parsing.reason }));
                     }
                     murmures.serverLog('Response sending');
                 }
