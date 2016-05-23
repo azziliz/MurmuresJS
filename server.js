@@ -46,26 +46,26 @@ murmures.serverLog('Loading classes');
     };
     vm.createContext(ctx);
 
-    let constantsjs = fs.readFileSync('./src/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let constantsjs = fs.readFileSync('./src/js/core/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(constantsjs, ctx, { filename: 'constants.js' });
-    let gameEnginejs = fs.readFileSync('./src/gameEngine.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let gameEnginejs = fs.readFileSync('./src/js/core/gameEngine.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(gameEnginejs, ctx, { filename: 'gameEngine.js' });
     
     ctx.gameEngine = new murmures.GameEngine();
 
-    let playerjs = fs.readFileSync('./src/player.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let playerjs = fs.readFileSync('./src/js/core/player.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(playerjs, ctx, { filename: 'player.js' });
-    let tilejs = fs.readFileSync('./src/tile.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let tilejs = fs.readFileSync('./src/js/core/tile.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(tilejs, ctx, { filename: 'tile.js' });
-    let leveljs = fs.readFileSync('./src/level.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let leveljs = fs.readFileSync('./src/js/core/level.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(leveljs, ctx, { filename: 'level.js' });
-    let characterjs = fs.readFileSync('./src/character.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let characterjs = fs.readFileSync('./src/js/core/character.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(characterjs, ctx, { filename: 'character.js' });
-    let orderjs = fs.readFileSync('./src/order.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let orderjs = fs.readFileSync('./src/js/core/order.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(orderjs, ctx, { filename: 'order.js' });
-    let physicalBodyjs = fs.readFileSync('./src/physicalBody.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let physicalBodyjs = fs.readFileSync('./src/js/core/physicalBody.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalBody.js' });
-    let behaviorjs = fs.readFileSync('./src/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    let behaviorjs = fs.readFileSync('./src/js/core/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(behaviorjs, ctx, { filename: 'behavior.js' });
 
     gameEngine = ctx.gameEngine;

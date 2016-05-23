@@ -18,19 +18,19 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
-    <Compile Include="src\behavior.js" />
-    <Compile Include="src\character.js" />
-    <Compile Include="src\clientScript.js">
+    <Compile Include="src\js\core\behavior.js" />
+    <Compile Include="src\js\core\character.js" />
+    <Compile Include="src\js\clientScript.js">
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>
     </Compile>
-    <Compile Include="src\constants.js" />
-    <Compile Include="src\gameEngine.js" />
-    <Compile Include="src\level.js" />
-    <Compile Include="src\order.js" />
-    <Compile Include="src\physicalBody.js" />
-    <Compile Include="src\player.js" />
-    <Compile Include="src\tile.js" />
+    <Compile Include="src\js\core\constants.js" />
+    <Compile Include="src\js\core\gameEngine.js" />
+    <Compile Include="src\js\core\level.js" />
+    <Compile Include="src\js\core\order.js" />
+    <Compile Include="src\js\core\physicalBody.js" />
+    <Compile Include="src\js\core\player.js" />
+    <Compile Include="src\js\core\tile.js" />
     <Content Include="src\pages\client.html" />
     <Content Include="data\bodies.json" />
     <Content Include="data\hero1.json" />
