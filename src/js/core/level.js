@@ -81,7 +81,7 @@ murmures.Level.prototype = {
       }
 
 
-      return {tiles :tilesArray, mobs: this.mobs};
+      return {tiles :tilesArray, mobs: this.mobsTosend};
     },
 
     instantiateMobs : function () {

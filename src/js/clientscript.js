@@ -165,23 +165,25 @@ function initUI() {
 
 function updateUI() {
     clearCharacterLayer();
-    for (let i = 0; i < gameEngine.level.mobs.length; i++) {
-        let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
-        let tilesetRank = ref.rank;
-        let tilesetX = tilesetRank % 64;
-        let tilesetY = (tilesetRank - tilesetX) / 64;
-        document.getElementById('mob' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
-        document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-        document.getElementById('mob' + i + '-name').innerHTML = ref.name || 'NameError';
-        let missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
-        document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
-        if (gameEngine.level.mobs[i].hitPoints === 0 || !gameEngine.level.mobs[i].onVision) {
-            document.getElementById('mob' + i + '-box').style.display = "none";
-        }
-        else {
-            document.getElementById('mob' + i + '-box').style.display = "block";
-            drawCharacter(gameEngine.level.mobs[i]);
-        }
+    if(gameEngine.level.mobs != undefined){
+      for (let i = 0; i < gameEngine.level.mobs.length; i++) {
+          let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
+          let tilesetRank = ref.rank;
+          let tilesetX = tilesetRank % 64;
+          let tilesetY = (tilesetRank - tilesetX) / 64;
+          document.getElementById('mob' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+          document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+          document.getElementById('mob' + i + '-name').innerHTML = ref.name || 'NameError';
+          let missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
+          document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
+          if (gameEngine.level.mobs[i].hitPoints === 0 || !gameEngine.level.mobs[i].onVision) {
+              document.getElementById('mob' + i + '-box').style.display = "none";
+          }
+          else {
+              document.getElementById('mob' + i + '-box').style.display = "block";
+              drawCharacter(gameEngine.level.mobs[i]);
+          }
+      }
     }
     let i = 0;
     let ref = gameEngine.bodies[gameEngine.hero.mobTemplate];

@@ -114,12 +114,14 @@ murmures.GameEngine.prototype = {
     tileHasMob : function (tile) {
         let ret = false;
         let retMob = null;
-        this.level.mobs.forEach(function (mob) {
-            if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
-                retMob = mob;
-                ret = true;
-            }
-        });
+        if (this.level.mobs!=undefined){
+          this.level.mobs.forEach(function (mob) {
+              if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
+                  retMob = mob;
+                  ret = true;
+              }
+          });
+        }
         return { code : ret, mob : retMob };
     },
 

@@ -74,6 +74,7 @@ murmures.Character.prototype = {
         }
 
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+            gameEngine.level.mobs[itMob].toUpdate = gameEngine.level.mobs[itMob].onVision == true;
             gameEngine.level.mobs[itMob].onVision = false;
         }
 
@@ -94,8 +95,10 @@ murmures.Character.prototype = {
                     for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
                         let mob = gameEngine.level.mobs[itMob];
                         if (mob.position.x === oxx && mob.position.y === oyy) {
+                            gameEngine.level.mobs[itMob].toUpdate = (gameEngine.level.mobs[itMob].toUpdate == true && mob.onVision == false);
                             mob.charSpotted = true;
                             mob.onVision = true;
+
                         }
                     }
                     let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
