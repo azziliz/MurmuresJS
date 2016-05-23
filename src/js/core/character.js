@@ -31,8 +31,10 @@ murmures.Character = function () {
     /// <field name="hitPoints" type="Number"/>
     /// <field name="hitPointsMax" type="Number"/>
     /// <field name="mobTemplate" type="String"/>
+    /// <field name="toUpdate" type="bool"/>
     this.charSpotted = false; // hero is known because seen at least once
     this.onVision = false; // hero is in isght of view
+    this.toUpdate = true;
 };
 
 murmures.Character.prototype = {

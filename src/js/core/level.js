@@ -10,13 +10,13 @@
 
 /**
  * Level is a class that contains all necessary information to build a new game zone.
- * 
+ *
  * This includes the zone topology, defined by an array of [tiles]{@link murmures.Tile}, as well as the starting points for all [characters]{@link murmures.Character}.
- * 
+ *
  * Static levels created by the editor are stored in JSON files, usually named /data/levelXX.json.
- * These files are in a "clean" state that contains only non-empty properties. 
+ * These files are in a "clean" state that contains only non-empty properties.
  * Missing tile layers and starting points are calculated when the level is loaded by the "fromJson" method.
- * 
+ *
  * @class
  */
 murmures.Level = function () {
@@ -35,7 +35,7 @@ murmures.Level.prototype = {
         this.layout = src.layout;
         this.width = src.width;
         this.height = src.height;
-        
+
         this.tiles = [];
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
@@ -44,7 +44,7 @@ murmures.Level.prototype = {
                 this.tiles[y][x].fromJson(src.tiles[y][x], x, y);
             }
         }
-        
+
         this.mobs = [];
         if (typeof src.mobs !== "undefined") {
             // mobs array is only defined after the first call to instantiateMobs
@@ -55,7 +55,35 @@ murmures.Level.prototype = {
             }, this);
         }
     },
-    
+
+    mergeFromJson : function(src){
+      for(let i=0;i<src.tiles.length;i++){
+        this.tiles[src.tiles[i].y][src.tiles[i].x].state = src.tiles[i].state;
+      }
+      this.mobs = src.mobs;
+    },
+
+    getMinimal : function(){
+      let tilesArray = [];
+      for (let y = 0; y < this.height; y++) {
+          for (let x = 0; x < this.width; x++) {
+              if(this.tiles[y][x].toUpdate === true){
+                tilesArray.push(this.tiles[y][x]);
+              }
+          }
+      }
+
+      let mobsTosend = [];
+      for (let itMob=0;itMob<this.mobs.length;itMob++){
+        if(this.mobs[itMob] === true){
+          mobsTosend.push(this.mobs[itMob]);
+        }
+      }
+
+
+      return {tiles :tilesArray, mobs: this.mobs};
+    },
+
     instantiateMobs : function () {
         this.mobs = [];
         for (let y = 0; y < this.height; y++) {
@@ -73,7 +101,7 @@ murmures.Level.prototype = {
             }
         }
     },
-    
+
     moveHeroToStartingPoint: function () {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
@@ -81,12 +109,12 @@ murmures.Level.prototype = {
                     let ref = gameEngine.bodies[this.tiles[y][x].charId];
                     if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') {
                         gameEngine.hero.position = this.tiles[y][x];
-                    } 
+                    }
                 }
             }
         }
     },
-    
+
     clean : function () {
         delete this.mobs;
         for (let y = 0; y < this.height; y++) {

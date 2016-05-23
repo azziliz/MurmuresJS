@@ -76,7 +76,7 @@ murmures.serverLog('Loading classes');
     vm.runInContext(vmperfjs, ctx, { filename: 'vmperf.js' });
     let servertestjs = fs.readFileSync('./src/js/test/servertest.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(servertestjs, ctx, { filename: 'servertest.js' });
-    
+
     gameEngine = ctx.gameEngine;
 })();
 
@@ -191,7 +191,7 @@ http.createServer(function (request, response) {
                 else {
                     compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
                 }
-            } 
+            }
             else if (request.url === '/order') {
                 let postData = JSON.parse(buffer);
                 if ((postData === null) ||
@@ -211,6 +211,7 @@ http.createServer(function (request, response) {
                             murmures.serverLog('Order checked');
                             gameEngine.applyOrder(clientOrder);
                             murmures.serverLog('Order applied');
+
                             let res = JSON.stringify(gameEngine.getMinimal());
                             murmures.serverLog('Response stringified');
                             compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });

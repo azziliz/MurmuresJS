@@ -10,15 +10,15 @@
 
 /**
  * GameEngine is the main manager for all game objects.
- * 
+ *
  * A single instance of this class is created when Node starts and is kept alive at all time afterwards.
  * This instance is in the global scope and can be accessed from any other class.
  * This is the only variable of the murmures project in the global scope.
- * During startup, the server loads all references data -stored in JSON files- into the engine instance. 
+ * During startup, the server loads all references data -stored in JSON files- into the engine instance.
  * This includes bodies.json (list of all physical bodies and character templates).
- * 
+ *
  * This class is also in charge of applying client orders to the game and calling AI methods.
- * 
+ *
  * @class
  */
 murmures.GameEngine = function () {
@@ -37,7 +37,7 @@ murmures.GameEngine.prototype = {
      * Creates a full GameEngine objects from a JSON string sent by the server.
      * Sub-classes are also synchronized recursively.
      * This function expects a full GameEngine object as input and is intended to overwrite the client instance completely.
-     * 
+     *
      * @param {string} src - A string received from the server, containing a stringified version of the remote gameEngine instance.
      */
     fromJson : function (src) {
@@ -56,27 +56,34 @@ murmures.GameEngine.prototype = {
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
     },
-    
+
     /**
      * This function receives a partial GameEngine as input and merges it into the client instance.
      */
     fromJsonMerge: function (src) {
-        this.activeLevel = src.activeLevel;
-        this.level = new murmures.Level();
-        this.level.fromJson(src.level);
+        let isNewLevel = (src.activeLevel != undefined ) && (gameEngine.activeLevel !== src.activeLevel);
+
+        if ( isNewLevel === true){
+          this.activeLevel = src.activeLevel;
+          this.level = new murmures.Level();
+          this.level.fromJson(src.level);
+        }else{
+          this.level.mergeFromJson(src.level);
+
+        }
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
     },
-    
+
     getMinimal : function () {
         //return this;
         return {
             activeLevel: this.activeLevel,
-            level: this.level,
+            level: this.level.getMinimal(),
             hero: this.hero
         };
     },
-    
+
     /**
      * This function is called on client and server side.
      * If the order is deemed valid on client side, it is then sent to the server by an XHR.
@@ -102,7 +109,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && (this.tileHasMob(order.target).code === true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     },
-    
+
     // TODO move this function to the tile class
     tileHasMob : function (tile) {
         let ret = false;
@@ -115,7 +122,7 @@ murmures.GameEngine.prototype = {
         });
         return { code : ret, mob : retMob };
     },
-    
+
     applyOrder : function (order) {
         // This function is only called on server side
         if (order.command === 'move') {
@@ -140,7 +147,7 @@ murmures.GameEngine.prototype = {
         this.hero.setVision();
         murmures.serverLog('Vision done');
     },
-    
+
     applyAI : function () {
         let hero = this.hero;
         let level = this.level;
