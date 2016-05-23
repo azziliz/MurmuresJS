@@ -52,8 +52,8 @@ murmures.serverLog('Loading classes');
 
     let constantsjs = fs.readFileSync('./src/js/core/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(constantsjs, ctx, { filename: 'constants.js' });
-    let gameEnginejs = fs.readFileSync('./src/js/core/gameEngine.js', 'utf8').toString().replace(/^\uFEFF/, '');
-    vm.runInContext(gameEnginejs, ctx, { filename: 'gameEngine.js' });
+    let gameEnginejs = fs.readFileSync('./src/js/core/gameengine.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(gameEnginejs, ctx, { filename: 'gameengine.js' });
 
     ctx.gameEngine = new murmures.GameEngine();
 
