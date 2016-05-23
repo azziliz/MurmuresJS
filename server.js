@@ -133,7 +133,8 @@ http.createServer(function (request, response) {
         response.end();
     }
     else if (request.url === '/') {
-        compressAndSend(request, response, 'text/html', fs.readFileSync('client.html').toString());
+        response.writeHead(301, { 'Location': '/src/pages/client.html' });
+        response.end();
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages

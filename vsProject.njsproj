@@ -31,7 +31,7 @@
     <Compile Include="src\physicalBody.js" />
     <Compile Include="src\player.js" />
     <Compile Include="src\tile.js" />
-    <Content Include="client.html" />
+    <Content Include="src\pages\client.html" />
     <Content Include="data\bodies.json" />
     <Content Include="data\hero1.json" />
     <Content Include="data\level1.json" />
@@ -52,6 +52,9 @@
     <Folder Include="src\" />
     <Folder Include="src\css\" />
     <Folder Include="src\img\" />
+    <Folder Include="src\js\" />
+    <Folder Include="src\js\core\" />
+    <Folder Include="src\js\test\" />
     <Folder Include="src\pages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
