@@ -75,13 +75,13 @@ murmures.Level.prototype = {
 
       let mobsTosend = [];
       for (let itMob=0;itMob<this.mobs.length;itMob++){
-        if(this.mobs[itMob] === true){
+        if(this.mobs[itMob].toUpdate === true){
           mobsTosend.push(this.mobs[itMob]);
         }
       }
 
 
-      return {tiles :tilesArray, mobs: this.mobsTosend};
+      return {tiles :tilesArray, mobs: mobsTosend};
     },
 
     instantiateMobs : function () {

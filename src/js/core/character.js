@@ -95,7 +95,8 @@ murmures.Character.prototype = {
                     for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
                         let mob = gameEngine.level.mobs[itMob];
                         if (mob.position.x === oxx && mob.position.y === oyy) {
-                            gameEngine.level.mobs[itMob].toUpdate = (gameEngine.level.mobs[itMob].toUpdate == true && mob.onVision == false);
+                            gameEngine.level.mobs[itMob].toUpdate = (gameEngine.level.mobs[itMob].toUpdate == true && mob.onVision == false)?false:true;
+                            //gameEngine.level.mobs[itMob].toUpdate  = true;
                             mob.charSpotted = true;
                             mob.onVision = true;
 
