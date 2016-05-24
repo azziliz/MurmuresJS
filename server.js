@@ -97,7 +97,7 @@ murmures.serverLog('Initializing game');
     gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
 
     gameEngine.levels = [];
-    gameEngine.levelIds = ["level2", "level1", "level4", "level5"];
+    gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
     gameEngine.levelIds.forEach(function (levelName) {
         let level1 = new murmures.Level();
         let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
