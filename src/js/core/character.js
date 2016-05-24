@@ -55,9 +55,7 @@ murmures.Character.prototype = {
     },
 
     move : function (x, y) {
-        this.position.x = x;
-        this.position.y = y;
-        this.propId = gameEngine.level.tiles[y][x].propId;
+        this.position = gameEngine.level.tiles[y][x];
     },
 
     setVision : function () {
