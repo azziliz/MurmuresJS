@@ -62,6 +62,7 @@ murmures.Character.prototype = {
 
     setVision : function () {
         let level = gameEngine.level;
+        let tilesProcessed=[];
 
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
@@ -94,33 +95,44 @@ murmures.Character.prototype = {
                 let oyy = 0;
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
-                    /*level.tiles[oyy][oxx].toUpdate = ((level.tiles[oyy][oxx].toUpdate === false  && level.tiles[oyy][oxx].state === murmures.C.TILE_HIGHLIGHTED) ||(level.tiles[oyy][oxx].toUpdate === true  && level.tiles[oyy][oxx].state === murmures.C.TILE_FOG_OF_WAR))?false:true;
-                    if(level.tiles[oyy][oxx].needsClientUpdate == true){
-                      level.tiles[oyy][oxx].toUpdate =  true;
-                    }*/
-                    level.tiles[oyy][oxx].toUpdate =  true;
-                    level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
-                    for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-                        let mob = gameEngine.level.mobs[itMob];
-                        if (mob.position.x === oxx && mob.position.y === oyy) {
-                            gameEngine.level.mobs[itMob].toUpdate = (gameEngine.level.mobs[itMob].toUpdate == true && mob.onVision == false)?false:true;
-                            //gameEngine.level.mobs[itMob].toUpdate  = true;
-                            mob.charSpotted = true;
-                            mob.onVision = true;
-
-                        }
-                    }
-                    let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
-                    let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
-                    if ((!groundLight || !propLight) && (j > 0)) {
+                    let toProceed = true;
+                    for (let itTiles=0;itTiles<tilesProcessed.length;itTiles++){
+                      if(tilesProcessed[itTiles].x == oxx && tilesProcessed[itTiles].y == oyy){
+                        toProceed = false;
                         break;
+                      }
+                    }
+                    if (toProceed == true){
+                      level.tiles[oyy][oxx].toUpdate = ((level.tiles[oyy][oxx].toUpdate === false  && level.tiles[oyy][oxx].state === murmures.C.TILE_HIGHLIGHTED) ||(level.tiles[oyy][oxx].toUpdate === true  && level.tiles[oyy][oxx].state === murmures.C.TILE_FOG_OF_WAR))?false:true;
+                      if(level.tiles[oyy][oxx].needsClientUpdate == true){
+                        level.tiles[oyy][oxx].toUpdate =  true;
+                      }
+                      //level.tiles[oyy][oxx].toUpdate =  true;
+                      level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
+                      for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+                          let mob = gameEngine.level.mobs[itMob];
+                          if (mob.position.x === oxx && mob.position.y === oyy) {
+                              gameEngine.level.mobs[itMob].toUpdate = (gameEngine.level.mobs[itMob].toUpdate == true && mob.onVision == false)?false:true;
+                              //gameEngine.level.mobs[itMob].toUpdate  = true;
+                              mob.charSpotted = true;
+                              mob.onVision = true;
+
+                          }
+                      }
+                      let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
+                      let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
+                      if ((!groundLight || !propLight) && (j > 0)) {
+                          break;
+                      }
+                      tilesProcessed.push(level.tiles[oyy][oxx]);
                     }
                     ox += x;
                     oy += y;
                 }
             }
         }
-        level.tiles[this.position.y][this.position.x].state = murmures.C.TILE_HIGHLIGHTED;
+/*        level.tiles[this.position.y][this.position.x].state = murmures.C.TILE_HIGHLIGHTED;
         level.tiles[this.position.y][this.position.x].toUpdate = true;
+*/
     }
 };

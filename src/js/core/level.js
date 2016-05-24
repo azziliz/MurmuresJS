@@ -36,7 +36,6 @@ murmures.Level.prototype = {
         this.layout = src.layout;
         this.width = src.width;
         this.height = src.height;
-
         this.tiles = [];
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
@@ -87,7 +86,9 @@ murmures.Level.prototype = {
       for (let y = 0; y < this.height; y++) {
           for (let x = 0; x < this.width; x++) {
               if(this.tiles[y][x].toUpdate === true){
-                tilesArray.push(this.tiles[y][x]);
+                  tilesArray.push(this.tiles[y][x]);
+                //  murmures.serverLog(JSON.stringify(this.tiles[y][x]));
+
               }
           }
       }
