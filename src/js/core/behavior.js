@@ -38,7 +38,7 @@ murmures.Behavior = {
         gameEngine.level.tiles[target.y][target.x].propId = cb_params; // changes the prop on the tile from "closed door" to "open door"
         gameEngine.level.tiles[target.y][target.x].behavior = gameEngine.bodies[cb_params].behavior; // updates the callback accordingly --> we want the new prop to have a different behavior
         gameEngine.level.tiles[target.y][target.x].needsClientUpdate = true; // tells the client to refresh all layers of the tile
-        gameEngine.level.tiles[target.y][target.x].toUpdate = true; // tells the client to refresh all layers of the tile
+        gameEngine.level.tiles[target.y][target.x].toUpdate = false; 
     },
 
     /**
@@ -54,7 +54,7 @@ murmures.Behavior = {
             gameEngine.activeLevel++;
             gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
             gameEngine.level.moveHeroToStartingPoint();
-            
+
         }
     },
 
