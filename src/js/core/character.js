@@ -57,6 +57,7 @@ murmures.Character.prototype = {
     move : function (x, y) {
         this.position.x = x;
         this.position.y = y;
+        this.propId = gameEngine.level.tiles[y][x].propId;
     },
 
     setVision : function () {
@@ -64,9 +65,13 @@ murmures.Character.prototype = {
 
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
+                if ((level.tiles[yy][xx].needsClientUpdate == true) && (level.tiles[yy][xx].toUpdate == true)){
+                   level.tiles[yy][xx].toUpdate = false;
+                   level.tiles[yy][xx].needsClientUpdate = false;
+                }
                 if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
                    level.tiles[yy][xx].toUpdate = true;
-                    level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
+                   level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
                 }else{
                   level.tiles[yy][xx].toUpdate = false;
                 }
@@ -89,8 +94,11 @@ murmures.Character.prototype = {
                 let oyy = 0;
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
-                     level.tiles[oyy][oxx].toUpdate = ((level.tiles[oyy][oxx].toUpdate === false  && level.tiles[oyy][oxx].state === murmures.C.TILE_HIGHLIGHTED) ||(level.tiles[oyy][oxx].toUpdate === true  && level.tiles[oyy][oxx].state === murmures.C.TILE_FOG_OF_WAR))?false:true;
-
+                    /*level.tiles[oyy][oxx].toUpdate = ((level.tiles[oyy][oxx].toUpdate === false  && level.tiles[oyy][oxx].state === murmures.C.TILE_HIGHLIGHTED) ||(level.tiles[oyy][oxx].toUpdate === true  && level.tiles[oyy][oxx].state === murmures.C.TILE_FOG_OF_WAR))?false:true;
+                    if(level.tiles[oyy][oxx].needsClientUpdate == true){
+                      level.tiles[oyy][oxx].toUpdate =  true;
+                    }*/
+                    level.tiles[oyy][oxx].toUpdate =  true;
                     level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
                     for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
                         let mob = gameEngine.level.mobs[itMob];
