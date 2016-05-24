@@ -79,7 +79,7 @@ murmures.Character.prototype = {
         }
 
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-            gameEngine.level.mobs[itMob].toUpdate = gameEngine.level.mobs[itMob].onVision == true;
+            gameEngine.level.mobs[itMob].toUpdate = gameEngine.level.mobs[itMob].onVision == true?true:false;
             gameEngine.level.mobs[itMob].onVision = false;
         }
 
@@ -120,5 +120,7 @@ murmures.Character.prototype = {
                 }
             }
         }
+        level.tiles[this.position.y][this.position.x].state = murmures.C.TILE_HIGHLIGHTED;
+        level.tiles[this.position.y][this.position.x].toUpdate = true;
     }
 };

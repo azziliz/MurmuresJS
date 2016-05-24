@@ -65,7 +65,21 @@ murmures.Level.prototype = {
           this.tiles[src.tiles[i].y][src.tiles[i].x].needsClientUpdate = true;
         }
       }
-      this.mobs = src.mobs;
+      //this.mobs = [];
+      if (typeof src.mobs !== "undefined") {
+          // mobs array is only defined after the first call to instantiateMobs
+          src.mobs.forEach(function (mob) {
+              let charmob = new murmures.Character();
+              charmob.fromJson(mob);
+              //this.mobs.push(charmob);
+              for (let itMob=0;itMob<this.mobs.length;itMob++){
+                if (this.mobs[itMob].guid == charmob.guid){
+                  this.mobs[itMob] = charmob;
+                }
+              }
+          }, this);
+      }
+      //this.mobs = src.mobs;
     },
 
     getMinimal : function(){
