@@ -97,7 +97,7 @@ murmures.serverLog('Initializing game');
     gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
 
     gameEngine.levels = [];
-    gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
+    gameEngine.levelIds = ["level2", "level1", "level4", "level5"];
     gameEngine.levelIds.forEach(function (levelName) {
         let level1 = new murmures.Level();
         let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -208,12 +208,17 @@ http.createServer(function (request, response) {
                     if (parsing.valid) {
                         let check = gameEngine.checkOrder(clientOrder);
                         if (check.valid) {
+                            let activeLevel = gameEngine.activeLevel;
                             murmures.serverLog('Order checked');
                             gameEngine.applyOrder(clientOrder);
                             murmures.serverLog('Order applied');
+                            let ge = gameEngine.getMinimal(false);
 
-                            let res = JSON.stringify(gameEngine.getMinimal());
-                            murmures.serverLog('Response stringified');
+                            if (activeLevel != gameEngine.activeLevel){
+                                ge = gameEngine.getMinimal(true);
+                            }
+                            let res = JSON.stringify(ge);
+                            murmures.serverLog('Response stringified' );
                             compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });
                         }
                         else {

@@ -62,7 +62,6 @@ murmures.GameEngine.prototype = {
      */
     fromJsonMerge: function (src) {
         let isNewLevel = (src.activeLevel != undefined ) && (gameEngine.activeLevel !== src.activeLevel);
-
         if ( isNewLevel === true){
           this.activeLevel = src.activeLevel;
           this.level = new murmures.Level();
@@ -75,11 +74,17 @@ murmures.GameEngine.prototype = {
         this.hero.fromJson(src.hero);
     },
 
-    getMinimal : function () {
+    getMinimal : function (allLevel) {
         //return this;
+
+        let resLevel = this.level;
+        if (allLevel == false){
+          resLevel = this.level.getMinimal();
+        }
+
         return {
             activeLevel: this.activeLevel,
-            level: this.level.getMinimal(),
+            level: resLevel,
             hero: this.hero
         };
     },
