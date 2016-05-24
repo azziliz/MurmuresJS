@@ -208,12 +208,17 @@ http.createServer(function (request, response) {
                     if (parsing.valid) {
                         let check = gameEngine.checkOrder(clientOrder);
                         if (check.valid) {
+                            let activeLevel = gameEngine.activeLevel;
                             murmures.serverLog('Order checked');
                             gameEngine.applyOrder(clientOrder);
                             murmures.serverLog('Order applied');
+                            let ge = gameEngine.getMinimal(false);
 
-                            let res = JSON.stringify(gameEngine.getMinimal());
-                            murmures.serverLog('Response stringified');
+                            if (activeLevel != gameEngine.activeLevel){
+                                ge = gameEngine.getMinimal(true);
+                            }
+                            let res = JSON.stringify(ge);
+                            murmures.serverLog('Response stringified' );
                             compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });
                         }
                         else {

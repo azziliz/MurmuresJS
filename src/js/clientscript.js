@@ -6,7 +6,7 @@ gameEngine.allowOrders = true;
 // #region Utils
 function screenLog(txt) {
     let now = new Date();
-    document.getElementById("screenLog").insertAdjacentHTML('afterbegin', 
+    document.getElementById("screenLog").insertAdjacentHTML('afterbegin',
         '<span class="channel-debug"><span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br></span>');
 }
 
@@ -325,7 +325,6 @@ function onOrderResponse(response) {
         screenLog('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
     }
     else {
-
         let isNewLevel = (ge.activeLevel != undefined) && (gameEngine.activeLevel !== ge.activeLevel);
         gameEngine.fromJsonMerge(ge);
         if (isNewLevel) {
