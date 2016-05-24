@@ -146,7 +146,7 @@ function drawOneSquare(context, x, y, color, filled) {
 }
 // #endregion
 
-// #region Characters
+// #region UI/Characters
 function initUI() {
     document.getElementById('rightCharacters').innerHTML = '';
     document.getElementById('leftCharacters').innerHTML =
