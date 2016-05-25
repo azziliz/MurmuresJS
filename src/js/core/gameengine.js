@@ -147,6 +147,7 @@ murmures.GameEngine.prototype = {
                 if (mob.onVision && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     mob.hitPoints -= 3;
                     mob.toUpdate = true;
+                    mob.updatedTurn = gameEngine.gameTurn;
                     if (mob.hitPoints < 0) mob.hitPoints = 0;
                 }
             });

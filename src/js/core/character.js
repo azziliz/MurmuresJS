@@ -83,9 +83,11 @@ murmures.Character.prototype = {
         }
 
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-            gameEngine.level.mobs[itMob].toUpdate = gameEngine.level.mobs[itMob].onVision == true?true:false;
-            gameEngine.level.mobs[itMob].onVision = false;
-            gameEngine.level.mobs[itMob].updatedTurn = gameEngine.gameTurn;
+            if(gameEngine.level.mobs[itMob].updatedTurn != gameEngine.gameTurn){
+              gameEngine.level.mobs[itMob].toUpdate = gameEngine.level.mobs[itMob].onVision == true?true:false;
+              gameEngine.level.mobs[itMob].onVision = false;
+              //gameEngine.level.mobs[itMob].updatedTurn = gameEngine.gameTurn;
+            }
         }
 
         for (let i=0; i < 360; i++) {
