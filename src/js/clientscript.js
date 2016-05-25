@@ -286,8 +286,7 @@ function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
 
 function getHoveredTile(mouseEventX, mouseEventY) {
     let tileX = Math.floor(mouseEventX / gameEngine.tileSize);
-    let tileY = Math.floor(mouseEventY / gameEngine.tileSize);
-    //document.getElementById('debugDiv').innerHTML = ''.concat(tileX, ' ', tileY);
+    let tileY = Math.floor(mouseEventY / gameEngine.tileSize);    
     return gameEngine.level.tiles[tileY][tileX];
 }
 
@@ -352,6 +351,7 @@ function onOrderResponse(response) {
             drawTiles();
             updateUI();
         }
+        document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
         screenLog('UI updated');
     }
 }

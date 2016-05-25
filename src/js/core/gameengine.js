@@ -155,10 +155,10 @@ murmures.GameEngine.prototype = {
             });
         }
         murmures.serverLog('Moves / attacks done' + order.target.x + "//" + order.target.y);
-        this.applyAI();
-        murmures.serverLog('AI done');
         this.hero.setVision();
         murmures.serverLog('Vision done');
+        this.applyAI();
+        murmures.serverLog('AI done');
     },
 
     applyAI : function () {
