@@ -34,6 +34,8 @@
     <Compile Include="src\js\test\moduleperf.js" />
     <Compile Include="src\js\test\servertest.js" />
     <Compile Include="src\js\test\vmperf.js" />
+    <Content Include="data\locale\en.json" />
+    <Content Include="data\locale\fr.json" />
     <Content Include="src\pages\client.html" />
     <Content Include="data\bodies.json" />
     <Content Include="data\hero1.json" />
@@ -53,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="data\" />
+    <Folder Include="data\locale\" />
     <Folder Include="src\" />
     <Folder Include="src\css\" />
     <Folder Include="src\img\" />

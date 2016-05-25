@@ -16046,7 +16046,6 @@
     "_b1_32_rat.rl2": {
         "layerId": "32",
         "rank": 2949,
-        "name": "Rat",
         "hitPointsMax": 5
     },
     "_b1_32_rattlesnake.conv": {
@@ -22035,8 +22034,7 @@
     },
     "_b1_44_skeleton.rl3": {
         "layerId": "44",
-        "rank": 4446,
-        "name": "Squelette"
+        "rank": 4446
     },
     "_b1_44_skeleton_bat": {
         "layerId": "44",
@@ -23360,8 +23358,7 @@
     },
     "_b1_56_jessica.rl2": {
         "layerId": "56",
-        "rank": 4777,
-        "name": "Angharad"
+        "rank": 4777
     },
     "_b1_56_job_gladiator.conv": {
         "layerId": "56",
