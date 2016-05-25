@@ -208,6 +208,7 @@ http.createServer(function (request, response) {
                     if (parsing.valid) {
                         let check = gameEngine.checkOrder(clientOrder);
                         if (check.valid) {
+                            gameEngine.gameTurn+=1;
                             let activeLevel = gameEngine.activeLevel;
                             murmures.serverLog('Order checked');
                             gameEngine.applyOrder(clientOrder);
@@ -224,6 +225,7 @@ http.createServer(function (request, response) {
                         else {
                             compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
                         }
+
                     }
                     else {
                         compressAndSend(request, response, 'application/json', JSON.stringify({ error: parsing.reason }));

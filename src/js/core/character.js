@@ -35,6 +35,7 @@ murmures.Character = function () {
     this.charSpotted = false; // hero is known because seen at least once
     this.onVision = false; // hero is in isght of view
     this.toUpdate = true;
+    this.updatedTurn = 0;
 };
 
 murmures.Character.prototype = {
@@ -64,15 +65,19 @@ murmures.Character.prototype = {
 
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
-                if ((level.tiles[yy][xx].needsClientUpdate == true) && (level.tiles[yy][xx].toUpdate == true)){
+/*                if ((level.tiles[yy][xx].needsClientUpdate == true) && (level.tiles[yy][xx].toUpdate == true)){
                    level.tiles[yy][xx].toUpdate = false;
                    level.tiles[yy][xx].needsClientUpdate = false;
-                }
+                }*/
                 if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
                    level.tiles[yy][xx].toUpdate = true;
+                   //level.tiles[yy][xx].updatedTurn = gameEngine.gameTurn;
                    level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
                 }else{
-                  level.tiles[yy][xx].toUpdate = false;
+                  if(level.tiles[yy][xx].updatedTurn != gameEngine.gameTurn){
+                  //level.tiles[yy][xx].updatedTurn = gameEngine.gameTurn;
+                    level.tiles[yy][xx].toUpdate = false;
+                  }
                 }
             }
         }
@@ -80,6 +85,7 @@ murmures.Character.prototype = {
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             gameEngine.level.mobs[itMob].toUpdate = gameEngine.level.mobs[itMob].onVision == true?true:false;
             gameEngine.level.mobs[itMob].onVision = false;
+            gameEngine.level.mobs[itMob].updatedTurn = gameEngine.gameTurn;
         }
 
         for (let i=0; i < 360; i++) {
@@ -101,9 +107,16 @@ murmures.Character.prototype = {
                       }
                     }
                     if (toProceed == true){
-                      level.tiles[oyy][oxx].toUpdate = ((level.tiles[oyy][oxx].toUpdate === false  && level.tiles[oyy][oxx].state === murmures.C.TILE_HIGHLIGHTED) ||(level.tiles[oyy][oxx].toUpdate === true  && level.tiles[oyy][oxx].state === murmures.C.TILE_FOG_OF_WAR))?false:true;
+                      /*level.tiles[oyy][oxx].toUpdate = ((level.tiles[oyy][oxx].toUpdate === false  && level.tiles[oyy][oxx].state === murmures.C.TILE_HIGHLIGHTED) ||(level.tiles[oyy][oxx].toUpdate === true  && level.tiles[oyy][oxx].state === murmures.C.TILE_FOG_OF_WAR))?false:true;
                       if(level.tiles[oyy][oxx].needsClientUpdate == true){
                         level.tiles[oyy][oxx].toUpdate =  true;
+                      }*/
+                      if(level.tiles[oyy][oxx].updatedTurn != gameEngine.gameTurn && level.tiles[oyy][oxx].toUpdate ==  true){
+                        level.tiles[oyy][oxx].toUpdate =  false;
+                        level.tiles[oyy][oxx].updatedTurn =  gameEngine.gameTurn;
+                      }else{
+                        level.tiles[oyy][oxx].toUpdate =  true;
+                        level.tiles[oyy][oxx].updatedTurn =  gameEngine.gameTurn;
                       }
                       //level.tiles[oyy][oxx].toUpdate =  true;
                       level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;

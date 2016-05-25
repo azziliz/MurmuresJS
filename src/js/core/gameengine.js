@@ -23,12 +23,14 @@
  */
 murmures.GameEngine = function () {
         /// <field name="tileSize" type="Number"/>
+        /// <field name="gameTurn" type="Number"/>
         /// <field name="bodies" type="PhysicalBody"/>
         /// <field name="levels" type="Array"/>
         /// <field name="levelIds" type="Array"/>
         /// <field name="activeLevel" type="Number"/>
         /// <field name="level" type="Level"/>
         /// <field name="hero" type="Character"/>
+        this.gameTurn = 0;
 };
 
 murmures.GameEngine.prototype = {

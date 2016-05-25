@@ -33,6 +33,8 @@ murmures.Tile = function () {
     /// <field name="effectId" type="String"/>
     /// <field name="needsClientUpdate" type="bool"/>
     /// <field name="toUpdate" type="bool"/>
+    /// <field name="updatedTurn" type="number"/>
+    this.updatedTurn = 0;
 };
 
 murmures.Tile.prototype = {
