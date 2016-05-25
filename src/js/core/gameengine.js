@@ -25,6 +25,7 @@ murmures.GameEngine = function () {
         /// <field name="tileSize" type="Number"/>
         /// <field name="gameTurn" type="Number"/>
         /// <field name="bodies" type="PhysicalBody"/>
+        /// <field name="locale" type="Object"/>
         /// <field name="levels" type="Array"/>
         /// <field name="levelIds" type="Array"/>
         /// <field name="activeLevel" type="Number"/>
@@ -45,6 +46,7 @@ murmures.GameEngine.prototype = {
     fromJson : function (src) {
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
+        this.locale = src.locale;
         //this.levels = [];
         //for (let i = 0; i < src.levels.length; i++) {
         //    this.levels[i] = new murmures.Level();

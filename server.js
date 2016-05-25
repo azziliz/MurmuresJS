@@ -35,6 +35,7 @@ var murmures = {
  * Declares the gameEngine variable for a later use.
  * This variable will be set to an instance of murmures.GameEngine after all classes are loaded.
  * @instance
+ * @type {murmures.GameEngine}
  */
 var gameEngine = {};
 
@@ -91,11 +92,17 @@ murmures.serverLog('Initializing game');
     let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.bodies = JSON.parse(bodiesJson);
 
+    gameEngine.locale = {};
+    let localefrJson = fs.readFileSync('./data/locale/fr.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.locale.fr = JSON.parse(localefrJson).locale;
+    let localeenJson = fs.readFileSync('./data/locale/en.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.locale.en = JSON.parse(localeenJson).locale;
+
     gameEngine.hero = new murmures.Character();
     let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.hero.fromJson(JSON.parse(hero1Txt));
     gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
-
+    
     gameEngine.levels = [];
     gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
     gameEngine.levelIds.forEach(function (levelName) {
