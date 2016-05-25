@@ -59,10 +59,8 @@ murmures.Level.prototype = {
     mergeFromJson : function(src){
       for(let i=0;i<src.tiles.length;i++){
         this.tiles[src.tiles[i].y][src.tiles[i].x].state = src.tiles[i].state;
-        if (src.tiles[i].needsClientUpdate == true){
-         this.tiles[src.tiles[i].y][src.tiles[i].x].propId = src.tiles[i].propId;
-          this.tiles[src.tiles[i].y][src.tiles[i].x].needsClientUpdate = true;
-        }
+        this.tiles[src.tiles[i].y][src.tiles[i].x].propId = src.tiles[i].propId;
+        this.tiles[src.tiles[i].y][src.tiles[i].x].needsClientUpdate = true;
       }
       //this.mobs = [];
       if (typeof src.mobs !== "undefined") {
