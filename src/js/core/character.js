@@ -81,13 +81,6 @@ murmures.Character.prototype = {
         this.onVision = src.onVision;
     },
 
-    instantiate : function (mobReference) {
-        /* OBSOLETE */
-        this.guid = Math.random().toString();
-        this.hitPointsMax = mobReference.hitPointsMax || (mobReference.layerId === "56" ? 20 : 10); // TODO replace 56 with Hero constant
-        this.hitPoints = this.hitPointsMax;
-    },
-
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
     },

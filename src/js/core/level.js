@@ -15,7 +15,7 @@
  *
  * Static levels created by the editor are stored in JSON files, usually named /data/levelXX.json.
  * These files are in a "clean" state that contains only non-empty properties.
- * Missing tile layers and starting points are calculated when the level is loaded by the "fromJson" method.
+ * Missing tile layers and starting points are calculated when the level is loaded by the "build" method.
  *
  * @class
  */
@@ -57,17 +57,11 @@ murmures.Level.prototype = {
             this.tiles[y] = [];
             for (let x = 0; x < this.width; x++) {
                 this.tiles[y][x] = new murmures.Tile();
-                this.tiles[y][x].build(src.tiles[y][x], x, y); // obsolete fromJson
+                this.tiles[y][x].build(src.tiles[y][x], x, y);
                 if (this.tiles[y][x].charId !== '') {
-                    let ref = gameEngine.bodies[this.tiles[y][x].charId];
-                    //if (murmures.C.LAYERS[ref.layerId][0] !== 'Hero') { // All charIds are now mobs
                     let mob = new murmures.Character();
-                    //mob.position = this.tiles[y][x];
-                    //mob.mobTemplate = this.tiles[y][x].charId;
-                    //mob.instantiate(ref);
                     mob.build(this.tiles[y][x], this.tiles[y][x].charId);
                     this.mobs.push(mob);
-                    //}
                 }
             }
         }
@@ -133,33 +127,12 @@ murmures.Level.prototype = {
         
         this.mobs = [];
         if (typeof src.mobs !== "undefined") {
-            // mobs array is only defined after the first call to instantiateMobs
             src.mobs.forEach(function (mob) {
                 let charmob = new murmures.Character();
                 charmob.fromJson(mob);
                 this.mobs.push(charmob);
             }, this);
         }
-    },
-    
-    instantiateMobs : function () {
-        /* OBSOLETE */
-        this.mobs = [];
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                if (this.tiles[y][x].charId !== '') {
-                    let ref = gameEngine.bodies[this.tiles[y][x].charId];
-                    if (murmures.C.LAYERS[ref.layerId][0] !== 'Hero') {
-                        let mob = new murmures.Character();
-                        mob.position = this.tiles[y][x];
-                        mob.mobTemplate = this.tiles[y][x].charId;
-                        mob.instantiate(ref);
-                        this.mobs.push(mob);
-                    }
-                }
-            }
-        }
-         
     },
     
     mergeFromJson : function (src) {
@@ -170,7 +143,6 @@ murmures.Level.prototype = {
         }
         //this.mobs = [];
         if (typeof src.mobs !== "undefined") {
-            // mobs array is only defined after the first call to instantiateMobs
             src.mobs.forEach(function (mob) {
                 let charmob = new murmures.Character();
                 charmob.fromJson(mob);
