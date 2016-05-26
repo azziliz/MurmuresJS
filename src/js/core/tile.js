@@ -21,6 +21,8 @@
  * @class
  */
 murmures.Tile = function () {
+    /** @type {string} */
+    this.guid = '';
     /** @type {number} */
     this.x = 0 | 0;
     /** @type {number} */
@@ -54,6 +56,7 @@ murmures.Tile = function () {
 murmures.Tile.prototype = {
     
     build : function (src, x, y) {
+        this.guid = Math.random().toString();
         this.x = x | 0;
         this.y = y | 0;
         this.state = murmures.C.TILE_NOT_DISCOVERED | 0;

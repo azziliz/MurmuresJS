@@ -36,7 +36,7 @@ murmures.Level = function () {
     this.mobs = [];
 };
 
-murmures.Level.prototype = {    
+murmures.Level.prototype = {
     /**
      * Initialization method reserved for the server.
      * Called once per level during server startup to build the gameEngine master instance.
@@ -89,7 +89,8 @@ murmures.Level.prototype = {
             for (let x = 0; x < this.width; x++) {
                 this.tiles[y][x] = new murmures.Tile();
             }
-        }        
+        }
+        this.synchronize(src);
     },
     
     /**
@@ -102,6 +103,22 @@ murmures.Level.prototype = {
      * It might also contain mob updates and new mobs.
      */
     synchronize : function (src) {
+        if (typeof src.mobs !== "undefined") {
+            src.mobs.forEach(function (remoteMob) {
+                let found = false;
+                this.mobs.forEach(function (localMob) {
+                    if (localMob.guid === remoteMob.guid) {
+                        found = true;
+                        this.localMob.synchronize(remoteMob);
+                    }
+                }, this);
+                if (!found) {
+                    let newMob = new murmures.Character();
+                    newMob.synchronize(remoteMob);
+                    this.mobs.push(newMob);
+                }
+            }, this);
+        }
     },
     
     /**
