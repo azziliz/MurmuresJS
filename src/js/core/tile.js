@@ -21,17 +21,30 @@
  * @class
  */
 murmures.Tile = function () {
-    /// <field name="x" type="Number"/>
-    /// <field name="y" type="Number"/>
+    /** @type {number} */
+    this.x = 0 | 0;
+    /** @type {number} */
+    this.y = 0 | 0;
+    /** @type {number} */
+    this.state = 0 | 0;
+    /** @type {string} */
+    this.groundId = '';
+    /** @type {string} */
+    this.groundDeco = '';
+    /** @type {string} */
+    this.propId = '';
+    /** @type {string} */
+    this.propDeco = '';
+    /** @type {string} */
+    this.itemId = '';
+    /** @type {string} */
+    this.charId = '';
+    /** @type {string} */
+    this.effectId = '';
+    /** @type {Object.<string, Object.<string, string>>} */
+    this.behavior = {};
+   
 
-    /// <field name="groundId" type="String"/>
-    /// <field name="groundDeco" type="String"/>
-    /// <field name="propId" type="String"/>
-    /// <field name="propDeco" type="String"/>
-    /// <field name="itemId" type="String"/>
-    /// <field name="charId" type="String"/>
-    /// <field name="charDeco" type="String"/>
-    /// <field name="effectId" type="String"/>
     /// <field name="needsClientUpdate" type="bool"/>
     /// <field name="toUpdate" type="bool"/>
     /// <field name="updatedTurn" type="number"/>
@@ -39,6 +52,21 @@ murmures.Tile = function () {
 };
 
 murmures.Tile.prototype = {
+    
+    build : function (src, x, y) {
+        this.x = x | 0;
+        this.y = y | 0;
+        this.state = murmures.C.TILE_NOT_DISCOVERED | 0;
+        this.groundId = (typeof src.groundId === 'undefined') ? '' : src.groundId;
+        this.groundDeco = (typeof src.groundDeco === 'undefined') ? '' : src.groundDeco;
+        this.propId = (typeof src.propId === 'undefined') ? '' : src.propId;
+        this.propDeco = (typeof src.propDeco === 'undefined') ? '' : src.propDeco;
+        this.itemId = (typeof src.itemId === 'undefined') ? '' : src.itemId;
+        this.charId = (typeof src.charId === 'undefined') ? '' : src.charId;
+        this.effectId = (typeof src.effectId === 'undefined') ? '' : src.effectId;
+        this.behavior = (typeof src.propId === 'undefined') ? {} : gameEngine.bodies[src.propId].behavior;
+    },
+
     /**
      * Method called by the server once, to build the gameEngine instance during startup.
      * Afterwards, becomes a client-side-only synchronization method.

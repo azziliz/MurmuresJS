@@ -97,11 +97,6 @@ murmures.serverLog('Initializing game');
     gameEngine.locale.fr = JSON.parse(localefrJson).locale;
     let localeenJson = fs.readFileSync('./data/locale/en.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.locale.en = JSON.parse(localeenJson).locale;
-
-    gameEngine.hero = new murmures.Character();
-    let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-    gameEngine.hero.fromJson(JSON.parse(hero1Txt));
-    gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
     
     gameEngine.levels = [];
     gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
@@ -114,6 +109,11 @@ murmures.serverLog('Initializing game');
     }, this);
     gameEngine.activeLevel = 0;
     gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
+
+    gameEngine.hero = new murmures.Character();
+    let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.hero.fromJson(JSON.parse(hero1Txt));
+    gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
     gameEngine.level.moveHeroToStartingPoint();
 
     gameEngine.hero.setVision();

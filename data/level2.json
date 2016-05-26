@@ -850,8 +850,7 @@
             { "groundId": "_b1_01_dngn_shallow_water.rl1" },
             {
                 "groundId": "_b1_01_floor_of_a_room.rl1",
-                "propId": "_b1_11_dngn_return.rl2",
-                "charId": "_b1_56_jessica.rl2"
+                "propId": "_b1_11_dngn_return.rl2"
             },
             { "groundId": "_b1_01_dngn_shallow_water.rl1" },
             { "groundId": "_b1_01_dngn_shallow_water.rl1" },

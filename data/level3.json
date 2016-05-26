@@ -633,8 +633,7 @@
         [
             { "groundId": "_b1_06_dngn_stone_wall.rl1" },
             {
-                "groundId": "_b1_01_floor_of_a_room.rl1",
-                "charId": "_b1_56_jessica.rl2"
+                "groundId": "_b1_01_floor_of_a_room.rl1"
             },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },

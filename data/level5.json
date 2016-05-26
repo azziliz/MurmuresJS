@@ -1,5 +1,5 @@
 {
-    "id": "5",
+    "id": "level5",
     "layout": "square",
     "width": 50,
     "height": 50,
@@ -828,8 +828,7 @@
             { "groundId": "_b1_06_dngn_rock_wall_08.rl1" },
             {
                 "groundId": "_b1_01_floor_of_a_room.rl1",
-                "propId": "_b1_11_dngn_return.rl2",
-                "charId": "_b1_56_jessica.rl2"
+                "propId": "_b1_11_dngn_return.rl2"
             },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },
             { "groundId": "_b1_01_floor_of_a_room.rl1" },

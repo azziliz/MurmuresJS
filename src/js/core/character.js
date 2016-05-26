@@ -11,9 +11,11 @@
 /**
  * Characters are entities that live, move and act inside a [level]{@link murmures.Level}.
  *
- * Heroes are characters managed by the players. They can be given [orders]{@link murmures.Order} on client side.
+ * Heroes are characters managed by the players. 
+ * They can be given [orders]{@link murmures.Order} on client side.
  * They can move from one level to another.
- * Mobs are characters managed by the AI. The AI methods to control them are defined in the [game engine]{@link murmures.GameEngine} class.
+ * Mobs are characters managed by the AI.
+ * The AI methods to control them are defined in the [game engine]{@link murmures.GameEngine} class.
  * They cannot change level.
  *
  * Three steps are mandatory to create a valid character:
@@ -26,11 +28,21 @@
  * @class
  */
 murmures.Character = function () {
-    /// <field name="guid" type="String"/>
-    /// <field name="position" type="Tile"/>
-    /// <field name="hitPoints" type="Number"/>
-    /// <field name="hitPointsMax" type="Number"/>
-    /// <field name="mobTemplate" type="String"/>
+    /** @type {string} */
+    this.guid = '';
+    /** @type {murmures.Tile} */
+    this.position = null;
+    /** @type {string} */
+    this.mobTemplate = '';
+    /** @type {number} */
+    this.hitPoints = 0 | 0;
+    /** @type {number} */
+    this.hitPointsMax = 0 | 0;
+    /** @type {boolean} */
+    this.onVision = false;
+    /** @type {boolean} */
+    this.charSpotted = false;
+    
     /// <field name="toUpdate" type="bool"/>
     this.charSpotted = false; // hero is known because seen at least once
     this.onVision = false; // hero is in isght of view
@@ -39,6 +51,20 @@ murmures.Character = function () {
 };
 
 murmures.Character.prototype = {
+
+    /**
+     * It is expected that, when the server calls this function, 
+     * the Tile object in parameter is already built.
+     */
+    build : function (tile, template) {
+        this.guid = Math.random().toString();
+        this.position = tile;
+        this.mobTemplate = template;
+        let ref = gameEngine.bodies[template];
+        this.hitPointsMax = (ref.hitPointsMax || (ref.layerId === "56" ? 20 : 10)) | 0; // TODO replace 56 with Hero constant
+        this.hitPoints = this.hitPointsMax | 0;
+    },
+
     /**
      * Method called by the server once, to build the gameEngine instance during startup.
      * Afterwards, becomes a client-side-only synchronization method.
@@ -49,15 +75,16 @@ murmures.Character.prototype = {
     fromJson : function (src) {
         this.guid = src.guid;
         this.position = src.position;
+        this.mobTemplate = src.mobTemplate;
         this.hitPoints = src.hitPoints;
         this.hitPointsMax = src.hitPointsMax;
-        this.mobTemplate = src.mobTemplate;
         this.onVision = src.onVision;
     },
 
     instantiate : function (mobReference) {
+        /* OBSOLETE */
         this.guid = Math.random().toString();
-        this.hitPointsMax = mobReference.hitPointsMax || (mobReference.layerId === "56" ? 20 : 10);
+        this.hitPointsMax = mobReference.hitPointsMax || (mobReference.layerId === "56" ? 20 : 10); // TODO replace 56 with Hero constant
         this.hitPoints = this.hitPointsMax;
     },
 

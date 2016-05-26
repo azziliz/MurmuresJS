@@ -21,26 +21,22 @@
  */
 murmures.Level = function () {
     /** @type {string} */
+    this.guid = '';
+    /** @type {string} */
     this.id = '';
-    
     /** @type {string} */
     this.layout = '';
-    
     /** @type {number} */
     this.width = 0 | 0;
-    
     /** @type {number} */
     this.height = 0 | 0;
-    
     /** @type {Array.<Array.<murmures.Tile>>} */
     this.tiles = [];
-    
     /** @type {Array.<murmures.Character>} */
     this.mobs = [];
 };
 
-murmures.Level.prototype = {
-    
+murmures.Level.prototype = {    
     /**
      * Initialization method reserved for the server.
      * Called once per level during server startup to build the gameEngine master instance.
@@ -50,6 +46,31 @@ murmures.Level.prototype = {
      * This parameter is expected to contain all tiles in a clean state and no mob.
      */
     build : function (src) {
+        this.guid = Math.random().toString();
+        this.id = src.id;
+        this.layout = src.layout;
+        this.width = src.width | 0;
+        this.height = src.height | 0;
+        this.tiles = [];
+        this.mobs = [];
+        for (let y = 0; y < this.height; y++) {
+            this.tiles[y] = [];
+            for (let x = 0; x < this.width; x++) {
+                this.tiles[y][x] = new murmures.Tile();
+                this.tiles[y][x].build(src.tiles[y][x], x, y); // obsolete fromJson
+                if (this.tiles[y][x].charId !== '') {
+                    let ref = gameEngine.bodies[this.tiles[y][x].charId];
+                    //if (murmures.C.LAYERS[ref.layerId][0] !== 'Hero') { // All charIds are now mobs
+                    let mob = new murmures.Character();
+                    //mob.position = this.tiles[y][x];
+                    //mob.mobTemplate = this.tiles[y][x].charId;
+                    //mob.instantiate(ref);
+                    mob.build(this.tiles[y][x], this.tiles[y][x].charId);
+                    this.mobs.push(mob);
+                    //}
+                }
+            }
+        }
     },
     
     /**
@@ -62,6 +83,19 @@ murmures.Level.prototype = {
      * It might also contain some mobs.
      */
     initialize : function (src) {
+        this.guid = src.guid;
+        this.id = src.id;
+        this.layout = src.layout;
+        this.width = src.width | 0;
+        this.height = src.height | 0;
+        this.tiles = [];
+        this.mobs = [];
+        for (let y = 0; y < this.height; y++) {
+            this.tiles[y] = [];
+            for (let x = 0; x < this.width; x++) {
+                this.tiles[y][x] = new murmures.Tile();
+            }
+        }        
     },
     
     /**
@@ -106,6 +140,26 @@ murmures.Level.prototype = {
                 this.mobs.push(charmob);
             }, this);
         }
+    },
+    
+    instantiateMobs : function () {
+        /* OBSOLETE */
+        this.mobs = [];
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (this.tiles[y][x].charId !== '') {
+                    let ref = gameEngine.bodies[this.tiles[y][x].charId];
+                    if (murmures.C.LAYERS[ref.layerId][0] !== 'Hero') {
+                        let mob = new murmures.Character();
+                        mob.position = this.tiles[y][x];
+                        mob.mobTemplate = this.tiles[y][x].charId;
+                        mob.instantiate(ref);
+                        this.mobs.push(mob);
+                    }
+                }
+            }
+        }
+         
     },
     
     mergeFromJson : function (src) {
@@ -154,34 +208,25 @@ murmures.Level.prototype = {
         return { tiles : tilesArray, mobs: mobsTosend };
     },
     
-    instantiateMobs : function () {
-        this.mobs = [];
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                if (this.tiles[y][x].charId !== '') {
-                    let ref = gameEngine.bodies[this.tiles[y][x].charId];
-                    if (murmures.C.LAYERS[ref.layerId][0] !== 'Hero') {
-                        let mob = new murmures.Character();
-                        mob.position = this.tiles[y][x];
-                        mob.mobTemplate = this.tiles[y][x].charId;
-                        mob.instantiate(ref);
-                        this.mobs.push(mob);
-                    }
-                }
-            }
-        }
-    },
-    
     moveHeroToStartingPoint: function () {
-        for (let y = 0; y < this.height; y++) {
-            for (let x = 0; x < this.width; x++) {
-                if (this.tiles[y][x].charId !== '') {
-                    let ref = gameEngine.bodies[this.tiles[y][x].charId];
-                    if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') {
-                        gameEngine.hero.position = this.tiles[y][x];
+        //temporary
+        // TODO : finding starting point from stairs
+        if (this.id === 'level1') gameEngine.hero.position = this.tiles[9][1];
+        else if (this.id === 'level2') gameEngine.hero.position = this.tiles[15][3];
+        else if (this.id === 'level4') gameEngine.hero.position = this.tiles[20][5];
+        else if (this.id === 'level5') gameEngine.hero.position = this.tiles[15][2];
+        else {
+            /* OBSOLETE
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    if (this.tiles[y][x].charId !== '') {
+                        let ref = gameEngine.bodies[this.tiles[y][x].charId];
+                        if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') {
+                            gameEngine.hero.position = this.tiles[y][x];
+                        }
                     }
                 }
-            }
+            }*/
         }
     },
     
