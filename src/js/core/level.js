@@ -20,12 +20,23 @@
  * @class
  */
 murmures.Level = function () {
-        /// <field name="id" type="String"/>
-        /// <field name="layout" type="String"/>
-        /// <field name="width" type="Number"/>
-        /// <field name="height" type="Number"/>
-        /// <field name="tiles" type="Array"/>
-        /// <field name="mobs" type="Array"/>
+    /** @type {string} */
+    this.id = '';
+
+    /** @type {string} */
+    this.layout = '';
+
+    /** @type {number} */
+    this.width = 0 | 0;
+
+    /** @type {number} */
+    this.height = 0 | 0;
+
+    /** @type {Array.<Array.<murmures.Tile>>} */
+    this.tiles = [];
+
+    /** @type {Array.<murmures.Character>} */
+    this.mobs = [];
 };
 
 murmures.Level.prototype = {
@@ -39,8 +50,8 @@ murmures.Level.prototype = {
     fromJson : function (src) {
         this.id = src.id;
         this.layout = src.layout;
-        this.width = src.width;
-        this.height = src.height;
+        this.width = src.width | 0;
+        this.height = src.height | 0;
         this.tiles = [];
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
