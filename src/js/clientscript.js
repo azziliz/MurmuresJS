@@ -342,7 +342,7 @@ function onOrderResponse(response) {
     }
     else {
         let isNewLevel = (ge.activeLevel != undefined) && (gameEngine.activeLevel !== ge.activeLevel);
-        gameEngine.fromJsonMerge(ge);
+        gameEngine.synchronize(ge);
         if (isNewLevel) {
             initUI();
             renderLevel();

@@ -101,7 +101,7 @@ murmures.Level.prototype = {
      * This parameter is expected to contain updates for known tiles and complete objects for newly discovered tiles.
      * It might also contain mob updates and new mobs.
      */
-    merge : function (src) {
+    synchronize : function (src) {
     },
     
     /**

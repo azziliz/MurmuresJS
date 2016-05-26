@@ -35,6 +35,13 @@ murmures.GameEngine = function () {
 };
 
 murmures.GameEngine.prototype = {
+    
+    /*
+     * No build method here because initialization involves several Node-only functions.
+     * We don't want to expose these functions to the client because they don't exist there.
+     * Instead, we build the gameEngine master instance in server.js
+     */
+
     /**
      * Synchronization method called on client side only.
      * Creates a full GameEngine objects from a JSON sent by the server.
@@ -65,7 +72,7 @@ murmures.GameEngine.prototype = {
      * Synchronization method called on client side only.
      * This function receives a partial GameEngine as input and merges it into the client instance.
      */
-    fromJsonMerge: function (src) {
+    synchronize: function (src) {
         let isNewLevel = (src.activeLevel != undefined) && (gameEngine.activeLevel !== src.activeLevel);
         if (isNewLevel === true) {
             this.activeLevel = src.activeLevel;
