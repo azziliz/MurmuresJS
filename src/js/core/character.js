@@ -65,6 +65,19 @@ murmures.Character.prototype = {
         this.hitPoints = this.hitPointsMax | 0;
     },
 
+    initialize : function (src) {
+        this.guid = src.guid;
+        this.synchronize(src);
+    },
+    
+    synchronize : function (src) {
+        if (typeof src.position !== 'undefined') this.position = gameEngine.level.tiles[src.position.y][src.position.x]; // TODO position=null when mob becomes invisible?
+        if (typeof src.mobTemplate !== 'undefined') this.mobTemplate = src.mobTemplate;
+        if (typeof src.hitPointsMax !== 'undefined') this.hitPointsMax = src.hitPointsMax;
+        if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
+        if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
+    },
+    
     /**
      * Method called by the server once, to build the gameEngine instance during startup.
      * Afterwards, becomes a client-side-only synchronization method.

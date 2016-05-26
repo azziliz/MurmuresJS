@@ -65,7 +65,7 @@ murmures.GameEngine.prototype = {
         this.level = new murmures.Level();
         this.level.fromJson(src.level);
         this.hero = new murmures.Character();
-        this.hero.fromJson(src.hero);
+        this.hero.initialize(src.hero);
     },
     
     /**
@@ -83,7 +83,7 @@ murmures.GameEngine.prototype = {
 
         }
         this.hero = new murmures.Character();
-        this.hero.fromJson(src.hero);
+        this.hero.initialize(src.hero);
     },
     
     getMinimal : function (allLevel) {

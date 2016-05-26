@@ -114,7 +114,7 @@ murmures.Level.prototype = {
                 }, this);
                 if (!found) {
                     let newMob = new murmures.Character();
-                    newMob.synchronize(remoteMob);
+                    newMob.initialize(remoteMob);
                     this.mobs.push(newMob);
                 }
             }, this);
@@ -122,8 +122,7 @@ murmures.Level.prototype = {
     },
     
     /**
-     * Method called by the server once, to build the gameEngine instance during startup.
-     * Afterwards, becomes a client-side-only synchronization method.
+     * Client-side-only synchronization method.
      * Creates a full Level object from a JSON.
      *
      * @param {Object} src - A parsed version of the stringified remote level.
@@ -146,7 +145,7 @@ murmures.Level.prototype = {
         if (typeof src.mobs !== "undefined") {
             src.mobs.forEach(function (mob) {
                 let charmob = new murmures.Character();
-                charmob.fromJson(mob);
+                charmob.initialize(mob);
                 this.mobs.push(charmob);
             }, this);
         }
@@ -162,7 +161,7 @@ murmures.Level.prototype = {
         if (typeof src.mobs !== "undefined") {
             src.mobs.forEach(function (mob) {
                 let charmob = new murmures.Character();
-                charmob.fromJson(mob);
+                charmob.initialize(mob);
                 //this.mobs.push(charmob);
                 for (let itMob=0; itMob < this.mobs.length; itMob++) {
                     if (this.mobs[itMob].guid == charmob.guid) {
