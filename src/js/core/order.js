@@ -30,25 +30,29 @@ murmures.Order = function () {
 };
 
 murmures.Order.prototype = {
-    fromJson : function (src) {
-        /// <param name="src" type="Order"/>
-        this.command = src.command;
-        this.source = src.source;
-        this.target = new murmures.Tile();
-        this.target.fromJson(src.target);
-    }, 
-    
+    /* 
+     * This class does NOT have a fromJson method because the server doesn't send orders to the client.
+     * Hence no need to rebuild the order object on client side.
+     */
+
+    /**
+     * Synchronization method called on server side only.
+     * Creates a full Order object from a JSON.
+     * This function is labelled "Safe" because it doesn't try to rebuild objects directly from the source.
+     * Instead, it reads the client data and builds an Order object refering only to other server objects.
+     *
+     * @param {Object} src - A parsed version of the stringified remote order.
+     */
     fromJsonSafe : function (src) {
-        /// <param name="src" type="Order"/>
         this.command = src.command;
-        if (gameEngine.hero.guid === src.source.guid) {
+        if (parseFloat(gameEngine.hero.guid) === parseFloat(src.source.guid)) {
             this.source = gameEngine.hero;
         }
         else {
             murmures.serverLog("Tech Error - Guid does not match - " + src.source.guid + " - " + gameEngine.hero.guid);
             return { valid: false, reason: 'Technical error - Guid does not match - Please refresh the page' };
         }
-        this.target = gameEngine.level.tiles[src.target.y][src.target.x];
+        this.target = gameEngine.level.tiles[src.target.y|0][src.target.x|0];
         return { valid: true };
     },
     

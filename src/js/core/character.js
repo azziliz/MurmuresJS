@@ -39,8 +39,14 @@ murmures.Character = function () {
 };
 
 murmures.Character.prototype = {
+    /**
+     * Method called by the server once, to build the gameEngine instance during startup.
+     * Afterwards, becomes a client-side-only synchronization method.
+     * Creates a full Character object from a JSON.
+     *
+     * @param {Object} src - A parsed version of the stringified remote character.
+     */
     fromJson : function (src) {
-        /// <param name="src" type="Character"/>
         this.guid = src.guid;
         this.position = src.position;
         this.hitPoints = src.hitPoints;

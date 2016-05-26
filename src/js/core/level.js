@@ -29,9 +29,14 @@ murmures.Level = function () {
 };
 
 murmures.Level.prototype = {
+    /**
+     * Method called by the server once, to build the gameEngine instance during startup.
+     * Afterwards, becomes a client-side-only synchronization method.
+     * Creates a full Level object from a JSON.
+     *
+     * @param {Object} src - A parsed version of the stringified remote level.
+     */
     fromJson : function (src) {
-        /// <param name="src" type="Level"/>
-
         this.id = src.id;
         this.layout = src.layout;
         this.width = src.width;
@@ -44,7 +49,7 @@ murmures.Level.prototype = {
                 this.tiles[y][x].fromJson(src.tiles[y][x], x, y);
             }
         }
-
+        
         this.mobs = [];
         if (typeof src.mobs !== "undefined") {
             // mobs array is only defined after the first call to instantiateMobs
@@ -55,55 +60,55 @@ murmures.Level.prototype = {
             }, this);
         }
     },
-
-    mergeFromJson : function(src){
-      for(let i=0;i<src.tiles.length;i++){
-        this.tiles[src.tiles[i].y][src.tiles[i].x].state = src.tiles[i].state;
-        if (src.tiles[i].needsClientUpdate == true){
-         this.tiles[src.tiles[i].y][src.tiles[i].x].propId = src.tiles[i].propId;
-          this.tiles[src.tiles[i].y][src.tiles[i].x].needsClientUpdate = true;
+    
+    mergeFromJson : function (src) {
+        for (let i=0; i < src.tiles.length; i++) {
+            this.tiles[src.tiles[i].y][src.tiles[i].x].state = src.tiles[i].state;
+            if (src.tiles[i].needsClientUpdate) {
+                this.tiles[src.tiles[i].y][src.tiles[i].x].propId = src.tiles[i].propId;
+                this.tiles[src.tiles[i].y][src.tiles[i].x].needsClientUpdate = true;
+            }
         }
-      }
-      //this.mobs = [];
-      if (typeof src.mobs !== "undefined") {
-          // mobs array is only defined after the first call to instantiateMobs
-          src.mobs.forEach(function (mob) {
-              let charmob = new murmures.Character();
-              charmob.fromJson(mob);
-              //this.mobs.push(charmob);
-              for (let itMob=0;itMob<this.mobs.length;itMob++){
-                if (this.mobs[itMob].guid == charmob.guid){
-                  this.mobs[itMob] = charmob;
+        //this.mobs = [];
+        if (typeof src.mobs !== "undefined") {
+            // mobs array is only defined after the first call to instantiateMobs
+            src.mobs.forEach(function (mob) {
+                let charmob = new murmures.Character();
+                charmob.fromJson(mob);
+                //this.mobs.push(charmob);
+                for (let itMob=0; itMob < this.mobs.length; itMob++) {
+                    if (this.mobs[itMob].guid == charmob.guid) {
+                        this.mobs[itMob] = charmob;
+                    }
                 }
-              }
-          }, this);
-      }
+            }, this);
+        }
       //this.mobs = src.mobs;
     },
-
-    getMinimal : function(){
-      let tilesArray = [];
-      for (let y = 0; y < this.height; y++) {
-          for (let x = 0; x < this.width; x++) {
-              if(this.tiles[y][x].toUpdate === true){
-                  tilesArray.push(this.tiles[y][x]);
+    
+    getMinimal : function () {
+        let tilesArray = [];
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                if (this.tiles[y][x].toUpdate === true) {
+                    tilesArray.push(this.tiles[y][x]);
                 //  murmures.serverLog(JSON.stringify(this.tiles[y][x]));
 
-              }
-          }
-      }
-
-      let mobsTosend = [];
-      for (let itMob=0;itMob<this.mobs.length;itMob++){
-        if(this.mobs[itMob].toUpdate === true){
-          mobsTosend.push(this.mobs[itMob]);
+                }
+            }
         }
-      }
-
-
-      return {tiles :tilesArray, mobs: mobsTosend};
+        
+        let mobsTosend = [];
+        for (let itMob=0; itMob < this.mobs.length; itMob++) {
+            if (this.mobs[itMob].toUpdate === true) {
+                mobsTosend.push(this.mobs[itMob]);
+            }
+        }
+        
+        
+        return { tiles : tilesArray, mobs: mobsTosend };
     },
-
+    
     instantiateMobs : function () {
         this.mobs = [];
         for (let y = 0; y < this.height; y++) {
@@ -121,7 +126,7 @@ murmures.Level.prototype = {
             }
         }
     },
-
+    
     moveHeroToStartingPoint: function () {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
@@ -134,7 +139,7 @@ murmures.Level.prototype = {
             }
         }
     },
-
+    
     clean : function () {
         delete this.mobs;
         for (let y = 0; y < this.height; y++) {

@@ -37,11 +37,11 @@ murmures.GameEngine = function () {
 murmures.GameEngine.prototype = {
     /**
      * Synchronization method called on client side only.
-     * Creates a full GameEngine objects from a JSON string sent by the server.
+     * Creates a full GameEngine objects from a JSON sent by the server.
      * Sub-classes are also synchronized recursively.
      * This function expects a full GameEngine object as input and is intended to overwrite the client instance completely.
      *
-     * @param {string} src - A string received from the server, containing a stringified version of the remote gameEngine instance.
+     * @param {Object} src - A parsed version of the stringified remote gameEngine instance.
      */
     fromJson : function (src) {
         this.tileSize = src.tileSize;
@@ -60,39 +60,40 @@ murmures.GameEngine.prototype = {
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
     },
-
+    
     /**
+     * Synchronization method called on client side only.
      * This function receives a partial GameEngine as input and merges it into the client instance.
      */
     fromJsonMerge: function (src) {
-        let isNewLevel = (src.activeLevel != undefined ) && (gameEngine.activeLevel !== src.activeLevel);
-        if ( isNewLevel === true){
-          this.activeLevel = src.activeLevel;
-          this.level = new murmures.Level();
-          this.level.fromJson(src.level);
-        }else{
-          this.level.mergeFromJson(src.level);
+        let isNewLevel = (src.activeLevel != undefined) && (gameEngine.activeLevel !== src.activeLevel);
+        if (isNewLevel === true) {
+            this.activeLevel = src.activeLevel;
+            this.level = new murmures.Level();
+            this.level.fromJson(src.level);
+        } else {
+            this.level.mergeFromJson(src.level);
 
         }
         this.hero = new murmures.Character();
         this.hero.fromJson(src.hero);
     },
-
+    
     getMinimal : function (allLevel) {
         //return this;
-
+        
         let resLevel = this.level;
-        if (allLevel == false){
-          resLevel = this.level.getMinimal();
+        if (allLevel == false) {
+            resLevel = this.level.getMinimal();
         }
-
+        
         return {
             activeLevel: this.activeLevel,
             level: resLevel,
             hero: this.hero
         };
     },
-
+    
     /**
      * This function is called on client and server side.
      * If the order is deemed valid on client side, it is then sent to the server by an XHR.
@@ -118,22 +119,22 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && (this.tileHasMob(order.target).code === true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     },
-
+    
     // TODO move this function to the tile class
     tileHasMob : function (tile) {
         let ret = false;
         let retMob = null;
-        if (this.level.mobs!=undefined){
-          this.level.mobs.forEach(function (mob) {
-              if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
-                  retMob = mob;
-                  ret = true;
-              }
-          });
+        if (this.level.mobs != undefined) {
+            this.level.mobs.forEach(function (mob) {
+                if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
+                    retMob = mob;
+                    ret = true;
+                }
+            });
         }
         return { code : ret, mob : retMob };
     },
-
+    
     applyOrder : function (order) {
         // This function is only called on server side
         if (order.command === 'move') {
@@ -160,7 +161,7 @@ murmures.GameEngine.prototype = {
         this.applyAI();
         murmures.serverLog('AI done');
     },
-
+    
     applyAI : function () {
         let hero = this.hero;
         let level = this.level;
@@ -174,7 +175,7 @@ murmures.GameEngine.prototype = {
                         fireOnHero = true;
                         if (hero.hitPoints < 0) hero.hitPoints = 0;
                     }
-
+                    
                 }
                 if (!fireOnHero) {
                 // TODO : move to hero
