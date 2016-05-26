@@ -230,6 +230,16 @@ murmures.Level.prototype = {
         }
     },
     
+    getStartingPoint: function () {
+        //temporary
+        // TODO : find starting point from stairs
+        if (this.id === 'level1') return this.tiles[9][1];
+        else if (this.id === 'level2') return this.tiles[15][3];
+        else if (this.id === 'level4') return this.tiles[20][5];
+        else if (this.id === 'level5') return this.tiles[15][2];
+        else throw "unknown level";
+    },
+    
     clean : function () {
         delete this.mobs;
         for (let y = 0; y < this.height; y++) {

@@ -112,9 +112,7 @@ murmures.serverLog('Initializing game');
 
     gameEngine.hero = new murmures.Character();
     let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-    gameEngine.hero.fromJson(JSON.parse(hero1Txt));
-    gameEngine.hero.instantiate(gameEngine.bodies[gameEngine.hero.mobTemplate]);
-    gameEngine.level.moveHeroToStartingPoint();
+    gameEngine.hero.build(gameEngine.level.getStartingPoint(), JSON.parse(hero1Txt).mobTemplate);
 
     gameEngine.hero.setVision();
 })();
