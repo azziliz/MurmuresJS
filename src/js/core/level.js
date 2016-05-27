@@ -103,6 +103,15 @@ murmures.Level.prototype = {
      * It might also contain mob updates and new mobs.
      */
     synchronize : function (src) {
+        if (typeof src.tiles !== "undefined") {
+            src.tiles.forEach(function (remoteTileRow) {
+                remoteTileRow.forEach(function (remoteTile) {
+                    let localTile = this.tiles[remoteTile.y][remoteTile.x];
+                    if (localTile.guid === remoteTile.guid) localTile.synchronize(remoteTile);
+                    else localTile.initialize(remoteTile);
+                }, this);
+            }, this);
+        }
         if (typeof src.mobs !== "undefined") {
             src.mobs.forEach(function (remoteMob) {
                 let found = false;
@@ -117,36 +126,6 @@ murmures.Level.prototype = {
                     newMob.initialize(remoteMob);
                     this.mobs.push(newMob);
                 }
-            }, this);
-        }
-    },
-    
-    /**
-     * Client-side-only synchronization method.
-     * Creates a full Level object from a JSON.
-     *
-     * @param {Object} src - A parsed version of the stringified remote level.
-     */
-    fromJson : function (src) {
-        this.id = src.id;
-        this.layout = src.layout;
-        this.width = src.width | 0;
-        this.height = src.height | 0;
-        this.tiles = [];
-        for (let y = 0; y < this.height; y++) {
-            this.tiles[y] = [];
-            for (let x = 0; x < this.width; x++) {
-                this.tiles[y][x] = new murmures.Tile(x, y);
-                this.tiles[y][x].initialize(src.tiles[y][x]);
-            }
-        }
-        
-        this.mobs = [];
-        if (typeof src.mobs !== "undefined") {
-            src.mobs.forEach(function (mob) {
-                let charmob = new murmures.Character();
-                charmob.initialize(mob);
-                this.mobs.push(charmob);
             }, this);
         }
     },

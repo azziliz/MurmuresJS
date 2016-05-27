@@ -50,20 +50,13 @@ murmures.GameEngine.prototype = {
      *
      * @param {Object} src - A parsed version of the stringified remote gameEngine instance.
      */
-    fromJson : function (src) {
+    fromJson : function (src) { // TODO: rename initialize
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
         this.locale = src.locale;
-        //this.levels = [];
-        //for (let i = 0; i < src.levels.length; i++) {
-        //    this.levels[i] = new murmures.Level();
-        //    this.levels[i].fromJson(src.levels[i]);
-        //}
-        //this.levelIds = src.levelIds;
         this.activeLevel = src.activeLevel;
-        //this.level = this.levels[this.activeLevel];
         this.level = new murmures.Level();
-        this.level.fromJson(src.level);
+        this.level.initialize(src.level);
         this.hero = new murmures.Character();
         this.hero.initialize(src.hero);
     },
@@ -77,7 +70,7 @@ murmures.GameEngine.prototype = {
         if (isNewLevel === true) {
             this.activeLevel = src.activeLevel;
             this.level = new murmures.Level();
-            this.level.fromJson(src.level);
+            this.level.initialize(src.level);
         } else {
             this.level.mergeFromJson(src.level);
 
