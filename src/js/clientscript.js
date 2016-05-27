@@ -148,19 +148,21 @@ function drawOneSquare(context, x, y, color, filled) {
 
 // #region UI/Characters
 function initUI() {
-    document.getElementById('rightCharacters').innerHTML = '';
-    document.getElementById('leftCharacters').innerHTML =
+    let additionalLinks = 
     '<a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br>' +
     '<a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br>' +
     '<a href="/src/pages/test.html" style="float:left; clear: left;">test</a><br>' +
-    '<code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:136px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>';
+    '<code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:136px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>';    
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
+    document.getElementById('rightCharacters').innerHTML = '';
     let templateStr = /template/g;
     for (let i = 0; i < gameEngine.level.mobs.length; i++) {
         document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + i));
     }
-    document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
-
+    if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
+        document.getElementById('leftCharacters').innerHTML = additionalLinks;
+        document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
+    }
 }
 
 function updateUI() {
