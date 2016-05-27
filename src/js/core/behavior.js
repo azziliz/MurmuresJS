@@ -11,7 +11,8 @@
 /**
  * This class is a collection of static methods that may be called by the [game engine]{@link murmures.GameEngine}
  * when the [tile]{@link murmures.Tile} targeted by an [order]{@link murmures.Order} contains a callback.
- * Because behaviors are called from the [GameEngine.applyOrder]{@link murmures.GameEngine.applyOrder} function, they only execute on the server.
+ * Because behaviors are called from the [GameEngine.applyOrder]{@link murmures.GameEngine.applyOrder} function, 
+ * they only execute on the server.
  *
  * Callbacks are defined -on props only- inside bodies.json.
  * They are copied into each tile that contains the prop during a [level]{@link murmures.Level} load.
@@ -56,7 +57,6 @@ murmures.Behavior = {
             gameEngine.activeLevel++;
             gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
             gameEngine.level.moveHeroToStartingPoint();
-
         }
     },
 

@@ -108,8 +108,7 @@ murmures.Level.prototype = {
             src.tiles.forEach(function (remoteTileRow) {
                 remoteTileRow.forEach(function (remoteTile) {
                     let localTile = this.tiles[remoteTile.y][remoteTile.x];
-                    if (localTile.guid === '') localTile.initialize(remoteTile);
-                    else localTile.synchronize(remoteTile);
+                    localTile.synchronize(remoteTile);
                 }, this);
             }, this);
         }
@@ -131,29 +130,41 @@ murmures.Level.prototype = {
         }
     },
     
-    getMinimal : function () {
-        let tilesArray = [];
-        for (let y = 0; y < this.height; y++) { // TODO: push only non-empty rows
-            let tmp = [];
+    compare : function (beforeState) {
+        let ret = {};
+        if (this.guid !== beforeState.guid) throw 'Level changed guid. This souldn\'t be happening';
+        if (this.id !== beforeState.id) throw 'Level changed id. This souldn\'t be happening';
+        if (this.layout !== beforeState.layout) throw 'Level changed layout. This souldn\'t be happening';
+        if (this.width !== beforeState.width) throw 'Level changed width. This souldn\'t be happening';
+        if (this.height !== beforeState.height) throw 'Level changed height. This souldn\'t be happening';
+        
+        let tileRows_ = [];
+        for (let y = 0; y < this.height; y++) { 
+            let tiles_ = [];
             for (let x = 0; x < this.width; x++) {
-                if (this.tiles[y][x].toUpdate === true) {
-                    tmp.push(this.tiles[y][x]);
-                //  murmures.serverLog(JSON.stringify(this.tiles[y][x]));
+                let tile_ = this.tiles[y][x].compare(beforeState.tiles[y][x]);
+                if (typeof tile_ !== "undefined") tiles_.push(tile_);
+            }
+            if (tiles_.length > 0) tileRows_.push(tiles_);
+        }
+        if (tileRows_.length > 0) ret.tiles = tileRows_;
 
+        let mobs_ = [];
+        this.mobs.forEach(function (newMob) {
+            beforeState.mobs.forEach(function (oldMob) {
+                if (newMob.guid === oldMob.guid) {
+                    let mob_ = newMob.compare(oldMob);
+                    if (typeof mob_ !== "undefined") mobs_.push(mob_);
                 }
-            }
-            if (tmp.length > 0) tilesArray.push(tmp);
+            }, this);
+        }, this);
+        if (mobs_.length > 0) ret.mobs = mobs_;
+        for (var prop in ret) {
+            // only returns ret if not empty
+            ret.guid = this.guid;
+            return ret;
         }
-        
-        let mobsTosend = [];
-        for (let itMob=0; itMob < this.mobs.length; itMob++) {
-            if (this.mobs[itMob].toUpdate === true) {
-                mobsTosend.push(this.mobs[itMob]);
-            }
-        }
-        
-        
-        return { tiles : tilesArray, mobs: mobsTosend };
+        // otherwise, no return = undefined
     },
     
     moveHeroToStartingPoint: function () {

@@ -54,7 +54,7 @@ murmures.GameEngine.prototype = {
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
         this.locale = src.locale;
-        this.activeLevel = src.activeLevel;
+        this.activeLevel = src.activeLevel; // TODO: replace activelevel with level.guid
         this.level = new murmures.Level();
         this.level.initialize(src.level);
         this.hero = new murmures.Character();
@@ -83,7 +83,7 @@ murmures.GameEngine.prototype = {
         
         let resLevel = this.level;
         if (allLevel == false) {
-            resLevel = this.level.getMinimal();
+            resLevel = this.level.compare(beforeState.level);
         }
         
         let ret = {

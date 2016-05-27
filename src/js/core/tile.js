@@ -21,8 +21,7 @@
  * @class
  */
 murmures.Tile = function (x, y) {
-    /** @type {string} */
-    this.guid = '';
+    /* No guid on Tile because tiles are always part of a level and we can identify a tile inside a level with (x, y)*/
     /** @type {number} */
     this.x = x | 0;
     /** @type {number} */
@@ -56,7 +55,6 @@ murmures.Tile = function (x, y) {
 murmures.Tile.prototype = {
     
     build : function (src) {
-        this.guid = Math.random().toString();
         // TODO: allow undefined layers
         this.groundId = (typeof src.groundId === 'undefined') ? '' : src.groundId;
         this.groundDeco = (typeof src.groundDeco === 'undefined') ? '' : src.groundDeco;
@@ -69,7 +67,6 @@ murmures.Tile.prototype = {
     },
     
     initialize : function (src) {
-        this.guid = src.guid;
         this.synchronize(src);
     },
     
@@ -84,6 +81,27 @@ murmures.Tile.prototype = {
         if (typeof src.charId !== 'undefined') this.charId = src.charId;
         if (typeof src.effectId !== 'undefined') this.effectId = src.effectId;
         if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
+    },
+    
+    compare : function (beforeState) {
+        let ret = {};
+        if (this.state !== beforeState.state) ret.state = this.state;
+        if (this.groundId !== beforeState.groundId) ret.groundId = this.groundId;
+        if (this.groundDeco !== beforeState.groundDeco) ret.groundDeco = this.groundDeco;
+        if (this.propId !== beforeState.propId) ret.propId = this.propId;
+        if (this.propDeco !== beforeState.propDeco) ret.propDeco = this.propDeco;
+        if (this.itemId !== beforeState.itemId) ret.itemId = this.itemId;
+        if (this.charId !== beforeState.charId) ret.charId = this.charId;
+        if (this.effectId !== beforeState.effectId) ret.effectId = this.effectId;
+        if (this.propId !== beforeState.propId && 
+        JSON.stringify(this.behavior) !== JSON.stringify(beforeState.behavior)) ret.behavior = this.behavior;
+        for (var prop in ret) {
+            // only returns ret if not empty
+            ret.x = this.x;
+            ret.y = this.y;
+            return ret;
+        }
+        // otherwise, no return = undefined
     },
     
     coordinates : function () {

@@ -79,16 +79,17 @@ murmures.Character.prototype = {
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
     },
 
-    compare : function (src) {
+    compare : function (beforeState) {
         let ret = {};
-        if (this.guid !== src.guid) ret.guid = this.guid;
-        if (this.position.guid !== src.position.guid) ret.position = this.position.coordinates();
-        if (this.mobTemplate !== src.mobTemplate) ret.mobTemplate = this.mobTemplate;
-        if (this.hitPointsMax !== src.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
-        if (this.hitPoints !== src.hitPoints) ret.hitPoints = this.hitPoints;
-        if (this.onVision !== src.onVision) ret.onVision = this.onVision;
+        if (this.guid !== beforeState.guid) throw 'Character changed guid. This souldn\'t be happening';
+        if (this.position.x !== beforeState.position.x || this.position.y !== beforeState.position.y) ret.position = this.position.coordinates();
+        if (this.mobTemplate !== beforeState.mobTemplate) ret.mobTemplate = this.mobTemplate;
+        if (this.hitPointsMax !== beforeState.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
+        if (this.hitPoints !== beforeState.hitPoints) ret.hitPoints = this.hitPoints;
+        if (this.onVision !== beforeState.onVision) ret.onVision = this.onVision;
         for (var prop in ret) {
             // only returns ret if not empty
+            ret.guid = this.guid;
             return ret;
         }
         // otherwise, no return = undefined
