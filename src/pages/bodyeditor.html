@@ -54,7 +54,7 @@
         }
 
         function loadEngineBodyEditor(engine) {
-            gameEngine.fromJson(JSON.parse(engine));
+            gameEngine.initialize(JSON.parse(engine));
             tileset.addEventListener('mousedown', function (event) {
                 let x = Math.floor(event.offsetX / gameEngine.tileSize / 0.75);
                 let y = Math.floor(event.offsetY / gameEngine.tileSize / 0.75);

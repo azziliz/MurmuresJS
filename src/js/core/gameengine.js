@@ -50,7 +50,7 @@ murmures.GameEngine.prototype = {
      *
      * @param {Object} src - A parsed version of the stringified remote gameEngine instance.
      */
-    fromJson : function (src) { // TODO: rename initialize
+    initialize : function (src) {
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
         this.locale = src.locale;
@@ -72,7 +72,7 @@ murmures.GameEngine.prototype = {
             this.level = new murmures.Level();
             this.level.initialize(src.level);
         } else {
-            this.level.mergeFromJson(src.level);
+            this.level.synchronize(src.level);
 
         }
         this.hero = new murmures.Character();

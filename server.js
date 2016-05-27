@@ -208,7 +208,7 @@ http.createServer(function (request, response) {
                 else {
                     murmures.serverLog('Request received');
                     let clientOrder = new murmures.Order();
-                    let parsing = clientOrder.fromJsonSafe(postData);
+                    let parsing = clientOrder.build(postData);
                     if (parsing.valid) {
                         let check = gameEngine.checkOrder(clientOrder);
                         if (check.valid) {

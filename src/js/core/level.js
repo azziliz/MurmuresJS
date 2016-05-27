@@ -107,8 +107,8 @@ murmures.Level.prototype = {
             src.tiles.forEach(function (remoteTileRow) {
                 remoteTileRow.forEach(function (remoteTile) {
                     let localTile = this.tiles[remoteTile.y][remoteTile.x];
-                    if (localTile.guid === remoteTile.guid) localTile.synchronize(remoteTile);
-                    else localTile.initialize(remoteTile);
+                    if (localTile.guid === '') localTile.initialize(remoteTile);
+                    else localTile.synchronize(remoteTile);
                 }, this);
             }, this);
         }
@@ -118,7 +118,7 @@ murmures.Level.prototype = {
                 this.mobs.forEach(function (localMob) {
                     if (localMob.guid === remoteMob.guid) {
                         found = true;
-                        this.localMob.synchronize(remoteMob);
+                        localMob.synchronize(remoteMob);
                     }
                 }, this);
                 if (!found) {
@@ -130,38 +130,18 @@ murmures.Level.prototype = {
         }
     },
     
-    mergeFromJson : function (src) {
-        for (let i=0; i < src.tiles.length; i++) {
-            this.tiles[src.tiles[i].y][src.tiles[i].x].state = src.tiles[i].state;
-            this.tiles[src.tiles[i].y][src.tiles[i].x].propId = src.tiles[i].propId;
-            this.tiles[src.tiles[i].y][src.tiles[i].x].needsClientUpdate = true;
-        }
-        //this.mobs = [];
-        if (typeof src.mobs !== "undefined") {
-            src.mobs.forEach(function (mob) {
-                let charmob = new murmures.Character();
-                charmob.initialize(mob);
-                //this.mobs.push(charmob);
-                for (let itMob=0; itMob < this.mobs.length; itMob++) {
-                    if (this.mobs[itMob].guid == charmob.guid) {
-                        this.mobs[itMob] = charmob;
-                    }
-                }
-            }, this);
-        }
-      //this.mobs = src.mobs;
-    },
-    
     getMinimal : function () {
         let tilesArray = [];
-        for (let y = 0; y < this.height; y++) {
+        for (let y = 0; y < this.height; y++) { // TODO: push only non-empty rows
+            let tmp = [];
             for (let x = 0; x < this.width; x++) {
                 if (this.tiles[y][x].toUpdate === true) {
-                    tilesArray.push(this.tiles[y][x]);
+                    tmp.push(this.tiles[y][x]);
                 //  murmures.serverLog(JSON.stringify(this.tiles[y][x]));
 
                 }
             }
+            if (tmp.length > 0) tilesArray.push(tmp);
         }
         
         let mobsTosend = [];

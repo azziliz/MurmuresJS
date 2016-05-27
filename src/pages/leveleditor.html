@@ -64,13 +64,13 @@
         }
 
         function firstEngineLoad(engine) {
-            gameEngine.fromJson(JSON.parse(engine));
+            gameEngine.initialize(JSON.parse(engine));
             initUILevelEditor();
             loadEngineLevelEditor(JSON.stringify(gameEngine));
         }
 
         function loadEngineLevelEditor(engine) {
-            gameEngine.fromJson(JSON.parse(engine));
+            gameEngine.initialize(JSON.parse(engine));
             //gameEngine.level.instantiateMobs();
             //gameEngine.level.moveHeroToStartingPoint();
             highlightLevel();
@@ -193,7 +193,7 @@
                     }
                 }
                 gameEngine.level = newLvl;
-                gameEngine.fromJson(JSON.parse(JSON.stringify(gameEngine)));
+                gameEngine.initialize(JSON.parse(JSON.stringify(gameEngine)));
                 gameEngine.hero.position = gameEngine.level.tiles[0][0];
                 renderLevel();
                 loadEngineLevelEditor(JSON.stringify(gameEngine));

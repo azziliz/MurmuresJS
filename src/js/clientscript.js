@@ -62,7 +62,7 @@ function tilesetLoaded() {
 }
 
 function loadEngine(engine) {
-    gameEngine.fromJson(JSON.parse(engine));
+    gameEngine.initialize(JSON.parse(engine));
     initUI();
     renderLevel();
 }

@@ -31,19 +31,19 @@ murmures.Order = function () {
 
 murmures.Order.prototype = {
     /* 
-     * This class does NOT have a fromJson method because the server doesn't send orders to the client.
+     * This class doesn't have initialize and synchronize methods because the server doesn't send orders to the client.
      * Hence no need to rebuild the order object on client side.
      */
 
     /**
      * Synchronization method called on server side only.
      * Creates a full Order object from a JSON.
-     * This function is labelled "Safe" because it doesn't try to rebuild objects directly from the source.
+     * This function is considered "safe" because it doesn't try to rebuild objects directly from the source.
      * Instead, it reads the client data and builds an Order object refering only to other server objects.
      *
      * @param {Object} src - A parsed version of the stringified remote order.
      */
-    fromJsonSafe : function (src) {
+    build : function (src) {
         this.command = src.command;
         if (parseFloat(gameEngine.hero.guid) === parseFloat(src.source.guid)) {
             this.source = gameEngine.hero;
