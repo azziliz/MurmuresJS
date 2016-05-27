@@ -35,9 +35,9 @@ murmures.Character = function () {
     /** @type {string} */
     this.mobTemplate = '';
     /** @type {number} */
-    this.hitPoints = 0 | 0;
-    /** @type {number} */
     this.hitPointsMax = 0 | 0;
+    /** @type {number} */
+    this.hitPoints = 0 | 0;
     /** @type {boolean} */
     this.onVision = false;
     /** @type {boolean} */
@@ -71,11 +71,27 @@ murmures.Character.prototype = {
     },
     
     synchronize : function (src) {
+        if (typeof src === 'undefined') return;
         if (typeof src.position !== 'undefined') this.move(src.position.x, src.position.y); // TODO position=null when mob becomes invisible?
         if (typeof src.mobTemplate !== 'undefined') this.mobTemplate = src.mobTemplate;
         if (typeof src.hitPointsMax !== 'undefined') this.hitPointsMax = src.hitPointsMax;
         if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
+    },
+
+    compare : function (src) {
+        let ret = {};
+        if (this.guid !== src.guid) ret.guid = this.guid;
+        if (this.position.guid !== src.position.guid) ret.position = this.position.coordinates();
+        if (this.mobTemplate !== src.mobTemplate) ret.mobTemplate = this.mobTemplate;
+        if (this.hitPointsMax !== src.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
+        if (this.hitPoints !== src.hitPoints) ret.hitPoints = this.hitPoints;
+        if (this.onVision !== src.onVision) ret.onVision = this.onVision;
+        for (var prop in ret) {
+            // only returns ret if not empty
+            return ret;
+        }
+        // otherwise, no return = undefined
     },
     
     move : function (x, y) {

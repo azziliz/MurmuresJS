@@ -66,6 +66,7 @@ murmures.GameEngine.prototype = {
      * This function receives a partial GameEngine as input and merges it into the client instance.
      */
     synchronize: function (src) {
+        if (typeof src === 'undefined') return;
         let isNewLevel = (src.activeLevel != undefined) && (gameEngine.activeLevel !== src.activeLevel);
         if (isNewLevel === true) {
             this.activeLevel = src.activeLevel;
@@ -73,13 +74,11 @@ murmures.GameEngine.prototype = {
             this.level.initialize(src.level);
         } else {
             this.level.synchronize(src.level);
-
         }
-        this.hero = new murmures.Character();
-        this.hero.initialize(src.hero);
+        this.hero.synchronize(src.hero);
     },
     
-    getMinimal : function (allLevel) {
+    getMinimal : function (allLevel, beforeState) {
         //return this;
         
         let resLevel = this.level;
@@ -87,11 +86,13 @@ murmures.GameEngine.prototype = {
             resLevel = this.level.getMinimal();
         }
         
-        return {
+        let ret = {
             activeLevel: this.activeLevel,
-            level: resLevel,
-            hero: this.hero
+            level: resLevel
         };
+        let hero_ = this.hero.compare(beforeState.hero);
+        if (typeof hero_ !== "undefined") ret.hero = hero_;
+        return ret;
     },
     
     /**

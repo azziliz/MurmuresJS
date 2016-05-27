@@ -103,6 +103,7 @@ murmures.Level.prototype = {
      * It might also contain mob updates and new mobs.
      */
     synchronize : function (src) {
+        if (typeof src === 'undefined') return;
         if (typeof src.tiles !== "undefined") {
             src.tiles.forEach(function (remoteTileRow) {
                 remoteTileRow.forEach(function (remoteTile) {
