@@ -23,12 +23,12 @@
  */
 murmures.GameEngine = function () {
         /// <field name="tileSize" type="Number"/>
-        /// <field name="gameTurn" type="Number"/>
+        /// <field name="gameTurn" type="Number"/>  // server only
         /// <field name="bodies" type="PhysicalBody"/>
         /// <field name="locale" type="Object"/>
-        /// <field name="levels" type="Array"/>
-        /// <field name="levelIds" type="Array"/>
-        /// <field name="activeLevel" type="Number"/>
+        /// <field name="levels" type="Array"/>  // server only
+        /// <field name="levelIds" type="Array"/>  // server only
+        /// <field name="activeLevel" type="Number"/>  // server only
         /// <field name="level" type="Level"/>
         /// <field name="hero" type="Character"/>
         this.gameTurn = 0;
@@ -54,7 +54,6 @@ murmures.GameEngine.prototype = {
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
         this.locale = src.locale;
-        this.activeLevel = src.activeLevel; // TODO: replace activelevel with level.guid
         this.level = new murmures.Level();
         this.level.initialize(src.level);
         this.hero = new murmures.Character();
@@ -67,9 +66,8 @@ murmures.GameEngine.prototype = {
      */
     synchronize: function (src) {
         if (typeof src === 'undefined') return;
-        let isNewLevel = (src.activeLevel != undefined) && (gameEngine.activeLevel !== src.activeLevel);
+        let isNewLevel = (typeof src.level !== 'undefined') && (typeof src.level.guid !== 'undefined') && (this.level.guid !== src.level.guid);
         if (isNewLevel === true) {
-            this.activeLevel = src.activeLevel;
             this.level = new murmures.Level();
             this.level.initialize(src.level);
         } else {
@@ -78,21 +76,17 @@ murmures.GameEngine.prototype = {
         this.hero.synchronize(src.hero);
     },
     
-    getMinimal : function (allLevel, beforeState) {
-        //return this;
-        
-        let resLevel = this.level;
-        if (allLevel == false) {
-            resLevel = this.level.compare(beforeState.level);
-        }
-        
-        let ret = {
-            activeLevel: this.activeLevel,
-            level: resLevel
-        };
+    compare : function (beforeState) {
+        let ret = {};
+        let level_ = this.level.guid === beforeState.level.guid ? this.level.compare(beforeState.level) : this.level; // TODO: optimize response when level changes. We could send a clean() state if the client was able to handle empty mob list.
+        if (typeof level_ !== "undefined") ret.level = level_;
         let hero_ = this.hero.compare(beforeState.hero);
         if (typeof hero_ !== "undefined") ret.hero = hero_;
-        return ret;
+        for (var prop in ret) {
+            // only returns ret if not empty
+            return ret;
+        }
+        // otherwise, no return = undefined
     },
     
     /**

@@ -341,7 +341,7 @@ function onOrderResponse(response) {
         screenLog('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
     }
     else {
-        let isNewLevel = (ge.activeLevel != undefined) && (gameEngine.activeLevel !== ge.activeLevel);
+        let isNewLevel = (typeof ge.level !== 'undefined') && (typeof ge.level.guid !== 'undefined') && (gameEngine.level.guid !== ge.level.guid);
         gameEngine.synchronize(ge);
         if (isNewLevel) {
             initUI();

@@ -212,21 +212,14 @@ http.createServer(function (request, response) {
                     if (parsing.valid) {
                         let check = gameEngine.checkOrder(clientOrder);
                         if (check.valid) {
-                            gameEngine.gameTurn += 1;
+                            gameEngine.gameTurn++;
                             murmures.serverLog('Order checked');
                             let beforeState = JSON.parse(JSON.stringify(gameEngine)); // TODO implement cloning methods
                             let activeLevel = gameEngine.activeLevel;
                             murmures.serverLog('State saved');
                             gameEngine.applyOrder(clientOrder);
                             murmures.serverLog('Order applied');
-                            let ge;
-                            
-                            if (activeLevel != gameEngine.activeLevel) {
-                                ge = gameEngine.getMinimal(true, beforeState);
-                            }
-                            else {
-                                ge = gameEngine.getMinimal(false, beforeState);
-                            }
+                            let ge = gameEngine.compare(beforeState);
                             let res = JSON.stringify(ge);
                             murmures.serverLog('Response stringified');
                             compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });

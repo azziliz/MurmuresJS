@@ -159,7 +159,6 @@ murmures.Level.prototype = {
         if (mobs_.length > 0) ret.mobs = mobs_;
         for (var prop in ret) {
             // only returns ret if not empty
-            ret.guid = this.guid;
             return ret;
         }
         // otherwise, no return = undefined
