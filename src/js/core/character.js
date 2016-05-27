@@ -71,29 +71,13 @@ murmures.Character.prototype = {
     },
     
     synchronize : function (src) {
-        if (typeof src.position !== 'undefined') this.position = gameEngine.level.tiles[src.position.y][src.position.x]; // TODO position=null when mob becomes invisible?
+        if (typeof src.position !== 'undefined') this.move(src.position.x, src.position.y); // TODO position=null when mob becomes invisible?
         if (typeof src.mobTemplate !== 'undefined') this.mobTemplate = src.mobTemplate;
         if (typeof src.hitPointsMax !== 'undefined') this.hitPointsMax = src.hitPointsMax;
         if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
     },
     
-    /**
-     * Method called by the server once, to build the gameEngine instance during startup.
-     * Afterwards, becomes a client-side-only synchronization method.
-     * Creates a full Character object from a JSON.
-     *
-     * @param {Object} src - A parsed version of the stringified remote character.
-     */
-    fromJson : function (src) {
-        this.guid = src.guid;
-        this.position = src.position;
-        this.mobTemplate = src.mobTemplate;
-        this.hitPoints = src.hitPoints;
-        this.hitPointsMax = src.hitPointsMax;
-        this.onVision = src.onVision;
-    },
-
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
     },

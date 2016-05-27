@@ -96,7 +96,7 @@ function drawOneTile(x, y, color) {
     let img = new Image();
     img.src = gameEngine.tileset;
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
-        if (gameEngine.level.tiles[y][x].needsClientUpdate) {
+        if (true) { // TODO: erase only tiles that come from the synchronized object
             document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
             document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
         }
@@ -297,7 +297,7 @@ function onKeyPress(char) {
         let moveOrder = new murmures.Order();
         moveOrder.command = "move";
         moveOrder.source = gameEngine.hero;
-        let target = new murmures.Tile();
+        let target = new murmures.Tile(gameEngine.hero.position.x, gameEngine.hero.position.y);
         if (char === '9' || char === '6' || char === '3') target.x = gameEngine.hero.position.x + 1;
         if (char === '7' || char === '4' || char === '1') target.x = gameEngine.hero.position.x - 1;
         if (char === '8' || char === '2') target.x = gameEngine.hero.position.x;

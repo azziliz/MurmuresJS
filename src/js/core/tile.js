@@ -20,15 +20,15 @@
  *
  * @class
  */
-murmures.Tile = function () {
+murmures.Tile = function (x, y) {
     /** @type {string} */
     this.guid = '';
     /** @type {number} */
-    this.x = 0 | 0;
+    this.x = x | 0;
     /** @type {number} */
-    this.y = 0 | 0;
+    this.y = y | 0;
     /** @type {number} */
-    this.state = 0 | 0;
+    this.state = murmures.C.TILE_NOT_DISCOVERED | 0;
     /** @type {string} */
     this.groundId = '';
     /** @type {string} */
@@ -55,11 +55,9 @@ murmures.Tile = function () {
 
 murmures.Tile.prototype = {
     
-    build : function (src, x, y) {
+    build : function (src) {
         this.guid = Math.random().toString();
-        this.x = x | 0;
-        this.y = y | 0;
-        this.state = murmures.C.TILE_NOT_DISCOVERED | 0;
+        // TODO: allow undefined layers
         this.groundId = (typeof src.groundId === 'undefined') ? '' : src.groundId;
         this.groundDeco = (typeof src.groundDeco === 'undefined') ? '' : src.groundDeco;
         this.propId = (typeof src.propId === 'undefined') ? '' : src.propId;
@@ -69,29 +67,22 @@ murmures.Tile.prototype = {
         this.effectId = (typeof src.effectId === 'undefined') ? '' : src.effectId;
         this.behavior = (typeof src.propId === 'undefined') ? {} : gameEngine.bodies[src.propId].behavior;
     },
-
-    /**
-     * Method called by the server once, to build the gameEngine instance during startup.
-     * Afterwards, becomes a client-side-only synchronization method.
-     * Creates a full Tile object from a JSON.
-     *
-     * @param {Object} src - A parsed version of the stringified remote tile.
-     */
-    fromJson : function (src, x, y) {
-        /// <param name="src" type="Tile"/>
-        this.x = (src.x === undefined) ? x : src.x;
-        this.y = (src.y === undefined) ? y : src.y;
-        this.state = (src.state === undefined) ? murmures.C.TILE_NOT_DISCOVERED : src.state;
-        this.groundId = (src.groundId === undefined) ? '' : src.groundId;
-        this.propId = (src.propId === undefined) ? '' : src.propId;
-        this.charId = (src.charId === undefined) ? '' : src.charId;
-        if (src.propId !== undefined && src.propId !== '') {
-            this.behavior = gameEngine.bodies[src.propId].behavior;
-        }
-        else {
-            this.behavior = {};
-        }
-        this.needsClientUpdate = (src.needsClientUpdate === undefined) ? false : src.needsClientUpdate;
+    
+    initialize : function (src) {
+        this.guid = src.guid;
+        this.synchronize(src);
+    },
+    
+    synchronize : function (src) {
+        if (typeof src.state !== 'undefined') this.state = src.state;
+        if (typeof src.groundId !== 'undefined') this.groundId = src.groundId;
+        if (typeof src.groundDeco !== 'undefined') this.groundDeco = src.groundDeco;
+        if (typeof src.propId !== 'undefined') this.propId = src.propId;
+        if (typeof src.propDeco !== 'undefined') this.propDeco = src.propDeco;
+        if (typeof src.itemId !== 'undefined') this.itemId = src.itemId;
+        if (typeof src.charId !== 'undefined') this.charId = src.charId;
+        if (typeof src.effectId !== 'undefined') this.effectId = src.effectId;
+        if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
     },
 
     clean: function () {

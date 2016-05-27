@@ -56,8 +56,8 @@ murmures.Level.prototype = {
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
             for (let x = 0; x < this.width; x++) {
-                this.tiles[y][x] = new murmures.Tile();
-                this.tiles[y][x].build(src.tiles[y][x], x, y);
+                this.tiles[y][x] = new murmures.Tile(x, y);
+                this.tiles[y][x].build(src.tiles[y][x]);
                 if (this.tiles[y][x].charId !== '') {
                     let mob = new murmures.Character();
                     mob.build(this.tiles[y][x], this.tiles[y][x].charId);
@@ -87,7 +87,7 @@ murmures.Level.prototype = {
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
             for (let x = 0; x < this.width; x++) {
-                this.tiles[y][x] = new murmures.Tile();
+                this.tiles[y][x] = new murmures.Tile(x, y);
             }
         }
         this.synchronize(src);
@@ -136,8 +136,8 @@ murmures.Level.prototype = {
         for (let y = 0; y < this.height; y++) {
             this.tiles[y] = [];
             for (let x = 0; x < this.width; x++) {
-                this.tiles[y][x] = new murmures.Tile();
-                this.tiles[y][x].fromJson(src.tiles[y][x], x, y);
+                this.tiles[y][x] = new murmures.Tile(x, y);
+                this.tiles[y][x].initialize(src.tiles[y][x]);
             }
         }
         

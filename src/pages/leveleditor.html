@@ -188,7 +188,7 @@
                 for (let y = 0; y < newLvl.height; y++) {
                     newLvl.tiles[y] = [];
                     for (let x = 0; x < newLvl.width; x++) {
-                        newLvl.tiles[y][x] = new murmures.Tile();
+                        newLvl.tiles[y][x] = new murmures.Tile(x, y);
                         newLvl.tiles[y][x][murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
                     }
                 }
