@@ -44,12 +44,6 @@ murmures.Tile = function (x, y) {
     this.effectId = '';
     /** @type {Object.<string, Object.<string, string>>} */
     this.behavior = {};
-   
-
-    /// <field name="needsClientUpdate" type="bool"/>
-    /// <field name="toUpdate" type="bool"/>
-    /// <field name="updatedTurn" type="number"/>
-    this.updatedTurn = 0;
 };
 
 murmures.Tile.prototype = {
@@ -113,7 +107,6 @@ murmures.Tile.prototype = {
         delete this.y;
         delete this.state;
         delete this.behavior;
-        delete this.needsClientUpdate;
         if (this.groundId === '') delete this.groundId;
         if (this.propId === '') delete this.propId;
         if (this.charId === '') delete this.charId;

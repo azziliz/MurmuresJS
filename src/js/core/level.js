@@ -136,8 +136,7 @@ murmures.Level.prototype = {
         if (this.id !== beforeState.id) throw 'Level changed id. This souldn\'t be happening';
         if (this.layout !== beforeState.layout) throw 'Level changed layout. This souldn\'t be happening';
         if (this.width !== beforeState.width) throw 'Level changed width. This souldn\'t be happening';
-        if (this.height !== beforeState.height) throw 'Level changed height. This souldn\'t be happening';
-        
+        if (this.height !== beforeState.height) throw 'Level changed height. This souldn\'t be happening';        
         let tileRows_ = [];
         for (let y = 0; y < this.height; y++) { 
             let tiles_ = [];
@@ -148,7 +147,6 @@ murmures.Level.prototype = {
             if (tiles_.length > 0) tileRows_.push(tiles_);
         }
         if (tileRows_.length > 0) ret.tiles = tileRows_;
-
         let mobs_ = [];
         this.mobs.forEach(function (newMob) {
             beforeState.mobs.forEach(function (oldMob) {

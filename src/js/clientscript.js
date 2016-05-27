@@ -313,7 +313,7 @@ function onKeyPress(char) {
 }
 // #endregion
 
-// #region Ajax
+// #region Ajax orders
 function launchOrder(order) {
     screenLog('checkOrder');
     let check = gameEngine.checkOrder(order);

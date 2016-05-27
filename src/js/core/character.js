@@ -39,19 +39,13 @@ murmures.Character = function () {
     /** @type {number} */
     this.hitPoints = 0 | 0;
     /** @type {boolean} */
-    this.onVision = false;
+    this.onVision = false; // hero is in sight
     /** @type {boolean} */
-    this.charSpotted = false;
-    
-    /// <field name="toUpdate" type="bool"/>
     this.charSpotted = false; // hero is known because seen at least once
-    this.onVision = false; // hero is in isght of view
-    this.toUpdate = true;
-    this.updatedTurn = 0;
 };
 
 murmures.Character.prototype = {
-
+    
     /**
      * It is expected that, when the server calls this function, 
      * the Tile object in parameter is already built.
@@ -64,7 +58,7 @@ murmures.Character.prototype = {
         this.hitPointsMax = (ref.hitPointsMax || (ref.layerId === "56" ? 20 : 10)) | 0; // TODO replace 56 with Hero constant
         this.hitPoints = this.hitPointsMax | 0;
     },
-
+    
     initialize : function (src) {
         this.guid = src.guid;
         this.synchronize(src);
@@ -78,7 +72,7 @@ murmures.Character.prototype = {
         if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
     },
-
+    
     compare : function (beforeState) {
         let ret = {};
         if (this.guid !== beforeState.guid) throw 'Character changed guid. This souldn\'t be happening';
@@ -98,38 +92,23 @@ murmures.Character.prototype = {
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
     },
-
+    
     setVision : function () {
         let level = gameEngine.level;
         let tilesProcessed=[];
-
+        
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
-/*                if ((level.tiles[yy][xx].needsClientUpdate == true) && (level.tiles[yy][xx].toUpdate == true)){
-                   level.tiles[yy][xx].toUpdate = false;
-                   level.tiles[yy][xx].needsClientUpdate = false;
-                }*/
                 if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
-                   level.tiles[yy][xx].toUpdate = true;
-                   //level.tiles[yy][xx].updatedTurn = gameEngine.gameTurn;
-                   level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
-                }else{
-                  if(level.tiles[yy][xx].updatedTurn != gameEngine.gameTurn){
-                  //level.tiles[yy][xx].updatedTurn = gameEngine.gameTurn;
-                    level.tiles[yy][xx].toUpdate = false;
-                  }
+                    level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
                 }
             }
         }
-
+        
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-            if(gameEngine.level.mobs[itMob].updatedTurn != gameEngine.gameTurn){
-              gameEngine.level.mobs[itMob].toUpdate = gameEngine.level.mobs[itMob].onVision == true?true:false;
-              gameEngine.level.mobs[itMob].onVision = false;
-              //gameEngine.level.mobs[itMob].updatedTurn = gameEngine.gameTurn;
-            }
+            gameEngine.level.mobs[itMob].onVision = false;
         }
-
+        
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);
@@ -142,50 +121,34 @@ murmures.Character.prototype = {
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
                     let toProceed = true;
-                    for (let itTiles=0;itTiles<tilesProcessed.length;itTiles++){
-                      if(tilesProcessed[itTiles].x == oxx && tilesProcessed[itTiles].y == oyy){
-                        toProceed = false;
-                        break;
-                      }
+                    for (let itTiles=0; itTiles < tilesProcessed.length; itTiles++) {
+                        if (tilesProcessed[itTiles].x == oxx && tilesProcessed[itTiles].y == oyy) {
+                            toProceed = false;
+                            break;
+                        }
                     }
-                    if (toProceed == true){
-                      /*level.tiles[oyy][oxx].toUpdate = ((level.tiles[oyy][oxx].toUpdate === false  && level.tiles[oyy][oxx].state === murmures.C.TILE_HIGHLIGHTED) ||(level.tiles[oyy][oxx].toUpdate === true  && level.tiles[oyy][oxx].state === murmures.C.TILE_FOG_OF_WAR))?false:true;
-                      if(level.tiles[oyy][oxx].needsClientUpdate == true){
-                        level.tiles[oyy][oxx].toUpdate =  true;
-                      }*/
-                      if(level.tiles[oyy][oxx].updatedTurn != gameEngine.gameTurn && level.tiles[oyy][oxx].toUpdate ==  true){
-                        level.tiles[oyy][oxx].toUpdate =  false;
-                        level.tiles[oyy][oxx].updatedTurn =  gameEngine.gameTurn;
-                      }else{
-                        level.tiles[oyy][oxx].toUpdate =  true;
-                        level.tiles[oyy][oxx].updatedTurn =  gameEngine.gameTurn;
-                      }
-                      //level.tiles[oyy][oxx].toUpdate =  true;
-                      level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
-                      for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-                          let mob = gameEngine.level.mobs[itMob];
-                          if (mob.position.x === oxx && mob.position.y === oyy) {
-                              gameEngine.level.mobs[itMob].toUpdate = (gameEngine.level.mobs[itMob].toUpdate == true && mob.onVision == false)?false:true;
-                              //gameEngine.level.mobs[itMob].toUpdate  = true;
-                              mob.charSpotted = true;
-                              mob.onVision = true;
-
-                          }
-                      }
-                      let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
-                      let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
-                      if ((!groundLight || !propLight) && (j > 0)) {
-                          break;
-                      }
-                      tilesProcessed.push(level.tiles[oyy][oxx]);
+                    if (toProceed) {
+                        level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
+                        let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
+                        let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
+                        if ((!groundLight || !propLight) && (j > 0)) {
+                            break;
+                        }
+                        tilesProcessed.push(level.tiles[oyy][oxx]);
                     }
                     ox += x;
                     oy += y;
                 }
             }
         }
-/*        level.tiles[this.position.y][this.position.x].state = murmures.C.TILE_HIGHLIGHTED;
-        level.tiles[this.position.y][this.position.x].toUpdate = true;
-*/
+        
+        for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+            let mob = gameEngine.level.mobs[itMob];
+            if (level.tiles[mob.position.y][mob.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
+                mob.charSpotted = true;
+                mob.onVision = true;
+            }
+        }
+
     }
 };
