@@ -33,7 +33,7 @@ murmures.GameEngine = function () {
     this.level = {};
     /** @type {murmures.Character} */
     this.hero = {};
-    
+
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
     this.levels = {};
@@ -43,10 +43,12 @@ murmures.GameEngine = function () {
     this.activeLevel = 0 | 0;
     /** @type {number} */
     this.gameTurn = 0 | 0;
+    /** @type {number} */
+    this.state = murmures.C.STATE_ENGINE_INIT;
 };
 
 murmures.GameEngine.prototype = {
-    
+
     /*
      * No build method here because initialization involves several Node-only functions.
      * We don't want to expose these functions to the client because they don't exist there.
@@ -69,8 +71,9 @@ murmures.GameEngine.prototype = {
         this.level.initialize(src.level);
         this.hero = new murmures.Character();
         this.hero.initialize(src.hero);
+        this.state = src.state;
     },
-    
+
     /**
      * Synchronization method called on client side only.
      * This function receives a partial GameEngine as input and merges it into the client instance.
@@ -84,18 +87,26 @@ murmures.GameEngine.prototype = {
         } else {
             this.level.synchronize(src.level);
         }
+        if (src.state !== "undefined"){
+          this.state = src.state;
+        }
         this.hero.synchronize(src.hero);
     },
-    
+
     clone : function (src) {
         return {
+            ge : {state :this.state},
             level: this.level.clone(),
             hero: this.hero.clone(),
         };
     },
-    
+
     compare : function (beforeState) {
         let ret = {};
+        if (this.state != beforeState.ge.state){
+          ret.state = this.state;
+        }
+
         let level_ = this.level.guid === beforeState.level.guid ? this.level.compare(beforeState.level) : this.level; // TODO: optimize response when level changes. We could send a clean() state if the client was able to handle empty mob list.
         if (typeof level_ !== "undefined") ret.level = level_;
         let hero_ = this.hero.compare(beforeState.hero);
@@ -106,7 +117,7 @@ murmures.GameEngine.prototype = {
         }
         // otherwise, no return = undefined
     },
-    
+
     /**
      * This function is called on client and server side.
      * If the order is deemed valid on client side, it is then sent to the server by an XHR.
@@ -132,7 +143,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && (this.tileHasMob(order.target).code === true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     },
-    
+
     // TODO move this function to the tile class
     tileHasMob : function (tile) {
         let ret = false;
@@ -147,7 +158,7 @@ murmures.GameEngine.prototype = {
         }
         return { code : ret, mob : retMob };
     },
-    
+
     applyOrder : function (order) {
         // This function is only called on server side
         if (order.command === 'move') {
@@ -172,11 +183,12 @@ murmures.GameEngine.prototype = {
         this.applyAI();
         murmures.serverLog('AI done');
     },
-    
+
     applyAI : function () {
         let hero = this.hero;
         let level = this.level;
         let bodies = this.bodies;
+        let ge = this;
         this.level.mobs.forEach(function (mob) {
             if (mob.charSpotted) {
                 let fireOnHero = false;
@@ -184,9 +196,12 @@ murmures.GameEngine.prototype = {
                     if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
                         hero.hitPoints -= 1;
                         fireOnHero = true;
-                        if (hero.hitPoints < 0) hero.hitPoints = 0;
+                        if (hero.hitPoints <= 0){
+                          hero.hitPoints = 0;
+                          ge.state = murmures.C.STATE_ENGINE_DEATH;
+                        }
                     }
-                    
+
                 }
                 if (!fireOnHero) {
                 // TODO : move to hero

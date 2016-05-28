@@ -148,15 +148,15 @@ function drawOneSquare(context, x, y, color, filled) {
 
 // #region UI/Characters
 function initUI() {
-    let additionalLinks = 
+    let additionalLinks =
     '<a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br>' +
     '<a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br>' +
     '<a href="/src/pages/test.html" style="float:left; clear: left;">test</a><br>' +
-    '<code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:136px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>';    
+    '<code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:136px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>';
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     document.getElementById('rightCharacters').innerHTML = '';
     let templateStr = /template/g;
-    
+
     gameEngine.level.uiMobCount = 0;
 
     //for (let i = 0; i < gameEngine.level.mobs.length; i++) {
@@ -297,7 +297,7 @@ function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
 
 function getHoveredTile(mouseEventX, mouseEventY) {
     let tileX = Math.floor(mouseEventX / gameEngine.tileSize);
-    let tileY = Math.floor(mouseEventY / gameEngine.tileSize);    
+    let tileY = Math.floor(mouseEventY / gameEngine.tileSize);
     return gameEngine.level.tiles[tileY][tileX];
 }
 
@@ -354,16 +354,21 @@ function onOrderResponse(response) {
     else {
         let isNewLevel = (typeof ge.level !== 'undefined') && (typeof ge.level.guid !== 'undefined') && (gameEngine.level.guid !== ge.level.guid);
         gameEngine.synchronize(ge);
-        if (isNewLevel) {
-            initUI();
-            renderLevel();
-        }
-        else {
-            drawTiles();
-            updateUI();
+        if (gameEngine.state !== murmures.C.STATE_ENGINE_DEATH){
+          if (isNewLevel) {
+              initUI();
+              renderLevel();
+          }
+          else {
+              drawTiles();
+              updateUI();
+          }
+        }else{
+          screenLog('MOOOOORRRRRTTTTT');
         }
         document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
         screenLog('UI updated');
+
     }
 }
 // #endregion
