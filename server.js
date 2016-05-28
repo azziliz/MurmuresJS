@@ -125,6 +125,7 @@ function compressAndSend(request, response, contType, txt, callback) {
     if (acceptEncoding.match(/\bgzip\b/) && contType !== 'image/png') {
         zlib.gzip(txt, function (err, zipped) {
             if (err) throw err;
+            murmures.serverLog('Response compressed');
             response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
             response.end(zipped, 'utf8', callback);
         });
@@ -229,7 +230,7 @@ http.createServer(function (request, response) {
                     else {
                         compressAndSend(request, response, 'application/json', JSON.stringify({ error: parsing.reason }));
                     }
-                    murmures.serverLog('Response sending');
+                    murmures.serverLog('Queued compression');
                 }
             }
             else if (request.url === '/test') {

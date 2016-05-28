@@ -72,7 +72,6 @@ murmures.Tile.prototype = {
         if (typeof src.propId !== 'undefined') this.propId = src.propId;
         if (typeof src.propDeco !== 'undefined') this.propDeco = src.propDeco;
         if (typeof src.itemId !== 'undefined') this.itemId = src.itemId;
-        if (typeof src.charId !== 'undefined') this.charId = src.charId; // TODO: do not send charId, this is only useful for server init
         if (typeof src.effectId !== 'undefined') this.effectId = src.effectId;
         if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
     },
@@ -85,7 +84,6 @@ murmures.Tile.prototype = {
             propId: this.propId,
             propDeco: this.propDeco,
             itemId: this.itemId,
-            charId: this.charId,
             effectId: this.effectId,
             behavior: this.behavior,
         };
@@ -99,7 +97,6 @@ murmures.Tile.prototype = {
         if (this.propId !== beforeState.propId) ret.propId = this.propId;
         if (this.propDeco !== beforeState.propDeco) ret.propDeco = this.propDeco;
         if (this.itemId !== beforeState.itemId) ret.itemId = this.itemId;
-        if (this.charId !== beforeState.charId) ret.charId = this.charId;
         if (this.effectId !== beforeState.effectId) ret.effectId = this.effectId;
         if (this.propId !== beforeState.propId && 
         JSON.stringify(this.behavior) !== JSON.stringify(beforeState.behavior)) ret.behavior = this.behavior;

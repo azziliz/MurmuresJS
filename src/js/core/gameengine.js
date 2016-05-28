@@ -96,7 +96,7 @@ murmures.GameEngine.prototype = {
     
     compare : function (beforeState) {
         let ret = {};
-        let level_ = this.level.guid === beforeState.level.guid ? this.level.compare(beforeState.level) : this.level; // TODO: optimize response when level changes. We could send a clean() state if the client was able to handle empty mob list.
+        let level_ = this.level.compare(beforeState.level);
         if (typeof level_ !== "undefined") ret.level = level_;
         let hero_ = this.hero.compare(beforeState.hero);
         if (typeof hero_ !== "undefined") ret.hero = hero_;
@@ -166,7 +166,7 @@ murmures.GameEngine.prototype = {
                 }
             });
         }
-        murmures.serverLog('Moves / attacks done' + order.target.x + "//" + order.target.y);
+        murmures.serverLog('Moves / attacks done');
         this.hero.setVision();
         murmures.serverLog('Vision done');
         this.applyAI();

@@ -88,10 +88,18 @@ murmures.Level.prototype = {
             this.tiles[y] = [];
             for (let x = 0; x < this.width; x++) {
                 this.tiles[y][x] = new murmures.Tile(x, y);
-                // TODO: tile.initialize(x, y)
+                src.tiles[y][x].x = x;
+                src.tiles[y][x].y = y;
+                // TODO: tile.initialize(x, y) ?
             }
         }
         this.synchronize(src);
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                //TODO: test if can do that directly in tile.synchronize
+                this.tiles[y][x].behavior = (this.tiles[y][x].propId === '') ? {} : gameEngine.bodies[this.tiles[y][x].propId].behavior;
+            }
+        }
     },
     
     /**
@@ -183,6 +191,30 @@ murmures.Level.prototype = {
             ret.layout = this.layout;
             ret.width = this.width | 0;
             ret.height = this.height | 0;
+            let newLevel = this.clone(); // TODO : replace by a clean creation / reuse tile.compare ?
+            for (let y = 0; y < this.height; y++) {
+                for (let x = 0; x < this.width; x++) {
+                    delete newLevel.tiles[y][x].x;
+                    delete newLevel.tiles[y][x].y;
+                    delete newLevel.tiles[y][x].behavior;
+                    delete newLevel.tiles[y][x].charId;
+                    if (newLevel.tiles[y][x].state === murmures.C.TILE_NOT_DISCOVERED) delete newLevel.tiles[y][x].state;
+                    if (newLevel.tiles[y][x].groundId === '') delete newLevel.tiles[y][x].groundId;
+                    if (newLevel.tiles[y][x].groundDeco === '') delete newLevel.tiles[y][x].groundDeco;
+                    if (newLevel.tiles[y][x].propId === '') delete newLevel.tiles[y][x].propId;
+                    if (newLevel.tiles[y][x].propDeco === '') delete newLevel.tiles[y][x].propDeco;
+                    if (newLevel.tiles[y][x].itemId === '') delete newLevel.tiles[y][x].itemId;
+                    if (newLevel.tiles[y][x].effectId === '') delete newLevel.tiles[y][x].effectId;
+                }
+            }
+            ret.tiles = newLevel.tiles;
+            let mobs_ = [];
+            newLevel.mobs.forEach(function (newMob) {
+                if (newMob.onVision) {
+                    mobs_.push(newMob);
+                }
+            }, this);
+            if (mobs_.length > 0) ret.mobs = mobs_;
         }
         for (var prop in ret) {
             // only returns ret if not empty

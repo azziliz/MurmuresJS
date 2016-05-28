@@ -91,7 +91,16 @@ murmures.Character.prototype = {
         if (this.mobTemplate !== beforeState.mobTemplate) ret.mobTemplate = this.mobTemplate;
         if (this.hitPointsMax !== beforeState.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
         if (this.hitPoints !== beforeState.hitPoints) ret.hitPoints = this.hitPoints;
-        if (this.onVision !== beforeState.onVision) ret.onVision = this.onVision;
+        if (this.onVision !== beforeState.onVision) {
+            ret.onVision = this.onVision;
+            if (this.onVision) {
+                // client discovers the mob for the first time --> send everything
+                ret.position = this.position.coordinates();
+                ret.mobTemplate = this.mobTemplate;
+                ret.hitPointsMax = this.hitPointsMax;
+                ret.hitPoints = this.hitPoints;
+            }
+        }
         for (var prop in ret) {
             // only returns ret if not empty
             ret.guid = this.guid;
