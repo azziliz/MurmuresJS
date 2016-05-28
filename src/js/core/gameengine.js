@@ -87,6 +87,13 @@ murmures.GameEngine.prototype = {
         this.hero.synchronize(src.hero);
     },
     
+    clone : function (src) {
+        return {
+            level: this.level.clone(),
+            hero: this.hero.clone(),
+        };
+    },
+    
     compare : function (beforeState) {
         let ret = {};
         let level_ = this.level.guid === beforeState.level.guid ? this.level.compare(beforeState.level) : this.level; // TODO: optimize response when level changes. We could send a clean() state if the client was able to handle empty mob list.

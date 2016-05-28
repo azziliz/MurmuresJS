@@ -5,7 +5,6 @@ var vm = require('vm');
 var fs = require('fs');
 var zlib = require('zlib');
 var http = require('http');
-var fastClone = new vm.Script('JSON.parse(JSON.stringify(ge))');
 
 /**
  * The main namespace. All classes should be prefixed with it.
@@ -213,8 +212,7 @@ http.createServer(function (request, response) {
                         if (check.valid) {
                             gameEngine.gameTurn++;
                             murmures.serverLog('Order checked');
-                            let beforeState = fastClone.runInNewContext({ge:gameEngine}); // TODO implement cloning methods
-                            let activeLevel = gameEngine.activeLevel;
+                            let beforeState = gameEngine.clone();
                             murmures.serverLog('State saved');
                             gameEngine.applyOrder(clientOrder);
                             murmures.serverLog('Order applied');

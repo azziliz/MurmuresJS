@@ -73,6 +73,17 @@ murmures.Character.prototype = {
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
     },
     
+    clone : function () {
+        return {
+            guid: this.guid,
+            position: { x: this.position.x, y: this.position.y },
+            mobTemplate: this.mobTemplate,
+            hitPointsMax: this.hitPointsMax,
+            hitPoints: this.hitPoints,
+            onVision: this.onVision,
+        };
+    },
+    
     compare : function (beforeState) {
         let ret = {};
         if (this.guid !== beforeState.guid) throw 'Character changed guid. This souldn\'t be happening';

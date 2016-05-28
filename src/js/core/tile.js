@@ -77,6 +77,20 @@ murmures.Tile.prototype = {
         if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
     },
     
+    clone : function () {
+        return {
+            state: this.state,
+            groundId: this.groundId,
+            groundDeco: this.groundDeco,
+            propId: this.propId,
+            propDeco: this.propDeco,
+            itemId: this.itemId,
+            charId: this.charId,
+            effectId: this.effectId,
+            behavior: this.behavior,
+        };
+    },
+    
     compare : function (beforeState) {
         let ret = {};
         if (this.state !== beforeState.state) ret.state = this.state;
