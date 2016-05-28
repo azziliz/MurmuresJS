@@ -22,16 +22,27 @@
  * @class
  */
 murmures.GameEngine = function () {
-        /// <field name="tileSize" type="Number"/>
-        /// <field name="gameTurn" type="Number"/>  // server only
-        /// <field name="bodies" type="PhysicalBody"/>
-        /// <field name="locale" type="Object"/>
-        /// <field name="levels" type="Array"/>  // server only
-        /// <field name="levelIds" type="Array"/>  // server only
-        /// <field name="activeLevel" type="Number"/>  // server only
-        /// <field name="level" type="Level"/>
-        /// <field name="hero" type="Character"/>
-        this.gameTurn = 0;
+    /* No guid on GameEngine ; we just want one */
+    /** @type {number} */
+    this.tileSize = 32 | 0;
+    /** @type {Object.<string, murmures.PhysicalBody>} */
+    this.bodies = {};
+    /** @type {Object.<string, Object.<string, string>>} */
+    this.locale = {};
+    /** @type {murmures.Level} */
+    this.level = {};
+    /** @type {murmures.Character} */
+    this.hero = {};
+    
+    /* Server-only */
+    /** @type {Array.<murmures.Level>} */
+    this.levels = {};
+    /** @type {Array.<string>} */
+    this.levelIds = {};
+    /** @type {number} */
+    this.activeLevel = 0 | 0;
+    /** @type {number} */
+    this.gameTurn = 0 | 0;
 };
 
 murmures.GameEngine.prototype = {

@@ -5,6 +5,7 @@ var vm = require('vm');
 var fs = require('fs');
 var zlib = require('zlib');
 var http = require('http');
+var fastClone = new vm.Script('JSON.parse(JSON.stringify(ge))');
 
 /**
  * The main namespace. All classes should be prefixed with it.
@@ -87,16 +88,14 @@ murmures.serverLog('Initializing game');
  * Initializes game
  */
 (function () {
-    gameEngine.tileSize = 32;
-
     let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.bodies = JSON.parse(bodiesJson);
 
     let localefrJson = fs.readFileSync('./data/locale/fr.json', 'utf8').toString().replace(/^\uFEFF/, '');
     let localeenJson = fs.readFileSync('./data/locale/en.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.locale = {};
-    gameEngine.locale.fr = JSON.parse(localefrJson).locale;
-    gameEngine.locale.en = JSON.parse(localeenJson).locale;
+    gameEngine.locale.fr = JSON.parse(localefrJson);
+    gameEngine.locale.en = JSON.parse(localeenJson);
     
     gameEngine.levels = [];
     gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
@@ -214,7 +213,7 @@ http.createServer(function (request, response) {
                         if (check.valid) {
                             gameEngine.gameTurn++;
                             murmures.serverLog('Order checked');
-                            let beforeState = JSON.parse(JSON.stringify(gameEngine)); // TODO implement cloning methods
+                            let beforeState = fastClone.runInNewContext({ge:gameEngine}); // TODO implement cloning methods
                             let activeLevel = gameEngine.activeLevel;
                             murmures.serverLog('State saved');
                             gameEngine.applyOrder(clientOrder);

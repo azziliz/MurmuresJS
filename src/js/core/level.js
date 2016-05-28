@@ -132,6 +132,7 @@ murmures.Level.prototype = {
     
     compare : function (beforeState) {
         let ret = {};
+        // TODO: handle level change (this.guid !== beforeState.guid)
         if (this.guid !== beforeState.guid) throw 'Level changed guid. This souldn\'t be happening';
         if (this.id !== beforeState.id) throw 'Level changed id. This souldn\'t be happening';
         if (this.layout !== beforeState.layout) throw 'Level changed layout. This souldn\'t be happening';

@@ -156,9 +156,12 @@ function initUI() {
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     document.getElementById('rightCharacters').innerHTML = '';
     let templateStr = /template/g;
-    for (let i = 0; i < gameEngine.level.mobs.length; i++) {
-        document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + i));
-    }
+    
+    gameEngine.level.uiMobCount = 0;
+
+    //for (let i = 0; i < gameEngine.level.mobs.length; i++) {
+    //    document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + i));
+    //}
     if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
         document.getElementById('leftCharacters').innerHTML = additionalLinks;
         document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
@@ -168,6 +171,12 @@ function initUI() {
 function updateUI() {
     clearCharacterLayer();
     if (gameEngine.level.mobs != undefined) {
+        while (gameEngine.level.mobs.length > gameEngine.level.uiMobCount) {
+            let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
+            let templateStr = /template/g;
+            document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + gameEngine.level.uiMobCount.toString()));
+            gameEngine.level.uiMobCount++;
+       }
         for (let i = 0; i < gameEngine.level.mobs.length; i++) {
             let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
             let locale = gameEngine.locale.fr.bodies[gameEngine.level.mobs[i].mobTemplate];

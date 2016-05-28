@@ -72,7 +72,7 @@ murmures.Tile.prototype = {
         if (typeof src.propId !== 'undefined') this.propId = src.propId;
         if (typeof src.propDeco !== 'undefined') this.propDeco = src.propDeco;
         if (typeof src.itemId !== 'undefined') this.itemId = src.itemId;
-        if (typeof src.charId !== 'undefined') this.charId = src.charId;
+        if (typeof src.charId !== 'undefined') this.charId = src.charId; // TODO: do not send charId, this is only useful for server init
         if (typeof src.effectId !== 'undefined') this.effectId = src.effectId;
         if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
     },
