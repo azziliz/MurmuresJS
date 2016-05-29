@@ -73,8 +73,8 @@ murmures.Level.prototype = {
      * Creates a partial Level object from a source JSON. The partial object contains all tiles in an empty state and no mob.
      *
      * @param {Object} src - A stringified and parsed partial level received from the server. 
-     * This parameter is expected to contain the level headers (including width and height) and a set of complete tiles.
-     * It might also contain some mobs.
+     * This parameter is expected to contain the level headers (including width and height) and a set of clean tiles.
+     * It might also contain some mobs, if they are visible from the level starting point.
      */
     initialize : function (src) {
         this.guid = src.guid;
@@ -138,6 +138,10 @@ murmures.Level.prototype = {
         }
     },
     
+    /**
+     * Cloning method reserved for the server.
+     * The whole game state is duplicated at the beginning of each turn by cascading clone methods.
+     */
     clone : function () {
         let tiles_ = [];
         for (let y = 0; y < this.height; y++) {
@@ -157,6 +161,13 @@ murmures.Level.prototype = {
         };
     },
     
+    /**
+     * Comparison method reserved for the server.
+     * This method is called at the end of each turn to identify the changes of the game state produced by orders.
+     * Returns all the fields that were actually modified.
+     * 
+     * @param {Object} beforeState - A stringified and parsed level that was saved before the turn by calling clone(). 
+     */
     compare : function (beforeState) {
         let ret = {};
         if (this.guid === beforeState.guid) {
@@ -223,7 +234,7 @@ murmures.Level.prototype = {
     
     moveHeroToStartingPoint: function () {
         //temporary
-        // TODO : finding starting point from stairs
+        // TODO : find starting point from stairs
         if (this.id === 'level1') gameEngine.hero.position = this.tiles[9][1];
         else if (this.id === 'level2') gameEngine.hero.position = this.tiles[15][3];
         else if (this.id === 'level4') gameEngine.hero.position = this.tiles[20][5];
