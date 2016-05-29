@@ -75,18 +75,20 @@ function renderLevel() {
         context.imageSmoothingEnabled = false;
     }
     //document.getElementById('screenLog').style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
-    drawTiles();
+    drawTiles(gameEngine);
     updateUI();
 }
 
 // #region Tiles
-function drawTiles() {
-    document.getElementById('fogOfWarLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
-    for (let x = 0; x < gameEngine.level.width; x++) {
-        for (let y = 0; y < gameEngine.level.height; y++) {
-            drawOneTile(x, y, '#2D1E19');
-        }
+function drawTiles(partialEngine) {
+    if (typeof partialEngine.level.tiles !== "undefined") {
+        partialEngine.level.tiles.forEach(function (tileRow) {
+            tileRow.forEach(function (tile) {
+                drawOneTile(tile.x, tile.y, '#2D1E19');
+            }, this);
+        }, this);
     }
+
 }
 
 function drawOneTile(x, y, color) {
@@ -94,8 +96,9 @@ function drawOneTile(x, y, color) {
     img.src = gameEngine.tileset;
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
         if (true) { // TODO: erase only tiles that come from the synchronized object
-            document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
-            document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize)
+            document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+            document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+            document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         }
         if (gameEngine.level.tiles[y][x].groundId !== "") {
             let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].rank;
@@ -356,7 +359,7 @@ function onOrderResponse(response) {
             renderLevel();
         }
         else {
-            drawTiles();
+            drawTiles(ge);
             updateUI();
         }
         document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';

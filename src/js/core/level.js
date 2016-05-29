@@ -90,7 +90,6 @@ murmures.Level.prototype = {
                 this.tiles[y][x] = new murmures.Tile(x, y);
                 src.tiles[y][x].x = x;
                 src.tiles[y][x].y = y;
-                // TODO: tile.initialize(x, y) ?
             }
         }
         this.synchronize(src);

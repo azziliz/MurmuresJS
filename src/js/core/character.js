@@ -55,7 +55,7 @@ murmures.Character.prototype = {
         this.position = tile;
         this.mobTemplate = template;
         let ref = gameEngine.bodies[template];
-        this.hitPointsMax = (ref.hitPointsMax || (ref.layerId === "56" ? 20 : 10)) | 0; // TODO replace 56 with Hero constant
+        this.hitPointsMax = (ref.hitPointsMax || (murmures.C.LAYERS[ref.layerId][0] === 'Hero' ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in bodies.json.
         this.hitPoints = this.hitPointsMax | 0;
     },
     
