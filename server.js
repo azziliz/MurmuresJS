@@ -5,6 +5,7 @@ var vm = require('vm');
 var fs = require('fs');
 var zlib = require('zlib');
 var http = require('http');
+var WebSocketServer = require("ws").Server
 
 /**
  * The main namespace. All classes should be prefixed with it.
@@ -139,7 +140,7 @@ function compressAndSend(request, response, contType, txt, callback) {
     }
 }
 
-http.createServer(function (request, response) {
+var server = http.createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
         response.writeHead(204); // No content
         response.end();
@@ -245,5 +246,8 @@ http.createServer(function (request, response) {
         });
     }
 }).listen(process.env.PORT || 15881);
+
+var wss = new WebSocketServer({ server: server })
+
 
 murmures.serverLog('Listening on http://127.0.0.1:' + (process.env.PORT || 15881).toString() + '/');

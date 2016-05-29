@@ -1,5 +1,8 @@
 'use strict';
 
+var host = location.origin.replace(/^http/, 'ws')
+var ws = new WebSocket(host);
+
 var gameEngine = new murmures.GameEngine();
 gameEngine.allowOrders = true;
 
