@@ -354,17 +354,17 @@ function onOrderResponse(response) {
     else {
         let isNewLevel = (typeof ge.level !== 'undefined') && (typeof ge.level.guid !== 'undefined') && (gameEngine.level.guid !== ge.level.guid);
         gameEngine.synchronize(ge);
+
+        if (isNewLevel) {
+            initUI();
+            renderLevel();
+        }
+        else {
+            drawTiles();
+            updateUI();
+        }
         if (gameEngine.state !== murmures.C.STATE_ENGINE_DEATH){
-          if (isNewLevel) {
-              initUI();
-              renderLevel();
-          }
-          else {
-              drawTiles();
-              updateUI();
-          }
-        }else{
-          screenLog('MOOOOORRRRRTTTTT');
+          screenLog('YOU DIE !');
         }
         document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
         screenLog('UI updated');
