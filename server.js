@@ -179,75 +179,53 @@ var server = http.createServer(function (request, response) {
         // #endregion
     }
     else {
-        let buffer = '';
-        request.on('data', function (chunk) {
-            buffer = buffer.concat(chunk.toString());
-            if (buffer.length > 1e6) request.connection.destroy(); // Prevent buffer overflow attacks
-        });
-        request.on('end', function () {
-            if (request.url === '/getLevel') {
-                let postData = JSON.parse(buffer);
-                if ((postData === null) ||
-                    (postData.id === null)) {
-                    response.writeHead(200, { 'Content-Type': 'application/json' });
-                    response.end(JSON.stringify({ error: 'Wrong request.' }));
-                }
-                else {
-                    compressAndSend(request, response, 'application/json', JSON.stringify(gameEngine));
-                }
-            }
-            else if (request.url === '/order') {
-                let postData = JSON.parse(buffer);
-                if ((postData === null) ||
-                    (postData.command === null) ||
-                    (postData.source === null) ||
-                    (postData.target === null)) {
-                    response.writeHead(200, { 'Content-Type': 'application/json' });
-                    response.end(JSON.stringify({ error: 'Wrong request.' }));
-                }
-                else {
-                    murmures.serverLog('Request received');
-                    let clientOrder = new murmures.Order();
-                    let parsing = clientOrder.build(postData);
-                    if (parsing.valid) {
-                        let check = gameEngine.checkOrder(clientOrder);
-                        if (check.valid) {
-                            gameEngine.gameTurn++;
-                            murmures.serverLog('Order checked');
-                            let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
-                            murmures.serverLog('State saved');
-                            gameEngine.applyOrder(clientOrder);
-                            murmures.serverLog('Order applied');
-                            let ge = gameEngine.compare(beforeState);
-                            let res = JSON.stringify(ge);
-                            murmures.serverLog('Response stringified');
-                            compressAndSend(request, response, 'application/json', res, function () { murmures.serverLog('Response sent'); });
-                        }
-                        else {
-                            compressAndSend(request, response, 'application/json', JSON.stringify({ error: check.reason }));
-                        }
-
-                    }
-                    else {
-                        compressAndSend(request, response, 'application/json', JSON.stringify({ error: parsing.reason }));
-                    }
-                    murmures.serverLog('Queued compression');
-                }
-            }
-            else if (request.url === '/test') {
-                let test = new murmures.ServerTest();
-                test.run(require);
-                response.writeHead(204); // No content
-                response.end();
-            } else {
-                response.writeHead(404);
-                response.end();
-            }
-        });
+        response.writeHead(404);
+        response.end();
     }
 }).listen(process.env.PORT || 15881);
 
 var wss = new WebSocketServer({ server: server })
-
+wss.on('connection', function (ws) {
+    ws.on('message', function (messageTxt) {
+        let message = JSON.parse(messageTxt);
+        if (message.service === 'getLevel') {
+            ws.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
+        }
+        else if (message.service === 'order') {
+            murmures.serverLog('Request received');
+            let clientOrder = new murmures.Order();
+            let parsing = clientOrder.build(message.payload);
+            if (parsing.valid) {
+                let check = gameEngine.checkOrder(clientOrder);
+                if (check.valid) {
+                    gameEngine.gameTurn++;
+                    murmures.serverLog('Order checked');
+                    let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
+                    murmures.serverLog('State saved');
+                    gameEngine.applyOrder(clientOrder);
+                    murmures.serverLog('Order applied');
+                    let ge = gameEngine.compare(beforeState);
+                    let res = JSON.stringify({ fn: 'o', payload: ge });
+                    murmures.serverLog('Response stringified');
+                    // broadcast to all clients
+                    wss.clients.forEach(function each(client) {
+                        client.send(res);
+                    });
+                }
+                else {
+                    ws.send(JSON.stringify({ fn: 'o', payload: { error: check.reason } }));
+                }
+            }
+            else {
+                ws.send(JSON.stringify({ fn: 'o', payload: { error: parsing.reason } }));
+            }
+            murmures.serverLog('Response sent');
+        }
+        else if (message.service === 'test') {
+            let test = new murmures.ServerTest();
+            test.run(require);
+        }
+    });
+});
 
 murmures.serverLog('Listening on http://127.0.0.1:' + (process.env.PORT || 15881).toString() + '/');

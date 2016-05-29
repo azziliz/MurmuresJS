@@ -50,11 +50,11 @@
         'use strict';
 
         function initBodyEditor() {
-            sendAjax('/getLevel', '{"id":"level1"}', loadEngineBodyEditor, true);
+            gameEngine.ws.send(JSON.stringify({ service: 'getLevel' }));
         }
 
-        function loadEngineBodyEditor(engine) {
-            gameEngine.initialize(JSON.parse(engine));
+        function loadEngine(engine) {
+            gameEngine.initialize(engine);
             tileset.addEventListener('mousedown', function (event) {
                 let x = Math.floor(event.offsetX / gameEngine.tileSize / 0.75);
                 let y = Math.floor(event.offsetY / gameEngine.tileSize / 0.75);

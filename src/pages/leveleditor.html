@@ -59,12 +59,12 @@
 
         //override
         function tilesetLoaded() {
-            sendAjax('/getLevel', '{"id":"level1"}', firstEngineLoad, true);
+            gameEngine.ws.send(JSON.stringify({ service: 'getLevel' }));
             registerEventsLevelEditor();
         }
 
-        function firstEngineLoad(engine) {
-            gameEngine.initialize(JSON.parse(engine));
+        function loadEngine(engine) {
+            gameEngine.initialize(engine);
             initUILevelEditor();
             loadEngineLevelEditor(JSON.stringify(gameEngine));
         }

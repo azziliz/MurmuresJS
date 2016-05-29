@@ -33,7 +33,7 @@
 
         //override
         function tilesetLoaded() {
-            sendAjax('/test', '{}', null, true);
+            gameEngine.ws.send(JSON.stringify({ service: 'test' }));
         }
 
 

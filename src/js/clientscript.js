@@ -1,32 +1,26 @@
 'use strict';
 
-var host = location.origin.replace(/^http/, 'ws')
-var ws = new WebSocket(host);
-
 var gameEngine = new murmures.GameEngine();
 gameEngine.allowOrders = true;
+gameEngine.ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
 
 // #region Utils
+gameEngine.ws.onmessage = function (event) {
+    let message = JSON.parse(event.data);
+    if (message.fn === 'init') {
+        let ge = message.payload;
+        loadEngine(ge);
+    }
+    else if (message.fn === 'o') {
+        let orderResponse = message.payload;
+        onOrderResponse(orderResponse);
+    }
+};
+
 function screenLog(txt) {
     let now = new Date();
     document.getElementById("screenLog").insertAdjacentHTML('afterbegin',
         '<span class="channel-debug"><span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br></span>');
-}
-
-function sendAjax(path, param, callback, async) {
-    let xhr = new XMLHttpRequest();
-    xhr.addEventListener("error", onXhrError);
-    xhr.addEventListener("abort", onXhrError);
-    xhr.open('POST', path, async);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    if (callback !== null) {
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                callback(xhr.responseText);
-            }
-        };
-    }
-    xhr.send(param);
 }
 
 function onXhrError(e) {
@@ -60,12 +54,12 @@ function init() {
 }
 
 function tilesetLoaded() {
-    sendAjax('/getLevel', '{"id":"level1"}', loadEngine, true);
+    gameEngine.ws.send(JSON.stringify({service:'getLevel'}));
     registerEvents();
 }
 
 function loadEngine(engine) {
-    gameEngine.initialize(JSON.parse(engine));
+    gameEngine.initialize(engine);
     initUI();
     renderLevel();
 }
@@ -327,7 +321,7 @@ function onKeyPress(char) {
 }
 // #endregion
 
-// #region Ajax orders
+// #region Orders
 function launchOrder(order) {
     screenLog('checkOrder');
     let check = gameEngine.checkOrder(order);
@@ -335,7 +329,7 @@ function launchOrder(order) {
         if (check.valid) {
             screenLog('>> order - ' + order.command);
             order.clean();
-            sendAjax('/order', JSON.stringify(order), onOrderResponse, true);
+            gameEngine.ws.send(JSON.stringify({ service: 'order', payload: order}));
             gameEngine.allowOrders = false;
         }
         else {
@@ -350,7 +344,7 @@ function launchOrder(order) {
 function onOrderResponse(response) {
     screenLog('<< onOrderResponse');
     gameEngine.allowOrders = true;
-    let ge = JSON.parse(response);
+    let ge = response;
     if (typeof ge.error != 'undefined') {
         screenLog('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
     }
