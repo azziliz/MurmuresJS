@@ -97,9 +97,9 @@ murmures.GameEngine.prototype = {
     compare : function (beforeState) {
         let ret = {};
         let level_ = this.level.compare(beforeState.level);
-        if (typeof level_ !== "undefined") ret.level = level_;
+        if (typeof level_ !== 'undefined') ret.level = level_;
         let hero_ = this.hero.compare(beforeState.hero);
-        if (typeof hero_ !== "undefined") ret.hero = hero_;
+        if (typeof hero_ !== 'undefined') ret.hero = hero_;
         for (var prop in ret) {
             // only returns ret if not empty
             return ret;
@@ -137,7 +137,7 @@ murmures.GameEngine.prototype = {
     tileHasMob : function (tile) {
         let ret = false;
         let retMob = null;
-        if (this.level.mobs != undefined) {
+        if (typeof this.level.mobs !== 'undefined') {
             this.level.mobs.forEach(function (mob) {
                 if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
                     retMob = mob;
