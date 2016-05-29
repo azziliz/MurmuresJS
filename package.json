@@ -1,0 +1,32 @@
+{
+    "name": "murmures",
+    "version": "0.2.1",
+    "description": "A tactical roguelike game for web browsers. Powered by Node.js.",
+    "keywords": [
+        "game",
+        "rogue",
+        "roguelike",
+        "nethack",
+        "tactical",
+        "multiplayer"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/azziliz/MurmuresJS.git"
+    },
+    "dependencies": {
+        "ws": "1.1.x"
+    },
+    "engines": {
+        "node": ">=5.0.0"
+    },
+    "contributors": [
+        {
+            "name": "azziliz"
+        },
+        {
+            "name": "thyshimrod"
+        }
+    ]
+}

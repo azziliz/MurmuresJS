@@ -1,0 +1,6 @@
+*.dll
+*.dat
+*.suo
+obj/*
+bin/*
+node_modules/*

@@ -160,7 +160,6 @@ murmures.Level.prototype = {
     
     compare : function (beforeState) {
         let ret = {};
-        // TODO: handle level change (this.guid !== beforeState.guid)
         if (this.guid === beforeState.guid) {
             // same level
             let tileRows_ = [];

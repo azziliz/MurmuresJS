@@ -213,7 +213,7 @@ http.createServer(function (request, response) {
                         if (check.valid) {
                             gameEngine.gameTurn++;
                             murmures.serverLog('Order checked');
-                            let beforeState = gameEngine.clone();
+                            let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
                             murmures.serverLog('State saved');
                             gameEngine.applyOrder(clientOrder);
                             murmures.serverLog('Order applied');
