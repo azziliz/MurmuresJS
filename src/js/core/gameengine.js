@@ -114,7 +114,7 @@ murmures.GameEngine.prototype = {
 
         if (this.state != beforeState.ge.state){
           ret.state = this.state;
-
+		  }
         let hero_ = this.hero.compare(beforeState.hero);
         if (typeof hero_ !== 'undefined') ret.hero = hero_;
         for (var prop in ret) {
