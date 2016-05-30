@@ -59,7 +59,7 @@
 
         //override
         function tilesetLoaded() {
-            gameEngine.ws.send(JSON.stringify({ service: 'getLevel' }));
+            gameEngine.client.ws.send(JSON.stringify({ service: 'getLevel' }));
             registerEventsLevelEditor();
         }
 

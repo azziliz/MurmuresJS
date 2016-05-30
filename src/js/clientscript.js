@@ -1,11 +1,13 @@
 'use strict';
 
 var gameEngine = new murmures.GameEngine();
-gameEngine.allowOrders = true;
-gameEngine.ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
+gameEngine.client = {};
+gameEngine.client.allowOrders = true;
+gameEngine.client.ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
+gameEngine.client.mouseMoveTarget = { x: -1 | 0, y: -1 | 0 };
 
 // #region Utils
-gameEngine.ws.onmessage = function (event) {
+gameEngine.client.ws.onmessage = function (event) {
     let message = JSON.parse(event.data);
     if (message.fn === 'init') {
         let ge = message.payload;
@@ -54,14 +56,14 @@ function init() {
 }
 
 function tilesetLoaded() {
-    gameEngine.ws.send(JSON.stringify({service:'getLevel'}));
-    registerEvents();
+    gameEngine.client.ws.send(JSON.stringify({service:'getLevel'}));
 }
 
 function loadEngine(engine) {
     gameEngine.initialize(engine);
     initUI();
     renderLevel();
+    registerEvents();
 }
 // #endregion
 
@@ -95,11 +97,9 @@ function drawOneTile(x, y, color) {
     let img = new Image();
     img.src = gameEngine.tileset;
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
-        if (true) { // TODO: erase only tiles that come from the synchronized object
-            document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-            document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-            document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-        }
+        document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+        document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+        document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         if (gameEngine.level.tiles[y][x].groundId !== "") {
             let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].rank;
             let tilesetX = tilesetRank % 64;
@@ -143,6 +143,35 @@ function drawOneSquare(context, x, y, color, filled) {
         context.fillStyle = color;
         context.fill();
     }
+}
+
+function drawTrail(sourceTile, destTile) {
+    let img = new Image();
+    img.src = gameEngine.tileset;
+    let direction = -1;
+    if (destTile.x === sourceTile.x && destTile.y === sourceTile.y - 1) direction = 0;
+    if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y - 1) direction = 1;
+    if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y) direction = 2;
+    if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y + 1) direction = 3;
+    if (destTile.x === sourceTile.x && destTile.y === sourceTile.y + 1) direction = 4;
+    if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y + 1) direction = 5;
+    if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y) direction = 6;
+    if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y - 1) direction = 7;
+    if (direction === -1) return; // this happens when the player moves the mouse very fast -> source and dest are more than 1 tile appart
+    let sourceBody = '_b1_91_travel_path_to' + (1 + direction).toString();
+    let destBody = '_b1_91_travel_path_from' + (1 + ((direction + 4) % 8)).toString();
+    let sourceRank = gameEngine.bodies[sourceBody].rank;
+    let destRank = gameEngine.bodies[destBody].rank;
+    let sourceX = sourceRank % 64;
+    let sourceY = (sourceRank - sourceX) / 64;
+    document.getElementById('trailLayer').getContext('2d').drawImage(img,
+                    sourceX * gameEngine.tileSize, sourceY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * sourceTile.x, gameEngine.tileSize * sourceTile.y, gameEngine.tileSize, gameEngine.tileSize);
+    let destX = destRank % 64;
+    let destY = (destRank - destX) / 64;
+    document.getElementById('trailLayer').getContext('2d').drawImage(img,
+                    destX * gameEngine.tileSize, destY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * destTile.x, gameEngine.tileSize * destTile.y, gameEngine.tileSize, gameEngine.tileSize);
 }
 // #endregion
 
@@ -254,9 +283,13 @@ function registerEvents() {
     let topLayer = document.getElementById("topLayer");
     topLayer.addEventListener("mousedown", function (e) {
         e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
-        let mouseX = Math.floor(e.offsetX);
-        let mouseY = Math.floor(e.offsetY);
-        topLayer_onClick(mouseX, mouseY, e.button === 2);
+        let targetedTile = getHoveredTile(e.offsetX, e.offsetY);
+        topLayer_onClick(targetedTile, e.button === 2);
+    }, false);
+    topLayer.addEventListener("mousemove", function (e) {
+        e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
+        let targetedTile = getHoveredTile(e.offsetX, e.offsetY);
+        topLayer_onMouseMove(targetedTile, e.button === 2);
     }, false);
     window.addEventListener("keypress", function (e) {
         let char = '';
@@ -268,12 +301,35 @@ function registerEvents() {
     }, false);
 }
 
-function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
-    screenLog('mouseEvent');
+function topLayer_onMouseMove(hoveredTile, rightClick) {
+    if (gameEngine.client.mouseMoveTarget.x !== hoveredTile.x || gameEngine.client.mouseMoveTarget.y !== hoveredTile.y) {
+        let order = new murmures.Order();
+        order.source = gameEngine.hero;
+        order.target = hoveredTile;
+        if (hoveredTile.hasMob.code) {
+            order.command = "attack";
+        }
+        else {
+            order.command = "move";
+        }
+        let check = gameEngine.checkOrder(order);
+        document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+        if (check.valid) {
+            window.requestAnimationFrame(function () {
+                drawTrail(order.source.position, order.target);
+            });
+        }
+        else {
+        }        
+        gameEngine.client.mouseMoveTarget.x = hoveredTile.x;
+        gameEngine.client.mouseMoveTarget.y = hoveredTile.y;
+    }
+}
+
+function topLayer_onClick(hoveredTile, rightClick) {
     if (!rightClick) {
         // event is a left click
         // find hovered tile
-        let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
         if (hoveredTile.hasMob.code) {
             let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
@@ -291,13 +347,16 @@ function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
     }
     else {
         // event is a right click
-        let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
     }
 }
 
 function getHoveredTile(mouseEventX, mouseEventY) {
     let tileX = Math.floor(mouseEventX / gameEngine.tileSize);
+    if (tileX < 0) tileX = 0;
+    if (tileX >= gameEngine.level.width) tileX = gameEngine.level.width - 1;
     let tileY = Math.floor(mouseEventY / gameEngine.tileSize);
+    if (tileY < 0) tileY = 0;
+    if (tileY >= gameEngine.level.height) tileY = gameEngine.level.height - 1;
     return gameEngine.level.tiles[tileY][tileX];
 }
 
@@ -328,12 +387,12 @@ function onKeyPress(char) {
 function launchOrder(order) {
     screenLog('checkOrder');
     let check = gameEngine.checkOrder(order);
-    if (gameEngine.allowOrders) {
+    if (gameEngine.client.allowOrders) {
         if (check.valid) {
             screenLog('>> order - ' + order.command);
             order.clean();
-            gameEngine.ws.send(JSON.stringify({ service: 'order', payload: order}));
-            gameEngine.allowOrders = false;
+            gameEngine.client.ws.send(JSON.stringify({ service: 'order', payload: order}));
+            gameEngine.client.allowOrders = false;
         }
         else {
             screenLog('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
@@ -346,13 +405,14 @@ function launchOrder(order) {
 
 function onOrderResponse(response) {
     screenLog('<< onOrderResponse');
-    gameEngine.allowOrders = true;
+    gameEngine.client.allowOrders = true;
     let ge = response;
-    if (typeof ge.error != 'undefined') {
+    if (typeof ge === 'undefined') return;
+    if (typeof ge.error !== 'undefined') {
         screenLog('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
     }
     else {
-        let isNewLevel = (typeof ge.level !== 'undefined') && (typeof ge.level.guid !== 'undefined') && (gameEngine.level.guid !== ge.level.guid);
+        let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
         gameEngine.synchronize(ge);
 
         if (isNewLevel) {
@@ -368,7 +428,6 @@ function onOrderResponse(response) {
         }
         document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
         screenLog('UI updated');
-
     }
 }
 // #endregion
