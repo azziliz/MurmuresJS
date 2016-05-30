@@ -123,7 +123,7 @@ murmures.Tile.prototype = {
         if (this.charId === '') delete this.charId;
     },
     
-    hasMob: function () {
+    get hasMob() {
         let ret = false;
         let retMob = null;
         if (typeof gameEngine.level.mobs !== 'undefined') {

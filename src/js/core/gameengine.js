@@ -138,29 +138,14 @@ murmures.GameEngine.prototype = {
 
         else if (order.command === 'attack' && Math.abs(order.target.x - this.hero.position.x) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
         else if (order.command === 'attack' && Math.abs(order.target.y - this.hero.position.y) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
-        else if (order.command === 'attack' && (!order.target.hasMob().code)) return { valid: false, reason: 'You cannot attack an empty tile' };
-        else if (order.command === 'attack' && (order.target.hasMob().code) && (!order.target.hasMob().mob.onVision)) return { valid: false, reason: 'You cannot attack over an obstacle' };
+        else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
+        else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVision)) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') return { valid: true, hasMob: true };
 
         else if (order.command === 'move' && Math.abs(order.target.x - this.hero.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - this.hero.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
-        else if (order.command === 'move' && (order.target.hasMob().code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
+        else if (order.command === 'move' && (order.target.hasMob.code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
-    },
-
-    // TODO move this function to the tile class
-    tileHasMob : function (tile) {
-        let ret = false;
-        let retMob = null;
-        if (typeof this.level.mobs !== 'undefined') {
-            this.level.mobs.forEach(function (mob) {
-                if (mob.position.x === tile.x && mob.position.y === tile.y && mob.hitPoints > 0) {
-                    retMob = mob;
-                    ret = true;
-                }
-            });
-        }
-        return { code : ret, mob : retMob };
     },
 
     applyOrder : function (order) {
