@@ -6,9 +6,19 @@ murmures.C = Object.freeze({
     HEX_TILES_LAYOUT : 'hex',
 
     DEFAULT_RANGE_SOV : 10,
+    /*
+     * Constant to manage state of a tile
+    */
     TILE_NOT_DISCOVERED: 0,
     TILE_HIGHLIGHTED: 1,
     TILE_FOG_OF_WAR: 2,
+    /*
+     * state engine constants
+    */
+    STATE_ENGINE_INIT: 0,
+    STATE_ENGINE_PLAYER_REGISTERED:1,
+    STATE_ENGINE_PLAYING:2,
+    STATE_ENGINE_DEATH:3,
 
     /* Format:
      * 'layerId' : ['layerName','TileGroup']
