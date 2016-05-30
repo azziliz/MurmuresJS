@@ -81,7 +81,7 @@ murmures.GameEngine.prototype = {
     synchronize: function (src) {
         if (typeof src === 'undefined') return;
         let isNewLevel = (typeof src.level !== 'undefined') && (typeof src.level.guid !== 'undefined') && (this.level.guid !== src.level.guid);
-        if (isNewLevel === true) {
+        if (isNewLevel) {
             this.level = new murmures.Level();
             this.level.initialize(src.level);
         } else {
@@ -107,9 +107,6 @@ murmures.GameEngine.prototype = {
 		          ret.state = this.state;
 		}
 		let level_ = this.level.compare(beforeState.level);
-
-
-        let level_ = this.level.compare(beforeState.level);
         if (typeof level_ !== 'undefined') ret.level = level_;
 
         if (this.state != beforeState.ge.state){
@@ -141,13 +138,13 @@ murmures.GameEngine.prototype = {
 
         else if (order.command === 'attack' && Math.abs(order.target.x - this.hero.position.x) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
         else if (order.command === 'attack' && Math.abs(order.target.y - this.hero.position.y) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
-        else if (order.command === 'attack' && (this.tileHasMob(order.target).code === false)) return { valid: false, reason: 'You cannot attack an empty tile' };
-        else if (order.command === 'attack' && (this.tileHasMob(order.target).code === true) && (this.tileHasMob(order.target).mob.onVision === false)) return { valid: false, reason: 'You cannot attack over an obstacle' };
+        else if (order.command === 'attack' && (!order.target.hasMob().code)) return { valid: false, reason: 'You cannot attack an empty tile' };
+        else if (order.command === 'attack' && (order.target.hasMob().code) && (!order.target.hasMob().mob.onVision)) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') return { valid: true, hasMob: true };
 
         else if (order.command === 'move' && Math.abs(order.target.x - this.hero.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - this.hero.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
-        else if (order.command === 'move' && (this.tileHasMob(order.target).code === true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
+        else if (order.command === 'move' && (order.target.hasMob().code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true, hasMob: false };
     },
 
