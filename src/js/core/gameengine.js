@@ -176,12 +176,12 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'attack' && Math.abs(order.target.y - heroToCheck.position.y) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
         else if (order.command === 'attack' && (this.tileHasMob(order.target).code === false)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (this.tileHasMob(order.target).code === true) && (this.tileHasMob(order.target).mob.onVision === false)) return { valid: false, reason: 'You cannot attack over an obstacle' };
-        else if (order.command === 'attack') return { valid: true, hasMob: true };
+        else if (order.command === 'attack') return { valid: true };
 
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (this.tileHasMob(order.target).code === true)) return { valid: false, reason: 'The target tile is occupied by a mob' };
-        else return { valid: true, hasMob: false };
+        else return { valid: true };
     },
 
     // TODO move this function to the tile class
