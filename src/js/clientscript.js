@@ -214,18 +214,22 @@ function updateUI() {
             }
         }
     }
+
     for (let i = 0; i < gameEngine.heros.length; i++) {
-      let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
-      let templateStr = /template/g;
-      document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + i)).replace('bgColorMob', 'bgColorHero'));
+      let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-icon');
+      if (winHero == undefined){
+        let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
+        let templateStr = /template/g;
+        document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
+      }
       let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
       let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
       let tilesetRank = ref.rank;
       let tilesetX = tilesetRank % 64;
       let tilesetY = (tilesetRank - tilesetX) / 64;
-      document.getElementById('hero' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
-      document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-      let namediv = document.getElementById('hero' + i + '-name');
+      document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+      document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+      let namediv = document.getElementById('hero' + gameEngine.heros[i].guid + '-name');
       let namedivwidth = window.getComputedStyle(namediv, null).width;
       namediv.innerHTML = locale || 'Name Error';
       let namefontsize = 100;
@@ -234,7 +238,7 @@ function updateUI() {
           namediv.style.fontSize = namefontsize.toString() + '%';
       }
       let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
-      document.getElementById('hero' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
+      document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
       drawCharacter(gameEngine.heros[i]);
     }
 }
