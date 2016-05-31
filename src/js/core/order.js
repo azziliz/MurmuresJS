@@ -10,17 +10,17 @@
 
 /**
  * An order is a player-generated instruction or event.
- * 
+ *
  * It is sent from the client to the server by an asynchronous request.
  * It contains a "command" field, which describes the type of the order, and various parameters.
  * Currently allowed commands are: "move" and "attack".
  * The list of allowed commands is expected to grow in the future.
- * 
+ *
  * Orders validity is enforced by a GameEngine method called "checkOrder".
  * Every time an existing command is modified or a new command is created, the checkOrder method should be updated.
- * 
+ *
  * The server responds to an order by sending the new gameEngine state, after the command is executed.
- * 
+ *
  * @class
  */
 murmures.Order = function () {
@@ -30,7 +30,7 @@ murmures.Order = function () {
 };
 
 murmures.Order.prototype = {
-    /* 
+    /*
      * This class doesn't have initialize and synchronize methods because the server doesn't send orders to the client.
      * Hence no need to rebuild the order object on client side.
      */
@@ -45,6 +45,7 @@ murmures.Order.prototype = {
      */
     build : function (src) {
         this.command = src.command;
+        
         if (parseFloat(gameEngine.hero.guid) === parseFloat(src.source.guid)) {
             this.source = gameEngine.hero;
         }
@@ -55,10 +56,9 @@ murmures.Order.prototype = {
         this.target = gameEngine.level.tiles[src.target.y|0][src.target.x|0];
         return { valid: true };
     },
-    
+
     clean: function () {
         this.source = { guid: this.source.guid };
         this.target = { x: this.target.x, y: this.target.y };
     }
 };
-

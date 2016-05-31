@@ -292,14 +292,14 @@ function topLayer_onClick(mouseEventX, mouseEventY, rightClick) {
         if (gameEngine.tileHasMob(hoveredTile).code === true) {
             let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
-            attackOrder.source = gameEngine.hero;
+            attackOrder.source = gameEngine.heros[0];
             attackOrder.target = hoveredTile;
             launchOrder(attackOrder);
         }
         else {
             let moveOrder = new murmures.Order();
             moveOrder.command = "move";
-            moveOrder.source = gameEngine.hero;
+            moveOrder.source = gameEngine.heros[0];
             moveOrder.target = hoveredTile;
             launchOrder(moveOrder);
         }
@@ -322,7 +322,7 @@ function onKeyPress(char) {
     if (allowedChars.indexOf(char) >= 0) {
         let moveOrder = new murmures.Order();
         moveOrder.command = "move";
-        moveOrder.source = gameEngine.hero;
+        moveOrder.source = gameEngine.heros[0];
         let target = new murmures.Tile(gameEngine.hero.position.x, gameEngine.hero.position.y);
         if (char === '9' || char === '6' || char === '3') target.x = gameEngine.hero.position.x + 1;
         if (char === '7' || char === '4' || char === '1') target.x = gameEngine.hero.position.x - 1;
