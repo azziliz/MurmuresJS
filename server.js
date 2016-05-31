@@ -124,6 +124,11 @@ function restartGame(){
   hero2.build(gameEngine.level.getStartingPoint(), JSON.parse(hero2Txt).mobTemplate);
   gameEngine.heros.push(hero2);
 
+  let hero3Txt = fs.readFileSync('./data/hero3.json', 'utf8').toString().replace(/^\uFEFF/, '');
+  let hero3 = new murmures.Character();
+  hero3.build(gameEngine.level.getStartingPoint(), JSON.parse(hero3Txt).mobTemplate);
+  gameEngine.heros.push(hero3);
+
   gameEngine.state = murmures.C.STATE_ENGINE_INIT;
 }
 

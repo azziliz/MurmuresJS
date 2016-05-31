@@ -168,8 +168,8 @@ function initUI() {
     //}
     if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
         document.getElementById('leftCharacters').innerHTML = additionalLinks;
-        document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
-        document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero1').replace('bgColorMob', 'bgColorHero'));
+        //document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
+        //document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero1').replace('bgColorMob', 'bgColorHero'));
     }
 }
 
@@ -215,6 +215,9 @@ function updateUI() {
         }
     }
     for (let i = 0; i < gameEngine.heros.length; i++) {
+      let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
+      let templateStr = /template/g;
+      document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + i)).replace('bgColorMob', 'bgColorHero'));
       let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
       let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
       let tilesetRank = ref.rank;
