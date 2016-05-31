@@ -115,7 +115,6 @@ murmures.GameEngine.prototype = {
         return {
             ge : {state :this.state},
             level: this.level.clone(),
-            //hero: this.hero.clone(),
             heros : tempHeros,
         };
     },
@@ -208,7 +207,6 @@ murmures.GameEngine.prototype = {
             }
             else {
                 order.source.move(order.target.x, order.target.y);
-                //this.hero.move(order.target.x, order.target.y);
             }
         }
         else {
@@ -220,7 +218,6 @@ murmures.GameEngine.prototype = {
             });
         }
         murmures.serverLog('Moves / attacks done');
-        //this.hero.setVision();
         var tilesProcessed=[];
         for (let itHero = 0; itHero < this.heros.length ; itHero++){
           if (tilesProcessed == undefined) {tilesProcessed = []; murmures.serverLog("prout");}
@@ -240,7 +237,7 @@ murmures.GameEngine.prototype = {
             if (mob.charSpotted) {
                 let fireOnHero = false;
                 if (mob.onVision) {
-                    
+
                     for (let itHero = 0; itHero < heros.length;itHero ++){
                       if (Math.abs(mob.position.x - heros[itHero].position.x) <= 2 && Math.abs(mob.position.y - heros[itHero].position.y) <= 2 && mob.hitPoints > 0) {
                           heros[itHero].hitPoints -= 1;

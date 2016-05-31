@@ -163,13 +163,8 @@ function initUI() {
 
     gameEngine.level.uiMobCount = 0;
 
-    //for (let i = 0; i < gameEngine.level.mobs.length; i++) {
-    //    document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + i));
-    //}
     if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
         document.getElementById('leftCharacters').innerHTML = additionalLinks;
-        //document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
-        //document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero1').replace('bgColorMob', 'bgColorHero'));
     }
 }
 
