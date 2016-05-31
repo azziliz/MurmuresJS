@@ -382,10 +382,10 @@ function onOrderResponse(response) {
             drawTiles(ge);
             updateUI();
         }
-        if (gameEngine.state !== murmures.C.STATE_ENGINE_DEATH){
+        if (gameEngine.state == murmures.C.STATE_ENGINE_DEATH){
           screenLog('YOU DIE !');
         }
-        document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
+        //document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
         screenLog('UI updated');
 
     }

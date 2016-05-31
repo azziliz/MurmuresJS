@@ -11,7 +11,7 @@
 /**
  * Characters are entities that live, move and act inside a [level]{@link murmures.Level}.
  *
- * Heroes are characters managed by the players. 
+ * Heroes are characters managed by the players.
  * They can be given [orders]{@link murmures.Order} on client side.
  * They can move from one level to another.
  * Mobs are characters managed by the AI.
@@ -45,9 +45,9 @@ murmures.Character = function () {
 };
 
 murmures.Character.prototype = {
-    
+
     /**
-     * It is expected that, when the server calls this function, 
+     * It is expected that, when the server calls this function,
      * the Tile object in parameter is already built.
      */
     build : function (tile, template) {
@@ -58,12 +58,12 @@ murmures.Character.prototype = {
         this.hitPointsMax = (ref.hitPointsMax || (murmures.C.LAYERS[ref.layerId][0] === 'Hero' ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in bodies.json.
         this.hitPoints = this.hitPointsMax | 0;
     },
-    
+
     initialize : function (src) {
         this.guid = src.guid;
         this.synchronize(src);
     },
-    
+
     synchronize : function (src) {
         if (typeof src === 'undefined') return;
         if (typeof src.position !== 'undefined') this.move(src.position.x, src.position.y); // TODO position=null when mob becomes invisible?
@@ -72,7 +72,7 @@ murmures.Character.prototype = {
         if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
     },
-    
+
     clone : function () {
         return {
             guid: this.guid,
@@ -83,7 +83,7 @@ murmures.Character.prototype = {
             onVision: this.onVision,
         };
     },
-    
+
     compare : function (beforeState) {
         let ret = {};
         if (this.guid !== beforeState.guid) throw 'Character changed guid. This souldn\'t be happening';
@@ -108,27 +108,35 @@ murmures.Character.prototype = {
         }
         // otherwise, no return = undefined
     },
-    
+
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
     },
-    
-    setVision : function () {
+
+    setVision : function (tilesProcessed) {
         let level = gameEngine.level;
-        let tilesProcessed=[];
-        
+        if (tilesProcessed === undefined ) {tilesProcessed = [];}
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
+              let toProceed = true;
+              for (let itTiles=0; itTiles < tilesProcessed.length; itTiles++) {
+                  if (tilesProcessed[itTiles].x == xx && tilesProcessed[itTiles].y == yy) {
+                      toProceed = false;
+                      break;
+                  }
+              }
+              if (toProceed){
                 if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
                     level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
                 }
+              }
             }
         }
-        
+
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             gameEngine.level.mobs[itMob].onVision = false;
         }
-        
+
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);
@@ -161,7 +169,7 @@ murmures.Character.prototype = {
                 }
             }
         }
-        
+
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             let mob = gameEngine.level.mobs[itMob];
             if (level.tiles[mob.position.y][mob.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
@@ -169,6 +177,6 @@ murmures.Character.prototype = {
                 mob.onVision = true;
             }
         }
-
+        return tilesProcessed;
     }
 };

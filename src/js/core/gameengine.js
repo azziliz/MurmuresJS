@@ -221,8 +221,11 @@ murmures.GameEngine.prototype = {
         }
         murmures.serverLog('Moves / attacks done');
         //this.hero.setVision();
+        var tilesProcessed=[];
+        murmures.serverLog(tilesProcessed.length);
         for (let itHero = 0; itHero < this.heros.length ; itHero++){
-          this.heros[itHero].setVision();
+          if (tilesProcessed == undefined) {tilesProcessed = []; murmures.serverLog("prout");}
+          tilesProcessed=this.heros[itHero].setVision(tilesProcessed);
         }
         murmures.serverLog('Vision done');
         this.applyAI();
