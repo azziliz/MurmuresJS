@@ -96,8 +96,8 @@ murmures.serverLog('Initializing game');
     gameEngine.locale = {};
     gameEngine.locale.fr = JSON.parse(localefrJson);
     gameEngine.locale.en = JSON.parse(localeenJson);
-    
-    gameEngine.levels = [];
+
+    /*gameEngine.levels = [];
     gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
     gameEngine.levelIds.forEach(function (levelName) {
         let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -112,8 +112,29 @@ murmures.serverLog('Initializing game');
     gameEngine.hero = new murmures.Character();
     gameEngine.hero.build(gameEngine.level.getStartingPoint(), JSON.parse(hero1Txt).mobTemplate);
 
-    gameEngine.hero.setVision();
+    gameEngine.hero.setVision();*/
+    restartGame();
 })();
+
+function restartGame(){
+  gameEngine.levels = [];
+  gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
+  gameEngine.levelIds.forEach(function (levelName) {
+      let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
+      let level1 = new murmures.Level();
+      level1.build(JSON.parse(level1Txt));
+      gameEngine.levels.push(level1);
+  }, this);
+  gameEngine.activeLevel = 0;
+  gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
+
+  let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
+  gameEngine.hero = new murmures.Character();
+  gameEngine.hero.build(gameEngine.level.getStartingPoint(), JSON.parse(hero1Txt).mobTemplate);
+
+  gameEngine.hero.setVision();
+  gameEngine.state = murmures.C.STATE_ENGINE_INIT;
+}
 
 murmures.serverLog('Starting HTTP server');
 
@@ -224,6 +245,13 @@ wss.on('connection', function (ws) {
         else if (message.service === 'test') {
             let test = new murmures.ServerTest();
             test.run(require);
+        }
+        else if(message.service == 'restart'){
+          restartGame();
+          wss.clients.forEach(function each(client) {
+              client.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
+
+          });
         }
     });
 });

@@ -53,6 +53,10 @@ function init() {
     xhr.send(null);
 }
 
+function restartGame(){
+  gameEngine.ws.send(JSON.stringify({service:'restart'}));
+}
+
 function tilesetLoaded() {
     gameEngine.ws.send(JSON.stringify({service:'getLevel'}));
     registerEvents();
@@ -169,6 +173,11 @@ function initUI() {
 }
 
 function updateUI() {
+    if(gameEngine.state == murmures.C.STATE_ENGINE_DEATH){
+      document.getElementById("deathWindow").style.display = "block";
+    }else{
+      document.getElementById("deathWindow").style.display = "None";
+    }
     clearCharacterLayer();
     if (gameEngine.level.mobs != undefined) {
         while (gameEngine.level.mobs.length > gameEngine.level.uiMobCount) {
