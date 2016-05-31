@@ -150,13 +150,13 @@ function drawTrail(sourceTile, destTile) {
     img.src = gameEngine.tileset;
     let direction = -1;
     if (destTile.x === sourceTile.x && destTile.y === sourceTile.y - 1) direction = 0;
-    if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y - 1) direction = 1;
-    if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y) direction = 2;
-    if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y + 1) direction = 3;
-    if (destTile.x === sourceTile.x && destTile.y === sourceTile.y + 1) direction = 4;
-    if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y + 1) direction = 5;
-    if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y) direction = 6;
-    if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y - 1) direction = 7;
+    else if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y - 1) direction = 1;
+    else if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y) direction = 2;
+    else if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y + 1) direction = 3;
+    else if (destTile.x === sourceTile.x && destTile.y === sourceTile.y + 1) direction = 4;
+    else if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y + 1) direction = 5;
+    else if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y) direction = 6;
+    else if (destTile.x === sourceTile.x - 1 && destTile.y === sourceTile.y - 1) direction = 7;
     if (direction === -1) return; // this happens when the player moves the mouse very fast -> source and dest are more than 1 tile appart
     let sourceBody = '_b1_91_travel_path_to' + (1 + direction).toString();
     let destBody = '_b1_91_travel_path_from' + (1 + ((direction + 4) % 8)).toString();
@@ -174,21 +174,41 @@ function drawTrail(sourceTile, destTile) {
                     gameEngine.tileSize * destTile.x, gameEngine.tileSize * destTile.y, gameEngine.tileSize, gameEngine.tileSize);
 }
 
-function animateProjectile(start, end, sourceTile, destTile) {
+function queueProjectile(start, sourceTile, destTile) {
     let img = new Image();
     img.src = gameEngine.tileset;
-    let imgRank = gameEngine.bodies['_b1_92_flame0'].rank;
+    let direction = -1;
+    let deltaX = destTile.x - sourceTile.x;
+    let absDeltaX = Math.abs(deltaX);
+    let deltaY = destTile.y - sourceTile.y;
+    let absDeltaY = Math.abs(deltaY);
+    // Note: 2.414 === 1 / Math.tan(45°/2) ; this is the bisecting angle between 2 directions
+    if (deltaY < 0 && 2.414 * absDeltaX < absDeltaY) direction = 0;
+    else if (deltaX > 0 && 2.414 * absDeltaY < absDeltaX) direction = 2;
+    else if (deltaY > 0 && 2.414 * absDeltaX < absDeltaY) direction = 4;
+    else if (deltaX < 0 && 2.414 * absDeltaY < absDeltaX) direction = 6;
+    else if (deltaY < 0 && deltaX > 0) direction = 1;
+    else if (deltaY > 0 && deltaX > 0) direction = 3;
+    else if (deltaY > 0 && deltaX < 0) direction = 5;
+    else if (deltaY < 0 && deltaX < 0) direction = 7;
+    //let imgRank = gameEngine.bodies['_b1_92_flame0'].rank;
+    let imgRank = gameEngine.bodies['_b1_92_stone_arrow' + direction].rank;
+    //let imgRank = gameEngine.bodies['_b1_92_icicle' + direction].rank;
     let imgX = imgRank % 64;
     let imgY = (imgRank - imgX) / 64;
-    window.requestAnimationFrame(function (timestamp) {
-        let lerpRatio = (timestamp - start) / (end - start);
-        let lerpX = sourceTile.x * (1 - lerpRatio) + destTile.x * lerpRatio;
-        let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;
-        document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
-        document.getElementById('projectileLayer').getContext('2d').drawImage(img,
+    animateProjectile(start, start + 100*Math.max(absDeltaX, absDeltaY), 0, img, imgX, imgY, sourceTile, destTile)
+}
+
+function animateProjectile(start, end, timestamp, img, imgX, imgY, sourceTile, destTile) {
+    let lerpRatio = (timestamp - start) / (end - start);
+    let lerpX = sourceTile.x * (1 - lerpRatio) + destTile.x * lerpRatio;
+    let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;
+    document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+    document.getElementById('projectileLayer').getContext('2d').drawImage(img,
                     imgX * gameEngine.tileSize, imgY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * lerpX, gameEngine.tileSize * lerpY, gameEngine.tileSize, gameEngine.tileSize);
-        if (timestamp < end) animateProjectile(start, end, sourceTile, destTile);
+    window.requestAnimationFrame(function (timestp) {
+        if (timestp < end) animateProjectile(start, end, timestp, img, imgX, imgY, sourceTile, destTile);
         else document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     });
 }
@@ -342,8 +362,7 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
             }
             else if (order.command === 'attack') {
                 window.requestAnimationFrame(function (timestamp) {
-                    let starttime = timestamp;
-                    animateProjectile(starttime, starttime + 300, order.source.position, order.target);
+                    queueProjectile(timestamp, order.source.position, order.target);
                 });
             }
         }
