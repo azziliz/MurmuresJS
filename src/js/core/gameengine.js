@@ -94,14 +94,29 @@ murmures.GameEngine.prototype = {
         if (src.state !== "undefined"){
           this.state = src.state;
         }
-        this.hero.synchronize(src.hero);
+
+        if (typeof src.heros !== "undefined") {
+            src.heros.forEach(function (remoteHero) {
+                this.heros.forEach(function (localHero) {
+                    if (localHero.guid === remoteHero.guid) {
+                        localHero.synchronize(remoteHero);
+                    }
+                }, this);
+            }, this);
+        }
     },
 
     clone : function (src) {
+        let tempHeros = [];
+        for (let itHero = 0; itHero < this.heros.length ; itHero++){
+          let hero = this.heros[itHero].clone();
+          tempHeros.push(hero);
+        }
         return {
             ge : {state :this.state},
             level: this.level.clone(),
-            hero: this.hero.clone(),
+            //hero: this.hero.clone(),
+            heros : tempHeros,
         };
     },
 
@@ -113,9 +128,20 @@ murmures.GameEngine.prototype = {
     		let level_ = this.level.compare(beforeState.level);
 
         if (typeof level_ !== 'undefined') ret.level = level_;
+        let heros_ = [];
+        for (let itHero =0;itHero < this.heros.length;itHero ++){
+          for (let itHero_ = 0 ; itHero_ < beforeState.heros.length;itHero_++){
+            if (beforeState.heros[itHero_].guid == this.heros[itHero].guid){
 
-        let hero_ = this.hero.compare(beforeState.hero);
-        if (typeof hero_ !== 'undefined') ret.hero = hero_;
+              let hero_ = this.heros[itHero].compare(beforeState.heros[itHero_]);
+              if (typeof hero_ !== 'undefined') heros_.push(hero_);
+            }
+          }
+        }
+
+        if (heros_.length > 0){
+          ret.heros = heros_;
+        }
         for (var prop in ret) {
             // only returns ret if not empty
             return ret;
@@ -181,7 +207,8 @@ murmures.GameEngine.prototype = {
                 murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
             }
             else {
-                this.hero.move(order.target.x, order.target.y);
+                order.source.move(order.target.x, order.target.y);
+                //this.hero.move(order.target.x, order.target.y);
             }
         }
         else {
@@ -193,7 +220,10 @@ murmures.GameEngine.prototype = {
             });
         }
         murmures.serverLog('Moves / attacks done');
-        this.hero.setVision();
+        //this.hero.setVision();
+        for (let itHero = 0; itHero < this.heros.length ; itHero++){
+          this.heros[itHero].setVision();
+        }
         murmures.serverLog('Vision done');
         this.applyAI();
         murmures.serverLog('AI done');

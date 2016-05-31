@@ -45,12 +45,16 @@ murmures.Order.prototype = {
      */
     build : function (src) {
         this.command = src.command;
-        
-        if (parseFloat(gameEngine.hero.guid) === parseFloat(src.source.guid)) {
-            this.source = gameEngine.hero;
+        this.source = undefined;
+        for (let itHero = 0; itHero < gameEngine.heros.length; itHero++){
+          if (parseFloat(gameEngine.heros[itHero].guid) === parseFloat(src.source.guid)) {
+            this.source = gameEngine.heros[itHero];
+            break;
+          }
         }
-        else {
-            murmures.serverLog("Tech Error - Guid does not match - " + src.source.guid + " - " + gameEngine.hero.guid);
+
+        if(this.source == undefined) {
+            murmures.serverLog("Tech Error - Guid does not match any heroes- " + src.source.guid );
             return { valid: false, reason: 'Technical error - Guid does not match - Please refresh the page' };
         }
         this.target = gameEngine.level.tiles[src.target.y|0][src.target.x|0];
