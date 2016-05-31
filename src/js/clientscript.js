@@ -173,6 +173,25 @@ function drawTrail(sourceTile, destTile) {
                     destX * gameEngine.tileSize, destY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * destTile.x, gameEngine.tileSize * destTile.y, gameEngine.tileSize, gameEngine.tileSize);
 }
+
+function animateProjectile(start, end, sourceTile, destTile) {
+    let img = new Image();
+    img.src = gameEngine.tileset;
+    let imgRank = gameEngine.bodies['_b1_92_flame0'].rank;
+    let imgX = imgRank % 64;
+    let imgY = (imgRank - imgX) / 64;
+    window.requestAnimationFrame(function (timestamp) {
+        let lerpRatio = (timestamp - start) / (end - start);
+        let lerpX = sourceTile.x * (1 - lerpRatio) + destTile.x * lerpRatio;
+        let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;
+        document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+        document.getElementById('projectileLayer').getContext('2d').drawImage(img,
+                    imgX * gameEngine.tileSize, imgY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * lerpX, gameEngine.tileSize * lerpY, gameEngine.tileSize, gameEngine.tileSize);
+        if (timestamp < end) animateProjectile(start, end, sourceTile, destTile);
+        else document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+    });
+}
 // #endregion
 
 // #region UI/Characters
@@ -315,12 +334,21 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
         let check = gameEngine.checkOrder(order);
         document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
         if (check.valid) {
-            window.requestAnimationFrame(function () {
-                drawTrail(order.source.position, order.target);
-            });
+            
+            if (order.command === 'move') {
+                window.requestAnimationFrame(function () {
+                    drawTrail(order.source.position, order.target);
+                });
+            }
+            else if (order.command === 'attack') {
+                window.requestAnimationFrame(function (timestamp) {
+                    let starttime = timestamp;
+                    animateProjectile(starttime, starttime + 300, order.source.position, order.target);
+                });
+            }
         }
         else {
-        }        
+        }
         gameEngine.client.mouseMoveTarget.x = hoveredTile.x;
         gameEngine.client.mouseMoveTarget.y = hoveredTile.y;
     }
