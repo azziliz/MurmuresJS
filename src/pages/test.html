@@ -33,7 +33,7 @@
 
         //override
         function tilesetLoaded() {
-            gameEngine.ws.send(JSON.stringify({ service: 'test' }));
+            gameEngine.client.ws.send(JSON.stringify({ service: 'test' }));
         }
 
 

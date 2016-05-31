@@ -50,7 +50,7 @@
         'use strict';
 
         function initBodyEditor() {
-            gameEngine.ws.send(JSON.stringify({ service: 'getLevel' }));
+            gameEngine.client.ws.send(JSON.stringify({ service: 'getLevel' }));
         }
 
         function loadEngine(engine) {
