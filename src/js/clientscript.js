@@ -357,7 +357,7 @@ function registerEvents() {
 function topLayer_onMouseMove(hoveredTile, rightClick) {
     if (gameEngine.client.mouseMoveTarget.x !== hoveredTile.x || gameEngine.client.mouseMoveTarget.y !== hoveredTile.y) {
         let order = new murmures.Order();
-        order.source = gameEngine.hero;
+        order.source = gameEngine.heros[0];
         order.target = hoveredTile;
         if (hoveredTile.hasMob.code) {
             order.command = "attack";
@@ -368,7 +368,7 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
         let check = gameEngine.checkOrder(order);
         document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
         if (check.valid) {
-            
+
             if (order.command === 'move') {
                 window.requestAnimationFrame(function () {
                     drawTrail(order.source.position, order.target);
@@ -422,7 +422,7 @@ function getHoveredTile(mouseEventX, mouseEventY) {
 }
 
 function onKeyPress(char) {
-    screenLog('keyboardEvent');
+    /*screenLog('keyboardEvent');
     let allowedChars = '12346789';
     if (allowedChars.indexOf(char) >= 0) {
         let moveOrder = new murmures.Order();
@@ -440,7 +440,7 @@ function onKeyPress(char) {
     }
     else {
         screenLog('<span style="color:#f66">' + 'ERROR - This is not a valid key</span>');
-    }
+    }*/
 }
 // #endregion
 
