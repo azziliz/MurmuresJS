@@ -169,6 +169,7 @@ function initUI() {
     if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
         document.getElementById('leftCharacters').innerHTML = additionalLinks;
         document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero0').replace('bgColorMob', 'bgColorHero'));
+        document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, 'hero1').replace('bgColorMob', 'bgColorHero'));
     }
 }
 
@@ -213,26 +214,28 @@ function updateUI() {
             }
         }
     }
-    let i = 0;
-    let ref = gameEngine.bodies[gameEngine.hero.mobTemplate];
-    let locale = gameEngine.locale.fr.bodies[gameEngine.hero.mobTemplate];
-    let tilesetRank = ref.rank;
-    let tilesetX = tilesetRank % 64;
-    let tilesetY = (tilesetRank - tilesetX) / 64;
-    document.getElementById('hero' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
-    document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-    let namediv = document.getElementById('hero' + i + '-name');
-    let namedivwidth = window.getComputedStyle(namediv, null).width;
-    namediv.innerHTML = locale || 'Name Error';
-    let namefontsize = 100;
-    while (window.getComputedStyle(namediv, null).width != namedivwidth) {
-        namefontsize--;
-        namediv.style.fontSize = namefontsize.toString() + '%';
+    for (let i = 0; i < gameEngine.heros.length; i++) {
+      let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
+      let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
+      let tilesetRank = ref.rank;
+      let tilesetX = tilesetRank % 64;
+      let tilesetY = (tilesetRank - tilesetX) / 64;
+      document.getElementById('hero' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+      document.getElementById('hero' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+      let namediv = document.getElementById('hero' + i + '-name');
+      let namedivwidth = window.getComputedStyle(namediv, null).width;
+      namediv.innerHTML = locale || 'Name Error';
+      let namefontsize = 100;
+      while (window.getComputedStyle(namediv, null).width != namedivwidth) {
+          namefontsize--;
+          namediv.style.fontSize = namefontsize.toString() + '%';
+      }
+      let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
+      document.getElementById('hero' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
+      drawCharacter(gameEngine.heros[i]);
     }
-    let missingLife = parseFloat(gameEngine.hero.hitPoints) / parseFloat(gameEngine.hero.hitPointsMax) * 100.0;
-    document.getElementById('hero' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
-    drawCharacter(gameEngine.hero);
 }
+
 
 function clearCharacterLayer() {
     document.getElementById('characterLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);

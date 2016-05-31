@@ -32,7 +32,7 @@ murmures.GameEngine = function () {
     /** @type {murmures.Level} */
     this.level = {};
     /** @type {murmures.Character} */
-    this.hero = {};
+    this.heros = {};
 
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
@@ -69,8 +69,12 @@ murmures.GameEngine.prototype = {
         this.locale = src.locale;
         this.level = new murmures.Level();
         this.level.initialize(src.level);
-        this.hero = new murmures.Character();
-        this.hero.initialize(src.hero);
+        this.heros = [];
+        for (var itHero in src.heros){
+          let tempHero = new murmures.Character();
+          tempHero.initialize(src.heros[itHero]);
+          this.heros.push(tempHero);
+        }
         this.state = src.state;
     },
 

@@ -97,22 +97,6 @@ murmures.serverLog('Initializing game');
     gameEngine.locale.fr = JSON.parse(localefrJson);
     gameEngine.locale.en = JSON.parse(localeenJson);
 
-    /*gameEngine.levels = [];
-    gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
-    gameEngine.levelIds.forEach(function (levelName) {
-        let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
-        let level1 = new murmures.Level();
-        level1.build(JSON.parse(level1Txt));
-        gameEngine.levels.push(level1);
-    }, this);
-    gameEngine.activeLevel = 0;
-    gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-
-    let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-    gameEngine.hero = new murmures.Character();
-    gameEngine.hero.build(gameEngine.level.getStartingPoint(), JSON.parse(hero1Txt).mobTemplate);
-
-    gameEngine.hero.setVision();*/
     restartGame();
 })();
 
@@ -129,10 +113,17 @@ function restartGame(){
   gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
 
   let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
-  gameEngine.hero = new murmures.Character();
-  gameEngine.hero.build(gameEngine.level.getStartingPoint(), JSON.parse(hero1Txt).mobTemplate);
+  gameEngine.heros = [];
+  let hero = new murmures.Character();
+  hero.build(gameEngine.level.getStartingPoint(), JSON.parse(hero1Txt).mobTemplate);
+  hero.setVision();
+  gameEngine.heros.push(hero);
 
-  gameEngine.hero.setVision();
+  let hero2Txt = fs.readFileSync('./data/hero2.json', 'utf8').toString().replace(/^\uFEFF/, '');
+  let hero2 = new murmures.Character();
+  hero2.build(gameEngine.level.getStartingPoint(), JSON.parse(hero2Txt).mobTemplate);
+  gameEngine.heros.push(hero2);
+
   gameEngine.state = murmures.C.STATE_ENGINE_INIT;
 }
 
