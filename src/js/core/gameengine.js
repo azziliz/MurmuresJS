@@ -222,7 +222,6 @@ murmures.GameEngine.prototype = {
         murmures.serverLog('Moves / attacks done');
         //this.hero.setVision();
         var tilesProcessed=[];
-        murmures.serverLog(tilesProcessed.length);
         for (let itHero = 0; itHero < this.heros.length ; itHero++){
           if (tilesProcessed == undefined) {tilesProcessed = []; murmures.serverLog("prout");}
           tilesProcessed=this.heros[itHero].setVision(tilesProcessed);
@@ -233,7 +232,7 @@ murmures.GameEngine.prototype = {
     },
 
     applyAI : function () {
-        let hero = this.hero;
+        let heros = this.heros;
         let level = this.level;
         let bodies = this.bodies;
         let ge = this;
@@ -241,13 +240,17 @@ murmures.GameEngine.prototype = {
             if (mob.charSpotted) {
                 let fireOnHero = false;
                 if (mob.onVision) {
-                    if (Math.abs(mob.position.x - hero.position.x) <= 2 && Math.abs(mob.position.y - hero.position.y) <= 2 && mob.hitPoints > 0) {
-                        hero.hitPoints -= 1;
-                        fireOnHero = true;
-                        if (hero.hitPoints <= 0){
-                          hero.hitPoints = 0;
-                          ge.state = murmures.C.STATE_ENGINE_DEATH;
-                        }
+                    
+                    for (let itHero = 0; itHero < heros.length;itHero ++){
+                      if (Math.abs(mob.position.x - heros[itHero].position.x) <= 2 && Math.abs(mob.position.y - heros[itHero].position.y) <= 2 && mob.hitPoints > 0) {
+                          heros[itHero].hitPoints -= 1;
+                          fireOnHero = true;
+                          if (heros[itHero].hitPoints <= 0){
+                            heros[itHero].hitPoints = 0;
+                            ge.state = murmures.C.STATE_ENGINE_DEATH;
+                          }
+                          break;
+                      }
                     }
 
                 }
