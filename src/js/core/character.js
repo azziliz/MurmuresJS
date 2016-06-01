@@ -42,6 +42,8 @@ murmures.Character = function () {
     this.onVision = false; // hero is in sight
     /** @type {boolean} */
     this.charSpotted = false; // hero is known because seen at least once
+    /** @type {number} */
+    this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
 };
 
 murmures.Character.prototype = {
@@ -71,6 +73,8 @@ murmures.Character.prototype = {
         if (typeof src.hitPointsMax !== 'undefined') this.hitPointsMax = src.hitPointsMax;
         if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
+
+        this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
     },
 
     clone : function () {

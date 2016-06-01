@@ -20,6 +20,14 @@ murmures.C = Object.freeze({
     STATE_ENGINE_PLAYING:2,
     STATE_ENGINE_DEATH:3,
 
+    /*
+     * character state
+    */
+
+    STATE_HERO_WAITING_FOR_ORDER : 0,
+    STATE_HERO_ORDER_INPROGRESS : 1,
+    STATE_HERO_ORDER_GIVEN : 2,
+
     /* Format:
      * 'layerId' : ['layerName','TileGroup']
      */

@@ -279,12 +279,20 @@ function updateUI() {
     }
 
     for (let i = 0; i < gameEngine.heros.length; i++) {
-        let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-icon');
+        let winHero = document.getElementById('hero' + gameEngine.heros[i].guid +'-box'); //+ '-icon');
         if (winHero == undefined) {
             let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
             let templateStr = /template/g;
             document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
+        }else{
+          let winChar = document.getElementById('hero' + gameEngine.heros[i].guid +'-name');
+          let color = "#000000"
+          if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_GIVEN ) color = "#FF0000";
+          if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_INPROGRESS ) color = "#00FF00";
+          winChar.style.borderColor  = color;
+          console.log(winChar);
         }
+
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
         let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
         let tilesetRank = ref.rank;
