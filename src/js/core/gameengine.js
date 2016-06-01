@@ -197,7 +197,7 @@ murmures.GameEngine.prototype = {
         else {
             this.level.mobs.forEach(function (mob) {
                 if (mob.onVision && mob.position.x === order.target.x && mob.position.y === order.target.y) {
-                    mob.hitPoints -= 3;
+                    mob.hitPoints -= order.source.defaultDamageValue;
                     if (mob.hitPoints < 0) mob.hitPoints = 0;
                 }
             });
@@ -225,7 +225,7 @@ murmures.GameEngine.prototype = {
 
                     for (let itHero = 0; itHero < heros.length;itHero ++){
                       if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
-                          heros[itHero].hitPoints -= 1;
+                          heros[itHero].hitPoints -= mob.defaultDamageValue;
                           fireOnHero = true;
                           if (heros[itHero].hitPoints <= 0){
                             heros[itHero].hitPoints = 0;
@@ -234,7 +234,6 @@ murmures.GameEngine.prototype = {
                           break;
                       }
                     }
-
                 }
                 if (!fireOnHero) {
                 // TODO : move to hero

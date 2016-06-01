@@ -40,6 +40,10 @@ murmures.Character = function () {
     this.hitPoints = 0 | 0;
     /** @type {number} */
     this.range = 0 | 0;
+    /** @type {number} */
+    this.defaultDamageValue = 0 | 0;
+    /** @type {boolean} */
+    this.canMove = false; // unused for now
     /** @type {boolean} */
     this.onVision = false; // hero is in sight
     /** @type {boolean} */
@@ -59,9 +63,11 @@ murmures.Character.prototype = {
         this.position = tile;
         this.mobTemplate = template;
         let ref = gameEngine.bodies[template];
-        this.hitPointsMax = (ref.hitPointsMax || (murmures.C.LAYERS[ref.layerId][0] === 'Hero' ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in bodies.json.
+        this.hitPointsMax = (ref.hitPointsMax || (this.isHero ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in bodies.json.
         this.hitPoints = this.hitPointsMax | 0;
-        this.range = (ref.range || (murmures.C.LAYERS[ref.layerId][0] === 'Hero' ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in bodies.json.
+        this.range = (ref.range || (this.isHero ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in bodies.json.
+        this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in bodies.json.
+        this.canMove = ref.canMove || false;
     },
 
     initialize : function (src) {
@@ -76,6 +82,8 @@ murmures.Character.prototype = {
         if (typeof src.hitPointsMax !== 'undefined') this.hitPointsMax = src.hitPointsMax;
         if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
         if (typeof src.range !== 'undefined') this.range = src.range;
+        if (typeof src.defaultDamageValue !== 'undefined') this.defaultDamageValue = src.defaultDamageValue;
+        if (typeof src.canMove !== 'undefined') this.canMove = src.canMove;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
 
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
@@ -89,6 +97,8 @@ murmures.Character.prototype = {
             hitPointsMax: this.hitPointsMax,
             hitPoints: this.hitPoints,
             range: this.range,
+            defaultDamageValue: this.defaultDamageValue,
+            canMove: this.canMove,
             onVision: this.onVision,
         };
     },
@@ -101,6 +111,8 @@ murmures.Character.prototype = {
         if (this.hitPointsMax !== beforeState.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
         if (this.hitPoints !== beforeState.hitPoints) ret.hitPoints = this.hitPoints;
         if (this.range !== beforeState.range) ret.range = this.range;
+        if (this.defaultDamageValue !== beforeState.defaultDamageValue) ret.defaultDamageValue = this.defaultDamageValue;
+        if (this.canMove !== beforeState.canMove) ret.canMove = this.canMove;
         if (this.onVision !== beforeState.onVision) {
             ret.onVision = this.onVision;
             if (this.onVision) {
@@ -110,6 +122,8 @@ murmures.Character.prototype = {
                 ret.hitPointsMax = this.hitPointsMax;
                 ret.hitPoints = this.hitPoints;
                 ret.range = this.range;
+                ret.defaultDamageValue = this.defaultDamageValue;
+                ret.canMove = this.canMove;
             }
         }
         for (var prop in ret) {
@@ -122,6 +136,11 @@ murmures.Character.prototype = {
 
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
+    },
+    
+    get isHero() {
+        let ref = gameEngine.bodies[this.mobTemplate];
+        return murmures.C.LAYERS[ref.layerId][0] === 'Hero';
     },
 
     setVision : function (tilesProcessed) {
