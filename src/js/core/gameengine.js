@@ -182,10 +182,8 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (order.target.hasMob.code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true };
-      },
 
 
-        else return { valid: true };
     },
 
     applyOrder : function (order) {
