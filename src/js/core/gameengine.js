@@ -156,24 +156,24 @@ murmures.GameEngine.prototype = {
     checkOrder : function (order) {
         /// <param name="order" type="Order"/>
         var heroToCheck = null;
-        for(let itHero=0;itHero<gameEngine.heros.length;itHero++){
-          if(order.source.guid === gameEngine.heros[itHero].guid){
-            heroToCheck = gameEngine.heros[itHero];
-            break;
-          }
+        for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
+            if (order.source.guid === gameEngine.heros[itHero].guid) {
+                heroToCheck = gameEngine.heros[itHero];
+                break;
+            }
         }
-
-        if( this.state == murmures.C.STATE_ENGINE_DEATH) return{valid : false, reason : 'You are dead!'};
+        
+        if (this.state === murmures.C.STATE_ENGINE_DEATH) return { valid : false, reason : 'You are dead!' };
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
         else if (order.command === null) return { valid: false, reason: 'Order command is not defined' };
         else if (order.command !== 'move' && order.command !== 'attack') return { valid: false, reason: 'Order contains an unknown command' };
         //else if ((order.source.guid !== this.heros[0].guid)) return { valid: false, reason: 'You can only give orders to your own hero' };
-        else if (heroToCheck == null) return {valid: false, reason : 'order sent for an invalid hero'};
+        else if (heroToCheck == null) return { valid: false, reason : 'order sent for an invalid hero' };
         else if (order.target.isWall()) return { valid: false, reason: 'You cannot target a wall' };
 
-        else if (order.command === 'attack' && Math.abs(order.target.x - heroToCheck.position.x) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
-        else if (order.command === 'attack' && Math.abs(order.target.y - heroToCheck.position.y) > 3) return { valid: false, reason: 'Target is too far. Your attack range is: 3' };
+        else if (order.command === 'attack' && Math.abs(order.target.x - heroToCheck.position.x) > heroToCheck.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + heroToCheck.range };
+        else if (order.command === 'attack' && Math.abs(order.target.y - heroToCheck.position.y) > heroToCheck.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + heroToCheck.range };
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVision)) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') return { valid: true };
@@ -182,8 +182,6 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (order.target.hasMob.code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true };
-
-
     },
 
     applyOrder : function (order) {
@@ -226,7 +224,7 @@ murmures.GameEngine.prototype = {
                 if (mob.onVision) {
 
                     for (let itHero = 0; itHero < heros.length;itHero ++){
-                      if (Math.abs(mob.position.x - heros[itHero].position.x) <= 2 && Math.abs(mob.position.y - heros[itHero].position.y) <= 2 && mob.hitPoints > 0) {
+                      if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
                           heros[itHero].hitPoints -= 1;
                           fireOnHero = true;
                           if (heros[itHero].hitPoints <= 0){

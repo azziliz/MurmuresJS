@@ -16046,7 +16046,8 @@
     "_b1_32_rat.rl2": {
         "layerId": "32",
         "rank": 2949,
-        "hitPointsMax": 5
+        "hitPointsMax": 5,
+        "range": 1
     },
     "_b1_32_rattlesnake.conv": {
         "layerId": "32",

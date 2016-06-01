@@ -38,6 +38,8 @@ murmures.Character = function () {
     this.hitPointsMax = 0 | 0;
     /** @type {number} */
     this.hitPoints = 0 | 0;
+    /** @type {number} */
+    this.range = 0 | 0;
     /** @type {boolean} */
     this.onVision = false; // hero is in sight
     /** @type {boolean} */
@@ -59,6 +61,7 @@ murmures.Character.prototype = {
         let ref = gameEngine.bodies[template];
         this.hitPointsMax = (ref.hitPointsMax || (murmures.C.LAYERS[ref.layerId][0] === 'Hero' ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in bodies.json.
         this.hitPoints = this.hitPointsMax | 0;
+        this.range = (ref.range || (murmures.C.LAYERS[ref.layerId][0] === 'Hero' ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in bodies.json.
     },
 
     initialize : function (src) {
@@ -72,6 +75,7 @@ murmures.Character.prototype = {
         if (typeof src.mobTemplate !== 'undefined') this.mobTemplate = src.mobTemplate;
         if (typeof src.hitPointsMax !== 'undefined') this.hitPointsMax = src.hitPointsMax;
         if (typeof src.hitPoints !== 'undefined') this.hitPoints = src.hitPoints;
+        if (typeof src.range !== 'undefined') this.range = src.range;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
 
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
@@ -84,6 +88,7 @@ murmures.Character.prototype = {
             mobTemplate: this.mobTemplate,
             hitPointsMax: this.hitPointsMax,
             hitPoints: this.hitPoints,
+            range: this.range,
             onVision: this.onVision,
         };
     },
@@ -95,6 +100,7 @@ murmures.Character.prototype = {
         if (this.mobTemplate !== beforeState.mobTemplate) ret.mobTemplate = this.mobTemplate;
         if (this.hitPointsMax !== beforeState.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
         if (this.hitPoints !== beforeState.hitPoints) ret.hitPoints = this.hitPoints;
+        if (this.range !== beforeState.range) ret.range = this.range;
         if (this.onVision !== beforeState.onVision) {
             ret.onVision = this.onVision;
             if (this.onVision) {
@@ -103,6 +109,7 @@ murmures.Character.prototype = {
                 ret.mobTemplate = this.mobTemplate;
                 ret.hitPointsMax = this.hitPointsMax;
                 ret.hitPoints = this.hitPoints;
+                ret.range = this.range;
             }
         }
         for (var prop in ret) {
