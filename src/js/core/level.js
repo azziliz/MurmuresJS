@@ -241,24 +241,6 @@ murmures.Level.prototype = {
           else if (this.id === 'level4') gameEngine.heros[itHero].position = this.tiles[20][5];
           else if (this.id === 'level5') gameEngine.heros[itHero].position = this.tiles[15][2];
         }
-
-        /*if (this.id === 'level1') gameEngine.hero.position = this.tiles[9][1];
-        else if (this.id === 'level2') gameEngine.hero.position = this.tiles[15][3];
-        else if (this.id === 'level4') gameEngine.hero.position = this.tiles[20][5];
-        else if (this.id === 'level5') gameEngine.hero.position = this.tiles[15][2];
-        else {
-            /* OBSOLETE
-            for (let y = 0; y < this.height; y++) {
-                for (let x = 0; x < this.width; x++) {
-                    if (this.tiles[y][x].charId !== '') {
-                        let ref = gameEngine.bodies[this.tiles[y][x].charId];
-                        if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') {
-                            gameEngine.hero.position = this.tiles[y][x];
-                        }
-                    }
-                }
-            }
-        }*/
     },
 
     getStartingPoint: function () {

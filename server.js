@@ -238,16 +238,18 @@ wss.on('connection', function (ws) {
             }
             murmures.serverLog('Response sent');
         }
+        else if (message.service === 'restart') {
+            restartGame();
+            wss.clients.forEach(function each(client) {
+                client.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
+            });
+        }
         else if (message.service === 'test') {
             let test = new murmures.ServerTest();
             test.run(require);
         }
-        else if(message.service == 'restart'){
-          restartGame();
-          wss.clients.forEach(function each(client) {
-              client.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
-
-          });
+        else {
+            murmures.serverLog('Received an incorrect request:' + messageTxt.toString());
         }
     });
 });

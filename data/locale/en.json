@@ -4775,9 +4775,9 @@
         "_b1_56_ilsuiw__2": "Hero",
         "_b1_56_iron_giant": "Hero",
         "_b1_56_jessica": "Hero",
-        "_b1_56_jessica.rl2": "Hero",
-        "_b1_56_job_gladiator.conv": "Hero",
-        "_b1_56_jorgrun": "Hero",
+        "_b1_56_jessica.rl2": "Angharad",
+        "_b1_56_job_gladiator.conv": "Jason",
+        "_b1_56_jorgrun": "Moradin",
         "_b1_56_jory": "Hero",
         "_b1_56_joseph": "Hero",
         "_b1_56_joseph.rl2": "Hero",
@@ -4877,5 +4877,9 @@
         "_b1_56_wizard_of_yendor.rl1": "Hero",
         "_b1_56_woodland-elf.rl1": "Hero",
         "_b1_56_xtahua.rl2": "Hero"
+    },
+    "ui": {
+        "death_window_title": "You are dead",
+        "death_window_restart": "Restart"
     }
 }

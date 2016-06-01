@@ -4776,8 +4776,8 @@
         "_b1_56_iron_giant": "Héros",
         "_b1_56_jessica": "Héros",
         "_b1_56_jessica.rl2": "Angharad",
-        "_b1_56_job_gladiator.conv": "Héros",
-        "_b1_56_jorgrun": "Héros",
+        "_b1_56_job_gladiator.conv": "Jason",
+        "_b1_56_jorgrun": "Moradin",
         "_b1_56_jory": "Héros",
         "_b1_56_joseph": "Héros",
         "_b1_56_joseph.rl2": "Héros",
@@ -4877,5 +4877,9 @@
         "_b1_56_wizard_of_yendor.rl1": "Héros",
         "_b1_56_woodland-elf.rl1": "Héros",
         "_b1_56_xtahua.rl2": "Héros"
+    },
+    "ui": {
+        "death_window_title": "Vous êtes mort",
+        "death_window_restart": "Rejouer"
     }
 }

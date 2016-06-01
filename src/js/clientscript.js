@@ -55,12 +55,12 @@ function init() {
     xhr.send(null);
 }
 
-function restartGame(){
-  gameEngine.ws.send(JSON.stringify({service:'restart'}));
+function restartGame() {
+    gameEngine.client.ws.send(JSON.stringify({ service: 'restart' }));
 }
 
 function tilesetLoaded() {
-    gameEngine.client.ws.send(JSON.stringify({service:'getLevel'}));
+    gameEngine.client.ws.send(JSON.stringify({ service: 'getLevel' }));
 }
 
 function loadEngine(engine) {
@@ -80,21 +80,19 @@ function renderLevel() {
         let context = allCanvas[canvasIter].getContext('2d');
         context.imageSmoothingEnabled = false;
     }
-    //document.getElementById('screenLog').style.top = (10 + gameEngine.level.height * gameEngine.tileSize).toString() + 'px';
     drawTiles(gameEngine);
     updateUI();
 }
 
 // #region Tiles
 function drawTiles(partialEngine) {
-    if (typeof partialEngine.level.tiles !== "undefined") {
+    if (typeof partialEngine !== "undefined" && typeof partialEngine.level !== "undefined" && typeof partialEngine.level.tiles !== "undefined") {
         partialEngine.level.tiles.forEach(function (tileRow) {
             tileRow.forEach(function (tile) {
                 drawOneTile(tile.x, tile.y, '#2D1E19');
             }, this);
         }, this);
     }
-
 }
 
 function drawOneTile(x, y, color) {
@@ -200,7 +198,7 @@ function queueProjectile(start, sourceTile, destTile) {
     //let imgRank = gameEngine.bodies['_b1_92_icicle' + direction].rank;
     let imgX = imgRank % 64;
     let imgY = (imgRank - imgX) / 64;
-    animateProjectile(start, start + 100*Math.max(absDeltaX, absDeltaY), 0, img, imgX, imgY, sourceTile, destTile)
+    animateProjectile(start, start + 100 * Math.max(absDeltaX, absDeltaY), 0, img, imgX, imgY, sourceTile, destTile)
 }
 
 function animateProjectile(start, end, timestamp, img, imgX, imgY, sourceTile, destTile) {
@@ -228,19 +226,21 @@ function initUI() {
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     document.getElementById('rightCharacters').innerHTML = '';
     let templateStr = /template/g;
-
+    
     gameEngine.level.uiMobCount = 0;
-
+    
     if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
         document.getElementById('leftCharacters').innerHTML = additionalLinks;
     }
 }
 
 function updateUI() {
-    if(gameEngine.state == murmures.C.STATE_ENGINE_DEATH){
-      document.getElementById("deathWindow").style.display = "block";
-    }else{
-      document.getElementById("deathWindow").style.display = "None";
+    if (gameEngine.state === murmures.C.STATE_ENGINE_DEATH) {
+        document.getElementById('deathWindowTitle').innerHTML = gameEngine.locale.fr.ui['death_window_title'];
+        document.getElementById('deathWindowRestartButton').innerHTML = gameEngine.locale.fr.ui['death_window_restart'];
+        document.getElementById('deathWindow').style.display = "block";
+    } else {
+        document.getElementById('deathWindow').style.display = "none";
     }
     clearCharacterLayer();
     if (gameEngine.level.mobs != undefined) {
@@ -249,7 +249,7 @@ function updateUI() {
             let templateStr = /template/g;
             document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + gameEngine.level.uiMobCount.toString()));
             gameEngine.level.uiMobCount++;
-       }
+        }
         for (let i = 0; i < gameEngine.level.mobs.length; i++) {
             let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
             let locale = gameEngine.locale.fr.bodies[gameEngine.level.mobs[i].mobTemplate];
@@ -277,32 +277,32 @@ function updateUI() {
             }
         }
     }
-
+    
     for (let i = 0; i < gameEngine.heros.length; i++) {
-      let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-icon');
-      if (winHero == undefined){
-        let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
-        let templateStr = /template/g;
-        document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
-      }
-      let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
-      let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
-      let tilesetRank = ref.rank;
-      let tilesetX = tilesetRank % 64;
-      let tilesetY = (tilesetRank - tilesetX) / 64;
-      document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
-      document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-      let namediv = document.getElementById('hero' + gameEngine.heros[i].guid + '-name');
-      let namedivwidth = window.getComputedStyle(namediv, null).width;
-      namediv.innerHTML = locale || 'Name Error';
-      let namefontsize = 100;
-      while (window.getComputedStyle(namediv, null).width != namedivwidth) {
-          namefontsize--;
-          namediv.style.fontSize = namefontsize.toString() + '%';
-      }
-      let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
-      document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
-      drawCharacter(gameEngine.heros[i]);
+        let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-icon');
+        if (winHero == undefined) {
+            let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
+            let templateStr = /template/g;
+            document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
+        }
+        let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
+        let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
+        let tilesetRank = ref.rank;
+        let tilesetX = tilesetRank % 64;
+        let tilesetY = (tilesetRank - tilesetX) / 64;
+        document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+        document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+        let namediv = document.getElementById('hero' + gameEngine.heros[i].guid + '-name');
+        let namedivwidth = window.getComputedStyle(namediv, null).width;
+        namediv.innerHTML = locale || 'Name Error';
+        let namefontsize = 100;
+        while (window.getComputedStyle(namediv, null).width != namedivwidth) {
+            namefontsize--;
+            namediv.style.fontSize = namefontsize.toString() + '%';
+        }
+        let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
+        document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
+        drawCharacter(gameEngine.heros[i]);
     }
 }
 
@@ -368,7 +368,7 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
         let check = gameEngine.checkOrder(order);
         document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
         if (check.valid) {
-
+            
             if (order.command === 'move') {
                 window.requestAnimationFrame(function () {
                     drawTrail(order.source.position, order.target);
@@ -452,7 +452,7 @@ function launchOrder(order) {
         if (check.valid) {
             screenLog('>> order - ' + order.command);
             order.clean();
-            gameEngine.client.ws.send(JSON.stringify({ service: 'order', payload: order}));
+            gameEngine.client.ws.send(JSON.stringify({ service: 'order', payload: order }));
             gameEngine.client.allowOrders = false;
         }
         else {
@@ -474,8 +474,7 @@ function onOrderResponse(response) {
     }
     else {
         let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
-        gameEngine.synchronize(ge);
-
+        gameEngine.synchronize(ge);        
         if (isNewLevel) {
             initUI();
             renderLevel();
@@ -484,8 +483,8 @@ function onOrderResponse(response) {
             drawTiles(ge);
             updateUI();
         }
-        if (gameEngine.state == murmures.C.STATE_ENGINE_DEATH){
-          screenLog('YOU DIE !');
+        if (gameEngine.state === murmures.C.STATE_ENGINE_DEATH) {
+            screenLog('YOU DIE !');
         }
         //document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
         screenLog('UI updated');
