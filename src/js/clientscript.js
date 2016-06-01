@@ -226,9 +226,9 @@ function initUI() {
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     document.getElementById('rightCharacters').innerHTML = '';
     let templateStr = /template/g;
-    
+
     gameEngine.level.uiMobCount = 0;
-    
+
     if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
         document.getElementById('leftCharacters').innerHTML = additionalLinks;
     }
@@ -277,7 +277,7 @@ function updateUI() {
             }
         }
     }
-    
+
     for (let i = 0; i < gameEngine.heros.length; i++) {
         let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-icon');
         if (winHero == undefined) {
@@ -368,7 +368,7 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
         let check = gameEngine.checkOrder(order);
         document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
         if (check.valid) {
-            
+
             if (order.command === 'move') {
                 window.requestAnimationFrame(function () {
                     drawTrail(order.source.position, order.target);
@@ -391,7 +391,7 @@ function topLayer_onClick(hoveredTile, rightClick) {
     if (!rightClick) {
         // event is a left click
         // find hovered tile
-		if (hoveredTile.hasMob().code) {            let attackOrder = new murmures.Order();
+		if (hoveredTile.hasMob.code) {            let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
             attackOrder.source = gameEngine.heros[0];
             attackOrder.target = hoveredTile;
@@ -473,7 +473,7 @@ function onOrderResponse(response) {
     }
     else {
         let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
-        gameEngine.synchronize(ge);        
+        gameEngine.synchronize(ge);
         if (isNewLevel) {
             initUI();
             renderLevel();
