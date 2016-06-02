@@ -162,7 +162,7 @@ murmures.GameEngine.prototype = {
                 break;
             }
         }
-        
+
         if (this.state === murmures.C.STATE_ENGINE_DEATH) return { valid : false, reason : 'You are dead!' };
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
@@ -182,6 +182,34 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (order.target.hasMob.code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true };
+    },
+
+    saveOrder : function (order) {
+        // This function is only called on server side
+        let nbOrderDone = 0;
+        for(let itHero = 0; itHero < this.heros.length ; itHero++){
+          if (this.heros[itHero].guid == order.source.guid){
+            this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
+            this.heros[itHero].order = order;
+            murmures.serverLog('Order saved');
+          }
+
+          if (this.heros[itHero].stateOrder == murmures.C.STATE_HERO_ORDER_GIVEN){
+            nbOrderDone += 1;
+          }
+        }
+
+        if (this.heros.length != nbOrderDone){
+          for(let itHero = 0; itHero < this.heros.length ; itHero++){
+              if (this.heros[itHero].stateOrder != murmures.C.STATE_HERO_ORDER_GIVEN){
+                this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+                murmures.serverLog('Waiting for next order from following hero');
+                break;
+              }
+          }
+        }else{
+          //TODO : applyOrder for each order
+        }
     },
 
     applyOrder : function (order) {

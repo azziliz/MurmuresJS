@@ -216,11 +216,12 @@ wss.on('connection', function (ws) {
             if (parsing.valid) {
                 let check = gameEngine.checkOrder(clientOrder);
                 if (check.valid) {
-                    gameEngine.gameTurn++;
+                    //gameEngine.gameTurn++;
                     murmures.serverLog('Order checked');
                     let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
                     murmures.serverLog('State saved');
-                    gameEngine.applyOrder(clientOrder);
+                    gameEngine.saveOrder(clientOrder);
+
                     murmures.serverLog('Order applied');
                     let ge = gameEngine.compare(beforeState);
                     let res = JSON.stringify({ fn: 'o', payload: ge });

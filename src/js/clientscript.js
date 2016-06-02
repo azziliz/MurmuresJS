@@ -291,7 +291,6 @@ function updateUI() {
         if (gameEngine.heros[i].stateOrder == murmures.C.STATE_HERO_ORDER_INPROGRESS ) color = "#00FF00";
         winChar.style.borderColor  = color;
 
-
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
         let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
         let tilesetRank = ref.rank;
