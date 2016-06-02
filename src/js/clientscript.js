@@ -283,14 +283,14 @@ function updateUI() {
         if (winHero == undefined) {
             let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
             let templateStr = /template/g;
-            document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
-        }else{
-          let winChar = document.getElementById('hero' + gameEngine.heros[i].guid +'-charname');
-          let color = "#000000"
-          if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_GIVEN ) color = "#FF0000";
-          if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_INPROGRESS ) color = "#00FF00";
-          winChar.style.borderColor  = color;
+            winHero = document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
         }
+        let winChar = document.getElementById('hero' + gameEngine.heros[i].guid +'-charname');
+        let color = "#000000"
+        if (gameEngine.heros[i].stateOrder == murmures.C.STATE_HERO_ORDER_GIVEN ) color = "#FF0000";
+        if (gameEngine.heros[i].stateOrder == murmures.C.STATE_HERO_ORDER_INPROGRESS ) color = "#00FF00";
+        winChar.style.borderColor  = color;
+
 
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
         let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];

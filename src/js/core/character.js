@@ -50,6 +50,8 @@ murmures.Character = function () {
     this.charSpotted = false; // hero is known because seen at least once
     /** @type {number} */
     this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+    /** @type {murmures.order} */
+    this.order = null;
 };
 
 murmures.Character.prototype = {
@@ -68,6 +70,7 @@ murmures.Character.prototype = {
         this.range = (ref.range || (this.isHero ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in bodies.json.
         this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in bodies.json.
         this.canMove = ref.canMove || false;
+        this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
     },
 
     initialize : function (src) {
@@ -85,8 +88,8 @@ murmures.Character.prototype = {
         if (typeof src.defaultDamageValue !== 'undefined') this.defaultDamageValue = src.defaultDamageValue;
         if (typeof src.canMove !== 'undefined') this.canMove = src.canMove;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
+        if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
 
-        this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
     },
 
     clone : function () {
@@ -100,6 +103,7 @@ murmures.Character.prototype = {
             defaultDamageValue: this.defaultDamageValue,
             canMove: this.canMove,
             onVision: this.onVision,
+            stateOrder : this.stateOrder,
         };
     },
 
@@ -113,6 +117,7 @@ murmures.Character.prototype = {
         if (this.range !== beforeState.range) ret.range = this.range;
         if (this.defaultDamageValue !== beforeState.defaultDamageValue) ret.defaultDamageValue = this.defaultDamageValue;
         if (this.canMove !== beforeState.canMove) ret.canMove = this.canMove;
+        if (this.stateOrder !== beforeState.stateOrder) ret.stateOrder = this.stateOrder;
         if (this.onVision !== beforeState.onVision) {
             ret.onVision = this.onVision;
             if (this.onVision) {
@@ -137,7 +142,7 @@ murmures.Character.prototype = {
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
     },
-    
+
     get isHero() {
         let ref = gameEngine.bodies[this.mobTemplate];
         return murmures.C.LAYERS[ref.layerId][0] === 'Hero';

@@ -17,7 +17,7 @@ var murmures = {
      * @private
      */
     startTime: process.hrtime(),
-    
+
     /**
      * Writes timestamped log to the console.
      * @public
@@ -30,7 +30,7 @@ var murmures = {
         }
         return fdiff;
     },
-    
+
     restartGame: function () {
         gameEngine.levels = [];
         gameEngine.levelIds = ["level1", "level2", "level4", "level5"];
@@ -42,24 +42,25 @@ var murmures = {
         }, this);
         gameEngine.activeLevel = 0;
         gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-        
+
         let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
         gameEngine.heros = [];
         let hero = new murmures.Character();
         hero.build(gameEngine.level.getStartingPoint(), JSON.parse(hero1Txt).mobTemplate);
         hero.setVision();
+        hero.stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
         gameEngine.heros.push(hero);
-        
+
         let hero2Txt = fs.readFileSync('./data/hero2.json', 'utf8').toString().replace(/^\uFEFF/, '');
         let hero2 = new murmures.Character();
         hero2.build(gameEngine.level.getStartingPoint(), JSON.parse(hero2Txt).mobTemplate);
         gameEngine.heros.push(hero2);
-        
+
         let hero3Txt = fs.readFileSync('./data/hero3.json', 'utf8').toString().replace(/^\uFEFF/, '');
         let hero3 = new murmures.Character();
         hero3.build(gameEngine.level.getStartingPoint(), JSON.parse(hero3Txt).mobTemplate);
         gameEngine.heros.push(hero3);
-        
+
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
     }
 };
