@@ -226,9 +226,9 @@ function initUI() {
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
     document.getElementById('rightCharacters').innerHTML = '';
     let templateStr = /template/g;
-
+    
     gameEngine.level.uiMobCount = 0;
-
+    
     if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
         document.getElementById('leftCharacters').innerHTML = additionalLinks;
     }
@@ -277,21 +277,21 @@ function updateUI() {
             }
         }
     }
-
+    
     for (let i = 0; i < gameEngine.heros.length; i++) {
-        let winHero = document.getElementById('hero' + gameEngine.heros[i].guid +'-box'); //+ '-icon');
+        let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-box'); //+ '-icon');
         if (winHero == undefined) {
             let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
             let templateStr = /template/g;
             document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
-        }else{
-          let winChar = document.getElementById('hero' + gameEngine.heros[i].guid +'-charname');
-          let color = "#000000"
-          if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_GIVEN ) color = "#FF0000";
-          if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_INPROGRESS ) color = "#00FF00";
-          winChar.style.borderColor  = color;
+        } else {
+            let winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
+            let color = "#000000"
+            if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_GIVEN) color = "#FF0000";
+            if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_INPROGRESS) color = "#00FF00";
+            winChar.style.borderColor = color;
         }
-
+        
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
         let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
         let tilesetRank = ref.rank;
@@ -359,6 +359,36 @@ function registerEvents() {
             char = String.fromCharCode(e.which);
         onKeyPress(char);
     }, false);
+    
+    let tabsLi = document.getElementById('tabs').childNodes;
+    for (let liIter = 0; liIter < tabsLi.length; liIter++) {
+        tabsLi[liIter].addEventListener("mousedown", function (e) {
+            e.preventDefault();
+            let target = this.dataset.target;
+            let contentDiv = document.getElementById('tabContent').childNodes;
+            for (let contentIter=0; contentIter < contentDiv.length; contentIter++) {
+                if (typeof contentDiv[contentIter].dataset !== 'undefined' && 
+                    contentDiv[contentIter].dataset.title === target) {
+                    // target found
+                    if (this.classList.contains("selected")) {
+                        this.classList.remove("selected");
+                        contentDiv[contentIter].classList.remove("show");
+                    }
+                    else {
+                        [].forEach.call(document.getElementById('tabs').childNodes, function (elt) {
+                            if (elt.nodeName === "LI") elt.classList.remove("selected");
+                        });
+                        [].forEach.call(document.getElementById('tabContent').childNodes, function (elt) {
+                            if (elt.nodeName === "DIV") elt.classList.remove("show");
+                        });
+                        this.classList.add("selected");
+                        contentDiv[contentIter].classList.add("show");
+                    }
+                }
+            }
+        }, false);
+    }
+
 }
 
 function topLayer_onMouseMove(hoveredTile, rightClick) {
@@ -375,7 +405,7 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
         let check = gameEngine.checkOrder(order);
         document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
         if (check.valid) {
-
+            
             if (order.command === 'move') {
                 window.requestAnimationFrame(function () {
                     drawTrail(order.source.position, order.target);
@@ -398,7 +428,8 @@ function topLayer_onClick(hoveredTile, rightClick) {
     if (!rightClick) {
         // event is a left click
         // find hovered tile
-		if (hoveredTile.hasMob.code) {            let attackOrder = new murmures.Order();
+        if (hoveredTile.hasMob.code) {
+            let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
             attackOrder.source = gameEngine.heros[0];
             attackOrder.target = hoveredTile;

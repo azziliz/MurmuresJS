@@ -2,14 +2,29 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <title>MurmuresJS</title>
     <link rel="stylesheet" href="/src/css/client.css" media="screen">
 </head>
 <body onload="init()">
     <header>
-
+        <ul id="tabs">
+            <li data-target="clientLog">Client log</li>
+            <li data-target="serverLog">Server log</li>
+            <li data-target="devTools">Dev tools</li>
+        </ul>
     </header>
+    <div id="tabContent">
+        <div data-title="clientLog">
+            test1<br>test2
+        </div>
+        <div data-title="serverLog">
+            test3<br>test4
+        </div>
+        <div data-title="devTools">
+            test5<br>test6
+        </div>
+    </div>
     <div id="tilesetLoadBg" class="tilesetLoad">
         <div id="tilesetLoadProgress"></div>
     </div>
@@ -59,10 +74,10 @@
         </div>
     </script>
     <!--
-    <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#f8f8f8; z-index:-20"></div>
-    <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#f8fff8; z-index:-10"></div>
-    <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:#f8f8ff; z-index:-9"></div>
-    <div id="iPhone4" style="position:absolute; top:0; left:0; width:960px; height:640px; background-color:#fff8f8; z-index:-8"></div>
+    <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#e8e8e8; z-index:-20"></div>
+    <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#e8ffe8; z-index:-10"></div>
+    <div id="iPhone5" style="position:absolute; top:0; left:0; width:1136px; height:640px; background-color:#e8e8ff; z-index:-9"></div>
+    <div id="iPhone4" style="position:absolute; top:0; left:0; width:960px; height:640px; background-color:#ffe8e8; z-index:-8"></div>
     <div id="galaxyS3Mini" style="position:absolute; top:0; left:0; width:800px; height:480px; background-color:#fff; z-index:-7"></div>
     -->
     <div id="targetResolution" class="fullScreen">
@@ -80,7 +95,7 @@
         <div id="rightCharacters" class="zUI" style="float:right">
         </div>
     </div>
-	 <div id="deathWindow" class="deathWindow" style="display:none;">
+    <div id="deathWindow" class="deathWindow" style="display:none;">
         <p style="position:absolute;left:150px;font-size:200%;" id="deathWindowTitle"></p>
         <p style="position:absolute;left:150px;top:200px;font-size:200%;"><a href="#" onclick="restartGame();" id="deathWindowRestartButton"></a></p>
     </div>
