@@ -84,6 +84,19 @@ function renderLevel() {
     updateUI();
 }
 
+function getCurrentHero() {
+    let heroToReturn = null;
+    let itHero = 0;
+    while (heroToReturn == null && itHero < gameEngine.heros.length) {
+        if (gameEngine.heros[itHero].stateOrder == murmures.C.STATE_HERO_ORDER_INPROGRESS) {
+            heroToReturn = gameEngine.heros[itHero];
+        }
+        itHero++;
+    }
+    
+    return heroToReturn;
+}
+
 // #region Tiles
 function drawTiles(partialEngine) {
     if (typeof partialEngine !== "undefined" && typeof partialEngine.level !== "undefined" && typeof partialEngine.level.tiles !== "undefined") {
@@ -283,14 +296,13 @@ function updateUI() {
         if (winHero == undefined) {
             let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
             let templateStr = /template/g;
-            document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
-        } else {
-            let winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
-            let color = "#000000"
-            if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_GIVEN) color = "#FF0000";
-            if (gameEngine.heros[i].state == murmures.C.STATE_HERO_ORDER_INPROGRESS) color = "#00FF00";
-            winChar.style.borderColor = color;
+            winHero = document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
         }
+        let winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
+        let color = "#000000";
+        if (gameEngine.heros[i].stateOrder == murmures.C.STATE_HERO_ORDER_GIVEN) color = "#FF0000";
+        if (gameEngine.heros[i].stateOrder == murmures.C.STATE_HERO_ORDER_INPROGRESS) color = "#00FF00";
+        winChar.style.borderColor = color;
         
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
         let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
@@ -394,7 +406,8 @@ function registerEvents() {
 function topLayer_onMouseMove(hoveredTile, rightClick) {
     if (gameEngine.client.mouseMoveTarget.x !== hoveredTile.x || gameEngine.client.mouseMoveTarget.y !== hoveredTile.y) {
         let order = new murmures.Order();
-        order.source = gameEngine.heros[0];
+        let currentHero = getCurrentHero();
+        order.source = currentHero;
         order.target = hoveredTile;
         if (hoveredTile.hasMob.code) {
             order.command = "attack";
@@ -428,17 +441,19 @@ function topLayer_onClick(hoveredTile, rightClick) {
     if (!rightClick) {
         // event is a left click
         // find hovered tile
+        
+        let currentHero = getCurrentHero();
         if (hoveredTile.hasMob.code) {
             let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
-            attackOrder.source = gameEngine.heros[0];
+            attackOrder.source = currentHero;
             attackOrder.target = hoveredTile;
             launchOrder(attackOrder);
         }
         else {
             let moveOrder = new murmures.Order();
             moveOrder.command = "move";
-            moveOrder.source = gameEngine.heros[0];
+            moveOrder.source = currentHero;
             moveOrder.target = hoveredTile;
             launchOrder(moveOrder);
         }
