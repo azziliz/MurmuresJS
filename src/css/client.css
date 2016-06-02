@@ -118,13 +118,11 @@ canvas {
             .characterBox div div div {
                 float: none;
             }
-.characterName{
-  border-style: solid;
-  border-color:#000000;
-}
+
     .characterBox .characterName {
-        width: calc(100% - 60px);
-        padding: 3px;
+        width: calc(100% - 52px);
+        padding: 2px;
+        border: 2px solid #000;
     }
 
         .characterBox .characterName div {
