@@ -208,13 +208,15 @@ murmures.GameEngine.prototype = {
               }
           }
         }else{
+          murmures.serverLog('Apply all orders');
           for(let itHero = 0; itHero < this.heros.length ; itHero++){
+            this.applyOrder(this.heros[itHero].order);
             if (itHero == 0){
               this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
             }else{
               this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-
             }
+
           }
         }
     },
