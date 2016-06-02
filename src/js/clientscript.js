@@ -84,6 +84,19 @@ function renderLevel() {
     updateUI();
 }
 
+function getCurrentHero(){
+  let heroToReturn = null;
+  let itHero = 0;
+  while (heroToReturn == null && itHero<gameEngine.heros.length){
+    if(gameEngine.heros[itHero].stateOrder == murmures.C.STATE_HERO_ORDER_INPROGRESS){
+      heroToReturn = gameEngine.heros[itHero];
+    }
+    itHero++;
+  }
+
+  return heroToReturn;
+}
+
 // #region Tiles
 function drawTiles(partialEngine) {
     if (typeof partialEngine !== "undefined" && typeof partialEngine.level !== "undefined" && typeof partialEngine.level.tiles !== "undefined") {
@@ -363,7 +376,8 @@ function registerEvents() {
 function topLayer_onMouseMove(hoveredTile, rightClick) {
     if (gameEngine.client.mouseMoveTarget.x !== hoveredTile.x || gameEngine.client.mouseMoveTarget.y !== hoveredTile.y) {
         let order = new murmures.Order();
-        order.source = gameEngine.heros[0];
+        let currentHero = getCurrentHero();
+        order.source = currentHero;
         order.target = hoveredTile;
         if (hoveredTile.hasMob.code) {
             order.command = "attack";
@@ -397,16 +411,19 @@ function topLayer_onClick(hoveredTile, rightClick) {
     if (!rightClick) {
         // event is a left click
         // find hovered tile
-		if (hoveredTile.hasMob.code) {            let attackOrder = new murmures.Order();
+
+    let currentHero = getCurrentHero();
+		if (hoveredTile.hasMob.code) {
+            let attackOrder = new murmures.Order();
             attackOrder.command = "attack";
-            attackOrder.source = gameEngine.heros[0];
+            attackOrder.source = currentHero;
             attackOrder.target = hoveredTile;
             launchOrder(attackOrder);
         }
         else {
             let moveOrder = new murmures.Order();
             moveOrder.command = "move";
-            moveOrder.source = gameEngine.heros[0];
+            moveOrder.source = currentHero;
             moveOrder.target = hoveredTile;
             launchOrder(moveOrder);
         }

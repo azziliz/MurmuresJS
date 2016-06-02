@@ -208,7 +208,14 @@ murmures.GameEngine.prototype = {
               }
           }
         }else{
-          //TODO : applyOrder for each order
+          for(let itHero = 0; itHero < this.heros.length ; itHero++){
+            if (itHero == 0){
+              this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+            }else{
+              this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+
+            }
+          }
         }
     },
 
