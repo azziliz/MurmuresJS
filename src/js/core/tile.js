@@ -57,7 +57,7 @@ murmures.Tile.prototype = {
         this.itemId = (typeof src.itemId === 'undefined') ? '' : src.itemId;
         this.charId = (typeof src.charId === 'undefined') ? '' : src.charId;
         this.effectId = (typeof src.effectId === 'undefined') ? '' : src.effectId;
-        this.behavior = (typeof src.propId === 'undefined') ? {} : gameEngine.bodies[src.propId].behavior;
+        this.behavior = (typeof src.propId === 'undefined' || src.propId === '') ? {} : gameEngine.bodies[src.propId].behavior;
     },
     
     initialize : function (src) {
@@ -72,6 +72,7 @@ murmures.Tile.prototype = {
         if (typeof src.propId !== 'undefined') this.propId = src.propId;
         if (typeof src.propDeco !== 'undefined') this.propDeco = src.propDeco;
         if (typeof src.itemId !== 'undefined') this.itemId = src.itemId;
+        if (typeof src.charId !== 'undefined') this.charId = src.charId; // the game client doesn't need this but the level editor does so we try to synchronize it
         if (typeof src.effectId !== 'undefined') this.effectId = src.effectId;
         if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
     },

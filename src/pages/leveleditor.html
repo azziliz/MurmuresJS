@@ -73,8 +73,7 @@
 
         function loadEngineLevelEditor(engine) {
             gameEngine.initialize(JSON.parse(engine));
-            //gameEngine.level.instantiateMobs();
-            //gameEngine.level.moveHeroToStartingPoint();
+            gameEngine.level.build(JSON.parse(engine).level); // this is mandatory to instanciate mobs from tiles.charId
             highlightLevel();
             drawTiles(gameEngine);
             document.getElementById("leftCharacters").style.display = "none";
@@ -145,14 +144,11 @@
             paintIcons('Oozes', ['42']);
             paintIcons('Plants', ['43']);
             paintIcons('Undead', ['44']);
-            paintIcons('Heroes', ['56']);
+            //paintIcons('Heroes', ['56']);
 
             let panels = document.getElementsByClassName("collapsible");
             for (let i = 0; i < panels.length; i++) {
                 panels[i].addEventListener("mousedown", function () { 
-                    //for (let j = 0; j < panels.length; j++) {
-                    //    panels[j].nextElementSibling.classList.remove("show");
-                    //}
                     this.nextElementSibling.classList.toggle("show");
                 }, false);
             }
