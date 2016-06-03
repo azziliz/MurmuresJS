@@ -63,9 +63,11 @@
             registerEventsLevelEditor();
         }
 
+        //override
         function loadEngine(engine) {
             gameEngine.initialize(engine);
             initUILevelEditor();
+            resetCanvas();
             loadEngineLevelEditor(JSON.stringify(gameEngine));
         }
 
@@ -74,8 +76,7 @@
             //gameEngine.level.instantiateMobs();
             //gameEngine.level.moveHeroToStartingPoint();
             highlightLevel();
-            drawTiles();
-            updateUI();
+            drawTiles(gameEngine);
             document.getElementById("leftCharacters").style.display = "none";
         }
 
@@ -100,7 +101,7 @@
                     let tilesetY = (tilesetRank - tilesetX) / 64;
                     let groundCopy = groundId;
                     document.getElementById('subpanel.' + layerId[0]).insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, groundId));
-                    document.getElementById(groundId + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+                    document.getElementById(groundId + '-icon').style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
                     document.getElementById(groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
                     document.getElementById(groundId + '-icon').addEventListener("mousedown", function (e) {
                         e.preventDefault();
@@ -162,7 +163,7 @@
             let tilesetRank = ref.rank;
             let tilesetX = tilesetRank % 64;
             let tilesetY = (tilesetRank - tilesetX) / 64;
-            document.getElementById('selectedBrush' + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+            document.getElementById('selectedBrush' + '-icon').style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
             document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
             document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><br><button id="exportButton">Export</button>');
             document.getElementById('exportButton').addEventListener("mousedown", function (e) {
@@ -193,8 +194,7 @@
                 }
                 gameEngine.level = newLvl;
                 gameEngine.initialize(JSON.parse(JSON.stringify(gameEngine)));
-                gameEngine.hero.position = gameEngine.level.tiles[0][0];
-                renderLevel();
+                resetCanvas();
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             }, false);
         }
@@ -205,7 +205,6 @@
             for (let i = 0; i < gameEngine.level.mobs.length; i++) {
                 drawCharacter(gameEngine.level.mobs[i]);
             }
-            drawCharacter(gameEngine.hero);
         }
 
         function registerEventsLevelEditor() {
@@ -279,11 +278,13 @@
     </div>
 
     <div style="float:left; position:relative;">
-        <canvas id="topLayer" width="1400" height="840" style="z-index: 90"></canvas>
-        <canvas id="characterLayer" width="1400" height="840" style="z-index: 30"></canvas>
-        <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas>
-        <canvas id="propsLayer" width="1400" height="840" style="z-index: 20"></canvas>
         <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
+        <canvas id="propsLayer" width="1400" height="840" style="z-index: 20"></canvas>
+        <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas>
+        <canvas id="trailLayer" width="1400" height="840" style="z-index: 30"></canvas>
+        <canvas id="characterLayer" width="1400" height="840" style="z-index: 35"></canvas>
+        <canvas id="projectileLayer" width="1400" height="840" style="z-index: 40"></canvas>
+        <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
     </div>
 
 

@@ -43,12 +43,13 @@ function init() {
     });
     xhr.addEventListener("load", function (evt) {
         document.getElementById('tilesetLoadBg').style.display = 'none';
-        gameEngine.tileset = window.URL.createObjectURL(this.response);
         let img = new Image();
         img.onload = function () {
+            gameEngine.client.tilesetImg = img;
             tilesetLoaded();
         }
-        img.src = gameEngine.tileset;
+        gameEngine.client.tileset = window.URL.createObjectURL(this.response);
+        img.src = gameEngine.client.tileset;
     });
     xhr.open('GET', '/src/img/murmures.png', true);
     xhr.responseType = "blob";
@@ -66,13 +67,14 @@ function tilesetLoaded() {
 function loadEngine(engine) {
     gameEngine.initialize(engine);
     initUI();
-    renderLevel();
+    resetCanvas();
+    drawTiles(gameEngine);
     registerEvents();
 }
 // #endregion
 
 // #region Renderer
-function renderLevel() {
+function resetCanvas() {
     let allCanvas = document.getElementsByTagName('canvas');
     for (let canvasIter = 0; canvasIter < allCanvas.length; canvasIter++) {
         allCanvas[canvasIter].width = gameEngine.level.width * gameEngine.tileSize; // This is a hard reset of all canvas and is quite time consumming.
@@ -80,8 +82,6 @@ function renderLevel() {
         let context = allCanvas[canvasIter].getContext('2d');
         context.imageSmoothingEnabled = false;
     }
-    drawTiles(gameEngine);
-    updateUI();
 }
 
 function getCurrentHero() {
@@ -105,11 +105,10 @@ function drawTiles(partialEngine) {
             }, this);
         }, this);
     }
+    updateUI();
 }
 
 function drawOneTile(x, y, color) {
-    let img = new Image();
-    img.src = gameEngine.tileset;
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
         document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
@@ -118,7 +117,7 @@ function drawOneTile(x, y, color) {
             let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].rank;
             let tilesetX = tilesetRank % 64;
             let tilesetY = (tilesetRank - tilesetX) / 64;
-            document.getElementById('tilesLayer').getContext('2d').drawImage(img,
+            document.getElementById('tilesLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         }
@@ -126,7 +125,7 @@ function drawOneTile(x, y, color) {
             let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].propId].rank;
             let tilesetX = tilesetRank % 64;
             let tilesetY = (tilesetRank - tilesetX) / 64;
-            document.getElementById('propsLayer').getContext('2d').drawImage(img,
+            document.getElementById('propsLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         }
@@ -160,8 +159,6 @@ function drawOneSquare(context, x, y, color, filled) {
 }
 
 function drawTrail(sourceTile, destTile) {
-    let img = new Image();
-    img.src = gameEngine.tileset;
     let direction = -1;
     if (destTile.x === sourceTile.x && destTile.y === sourceTile.y - 1) direction = 0;
     else if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y - 1) direction = 1;
@@ -178,19 +175,17 @@ function drawTrail(sourceTile, destTile) {
     let destRank = gameEngine.bodies[destBody].rank;
     let sourceX = sourceRank % 64;
     let sourceY = (sourceRank - sourceX) / 64;
-    document.getElementById('trailLayer').getContext('2d').drawImage(img,
+    document.getElementById('trailLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     sourceX * gameEngine.tileSize, sourceY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * sourceTile.x, gameEngine.tileSize * sourceTile.y, gameEngine.tileSize, gameEngine.tileSize);
     let destX = destRank % 64;
     let destY = (destRank - destX) / 64;
-    document.getElementById('trailLayer').getContext('2d').drawImage(img,
+    document.getElementById('trailLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     destX * gameEngine.tileSize, destY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * destTile.x, gameEngine.tileSize * destTile.y, gameEngine.tileSize, gameEngine.tileSize);
 }
 
 function queueProjectile(start, sourceTile, destTile) {
-    let img = new Image();
-    img.src = gameEngine.tileset;
     let direction = -1;
     let deltaX = destTile.x - sourceTile.x;
     let absDeltaX = Math.abs(deltaX);
@@ -210,19 +205,19 @@ function queueProjectile(start, sourceTile, destTile) {
     //let imgRank = gameEngine.bodies['_b1_92_icicle' + direction].rank;
     let imgX = imgRank % 64;
     let imgY = (imgRank - imgX) / 64;
-    animateProjectile(start, start + 100 * Math.max(absDeltaX, absDeltaY), 0, img, imgX, imgY, sourceTile, destTile)
+    animateProjectile(start, start + 100 * Math.max(absDeltaX, absDeltaY), 0, imgX, imgY, sourceTile, destTile)
 }
 
-function animateProjectile(start, end, timestamp, img, imgX, imgY, sourceTile, destTile) {
+function animateProjectile(start, end, timestamp, imgX, imgY, sourceTile, destTile) {
     let lerpRatio = (timestamp - start) / (end - start);
     let lerpX = sourceTile.x * (1 - lerpRatio) + destTile.x * lerpRatio;
     let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;
     document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
-    document.getElementById('projectileLayer').getContext('2d').drawImage(img,
+    document.getElementById('projectileLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     imgX * gameEngine.tileSize, imgY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * lerpX, gameEngine.tileSize * lerpY, gameEngine.tileSize, gameEngine.tileSize);
     window.requestAnimationFrame(function (timestp) {
-        if (timestp < end) animateProjectile(start, end, timestp, img, imgX, imgY, sourceTile, destTile);
+        if (timestp < end) animateProjectile(start, end, timestp, imgX, imgY, sourceTile, destTile);
         else document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     });
 }
@@ -231,7 +226,7 @@ function animateProjectile(start, end, timestamp, img, imgX, imgY, sourceTile, d
 // #region UI/Characters
 function initUI() {
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
-    document.getElementById('rightCharacters').innerHTML = '';    
+    document.getElementById('rightCharacters').innerHTML = '';
     gameEngine.level.uiMobCount = 0;
 }
 
@@ -257,7 +252,7 @@ function updateUI() {
             let tilesetRank = ref.rank;
             let tilesetX = tilesetRank % 64;
             let tilesetY = (tilesetRank - tilesetX) / 64;
-            document.getElementById('mob' + i + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+            document.getElementById('mob' + i + '-icon').style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
             document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
             let namediv = document.getElementById('mob' + i + '-name');
             let namedivwidth = window.getComputedStyle(namediv, null).width;
@@ -297,7 +292,7 @@ function updateUI() {
         let tilesetRank = ref.rank;
         let tilesetX = tilesetRank % 64;
         let tilesetY = (tilesetRank - tilesetX) / 64;
-        document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundImage = "url('" + gameEngine.tileset + "')";
+        document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
         document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
         let namediv = document.getElementById('hero' + gameEngine.heros[i].guid + '-name');
         let namedivwidth = window.getComputedStyle(namediv, null).width;
@@ -319,13 +314,11 @@ function clearCharacterLayer() {
 }
 
 function drawCharacter(character) {
-    let img = new Image();
-    img.src = gameEngine.tileset;
     let tilesetRank = gameEngine.bodies[character.mobTemplate].rank;
     let tilesetX = tilesetRank % 64;
     let tilesetY = (tilesetRank - tilesetX) / 64;
     if (gameEngine.level.tiles[character.position.y][character.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
-        document.getElementById('characterLayer').getContext('2d').drawImage(img,
+        document.getElementById('characterLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);
     }
@@ -516,11 +509,11 @@ function onOrderResponse(response) {
         gameEngine.synchronize(ge);
         if (isNewLevel) {
             initUI();
-            renderLevel();
+            resetCanvas();
+            drawTiles(gameEngine);
         }
         else {
             drawTiles(ge);
-            updateUI();
         }
         if (gameEngine.state === murmures.C.STATE_ENGINE_DEATH) {
             screenLog('YOU DIE !');
