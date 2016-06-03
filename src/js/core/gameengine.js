@@ -33,6 +33,8 @@ murmures.GameEngine = function () {
     this.level = {};
     /** @type {murmures.Character} */
     this.heros = {};
+    /** @type {murmures.Order} */
+    this.waitingOrders = [];
 
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
@@ -190,7 +192,9 @@ murmures.GameEngine.prototype = {
         for(let itHero = 0; itHero < this.heros.length ; itHero++){
           if (this.heros[itHero].guid == order.source.guid){
             this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
-            this.heros[itHero].order = order;
+            if (this.waitingOrders === undefined) this.waitingOrders = [];
+            murmures.serverLog(this.waitingOrders);
+            this.waitingOrders.push( order );
             murmures.serverLog('Order saved');
           }
 
@@ -209,14 +213,17 @@ murmures.GameEngine.prototype = {
           }
         }else{
           murmures.serverLog('Apply all orders');
+          for(let itOrders = 0; itOrders < this.waitingOrders.length ; itOrders++){
+            this.applyOrder(this.waitingOrders[itOrders]);
+          }
+          this.waitingOrders = [];
+
           for(let itHero = 0; itHero < this.heros.length ; itHero++){
-            this.applyOrder(this.heros[itHero].order);
             if (itHero == 0){
               this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
             }else{
               this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
             }
-
           }
         }
     },

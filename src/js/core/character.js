@@ -50,8 +50,7 @@ murmures.Character = function () {
     this.charSpotted = false; // hero is known because seen at least once
     /** @type {number} */
     this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-    /** @type {murmures.order} */
-    this.order = null;
+  
 };
 
 murmures.Character.prototype = {
