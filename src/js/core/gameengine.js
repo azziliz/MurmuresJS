@@ -231,7 +231,7 @@ murmures.GameEngine.prototype = {
     applyOrder : function (order) {
         // This function is only called on server side
         if (order.command === 'move') {
-            if (typeof order.target.behavior !== 'undefined' && typeof order.target.behavior.move !== "undefined") {
+            if (typeof order.target.behavior !== 'undefined' && typeof order.target.behavior.move !== 'undefined') {
                 murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
             }
             else {

@@ -330,7 +330,6 @@ function clearCharacterLayer() {
 }
 
 function drawCharacter(character) {
-    /// <param name="character" type="Character"/>
     let img = new Image();
     img.src = gameEngine.tileset;
     let tilesetRank = gameEngine.bodies[character.mobTemplate].rank;
@@ -477,7 +476,7 @@ function onKeyPress(char) {
     let allowedChars = '12346789';
     if (allowedChars.indexOf(char) >= 0) {
         let moveOrder = new murmures.Order();
-        moveOrder.command = "move";
+        moveOrder.command = 'move';
         moveOrder.source = gameEngine.heros[0];
         let target = new murmures.Tile(gameEngine.hero.position.x, gameEngine.hero.position.y);
         if (char === '9' || char === '6' || char === '3') target.x = gameEngine.hero.position.x + 1;
