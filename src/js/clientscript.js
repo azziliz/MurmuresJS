@@ -101,37 +101,37 @@ function drawTiles(partialEngine) {
     if (typeof partialEngine !== 'undefined' && typeof partialEngine.level !== 'undefined' && typeof partialEngine.level.tiles !== 'undefined') {
         partialEngine.level.tiles.forEach(function (tileRow) {
             tileRow.forEach(function (tile) {
-                drawOneTile(tile.x, tile.y, '#2D1E19');
+                drawOneTile(tile.x, tile.y);
             }, this);
         }, this);
     }
     updateUI();
 }
 
-function drawOneTile(x, y, color) {
+function drawOneTile(x, y) {
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
         document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-        document.getElementById('propsLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-        if (gameEngine.level.tiles[y][x].groundId !== "") {
-            let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].groundId].rank;
-            let tilesetX = tilesetRank % 64;
-            let tilesetY = (tilesetRank - tilesetX) / 64;
-            document.getElementById('tilesLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
-                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
-                    gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-        }
-        if (gameEngine.level.tiles[y][x].propId !== "") {
-            let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x].propId].rank;
-            let tilesetX = tilesetRank % 64;
-            let tilesetY = (tilesetRank - tilesetX) / 64;
-            document.getElementById('propsLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
-                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
-                    gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
-        }
+        drawOneLayer(x, y, 'groundId');
+        drawOneLayer(x, y, 'groundDeco');
+        drawOneLayer(x, y, 'propId');
+        drawOneLayer(x, y, 'propDeco');
+        drawOneLayer(x, y, 'itemId');
+        drawOneLayer(x, y, 'effectId');
     }
     if (gameEngine.level.tiles[y][x].state === murmures.C.TILE_FOG_OF_WAR) {
         drawOneSquare(document.getElementById('fogOfWarLayer').getContext('2d'), x, y, "#000000", true);
+    }
+}
+
+function drawOneLayer(x, y, layerId) {
+    if (gameEngine.level.tiles[y][x][layerId] !== '') {
+        let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x][layerId]].rank;
+        let tilesetX = tilesetRank % 64;
+        let tilesetY = (tilesetRank - tilesetX) / 64;
+        document.getElementById('tilesLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
+                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
     }
 }
 

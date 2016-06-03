@@ -242,7 +242,10 @@ murmures.GameEngine.prototype = {
             this.level.mobs.forEach(function (mob) {
                 if (mob.onVision && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     mob.hitPoints -= order.source.defaultDamageValue;
-                    if (mob.hitPoints < 0) mob.hitPoints = 0;
+                    if (mob.hitPoints <= 0) {
+                        mob.hitPoints = 0;
+                        mob.position.groundDeco = '_b1_02_blood_red00';
+                    }
                 }
             });
         }
