@@ -2346,8 +2346,6 @@
         "rank": 262,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_gervais_3170": {
@@ -2355,8 +2353,6 @@
         "rank": 263,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_gervais_3171": {
@@ -2364,8 +2360,6 @@
         "rank": 264,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_gervais_3172": {
@@ -3406,8 +3400,6 @@
         "rank": 380,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_lava1": {
@@ -3415,8 +3407,6 @@
         "rank": 381,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_lava2": {
@@ -3424,8 +3414,6 @@
         "rank": 382,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_lava3": {
@@ -3433,8 +3421,6 @@
         "rank": 383,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_limestone0": {
@@ -3649,8 +3635,6 @@
         "rank": 407,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
         "allowEthereal": true
     },
     "_b1_01_mosaic0": {
