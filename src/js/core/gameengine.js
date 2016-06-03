@@ -115,15 +115,15 @@ murmures.GameEngine.prototype = {
             tempHeros.push(hero);
         }
         return {
-            ge : { state : this.state },
+            state: this.state,
             level: this.level.clone(),
-            heros : tempHeros,
+            heros: tempHeros,
         };
     },
     
     compare : function (beforeState) {
         let ret = {};
-        if (this.state != beforeState.ge.state) {
+        if (this.state != beforeState.state) {
             ret.state = this.state;
         }
         let level_ = this.level.compare(beforeState.level);
@@ -262,7 +262,6 @@ murmures.GameEngine.prototype = {
         let heros = this.heros;
         let level = this.level;
         let bodies = this.bodies;
-        let ge = this;
         this.level.mobs.forEach(function (mob) {
             if (mob.charSpotted) {
                 let fireOnHero = false;
@@ -274,7 +273,7 @@ murmures.GameEngine.prototype = {
                             fireOnHero = true;
                             if (heros[itHero].hitPoints <= 0) {
                                 heros[itHero].hitPoints = 0;
-                                ge.state = murmures.C.STATE_ENGINE_DEATH;
+                                this.state = murmures.C.STATE_ENGINE_DEATH;
                             }
                             break;
                         }
@@ -284,6 +283,6 @@ murmures.GameEngine.prototype = {
                 // TODO : move to hero
                 }
             }
-        });
+        }, this);
     }
 };

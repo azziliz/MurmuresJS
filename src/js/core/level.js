@@ -66,7 +66,7 @@ murmures.Level.prototype = {
             }
         }
     },
-
+    
     /**
      * Initialization method reserved for the client.
      * Called everytime the client loads a new level.
@@ -100,7 +100,7 @@ murmures.Level.prototype = {
             }
         }
     },
-
+    
     /**
      * Synchronization method reserved for the client.
      * Called after each turn, when the client receives a server response.
@@ -137,7 +137,7 @@ murmures.Level.prototype = {
             }, this);
         }
     },
-
+    
     /**
      * Cloning method reserved for the server.
      * The whole game state is duplicated at the beginning of each turn by cascading clone methods.
@@ -160,7 +160,7 @@ murmures.Level.prototype = {
             mobs: mobs_,
         };
     },
-
+    
     /**
      * Comparison method reserved for the server.
      * This method is called at the end of each turn to identify the changes of the game state produced by orders.
@@ -231,18 +231,19 @@ murmures.Level.prototype = {
         }
         // otherwise, no return = undefined
     },
-
+    
     moveHeroToStartingPoint: function () {
         //temporary
         // TODO : find starting point from stairs
-        for(let itHero=0;itHero < gameEngine.heros.length;itHero++){
-          if (this.id === 'level1') gameEngine.heros[itHero].position = this.tiles[9][1];
-          else if (this.id === 'level2') gameEngine.heros[itHero].position = this.tiles[15][3];
-          else if (this.id === 'level4') gameEngine.heros[itHero].position = this.tiles[20][5];
-          else if (this.id === 'level5') gameEngine.heros[itHero].position = this.tiles[15][2];
+        for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
+            if (this.id === 'level1') gameEngine.heros[itHero].position = this.tiles[9][1];
+            else if (this.id === 'level2') gameEngine.heros[itHero].position = this.tiles[15][3];
+            else if (this.id === 'level4') gameEngine.heros[itHero].position = this.tiles[20][5];
+            else if (this.id === 'level5') gameEngine.heros[itHero].position = this.tiles[15][2];
+            else gameEngine.heros[itHero].position = this.tiles[5][5];
         }
     },
-
+    
     getStartingPoint: function () {
         //temporary
         // TODO : find starting point from stairs
@@ -250,9 +251,9 @@ murmures.Level.prototype = {
         else if (this.id === 'level2') return this.tiles[15][3];
         else if (this.id === 'level4') return this.tiles[20][5];
         else if (this.id === 'level5') return this.tiles[15][2];
-        else throw "unknown level";
+        else return this.tiles[5][5];
     },
-
+    
     clean : function () {
         delete this.guid;
         delete this.mobs;
