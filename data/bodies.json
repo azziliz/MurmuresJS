@@ -534,8 +534,7 @@
         "rank": 60,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_deep_water2": {
@@ -543,8 +542,7 @@
         "rank": 61,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_demonic_red1": {
@@ -767,8 +765,7 @@
         "rank": 86,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_open_sea2": {
@@ -776,8 +773,7 @@
         "rank": 87,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shallow_water.rl1": {
@@ -831,8 +827,7 @@
         "rank": 93,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water1_shape": {
@@ -840,8 +835,7 @@
         "rank": 94,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water2": {
@@ -849,8 +843,7 @@
         "rank": 95,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water2_bubbles": {
@@ -858,8 +851,7 @@
         "rank": 96,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water2_shape": {
@@ -867,8 +859,7 @@
         "rank": 97,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water3": {
@@ -876,8 +867,7 @@
         "rank": 98,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water3_bubbles": {
@@ -885,8 +875,7 @@
         "rank": 99,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water4": {
@@ -894,8 +883,7 @@
         "rank": 100,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_deep_water4_bubbles": {
@@ -903,8 +891,7 @@
         "rank": 101,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_dngn_shoals_shallow_water1": {
@@ -913,6 +900,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -922,6 +910,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -931,6 +920,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -940,6 +930,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -949,6 +940,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -958,6 +950,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -967,6 +960,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4529,6 +4523,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4538,6 +4533,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4547,6 +4543,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4556,6 +4553,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4564,8 +4562,7 @@
         "rank": 508,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water1": {
@@ -4573,8 +4570,7 @@
         "rank": 509,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water10": {
@@ -4582,8 +4578,7 @@
         "rank": 510,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water11": {
@@ -4591,8 +4586,7 @@
         "rank": 511,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water2": {
@@ -4600,8 +4594,7 @@
         "rank": 512,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water3": {
@@ -4609,8 +4602,7 @@
         "rank": 513,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water4": {
@@ -4618,8 +4610,7 @@
         "rank": 514,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water5": {
@@ -4627,8 +4618,7 @@
         "rank": 515,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water6": {
@@ -4636,8 +4626,7 @@
         "rank": 516,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water7": {
@@ -4645,8 +4634,7 @@
         "rank": 517,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water8": {
@@ -4654,8 +4642,7 @@
         "rank": 518,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_deep_water9": {
@@ -4663,8 +4650,7 @@
         "rank": 519,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_shoals_shallow_water0": {
@@ -5390,6 +5376,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -5398,8 +5385,7 @@
         "rank": 599,
         "hasPhysics": true,
         "allowFlying": true,
-        "allowTerrestrial": true,
-        "allowUnderground": true,
+        "allowAquatic": true,
         "allowEthereal": true
     },
     "_b1_01_waterNE": {
