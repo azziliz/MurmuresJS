@@ -254,6 +254,7 @@ murmures.Level.prototype = {
     },
 
     clean : function () {
+        delete this.guid;
         delete this.mobs;
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {

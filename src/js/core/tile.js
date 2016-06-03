@@ -120,8 +120,12 @@ murmures.Tile.prototype = {
         delete this.state;
         delete this.behavior;
         if (this.groundId === '') delete this.groundId;
+        if (this.groundDeco === '') delete this.groundDeco;
         if (this.propId === '') delete this.propId;
+        if (this.propDeco === '') delete this.propDeco;
+        if (this.itemId === '') delete this.itemId;
         if (this.charId === '') delete this.charId;
+        if (this.effectId === '') delete this.effectId;
     },
     
     get hasMob() {
