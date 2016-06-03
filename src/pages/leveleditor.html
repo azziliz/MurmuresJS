@@ -224,23 +224,13 @@
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             }, false);
 
-            document.getElementById('saveButton').addEventListener('mousedown', function (event) {
-                let body = {};
-                let uniqueId = document.getElementById('uniqueId').value;
-                body.layerId = document.getElementById('layerId').value;
-                body.rank = parseInt(document.getElementById('rank').value);
-                let hasPhysics = document.getElementById('hasPhysics').checked;
-                if (hasPhysics) {
-                    body.hasPhysics = true;
-                    body.allowFlying = document.getElementById('allowFlying').checked;
-                    body.allowTerrestrial = document.getElementById('allowTerrestrial').checked;
-                    body.allowAquatic = document.getElementById('allowAquatic').checked;
-                    body.allowUnderground = document.getElementById('allowUnderground').checked;
-                    body.allowEthereal = document.getElementById('allowEthereal').checked;
-                }
-                body.behavior = JSON.parse(document.getElementById('behavior').value);
-                gameEngine.bodies[uniqueId] = body;
-            });
+            document.getElementById('hasPhysics').addEventListener('change', saveBody);
+            document.getElementById('allowFlying').addEventListener('change', saveBody);
+            document.getElementById('allowTerrestrial').addEventListener('change', saveBody);
+            document.getElementById('allowAquatic').addEventListener('change', saveBody);
+            document.getElementById('allowUnderground').addEventListener('change', saveBody);
+            document.getElementById('allowEthereal').addEventListener('change', saveBody);
+            document.getElementById('behavior').addEventListener('change', saveBody);
             document.getElementById('dumpButton').addEventListener('mousedown', function (event) {
                 //cleanup
                 for (let key in gameEngine.bodies) {
@@ -265,6 +255,25 @@
                 loadEngineLevelEditor(JSON.stringify(gameEngine));
             });
 
+        }
+
+        function saveBody() {
+            console.log('saved');
+            let body = {};
+            let uniqueId = document.getElementById('uniqueId').value;
+            body.layerId = document.getElementById('layerId').value;
+            body.rank = parseInt(document.getElementById('rank').value);
+            let hasPhysics = document.getElementById('hasPhysics').checked;
+            if (hasPhysics) {
+                body.hasPhysics = true;
+                body.allowFlying = document.getElementById('allowFlying').checked;
+                body.allowTerrestrial = document.getElementById('allowTerrestrial').checked;
+                body.allowAquatic = document.getElementById('allowAquatic').checked;
+                body.allowUnderground = document.getElementById('allowUnderground').checked;
+                body.allowEthereal = document.getElementById('allowEthereal').checked;
+            }
+            body.behavior = JSON.parse(document.getElementById('behavior').value);
+            gameEngine.bodies[uniqueId] = body;
         }
 
         //override
@@ -347,8 +356,8 @@
         </div>
         <div id="rightCharacters" style="position:fixed; width:calc(20% - 15px); height:100vh; z-index: 101; background: #666; display:none; overflow-y: hidden; padding-left: 15px; right: 0;">
             <div style="display: table;">
-                <p><label>uniqueId</label><input type="text" id="uniqueId"></p>
-                <p><label>layerId</label><input type="text" id="layerId"></p>
+                <p><label>uniqueId</label><input type="text" id="uniqueId" readonly></p>
+                <p><label>layerId</label><input type="text" id="layerId" readonly></p>
                 <p><label>rank</label><input type="text" id="rank" readonly></p>
                 <p><label>hasPhysics</label><input type="checkbox" id="hasPhysics"></p>
                 <p><label>allowFlying</label><input type="checkbox" id="allowFlying"></p>
@@ -358,7 +367,6 @@
                 <p><label>allowEthereal</label><input type="checkbox" id="allowEthereal"></p>
                 <p><label>behavior</label><input type="text" id="behavior"></p>
             </div>
-            <button id="saveButton">Save</button>
             <button id="dumpButton">Dump</button>
         </div>
         <code id="screenLog" style="position:fixed; width:100%; height:100vh; z-index:100; background: #000; color:white; overflow:auto; display: none;"></code>

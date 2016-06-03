@@ -4673,6 +4673,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4682,6 +4683,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4691,6 +4693,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4700,6 +4703,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4709,6 +4713,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4718,6 +4723,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4727,6 +4733,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4736,6 +4743,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4745,6 +4753,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4754,6 +4763,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4763,6 +4773,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4772,6 +4783,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4781,6 +4793,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4790,6 +4803,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
@@ -4799,6 +4813,7 @@
         "hasPhysics": true,
         "allowFlying": true,
         "allowTerrestrial": true,
+        "allowAquatic": true,
         "allowUnderground": true,
         "allowEthereal": true
     },
