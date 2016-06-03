@@ -230,20 +230,9 @@ function animateProjectile(start, end, timestamp, img, imgX, imgY, sourceTile, d
 
 // #region UI/Characters
 function initUI() {
-    let additionalLinks =
-    '<a href="/src/pages/bodyeditor.html" style="float:left; clear: left;">body editor</a><br>' +
-    '<a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br>' +
-    '<a href="/src/pages/test.html" style="float:left; clear: left;">test</a><br>' +
-    '<code id="screenLog" style="position:relative; top:10px; margin:2px 7px; width:136px; height:300px; z-index:9999; color:white; overflow:auto; display: block;"></code>';
     let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
-    document.getElementById('rightCharacters').innerHTML = '';
-    let templateStr = /template/g;
-    
+    document.getElementById('rightCharacters').innerHTML = '';    
     gameEngine.level.uiMobCount = 0;
-    
-    if (document.getElementById('leftCharacters').innerHTML.length <= additionalLinks.length) {
-        document.getElementById('leftCharacters').innerHTML = additionalLinks;
-    }
 }
 
 function updateUI() {
