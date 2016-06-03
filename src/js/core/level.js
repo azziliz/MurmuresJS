@@ -112,7 +112,7 @@ murmures.Level.prototype = {
      */
     synchronize : function (src) {
         if (typeof src === 'undefined') return;
-        if (typeof src.tiles !== "undefined") {
+        if (typeof src.tiles !== 'undefined') {
             src.tiles.forEach(function (remoteTileRow) {
                 remoteTileRow.forEach(function (remoteTile) {
                     let localTile = this.tiles[remoteTile.y][remoteTile.x];
@@ -120,7 +120,7 @@ murmures.Level.prototype = {
                 }, this);
             }, this);
         }
-        if (typeof src.mobs !== "undefined") {
+        if (typeof src.mobs !== 'undefined') {
             src.mobs.forEach(function (remoteMob) {
                 let found = false;
                 this.mobs.forEach(function (localMob) {
@@ -177,7 +177,7 @@ murmures.Level.prototype = {
                 let tiles_ = [];
                 for (let x = 0; x < this.width; x++) {
                     let tile_ = this.tiles[y][x].compare(beforeState.tiles[y][x]);
-                    if (typeof tile_ !== "undefined") tiles_.push(tile_);
+                    if (typeof tile_ !== 'undefined') tiles_.push(tile_);
                 }
                 if (tiles_.length > 0) tileRows_.push(tiles_);
             }
@@ -187,7 +187,7 @@ murmures.Level.prototype = {
                 beforeState.mobs.forEach(function (oldMob) {
                     if (newMob.guid === oldMob.guid) {
                         let mob_ = newMob.compare(oldMob);
-                        if (typeof mob_ !== "undefined") mobs_.push(mob_);
+                        if (typeof mob_ !== 'undefined') mobs_.push(mob_);
                     }
                 }, this);
             }, this);
@@ -225,7 +225,7 @@ murmures.Level.prototype = {
             }, this);
             if (mobs_.length > 0) ret.mobs = mobs_;
         }
-        for (var prop in ret) {
+        for (let prop in ret) {
             // only returns ret if not empty
             return ret;
         }

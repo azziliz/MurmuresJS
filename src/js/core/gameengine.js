@@ -33,9 +33,9 @@ murmures.GameEngine = function () {
     this.level = {};
     /** @type {murmures.Character} */
     this.heros = {};
-    /** @type {murmures.Order} */
+    /** @type {Array.<murmures.Order>} */
     this.waitingOrders = [];
-
+    
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
     this.levels = {};
@@ -46,11 +46,11 @@ murmures.GameEngine = function () {
     /** @type {number} */
     this.gameTurn = 0 | 0;
     /** @type {number} */
-    this.state = murmures.C.STATE_ENGINE_INIT;
+    this.state = murmures.C.STATE_ENGINE_INIT | 0;
 };
 
 murmures.GameEngine.prototype = {
-
+    
     /*
      * No build method here because initialization involves several Node-only functions.
      * We don't want to expose these functions to the client because they don't exist there.
@@ -72,14 +72,14 @@ murmures.GameEngine.prototype = {
         this.level = new murmures.Level();
         this.level.initialize(src.level);
         this.heros = [];
-        for (var itHero in src.heros){
-          let tempHero = new murmures.Character();
-          tempHero.initialize(src.heros[itHero]);
-          this.heros.push(tempHero);
-        }
+        src.heros.forEach(function (hero) {
+            let tempHero = new murmures.Character();
+            tempHero.initialize(hero);
+            this.heros.push(tempHero);
+        }, this);
         this.state = src.state;
     },
-
+    
     /**
      * Synchronization method called on client side only.
      * This function receives a partial GameEngine as input and merges it into the client instance.
@@ -93,11 +93,11 @@ murmures.GameEngine.prototype = {
         } else {
             this.level.synchronize(src.level);
         }
-        if (src.state !== "undefined"){
-          this.state = src.state;
+        if (src.state !== 'undefined') {
+            this.state = src.state;
         }
-
-        if (typeof src.heros !== "undefined") {
+        
+        if (typeof src.heros !== 'undefined') {
             src.heros.forEach(function (remoteHero) {
                 this.heros.forEach(function (localHero) {
                     if (localHero.guid === remoteHero.guid) {
@@ -107,49 +107,48 @@ murmures.GameEngine.prototype = {
             }, this);
         }
     },
-
+    
     clone : function (src) {
         let tempHeros = [];
-        for (let itHero = 0; itHero < this.heros.length ; itHero++){
-          let hero = this.heros[itHero].clone();
-          tempHeros.push(hero);
+        for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+            let hero = this.heros[itHero].clone();
+            tempHeros.push(hero);
         }
         return {
-            ge : {state :this.state},
+            ge : { state : this.state },
             level: this.level.clone(),
             heros : tempHeros,
         };
     },
-
+    
     compare : function (beforeState) {
         let ret = {};
-    		if (this.state != beforeState.ge.state){
-    		          ret.state = this.state;
-    		}
-    		let level_ = this.level.compare(beforeState.level);
-
+        if (this.state != beforeState.ge.state) {
+            ret.state = this.state;
+        }
+        let level_ = this.level.compare(beforeState.level);
+        
         if (typeof level_ !== 'undefined') ret.level = level_;
         let heros_ = [];
-        for (let itHero =0;itHero < this.heros.length;itHero ++){
-          for (let itHero_ = 0 ; itHero_ < beforeState.heros.length;itHero_++){
-            if (beforeState.heros[itHero_].guid == this.heros[itHero].guid){
-
-              let hero_ = this.heros[itHero].compare(beforeState.heros[itHero_]);
-              if (typeof hero_ !== 'undefined') heros_.push(hero_);
+        for (let itHero =0; itHero < this.heros.length; itHero++) {
+            for (let itHero_ = 0 ; itHero_ < beforeState.heros.length; itHero_++) {
+                if (beforeState.heros[itHero_].guid === this.heros[itHero].guid) {
+                    let hero_ = this.heros[itHero].compare(beforeState.heros[itHero_]);
+                    if (typeof hero_ !== 'undefined') heros_.push(hero_);
+                }
             }
-          }
         }
-
-        if (heros_.length > 0){
-          ret.heros = heros_;
+        
+        if (heros_.length > 0) {
+            ret.heros = heros_;
         }
-        for (var prop in ret) {
+        for (let prop in ret) {
             // only returns ret if not empty
             return ret;
         }
         // otherwise, no return = undefined
     },
-
+    
     /**
      * This function is called on client and server side.
      * If the order is deemed valid on client side, it is then sent to the server by an XHR.
@@ -157,21 +156,20 @@ murmures.GameEngine.prototype = {
      */
     checkOrder : function (order) {
         /// <param name="order" type="Order"/>
-        var heroToCheck = null;
-        for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
-            if (order.source.guid === gameEngine.heros[itHero].guid) {
-                heroToCheck = gameEngine.heros[itHero];
-                break;
+        let heroToCheck = null;
+        this.heros.forEach(function (hero) {
+            if (order.source.guid === hero.guid) {
+                heroToCheck = hero;
             }
-        }
-
+        }, this);
+        
         if (this.state === murmures.C.STATE_ENGINE_DEATH) return { valid : false, reason : 'You are dead!' };
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
         else if (order.command === null) return { valid: false, reason: 'Order command is not defined' };
         else if (order.command !== 'move' && order.command !== 'attack') return { valid: false, reason: 'Order contains an unknown command' };
         //else if ((order.source.guid !== this.heros[0].guid)) return { valid: false, reason: 'You can only give orders to your own hero' };
-        else if (heroToCheck == null) return { valid: false, reason : 'order sent for an invalid hero' };
+        else if (typeof heroToCheck === 'undefined' || heroToCheck === null) return { valid: false, reason : 'order sent for an invalid hero' };
         else if (order.target.isWall()) return { valid: false, reason: 'You cannot target a wall' };
 
         else if (order.command === 'attack' && Math.abs(order.target.x - heroToCheck.position.x) > heroToCheck.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + heroToCheck.range };
@@ -185,49 +183,49 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && (order.target.hasMob.code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true };
     },
-
+    
     saveOrder : function (order) {
         // This function is only called on server side
         let nbOrderDone = 0;
-        for(let itHero = 0; itHero < this.heros.length ; itHero++){
-          if (this.heros[itHero].guid == order.source.guid){
-            this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
-            if (this.waitingOrders === undefined) this.waitingOrders = [];
-            murmures.serverLog(this.waitingOrders);
-            this.waitingOrders.push( order );
-            murmures.serverLog('Order saved');
-          }
-
-          if (this.heros[itHero].stateOrder == murmures.C.STATE_HERO_ORDER_GIVEN){
-            nbOrderDone += 1;
-          }
-        }
-
-        if (this.heros.length != nbOrderDone){
-          for(let itHero = 0; itHero < this.heros.length ; itHero++){
-              if (this.heros[itHero].stateOrder != murmures.C.STATE_HERO_ORDER_GIVEN){
-                this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
-                murmures.serverLog('Waiting for next order from following hero');
-                break;
-              }
-          }
-        }else{
-          murmures.serverLog('Apply all orders');
-          for(let itOrders = 0; itOrders < this.waitingOrders.length ; itOrders++){
-            this.applyOrder(this.waitingOrders[itOrders]);
-          }
-          this.waitingOrders = [];
-
-          for(let itHero = 0; itHero < this.heros.length ; itHero++){
-            if (itHero == 0){
-              this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
-            }else{
-              this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+        for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+            if (this.heros[itHero].guid === order.source.guid) {
+                this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
+                if (typeof this.waitingOrders === 'undefined') this.waitingOrders = [];
+                murmures.serverLog(this.waitingOrders);
+                this.waitingOrders.push(order);
+                murmures.serverLog('Order saved');
             }
-          }
+            
+            if (this.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) {
+                nbOrderDone += 1;
+            }
+        }
+        
+        if (this.heros.length !== nbOrderDone) {
+            for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+                if (this.heros[itHero].stateOrder !== murmures.C.STATE_HERO_ORDER_GIVEN) {
+                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+                    murmures.serverLog('Waiting for next order from following hero');
+                    break;
+                }
+            }
+        } else {
+            murmures.serverLog('Apply all orders');
+            for (let itOrders = 0; itOrders < this.waitingOrders.length ; itOrders++) {
+                this.applyOrder(this.waitingOrders[itOrders]);
+            }
+            this.waitingOrders = [];
+            
+            for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+                if (itHero === 0) {
+                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+                } else {
+                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+                }
+            }
         }
     },
-
+    
     applyOrder : function (order) {
         // This function is only called on server side
         if (order.command === 'move') {
@@ -247,16 +245,16 @@ murmures.GameEngine.prototype = {
             });
         }
         murmures.serverLog('Moves / attacks done');
-        var tilesProcessed=[];
-        for (let itHero = 0; itHero < this.heros.length ; itHero++){
-          if (tilesProcessed == undefined) {tilesProcessed = []; murmures.serverLog("prout");}
-          tilesProcessed=this.heros[itHero].setVision(tilesProcessed);
+        let tilesProcessed = [];
+        for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+            if (typeof tilesProcessed === 'undefined') { tilesProcessed = []; murmures.serverLog("prout"); }
+            tilesProcessed = this.heros[itHero].setVision(tilesProcessed);
         }
         murmures.serverLog('Vision done');
         this.applyAI();
         murmures.serverLog('AI done');
     },
-
+    
     applyAI : function () {
         let heros = this.heros;
         let level = this.level;
@@ -266,17 +264,17 @@ murmures.GameEngine.prototype = {
             if (mob.charSpotted) {
                 let fireOnHero = false;
                 if (mob.onVision) {
-
-                    for (let itHero = 0; itHero < heros.length;itHero ++){
-                      if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
-                          heros[itHero].hitPoints -= mob.defaultDamageValue;
-                          fireOnHero = true;
-                          if (heros[itHero].hitPoints <= 0){
-                            heros[itHero].hitPoints = 0;
-                            ge.state = murmures.C.STATE_ENGINE_DEATH;
-                          }
-                          break;
-                      }
+                    
+                    for (let itHero = 0; itHero < heros.length; itHero++) {
+                        if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
+                            heros[itHero].hitPoints -= mob.defaultDamageValue;
+                            fireOnHero = true;
+                            if (heros[itHero].hitPoints <= 0) {
+                                heros[itHero].hitPoints = 0;
+                                ge.state = murmures.C.STATE_ENGINE_DEATH;
+                            }
+                            break;
+                        }
                     }
                 }
                 if (!fireOnHero) {

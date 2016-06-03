@@ -100,7 +100,7 @@ murmures.Tile.prototype = {
         if (this.effectId !== beforeState.effectId) ret.effectId = this.effectId;
         if (this.propId !== beforeState.propId && 
         JSON.stringify(this.behavior) !== JSON.stringify(beforeState.behavior)) ret.behavior = this.behavior;
-        for (var prop in ret) {
+        for (let prop in ret) {
             // only returns ret if not empty
             ret.x = this.x;
             ret.y = this.y;
@@ -140,7 +140,7 @@ murmures.Tile.prototype = {
     isWall : function () {
         let allowTerrestrialGround = (this.groundId === "") ? true : !gameEngine.bodies[this.groundId].hasPhysics ? true : !!gameEngine.bodies[this.groundId].allowTerrestrial;
         let allowTerrestrialProp = (this.propId === "") ? true : !gameEngine.bodies[this.propId].hasPhysics ? true : !!gameEngine.bodies[this.propId].allowTerrestrial;
-        let hasMoveBehavior = (typeof this.behavior !== "undefined" && typeof this.behavior.move !== "undefined");
+        let hasMoveBehavior = (typeof this.behavior !== 'undefined' && typeof this.behavior.move !== 'undefined');
         return (!allowTerrestrialGround || !allowTerrestrialProp) && !hasMoveBehavior;
     }
 };

@@ -53,7 +53,7 @@ murmures.Order.prototype = {
           }
         }
 
-        if(this.source == undefined) {
+        if(typeof this.source === 'undefined') {
             murmures.serverLog("Tech Error - Guid does not match any heroes- " + src.source.guid );
             return { valid: false, reason: 'Technical error - Guid does not match - Please refresh the page' };
         }
