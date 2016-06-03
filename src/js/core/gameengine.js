@@ -215,6 +215,8 @@ murmures.GameEngine.prototype = {
                 this.applyOrder(this.waitingOrders[itOrders]);
             }
             this.waitingOrders = [];
+            this.applyAI();
+            murmures.serverLog('AI done');
             
             for (let itHero = 0; itHero < this.heros.length ; itHero++) {
                 if (itHero === 0) {
@@ -251,8 +253,6 @@ murmures.GameEngine.prototype = {
             tilesProcessed = this.heros[itHero].setVision(tilesProcessed);
         }
         murmures.serverLog('Vision done');
-        this.applyAI();
-        murmures.serverLog('AI done');
     },
     
     applyAI : function () {
