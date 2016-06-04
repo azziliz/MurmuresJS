@@ -54,7 +54,8 @@
 
         let selectedBrush = {
             id: '_b1_01_floor_of_a_room.rl1',
-            layerId: '01'
+            layerId: '01',
+            mode: 'paint'
         };
 
         //override
@@ -292,7 +293,7 @@
                 let mouseY = Math.floor(e.offsetY);
                 justDrawn.x = mouseX;
                 justDrawn.y = mouseY;
-                topLayer_onClickLevelEditor(mouseX, mouseY, e.button === 2);
+                topLayer_onClickLevelEditor(mouseX, mouseY, e.button);
             }, false);
             topLayer.addEventListener("mousemove", function (e) {
                 e.preventDefault();
@@ -302,7 +303,7 @@
                     if (justDrawn.x !== mouseX || justDrawn.y !== mouseY) {
                         justDrawn.x = mouseX;
                         justDrawn.y = mouseY;
-                        topLayer_onClickLevelEditor(mouseX, mouseY, e.button === 2);
+                        topLayer_onClickLevelEditor(mouseX, mouseY, e.button);
                     }
                 }
             }, false);
@@ -319,16 +320,16 @@
             }, false);
         }
 
-        function topLayer_onClickLevelEditor(mouseEventX, mouseEventY, rightClick) {
+        function topLayer_onClickLevelEditor(mouseEventX, mouseEventY, mouseButton) {
             let hoveredTile = getHoveredTile(mouseEventX, mouseEventY);
             if (justDrawn.x !== hoveredTile.x || justDrawn.y !== hoveredTile.y) {
                 justDrawn.x = hoveredTile.x;
                 justDrawn.y = hoveredTile.y;
-                if (!rightClick) {
+                if (mouseButton === 0) {
                     // event is a left click
                     hoveredTile[murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
                 }
-                else {
+                else if (mouseButton === 2) {
                     // event is a right click
                     hoveredTile[murmures.C.LAYERS[selectedBrush.layerId][1]] = '';
                 }

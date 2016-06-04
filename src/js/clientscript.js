@@ -99,6 +99,13 @@ function getCurrentHero() {
 
 // #region Tiles
 function drawTiles(partialEngine) {
+    for (let y = 0; y < gameEngine.level.height; y++) {
+        for (let x = 0; x < gameEngine.level.width; x++) {
+            if (gameEngine.level.tiles[y][x].state === murmures.C.TILE_HIGHLIGHTED) {
+                document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+            }
+        }
+    }
     if (typeof partialEngine !== 'undefined' && typeof partialEngine.level !== 'undefined' && typeof partialEngine.level.tiles !== 'undefined') {
         partialEngine.level.tiles.forEach(function (tileRow) {
             tileRow.forEach(function (tile) {
@@ -111,7 +118,6 @@ function drawTiles(partialEngine) {
 
 function drawOneTile(x, y) {
     if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
-        document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
         drawOneLayer(x, y, 'groundId');
         drawOneLayer(x, y, 'groundDeco');

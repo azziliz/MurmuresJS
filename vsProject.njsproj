@@ -51,7 +51,6 @@
     <Content Include="README.md" />
     <Compile Include="server.js" />
     <Content Include="src\img\murmures.png" />
-    <Content Include="src\pages\bodyeditor.html" />
     <Content Include="src\css\client.css" />
     <Content Include="src\pages\leveleditor.html" />
     <Content Include="src\pages\test.html" />
