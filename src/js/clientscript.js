@@ -66,6 +66,7 @@ function tilesetLoaded() {
 
 function loadEngine(engine) {
     gameEngine.initialize(engine);
+    loadDevTools();
     clearUI();
     initUI();
     resetCanvas();
@@ -231,6 +232,11 @@ function animateProjectile(start, end, timestamp, imgX, imgY, sourceTile, destTi
 // #endregion
 
 // #region UI/Characters
+function loadDevTools() {
+    gameEngine.levelIds.forEach(function (levelId) {
+    }, this);
+}
+
 function clearUI() {
     document.getElementById('leftCharacters').innerHTML = '';
     document.getElementById('rightCharacters').innerHTML = '';

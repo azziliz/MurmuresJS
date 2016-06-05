@@ -43,11 +43,11 @@
     <Content Include="src\pages\client.html" />
     <Content Include="data\bodies.json" />
     <Content Include="data\hero1.json" />
-    <Content Include="data\level1.json" />
-    <Content Include="data\level2.json" />
-    <Content Include="data\level3.json" />
-    <Content Include="data\level4.json" />
-    <Content Include="data\level5.json" />
+    <Content Include="data\staticlevels\level1.json" />
+    <Content Include="data\staticlevels\level2.json" />
+    <Content Include="data\staticlevels\level3.json" />
+    <Content Include="data\staticlevels\level4.json" />
+    <Content Include="data\staticlevels\level5.json" />
     <Content Include="README.md" />
     <Compile Include="server.js" />
     <Content Include="src\img\murmures.png" />
@@ -58,6 +58,8 @@
   <ItemGroup>
     <Folder Include="data\" />
     <Folder Include="data\locale\" />
+    <Folder Include="data\staticlevels\" />
+    <Folder Include="data\reference\" />
     <Folder Include="src\" />
     <Folder Include="src\css\" />
     <Folder Include="src\img\" />

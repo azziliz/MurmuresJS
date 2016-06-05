@@ -33,12 +33,12 @@ var murmures = {
 
     restartGame: function () {
         gameEngine.levels = [];
-        gameEngine.levelIds = ['level4', 'level1', 'level2', 'level5'];
+        gameEngine.levelIds = fs.readdirSync('./data/staticlevels/', 'utf8');
         gameEngine.levelIds.forEach(function (levelName) {
-            let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
+            let level1Txt = fs.readFileSync('./data/staticlevels/' + levelName, 'utf8').toString().replace(/^\uFEFF/, '');
             let level1 = new murmures.Level();
             level1.build(JSON.parse(level1Txt));
-            level1.id = levelName;
+            level1.id = levelName.replace('.json', '');
             gameEngine.levels.push(level1);
         }, this);
         gameEngine.activeLevel = 0;

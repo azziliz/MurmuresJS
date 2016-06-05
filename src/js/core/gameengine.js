@@ -69,6 +69,7 @@ murmures.GameEngine.prototype = {
         this.tileSize = src.tileSize;
         this.bodies = src.bodies;
         this.locale = src.locale;
+        this.levelIds = src.levelIds;
         this.level = new murmures.Level();
         this.level.initialize(src.level);
         this.heros = [];
