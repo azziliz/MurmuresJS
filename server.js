@@ -31,17 +31,22 @@ var murmures = {
         return fdiff;
     },
 
-    restartGame: function () {
+    restartGame: function (targetLevel) {
         gameEngine.levels = [];
+        gameEngine.activeLevel = 0;
         gameEngine.levelIds = fs.readdirSync('./data/staticlevels/', 'utf8');
+        let loopCounter = 0;
         gameEngine.levelIds.forEach(function (levelName) {
             let level1Txt = fs.readFileSync('./data/staticlevels/' + levelName, 'utf8').toString().replace(/^\uFEFF/, '');
             let level1 = new murmures.Level();
             level1.build(JSON.parse(level1Txt));
             level1.id = levelName.replace('.json', '');
             gameEngine.levels.push(level1);
+            if (typeof targetLevel !== 'undefined' && targetLevel && targetLevel === levelName) {
+                gameEngine.activeLevel = loopCounter;
+            }
+            loopCounter++;
         }, this);
-        gameEngine.activeLevel = 0;
         gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
 
         let hero1Txt = fs.readFileSync('./data/hero1.json', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -242,7 +247,7 @@ wss.on('connection', function (ws) {
             murmures.serverLog('Response sent');
         }
         else if (message.service === 'restart') {
-            murmures.restartGame();
+            murmures.restartGame(message.payload);
             wss.clients.forEach(function each(client) {
                 client.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
             });

@@ -5,6 +5,7 @@ gameEngine.client = {};
 gameEngine.client.allowOrders = true;
 gameEngine.client.ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
 gameEngine.client.mouseMoveTarget = { x: -1 | 0, y: -1 | 0 };
+gameEngine.client.eventsRegistered = false;
 
 // #region Utils
 gameEngine.client.ws.onmessage = function (event) {
@@ -233,7 +234,12 @@ function animateProjectile(start, end, timestamp, imgX, imgY, sourceTile, destTi
 
 // #region UI/Characters
 function loadDevTools() {
+    document.getElementById('levelSelect').innerHTML = '';
     gameEngine.levelIds.forEach(function (levelId) {
+        let opt = document.createElement("option");
+        opt.value = levelId;
+        opt.text = levelId.replace('.json', '');
+        document.getElementById('levelSelect').add(opt);
     }, this);
 }
 
@@ -326,7 +332,6 @@ function updateUI() {
     }
 }
 
-
 function clearCharacterLayer() {
     document.getElementById('characterLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
 }
@@ -347,6 +352,7 @@ function drawCharacter(character) {
 
 // #region Events
 function registerEvents() {
+    if (gameEngine.client.eventsRegistered) return; // We want to resister events only once
     // IE11 returns decimal number for MouseEvent coordinates but Chrome43 always rounds down.
     // --> using floor() for consistency.
     // and retrieves the nearest pixel coordinates.
@@ -398,7 +404,12 @@ function registerEvents() {
             }
         }, false);
     }
+    let changeLevelButton = document.getElementById('changeLevel');
+    changeLevelButton.addEventListener('mousedown', function (e) {
+        gameEngine.client.ws.send(JSON.stringify({ service: 'restart', payload: document.getElementById('levelSelect').value }));
+    }, false);
 
+    gameEngine.client.eventsRegistered = true;
 }
 
 function topLayer_onMouseMove(hoveredTile, rightClick) {
