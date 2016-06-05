@@ -38,6 +38,7 @@ var murmures = {
             let level1Txt = fs.readFileSync('./data/' + levelName + '.json', 'utf8').toString().replace(/^\uFEFF/, '');
             let level1 = new murmures.Level();
             level1.build(JSON.parse(level1Txt));
+            level1.id = levelName;
             gameEngine.levels.push(level1);
         }, this);
         gameEngine.activeLevel = 0;
