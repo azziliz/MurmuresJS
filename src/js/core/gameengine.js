@@ -15,7 +15,7 @@
  * This instance is in the global scope and can be accessed from any other class.
  * This is the only variable of the murmures project in the global scope.
  * During startup, the server loads all references data -stored in JSON files- into the engine instance.
- * This includes bodies.json (list of all physical bodies and character templates).
+ * This includes assets (list of all physical bodies and character templates), locale files, heroes and static levels.
  *
  * This class is also in charge of applying client orders to the game and calling AI methods.
  *

@@ -41,7 +41,7 @@
     <Content Include="data\tmp.json" />
     <Content Include="package.json" />
     <Content Include="src\pages\client.html" />
-    <Content Include="data\bodies.json" />
+    <Content Include="data\reference\assets.json" />
     <Content Include="data\hero1.json" />
     <Content Include="data\staticlevels\level1.json" />
     <Content Include="data\staticlevels\level2.json" />

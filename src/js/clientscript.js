@@ -272,7 +272,7 @@ function updateUI() {
         }
         for (let i = 0; i < gameEngine.level.mobs.length; i++) {
             let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
-            let locale = gameEngine.locale.fr.bodies[gameEngine.level.mobs[i].mobTemplate];
+            let locale = gameEngine.locale.fr.assets[gameEngine.level.mobs[i].mobTemplate];
             let tilesetRank = ref.rank;
             let tilesetX = tilesetRank % 64;
             let tilesetY = (tilesetRank - tilesetX) / 64;
@@ -312,7 +312,7 @@ function updateUI() {
         winChar.style.borderColor = color;
         
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
-        let locale = gameEngine.locale.fr.bodies[gameEngine.heros[i].mobTemplate];
+        let locale = gameEngine.locale.fr.assets[gameEngine.heros[i].mobTemplate];
         let tilesetRank = ref.rank;
         let tilesetX = tilesetRank % 64;
         let tilesetY = (tilesetRank - tilesetX) / 64;

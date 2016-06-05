@@ -64,10 +64,10 @@ murmures.Character.prototype = {
         this.position = tile;
         this.mobTemplate = template;
         let ref = gameEngine.bodies[template];
-        this.hitPointsMax = (ref.hitPointsMax || (this.isHero ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in bodies.json.
+        this.hitPointsMax = (ref.hitPointsMax || (this.isHero ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in assets.json.
         this.hitPoints = this.hitPointsMax | 0;
-        this.range = (ref.range || (this.isHero ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in bodies.json.
-        this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in bodies.json.
+        this.range = (ref.range || (this.isHero ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in assets.json.
+        this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in assets.json.
         this.canMove = ref.canMove || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
     },

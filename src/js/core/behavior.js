@@ -14,15 +14,15 @@
  * Because behaviors are called from the [GameEngine.applyOrder]{@link murmures.GameEngine.applyOrder} function, 
  * they only execute on the server.
  *
- * Callbacks are defined -on props only- inside bodies.json.
+ * Callbacks are defined -on props only- inside assets.json.
  * They are copied into each tile that contains the prop during a [level]{@link murmures.Level} load.
- * To fire the callback, the order's "command" has to match the behavior name defined in bodies.json.
+ * To fire the callback, the order's "command" has to match the behavior name defined in assets.json.
  *
  * All behavior methods have 3 arguments: source, target and cb_params.
  * source and target are the order source and order target, respectively.
  * They are filled by the game engine directly from the client order.
  * cb_params is an Object (usually a string, but it may vary from one callback to another)
- * that is defined inside bodies.json to be passed to the callback function.
+ * that is defined inside assets.json to be passed to the callback function.
  *
  * @class
  */

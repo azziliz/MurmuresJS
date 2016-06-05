@@ -127,8 +127,8 @@ murmures.serverLog('Initializing game');
  * Initializes game
  */
 (function () {
-    let bodiesJson = fs.readFileSync('./data/bodies.json', 'utf8').toString().replace(/^\uFEFF/, '');
-    gameEngine.bodies = JSON.parse(bodiesJson);
+    let assetsJson = fs.readFileSync('./data/reference/assets.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    gameEngine.bodies = JSON.parse(assetsJson);
 
     let localefrJson = fs.readFileSync('./data/locale/fr.json', 'utf8').toString().replace(/^\uFEFF/, '');
     let localeenJson = fs.readFileSync('./data/locale/en.json', 'utf8').toString().replace(/^\uFEFF/, '');
