@@ -31,10 +31,8 @@ murmures.GameEngine = function () {
     this.locale = {};
     /** @type {murmures.Level} */
     this.level = {};
-    /** @type {murmures.Character} */
-    this.heros = {};
-    /** @type {Array.<murmures.Order>} */
-    this.waitingOrders = [];
+    /** @type {Array.<murmures.Character>} */
+    this.heros = [];
     
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
@@ -47,6 +45,8 @@ murmures.GameEngine = function () {
     this.gameTurn = 0 | 0;
     /** @type {number} */
     this.state = murmures.C.STATE_ENGINE_INIT | 0;
+    /** @type {Array.<murmures.Order>} */
+    this.waitingOrders = [];
 };
 
 murmures.GameEngine.prototype = {
