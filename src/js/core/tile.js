@@ -72,7 +72,7 @@ murmures.Tile.prototype = {
         if (typeof src.propId !== 'undefined') this.propId = src.propId;
         if (typeof src.propDeco !== 'undefined') this.propDeco = src.propDeco;
         if (typeof src.itemId !== 'undefined') this.itemId = src.itemId;
-        if (typeof src.charId !== 'undefined') this.charId = src.charId; // the game client doesn't need this but the level editor does so we try to synchronize it
+        if (typeof src.charId !== 'undefined') this.charId = src.charId; // level editor needs this so we send it but it also lets clients cheat. TODO: find a clean way to hide this to clients.
         if (typeof src.effectId !== 'undefined') this.effectId = src.effectId;
         if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
     },
