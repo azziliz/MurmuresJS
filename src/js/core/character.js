@@ -50,11 +50,11 @@ murmures.Character = function () {
     this.charSpotted = false; // hero is known because seen at least once
     /** @type {number} */
     this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-  
+
 };
 
 murmures.Character.prototype = {
-    
+
     /**
      * It is expected that, when the server calls this function,
      * the Tile object in parameter is already built.
@@ -71,12 +71,12 @@ murmures.Character.prototype = {
         this.canMove = ref.canMove || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
     },
-    
+
     initialize : function (src) {
         this.guid = src.guid;
         this.synchronize(src);
     },
-    
+
     synchronize : function (src) {
         if (typeof src === 'undefined') return;
         if (typeof src.position !== 'undefined') this.move(src.position.x, src.position.y); // TODO position=null when mob becomes invisible?
@@ -89,7 +89,7 @@ murmures.Character.prototype = {
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
         if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
     },
-    
+
     clone : function () {
         return {
             guid: this.guid,
@@ -104,7 +104,7 @@ murmures.Character.prototype = {
             stateOrder : this.stateOrder,
         };
     },
-    
+
     compare : function (beforeState) {
         let ret = {};
         if (this.guid !== beforeState.guid) throw 'Character changed guid. This souldn\'t be happening';
@@ -136,28 +136,23 @@ murmures.Character.prototype = {
         }
         // otherwise, no return = undefined
     },
-    
+
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
     },
-    
+
     get isHero() {
         let ref = gameEngine.bodies[this.mobTemplate];
         return murmures.C.LAYERS[ref.layerId][0] === 'Hero';
     },
-    
+
     setVision : function (tilesProcessed) {
+        murmures.serverLog("hero position " + this.position.x + "//" + this.position.y);
         let level = gameEngine.level;
         if (typeof tilesProcessed === 'undefined' || tilesProcessed === null) { tilesProcessed = []; }
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
-                let toProceed = true;
-                for (let itTiles=0; itTiles < tilesProcessed.length; itTiles++) {
-                    if (tilesProcessed[itTiles].x === xx && tilesProcessed[itTiles].y === yy) {
-                        toProceed = false;
-                        break;
-                    }
-                }
+                let toProceed = (tilesProcessed.indexOf(level.tiles[yy][xx])<0);
                 if (toProceed) {
                     if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
                         level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
@@ -165,44 +160,45 @@ murmures.Character.prototype = {
                 }
             }
         }
-        
+
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             gameEngine.level.mobs[itMob].onVision = false;
         }
-        
+
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);
             let ox = this.position.x + 0.5;
             let oy = this.position.y + 0.5;
-            for (let j=0; j < murmures.C.DEFAULT_RANGE_FOV; j++) {
+            let j=0;
+            let breakObstacle = false;
+            while((j<murmures.C.DEFAULT_RANGE_FOV ) && (breakObstacle===false)){
                 let oxx = 0;
                 oxx = Math.floor(ox);
                 let oyy = 0;
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
-                    let toProceed = true;
-                    for (let itTiles=0; itTiles < tilesProcessed.length; itTiles++) {
-                        if (tilesProcessed[itTiles].x === oxx && tilesProcessed[itTiles].y === oyy) {
-                            toProceed = false;
-                            break;
-                        }
+                    let toProceed = (tilesProcessed.indexOf(level.tiles[oyy][oxx])<0);
+
+                    let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
+                    let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
+                    if ((!groundLight || !propLight) && (j > 0)) {
+                        breakObstacle = true;
                     }
-                    if (toProceed) {
-                        level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
-                        let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
-                        let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
-                        if ((!groundLight || !propLight) && (j > 0)) {
-                            break;
-                        }
-                        tilesProcessed.push(level.tiles[oyy][oxx]);
+                    if(toProceed){
+                      level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
+                      tilesProcessed.push(level.tiles[oyy][oxx]);
                     }
+
                     ox += x;
                     oy += y;
+                }else{
+                  breakObstacle = true;
                 }
+                j+=1;
             }
         }
-        
+
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             let mob = gameEngine.level.mobs[itMob];
             if (level.tiles[mob.position.y][mob.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
