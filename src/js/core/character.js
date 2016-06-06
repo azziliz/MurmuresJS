@@ -93,7 +93,7 @@ murmures.Character.prototype = {
     clone : function () {
         return {
             guid: this.guid,
-            position: { x: this.position.x, y: this.position.y },
+            position: this.position.coordinates,
             mobTemplate: this.mobTemplate,
             hitPointsMax: this.hitPointsMax,
             hitPoints: this.hitPoints,
@@ -108,7 +108,7 @@ murmures.Character.prototype = {
     compare : function (beforeState) {
         let ret = {};
         if (this.guid !== beforeState.guid) throw 'Character changed guid. This souldn\'t be happening';
-        if (this.position.x !== beforeState.position.x || this.position.y !== beforeState.position.y) ret.position = this.position.coordinates();
+        if (this.position.x !== beforeState.position.x || this.position.y !== beforeState.position.y) ret.position = this.position.coordinates;
         if (this.mobTemplate !== beforeState.mobTemplate) ret.mobTemplate = this.mobTemplate;
         if (this.hitPointsMax !== beforeState.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
         if (this.hitPoints !== beforeState.hitPoints) ret.hitPoints = this.hitPoints;
@@ -120,7 +120,7 @@ murmures.Character.prototype = {
             ret.onVision = this.onVision;
             if (this.onVision) {
                 // client discovers the mob for the first time --> send everything
-                ret.position = this.position.coordinates();
+                ret.position = this.position.coordinates;
                 ret.mobTemplate = this.mobTemplate;
                 ret.hitPointsMax = this.hitPointsMax;
                 ret.hitPoints = this.hitPoints;

@@ -114,6 +114,8 @@ murmures.serverLog('Loading classes');
     vm.runInContext(characterjs, ctx, { filename: 'character.js' });
     let orderjs = fs.readFileSync('./src/js/core/order.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(orderjs, ctx, { filename: 'order.js' });
+    let turnReportjs = fs.readFileSync('./src/js/core/turnreport.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(turnReportjs, ctx, { filename: 'turnreport.js' });
     let physicalBodyjs = fs.readFileSync('./src/js/core/physicalbody.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalbody.js' });
     let behaviorjs = fs.readFileSync('./src/js/core/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');

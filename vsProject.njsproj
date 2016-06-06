@@ -31,6 +31,7 @@
     <Compile Include="src\js\core\physicalbody.js" />
     <Compile Include="src\js\core\player.js" />
     <Compile Include="src\js\core\tile.js" />
+    <Compile Include="src\js\core\turnreport.js" />
     <Compile Include="src\js\test\moduleperf.js" />
     <Compile Include="src\js\test\servertest.js" />
     <Compile Include="src\js\test\vmperf.js" />

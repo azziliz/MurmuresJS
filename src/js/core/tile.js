@@ -110,7 +110,7 @@ murmures.Tile.prototype = {
         // otherwise, no return = undefined
     },
     
-    coordinates : function () {
+    get coordinates() {
         return { x: this.x, y: this.y };
     },
     

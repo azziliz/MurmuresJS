@@ -33,6 +33,8 @@ murmures.GameEngine = function () {
     this.level = {};
     /** @type {Array.<murmures.Character>} */
     this.heros = [];
+    /** @type {Array.<murmures.TurnReport>} */
+    this.reportQueue = [];
     
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
@@ -46,7 +48,7 @@ murmures.GameEngine = function () {
     /** @type {number} */
     this.state = murmures.C.STATE_ENGINE_INIT | 0;
     /** @type {Array.<murmures.Order>} */
-    this.waitingOrders = [];
+    this.orderQueue = [];
 };
 
 murmures.GameEngine.prototype = {
@@ -78,6 +80,14 @@ murmures.GameEngine.prototype = {
             tempHero.initialize(hero);
             this.heros.push(tempHero);
         }, this);
+        this.reportQueue = [];
+        if (typeof src.reportQueue !== 'undefined') {
+            src.reportQueue.forEach(function (report) {
+                let tempReport = new murmures.TurnReport();
+                tempReport.initialize(report);
+                this.reportQueue.push(tempReport);
+            }, this);
+        }
         this.state = src.state;
     },
     
@@ -96,8 +106,7 @@ murmures.GameEngine.prototype = {
         }
         if (src.state !== 'undefined') {
             this.state = src.state;
-        }
-        
+        }        
         if (typeof src.heros !== 'undefined') {
             src.heros.forEach(function (remoteHero) {
                 this.heros.forEach(function (localHero) {
@@ -105,6 +114,14 @@ murmures.GameEngine.prototype = {
                         localHero.synchronize(remoteHero);
                     }
                 }, this);
+            }, this);
+        }
+        this.reportQueue = [];
+        if (typeof src.reportQueue !== 'undefined') {
+            src.reportQueue.forEach(function (report) {
+                let tempReport = new murmures.TurnReport();
+                tempReport.initialize(report);
+                this.reportQueue.push(tempReport);
             }, this);
         }
     },
@@ -118,7 +135,7 @@ murmures.GameEngine.prototype = {
         return {
             state: this.state,
             level: this.level.clone(),
-            heros: tempHeros,
+            heros: tempHeros
         };
     },
     
@@ -131,17 +148,19 @@ murmures.GameEngine.prototype = {
         
         if (typeof level_ !== 'undefined') ret.level = level_;
         let heros_ = [];
-        for (let itHero =0; itHero < this.heros.length; itHero++) {
-            for (let itHero_ = 0 ; itHero_ < beforeState.heros.length; itHero_++) {
+        for (let itHero = 0; itHero < this.heros.length; itHero++) {
+            for (let itHero_ = 0; itHero_ < beforeState.heros.length; itHero_++) {
                 if (beforeState.heros[itHero_].guid === this.heros[itHero].guid) {
                     let hero_ = this.heros[itHero].compare(beforeState.heros[itHero_]);
                     if (typeof hero_ !== 'undefined') heros_.push(hero_);
                 }
             }
-        }
-        
+        }        
         if (heros_.length > 0) {
             ret.heros = heros_;
+        }
+        if (this.reportQueue.length > 0) {
+            ret.reportQueue = this.reportQueue;
         }
         for (let prop in ret) {
             // only returns ret if not empty
@@ -150,9 +169,15 @@ murmures.GameEngine.prototype = {
         // otherwise, no return = undefined
     },
     
+    getHeroByGuid: function (guid) {
+        this.heros.forEach(function (hero) {
+            if (hero.guid === guid) return hero;
+        }, this);
+    },
+    
     /**
      * This function is called on client and server side.
-     * If the order is deemed valid on client side, it is then sent to the server by an XHR.
+     * If the order is deemed valid on client side, it is then sent to the server by a websocket message.
      * The server will check it again and, if it's still valid, call applyOrder().
      */
     checkOrder : function (order) {
@@ -191,9 +216,9 @@ murmures.GameEngine.prototype = {
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
             if (this.heros[itHero].guid === order.source.guid) {
                 this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
-                if (typeof this.waitingOrders === 'undefined') this.waitingOrders = [];
-                murmures.serverLog(this.waitingOrders);
-                this.waitingOrders.push(order);
+                if (typeof this.orderQueue === 'undefined') this.orderQueue = [];
+                murmures.serverLog(this.orderQueue);
+                this.orderQueue.push(order);
                 murmures.serverLog('Order saved');
             }
             
@@ -201,7 +226,7 @@ murmures.GameEngine.prototype = {
                 nbOrderDone += 1;
             }
         }
-        
+        this.reportQueue = [];
         if (this.heros.length !== nbOrderDone) {
             for (let itHero = 0; itHero < this.heros.length ; itHero++) {
                 if (this.heros[itHero].stateOrder !== murmures.C.STATE_HERO_ORDER_GIVEN) {
@@ -212,10 +237,10 @@ murmures.GameEngine.prototype = {
             }
         } else {
             murmures.serverLog('Apply all orders');
-            for (let itOrders = 0; itOrders < this.waitingOrders.length ; itOrders++) {
-                this.applyOrder(this.waitingOrders[itOrders]);
+            for (let itOrders = 0; itOrders < this.orderQueue.length ; itOrders++) {
+                this.applyOrder(this.orderQueue[itOrders]);
             }
-            this.waitingOrders = [];
+            this.orderQueue = [];
             this.applyAI();
             murmures.serverLog('AI done');
             
@@ -236,24 +261,48 @@ murmures.GameEngine.prototype = {
                 murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
             }
             else {
+                let tr1 = new murmures.TurnReport();
+                tr1.build({
+                    effect: 'characterMove',
+                    character: order.source,
+                    sourceTile: order.source.position.coordinates,
+                    targetTile: order.target.coordinates
+                });
+                this.reportQueue.push(tr1);
                 order.source.move(order.target.x, order.target.y);
             }
         }
         else {
             this.level.mobs.forEach(function (mob) {
                 if (mob.onVision && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                    let tr1 = new murmures.TurnReport();
+                    tr1.build({
+                        effect: 'projectileMove',
+                        sourceTile: order.source.position.coordinates,
+                        targetTile: order.target.coordinates
+                    });
+                    this.reportQueue.push(tr1);
+                    let tr2 = new murmures.TurnReport();
+                    tr2.build({
+                        effect: 'damage',
+                        character: mob,
+                        value: order.source.defaultDamageValue
+                    });
+                    this.reportQueue.push(tr2);
                     mob.hitPoints -= order.source.defaultDamageValue;
                     if (mob.hitPoints <= 0) {
                         mob.hitPoints = 0;
                         mob.position.groundDeco = '_b1_02_blood_red00';
                     }
                 }
-            });
+            }, this);
         }
         murmures.serverLog('Moves / attacks done');
         let tilesProcessed = [];
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
-            if (typeof tilesProcessed === 'undefined') { tilesProcessed = []; murmures.serverLog("prout"); }
+            if (typeof tilesProcessed === 'undefined') {
+                tilesProcessed = [];
+            }
             tilesProcessed = this.heros[itHero].setVision(tilesProcessed);
         }
         murmures.serverLog('Vision done');

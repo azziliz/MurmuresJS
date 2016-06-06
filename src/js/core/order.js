@@ -24,9 +24,12 @@
  * @class
  */
 murmures.Order = function () {
-        /// <field name="command" type="String"/>
-        /// <field name="source" type="Character"/>
-        /// <field name="target" type="Tile"/>
+    /** @type {string} */
+    this.command = '';
+    /** @type {murmures.Character} */
+    this.source = {};
+    /** @type {murmures.Tile} */
+    this.target = {};
 };
 
 murmures.Order.prototype = {
