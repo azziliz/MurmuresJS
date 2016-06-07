@@ -196,7 +196,7 @@ function drawTrail(sourceTile, destTile) {
                     gameEngine.tileSize * destTile.x, gameEngine.tileSize * destTile.y, gameEngine.tileSize, gameEngine.tileSize);
 }
 
-function queueProjectile(start, sourceTile, destTile) {
+function queueProjectile(start, sourceTile, destTile, endEvent) {
     let direction = -1;
     let deltaX = destTile.x - sourceTile.x;
     let absDeltaX = Math.abs(deltaX);
@@ -218,11 +218,12 @@ function queueProjectile(start, sourceTile, destTile) {
     let imgY = (imgRank - imgX) / 64;
     gameEngine.client.animationQueue.push({
         start: start,
-        end: start + 200 + 100 * Math.max(absDeltaX, absDeltaY),
+        end: start + 150 + 100 * Math.max(absDeltaX, absDeltaY),
         imgX: imgX,
         imgY: imgY,
         sourceTile: sourceTile,
-        destTile: destTile
+        destTile: destTile,
+        endEvent: endEvent
     });
 }
 
@@ -241,21 +242,39 @@ function renderReportQueue() {
     //gameEngine.reportQueue.sort(function (rep1, rep2) { return rep1.priority - rep2.priority });
     document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     let heroMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 10 });
-    heroMoves.forEach(function (report) {
-        drawTrail(report.sourceTile, report.targetTile);
-    }, this);
+    if (heroMoves.length > 0) {
+        heroMoves.forEach(function (report) {
+            drawTrail(report.sourceTile, report.targetTile);
+        }, this);
+        gameEngine.reportQueue = gameEngine.reportQueue.filter(function (report) { return report.priority !== 10 });
+    }
     let heroProjectileMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 20 });
-    heroProjectileMoves.forEach(function (report) {
-        window.requestAnimationFrame(function (timestamp) {
-            queueProjectile(timestamp, report.sourceTile, report.targetTile);
-        });
-    }, this);
+    if (heroProjectileMoves.length > 0) {
+        heroProjectileMoves.forEach(function (report) {
+            window.requestAnimationFrame(function (timestamp) {
+                queueProjectile(timestamp, report.sourceTile, report.targetTile, 'heroAnimationEnded');
+            });
+        }, this);
+        gameEngine.reportQueue = gameEngine.reportQueue.filter(function (report) { return report.priority !== 20 });
+    }
+    else {
+        let event = document.createEvent('CustomEvent');
+        event.initCustomEvent('heroAnimationEnded', false, false, {});
+        window.dispatchEvent(event);
+    }
+}
+
+function onHeroAnimationEnded(e) {
+    if (gameEngine.reportQueue.length === 0) return;
     let aiProjectileMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 120 });
-    aiProjectileMoves.forEach(function (report) {
-        window.requestAnimationFrame(function (timestamp) {
-            queueProjectile(timestamp + 200, report.sourceTile, report.targetTile);
-        });
-    }, this);
+    if (aiProjectileMoves.length > 0) {
+        aiProjectileMoves.forEach(function (report) {
+            window.requestAnimationFrame(function (timestamp) {
+                queueProjectile(timestamp + 100, report.sourceTile, report.targetTile);
+            });
+        }, this);
+        gameEngine.reportQueue = gameEngine.reportQueue.filter(function (report) { return report.priority !== 120 });
+    }
 }
 
 function animationManager(timestamp) {
@@ -266,6 +285,14 @@ function animationManager(timestamp) {
             if (timestamp <= projectile.end) {
                 if (timestamp >= projectile.start) drawProjectile(projectile.start, projectile.end, timestamp, projectile.imgX, projectile.imgY, projectile.sourceTile, projectile.destTile);
                 newAnimationQueue.push(projectile);
+            }
+            else {
+                if (typeof projectile.endEvent !== 'undefined') {
+                    // TODO: drop support for IE11 and write a clean implementation of custom events
+                    let event = document.createEvent('CustomEvent');
+                    event.initCustomEvent(projectile.endEvent, false, false, {});
+                    window.dispatchEvent(event);
+                }
             }
         }, this);
         gameEngine.client.animationQueue = newAnimationQueue;
@@ -452,6 +479,11 @@ function registerEvents() {
     changeLevelButton.addEventListener('mousedown', function (e) {
         gameEngine.client.ws.send(JSON.stringify({ service: 'restart', payload: document.getElementById('levelSelect').value }));
     }, false);
+    
+    window.addEventListener('heroAnimationEnded', function (e) {
+        onHeroAnimationEnded(e.detail);
+    }, false);
+
     animationManager(0);
     gameEngine.client.eventsRegistered = true;
 }

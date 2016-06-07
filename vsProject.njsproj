@@ -66,6 +66,7 @@
     <Folder Include="src\img\" />
     <Folder Include="src\js\" />
     <Folder Include="src\js\core\" />
+    <Folder Include="src\js\client\" />
     <Folder Include="src\js\test\" />
     <Folder Include="src\pages\" />
   </ItemGroup>

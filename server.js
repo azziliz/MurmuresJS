@@ -63,7 +63,7 @@ var murmures = {
                 let rand = Math.floor(Math.random() * allHeroesKeys.length);
                 chosenHero = allHeroesKeys[rand];
             } while (chosenHeroesKeys.indexOf(chosenHero) >= 0); // This loop prevents duplicate heroes
-
+            chosenHeroesKeys.push(chosenHero);
             let hero1 = new murmures.Character();
             hero1.build(gameEngine.level.getStartingPoint(), chosenHero);
             if (loopCounter === 0) {
