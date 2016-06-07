@@ -72,7 +72,7 @@ var murmures = {
             }
             gameEngine.heros.push(hero1);
         }
-
+        gameEngine.reportQueue = [];
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
     }
 };
