@@ -4,6 +4,10 @@ var gameEngine = new murmures.GameEngine();
 gameEngine.client = {};
 gameEngine.client.allowOrders = true;
 gameEngine.client.ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
+gameEngine.client.tileset = {};
+gameEngine.client.tilesetImg = {};
+gameEngine.client.tilesetGray = {};
+gameEngine.client.tilesetImgGray = {};
 gameEngine.client.mouseMoveTarget = { x: -1 | 0, y: -1 | 0 };
 gameEngine.client.eventsRegistered = false;
 gameEngine.client.reportInProgress = false;
@@ -49,7 +53,7 @@ function init() {
         let img = new Image();
         img.onload = function () {
             gameEngine.client.tilesetImg = img;
-            tilesetLoaded();
+            loadGrayscale();
         }
         gameEngine.client.tileset = window.URL.createObjectURL(this.response);
         img.src = gameEngine.client.tileset;
@@ -57,6 +61,49 @@ function init() {
     xhr.open('GET', '/src/img/murmures.png', true);
     xhr.responseType = "blob";
     xhr.send(null);
+}
+
+function loadGrayscale() {
+    screenLog('entering loadGrayscale');
+    let canvas = document.createElement('canvas');
+    canvas.width = gameEngine.client.tilesetImg.width;
+    canvas.height = gameEngine.client.tilesetImg.height;
+    let ctx = canvas.getContext('2d');
+    ctx.drawImage(gameEngine.client.tilesetImg, 0, 0);
+    screenLog('drawn');
+    let imageData = ctx.getImageData(0, 2239, canvas.width, 2465 - 2239);
+    let data = imageData.data;
+    screenLog('getdata');
+    for (let i = 0; i < data.length; i += 4) {
+        let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+        data[i] = avg; // red
+        data[i + 1] = avg; // green
+        data[i + 2] = avg; // blue
+        // do not change alpha value
+    }
+    screenLog('updated pixels');
+    ctx.putImageData(imageData, 0, 2239);
+    screenLog('putimage');
+    // Code below is slightly faster (than toDataURL) on chrome51 but breaks IE11 compatibility. 
+    // Keeping it in comment for now.
+    //canvas.toBlob(function (blob) {
+    //    gameEngine.client.tilesetGray = window.URL.createObjectURL(blob);
+    //    let img = new Image();
+    //    img.onload = function () {
+    //        gameEngine.client.tilesetImgGray = img;
+    //        screenLog('loaded2');
+    //        tilesetLoaded();
+    //    }
+    //    img.src = gameEngine.client.tilesetGray;
+    //});
+    let img = new Image();
+    img.onload = function () {
+        gameEngine.client.tilesetImgGray = img;
+        screenLog('grayscale loaded');
+        tilesetLoaded();
+    }
+    gameEngine.client.tilesetGray = canvas.toDataURL();
+    img.src = gameEngine.client.tilesetGray;
 }
 
 function restartGame() {
@@ -190,7 +237,7 @@ function queueTrail(start, sourceTile, destTile) {
     let destY = (destRank - destX) / 64;
     gameEngine.client.animationQueue.push({
         start: start,
-        end: start + 1000,
+        end: start + 1500,
         imgX: sourceX,
         imgY: sourceY,
         sourceTile: sourceTile,
@@ -198,7 +245,7 @@ function queueTrail(start, sourceTile, destTile) {
     });
     gameEngine.client.animationQueue.push({
         start: start,
-        end: start + 1000,
+        end: start + 1500,
         imgX: destX,
         imgY: destY,
         sourceTile: destTile,
@@ -381,6 +428,7 @@ function updateUI() {
         }
     }
     
+    gameEngine.heros.sort(function (h1, h2) { return h1.stateOrder - h2.stateOrder; });
     for (let i = 0; i < gameEngine.heros.length; i++) {
         let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-box');
         if (typeof winHero === 'undefined' || winHero === null) {
@@ -424,7 +472,8 @@ function drawCharacter(character) {
     let tilesetX = tilesetRank % 64;
     let tilesetY = (tilesetRank - tilesetX) / 64;
     if (gameEngine.level.tiles[character.position.y][character.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
-        document.getElementById('characterLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
+        document.getElementById('characterLayer').getContext('2d').drawImage(
+            !character.isHero || character.stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS ? gameEngine.client.tilesetImg : gameEngine.client.tilesetImgGray,
                     tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);
     }
