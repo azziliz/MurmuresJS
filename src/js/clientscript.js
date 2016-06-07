@@ -169,7 +169,7 @@ function drawOneSquare(context, x, y, color, filled) {
     }
 }
 
-function drawTrail(sourceTile, destTile) {
+function queueTrail(start, sourceTile, destTile) {
     let direction = -1;
     if (destTile.x === sourceTile.x && destTile.y === sourceTile.y - 1) direction = 0;
     else if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y - 1) direction = 1;
@@ -186,14 +186,24 @@ function drawTrail(sourceTile, destTile) {
     let destRank = gameEngine.bodies[destBody].rank;
     let sourceX = sourceRank % 64;
     let sourceY = (sourceRank - sourceX) / 64;
-    document.getElementById('trailLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
-                    sourceX * gameEngine.tileSize, sourceY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
-                    gameEngine.tileSize * sourceTile.x, gameEngine.tileSize * sourceTile.y, gameEngine.tileSize, gameEngine.tileSize);
     let destX = destRank % 64;
     let destY = (destRank - destX) / 64;
-    document.getElementById('trailLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
-                    destX * gameEngine.tileSize, destY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
-                    gameEngine.tileSize * destTile.x, gameEngine.tileSize * destTile.y, gameEngine.tileSize, gameEngine.tileSize);
+    gameEngine.client.animationQueue.push({
+        start: start,
+        end: start + 1000,
+        imgX: sourceX,
+        imgY: sourceY,
+        sourceTile: sourceTile,
+        destTile: sourceTile
+    });
+    gameEngine.client.animationQueue.push({
+        start: start,
+        end: start + 1000,
+        imgX: destX,
+        imgY: destY,
+        sourceTile: destTile,
+        destTile: destTile
+    });
 }
 
 function queueProjectile(start, sourceTile, destTile, endEvent) {
@@ -227,10 +237,10 @@ function queueProjectile(start, sourceTile, destTile, endEvent) {
     });
 }
 
-function drawProjectile(start, end, timestamp, imgX, imgY, sourceTile, destTile) {
+function drawAnimation(start, end, timestamp, imgX, imgY, sourceTile, destTile) {
     let lerpRatio = (timestamp - start) / (end - start);
     let lerpX = sourceTile.x * (1 - lerpRatio) + destTile.x * lerpRatio;
-    let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;    
+    let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;
     document.getElementById('projectileLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     imgX * gameEngine.tileSize, imgY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * lerpX, gameEngine.tileSize * lerpY, gameEngine.tileSize, gameEngine.tileSize);
@@ -240,11 +250,13 @@ function renderReportQueue() {
     if (gameEngine.reportQueue.length === 0) return;
     gameEngine.client.reportInProgress = true;
     //gameEngine.reportQueue.sort(function (rep1, rep2) { return rep1.priority - rep2.priority });
-    document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+    //document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     let heroMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 10 });
     if (heroMoves.length > 0) {
         heroMoves.forEach(function (report) {
-            drawTrail(report.sourceTile, report.targetTile);
+            window.requestAnimationFrame(function (timestamp) {
+                queueTrail(timestamp, report.sourceTile, report.targetTile);
+            });
         }, this);
         gameEngine.reportQueue = gameEngine.reportQueue.filter(function (report) { return report.priority !== 10 });
     }
@@ -283,7 +295,7 @@ function animationManager(timestamp) {
         document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
         gameEngine.client.animationQueue.forEach(function (projectile) {
             if (timestamp <= projectile.end) {
-                if (timestamp >= projectile.start) drawProjectile(projectile.start, projectile.end, timestamp, projectile.imgX, projectile.imgY, projectile.sourceTile, projectile.destTile);
+                if (timestamp >= projectile.start) drawAnimation(projectile.start, projectile.end, timestamp, projectile.imgX, projectile.imgY, projectile.sourceTile, projectile.destTile);
                 newAnimationQueue.push(projectile);
             }
             else {
@@ -483,7 +495,7 @@ function registerEvents() {
     window.addEventListener('heroAnimationEnded', function (e) {
         onHeroAnimationEnded(e.detail);
     }, false);
-
+    
     animationManager(0);
     gameEngine.client.eventsRegistered = true;
 }
@@ -501,7 +513,7 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
             order.command = 'move';
         }
         let check = gameEngine.checkOrder(order);
-        if (check.valid) {            
+        if (check.valid) {
             if (order.command === 'move') {
                 window.requestAnimationFrame(function () {
                     //drawTrail(order.source.position, order.target);
