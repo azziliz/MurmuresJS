@@ -6,6 +6,8 @@ gameEngine.client.allowOrders = true;
 gameEngine.client.ws = new WebSocket(location.origin.replace(/^http/, 'ws'));
 gameEngine.client.mouseMoveTarget = { x: -1 | 0, y: -1 | 0 };
 gameEngine.client.eventsRegistered = false;
+gameEngine.client.reportInProgress = false;
+gameEngine.client.animationQueue = [];
 
 // #region Utils
 gameEngine.client.ws.onmessage = function (event) {
@@ -214,20 +216,62 @@ function queueProjectile(start, sourceTile, destTile) {
     //let imgRank = gameEngine.bodies['_b1_92_icicle' + direction].rank;
     let imgX = imgRank % 64;
     let imgY = (imgRank - imgX) / 64;
-    animateProjectile(start, start + 100 * Math.max(absDeltaX, absDeltaY), 0, imgX, imgY, sourceTile, destTile)
+    gameEngine.client.animationQueue.push({
+        start: start,
+        end: start + 200 + 100 * Math.max(absDeltaX, absDeltaY),
+        imgX: imgX,
+        imgY: imgY,
+        sourceTile: sourceTile,
+        destTile: destTile
+    });
 }
 
-function animateProjectile(start, end, timestamp, imgX, imgY, sourceTile, destTile) {
+function drawProjectile(start, end, timestamp, imgX, imgY, sourceTile, destTile) {
     let lerpRatio = (timestamp - start) / (end - start);
     let lerpX = sourceTile.x * (1 - lerpRatio) + destTile.x * lerpRatio;
-    let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;
-    document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+    let lerpY = sourceTile.y * (1 - lerpRatio) + destTile.y * lerpRatio;    
     document.getElementById('projectileLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
                     imgX * gameEngine.tileSize, imgY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * lerpX, gameEngine.tileSize * lerpY, gameEngine.tileSize, gameEngine.tileSize);
-    window.requestAnimationFrame(function (timestp) {
-        if (timestp < end) animateProjectile(start, end, timestp, imgX, imgY, sourceTile, destTile);
-        else document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+}
+
+function renderReportQueue() {
+    if (gameEngine.reportQueue.length === 0) return;
+    gameEngine.client.reportInProgress = true;
+    //gameEngine.reportQueue.sort(function (rep1, rep2) { return rep1.priority - rep2.priority });
+    document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+    let heroMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 10 });
+    heroMoves.forEach(function (report) {
+        drawTrail(report.sourceTile, report.targetTile);
+    }, this);
+    let heroProjectileMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 20 });
+    heroProjectileMoves.forEach(function (report) {
+        window.requestAnimationFrame(function (timestamp) {
+            queueProjectile(timestamp, report.sourceTile, report.targetTile);
+        });
+    }, this);
+    let aiProjectileMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 120 });
+    aiProjectileMoves.forEach(function (report) {
+        window.requestAnimationFrame(function (timestamp) {
+            queueProjectile(timestamp + 200, report.sourceTile, report.targetTile);
+        });
+    }, this);
+}
+
+function animationManager(timestamp) {
+    if (gameEngine.client.animationQueue.length > 0) {
+        let newAnimationQueue = [];
+        document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+        gameEngine.client.animationQueue.forEach(function (projectile) {
+            if (timestamp <= projectile.end) {
+                if (timestamp >= projectile.start) drawProjectile(projectile.start, projectile.end, timestamp, projectile.imgX, projectile.imgY, projectile.sourceTile, projectile.destTile);
+                newAnimationQueue.push(projectile);
+            }
+        }, this);
+        gameEngine.client.animationQueue = newAnimationQueue;
+    }
+    window.requestAnimationFrame(function (timestamp) {
+        animationManager(timestamp);
     });
 }
 // #endregion
@@ -408,7 +452,7 @@ function registerEvents() {
     changeLevelButton.addEventListener('mousedown', function (e) {
         gameEngine.client.ws.send(JSON.stringify({ service: 'restart', payload: document.getElementById('levelSelect').value }));
     }, false);
-
+    animationManager(0);
     gameEngine.client.eventsRegistered = true;
 }
 
@@ -425,17 +469,15 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
             order.command = 'move';
         }
         let check = gameEngine.checkOrder(order);
-        document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
-        if (check.valid) {
-            
+        if (check.valid) {            
             if (order.command === 'move') {
                 window.requestAnimationFrame(function () {
-                    drawTrail(order.source.position, order.target);
+                    //drawTrail(order.source.position, order.target);
                 });
             }
             else if (order.command === 'attack') {
                 window.requestAnimationFrame(function (timestamp) {
-                    queueProjectile(timestamp, order.source.position, order.target);
+                    //queueProjectile(timestamp, order.source.position, order.target);
                 });
             }
         }
@@ -544,6 +586,7 @@ function onOrderResponse(response) {
         else {
             drawTiles(ge);
         }
+        renderReportQueue();
         if (gameEngine.state === murmures.C.STATE_ENGINE_DEATH) {
             screenLog('YOU DIE !');
         }
