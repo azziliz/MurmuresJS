@@ -266,7 +266,8 @@ murmures.GameEngine.prototype = {
                     effect: 'characterMove',
                     character: order.source,
                     sourceTile: order.source.position.coordinates,
-                    targetTile: order.target.coordinates
+                    targetTile: order.target.coordinates,
+                    priority: 10
                 });
                 this.reportQueue.push(tr1);
                 order.source.move(order.target.x, order.target.y);
@@ -279,14 +280,16 @@ murmures.GameEngine.prototype = {
                     tr1.build({
                         effect: 'projectileMove',
                         sourceTile: order.source.position.coordinates,
-                        targetTile: order.target.coordinates
+                        targetTile: order.target.coordinates,
+                        priority: 20
                     });
                     this.reportQueue.push(tr1);
                     let tr2 = new murmures.TurnReport();
                     tr2.build({
                         effect: 'damage',
                         character: mob,
-                        value: order.source.defaultDamageValue
+                        value: order.source.defaultDamageValue,
+                        priority: 30
                     });
                     this.reportQueue.push(tr2);
                     mob.hitPoints -= order.source.defaultDamageValue;
@@ -319,6 +322,22 @@ murmures.GameEngine.prototype = {
                     
                     for (let itHero = 0; itHero < heros.length; itHero++) {
                         if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
+                            let tr1 = new murmures.TurnReport();
+                            tr1.build({
+                                effect: 'projectileMove',
+                                sourceTile: mob.position.coordinates,
+                                targetTile: heros[itHero].position.coordinates,
+                                priority: 120
+                            });
+                            this.reportQueue.push(tr1);
+                            let tr2 = new murmures.TurnReport();
+                            tr2.build({
+                                effect: 'damage',
+                                character: heros[itHero],
+                                value: mob.defaultDamageValue,
+                                priority: 130
+                            });
+                            this.reportQueue.push(tr2);
                             heros[itHero].hitPoints -= mob.defaultDamageValue;
                             fireOnHero = true;
                             if (heros[itHero].hitPoints <= 0) {

@@ -27,6 +27,8 @@ murmures.TurnReport = function () {
     this.targetTile = {};
     /** @type {number} */
     this.value = {};
+    /** @type {number} */
+    this.priority = {};
 };
 
 murmures.TurnReport.prototype = {
@@ -38,6 +40,7 @@ murmures.TurnReport.prototype = {
         this.sourceTile = typeof src.sourceTile !== 'undefined' ? { x: src.sourceTile.x, y: src.sourceTile.y } : undefined;
         this.targetTile = typeof src.targetTile !== 'undefined' ? { x: src.targetTile.x, y: src.targetTile.y } : undefined;
         this.value = typeof src.value !== 'undefined' ? src.value : undefined;
+        this.priority = typeof src.priority !== 'undefined' ? src.priority : undefined;
     },
     
     initialize : function (src) {
@@ -45,6 +48,7 @@ murmures.TurnReport.prototype = {
         if (typeof src.character !== 'undefined') this.character = gameEngine.getHeroByGuid(src.character.guid);
         if (typeof src.sourceTile !== 'undefined') this.sourceTile = gameEngine.level.tiles[src.sourceTile.y][src.sourceTile.x];
         if (typeof src.targetTile !== 'undefined') this.targetTile = gameEngine.level.tiles[src.targetTile.y][src.targetTile.x];
-        this.value = src.value;        
+        this.value = src.value;
+        this.priority = src.priority;
     }
 };
