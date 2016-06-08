@@ -8,6 +8,14 @@ var http = require('http');
 var WebSocketServer = require("ws").Server
 
 /**
+ * Declares the gameEngine variable for a later use.
+ * This variable will be set to an instance of murmures.GameEngine after all classes are loaded.
+ * @instance
+ * @type {murmures.GameEngine}
+ */
+var gameEngine = {};
+
+/**
  * The main namespace. All classes should be prefixed with it.
  * @namespace
  */
@@ -76,14 +84,6 @@ var murmures = {
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
     }
 };
-
-/**
- * Declares the gameEngine variable for a later use.
- * This variable will be set to an instance of murmures.GameEngine after all classes are loaded.
- * @instance
- * @type {murmures.GameEngine}
- */
-var gameEngine = {};
 
 murmures.serverLog('Loading classes');
 

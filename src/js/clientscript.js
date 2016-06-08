@@ -216,7 +216,7 @@ function drawOneSquare(context, x, y, color, filled) {
     }
 }
 
-function queueTrail(start, sourceTile, destTile) {
+function computeTrail(sourceTile, destTile) {
     let direction = -1;
     if (destTile.x === sourceTile.x && destTile.y === sourceTile.y - 1) direction = 0;
     else if (destTile.x === sourceTile.x + 1 && destTile.y === sourceTile.y - 1) direction = 1;
@@ -235,19 +235,30 @@ function queueTrail(start, sourceTile, destTile) {
     let sourceY = (sourceRank - sourceX) / 64;
     let destX = destRank % 64;
     let destY = (destRank - destX) / 64;
+    return {
+        sourceX: sourceX,
+        sourceY: sourceY,
+        destX: destX,
+        destY: destY
+    }
+}
+
+function queueTrail(start, sourceTile, destTile) {
+    let ret = computeTrail(sourceTile, destTile);
+    if (typeof ret === 'undefined') return;
     gameEngine.client.animationQueue.push({
         start: start,
         end: start + 1500,
-        imgX: sourceX,
-        imgY: sourceY,
+        imgX: ret.sourceX,
+        imgY: ret.sourceY,
         sourceTile: sourceTile,
         destTile: sourceTile
     });
     gameEngine.client.animationQueue.push({
         start: start,
         end: start + 1500,
-        imgX: destX,
-        imgY: destY,
+        imgX: ret.destX,
+        imgY: ret.destY,
         sourceTile: destTile,
         destTile: destTile
     });
@@ -295,9 +306,10 @@ function drawAnimation(start, end, timestamp, imgX, imgY, sourceTile, destTile) 
 
 function renderReportQueue() {
     if (gameEngine.reportQueue.length === 0) return;
+    gameEngine.heros.forEach(function (hero) {
+        document.getElementById('hero' + hero.guid + '-box').dataset.order = '';
+    }, this);
     gameEngine.client.reportInProgress = true;
-    //gameEngine.reportQueue.sort(function (rep1, rep2) { return rep1.priority - rep2.priority });
-    //document.getElementById('trailLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     let heroMoves = gameEngine.reportQueue.filter(function (report) { return report.priority === 10 });
     if (heroMoves.length > 0) {
         heroMoves.forEach(function (report) {
@@ -359,6 +371,23 @@ function animationManager(timestamp) {
     window.requestAnimationFrame(function (timestamp) {
         animationManager(timestamp);
     });
+}
+
+function herobox_onMouseEnter(e) {
+    if (e.target.dataset.order === '') return;
+    let orderObj = JSON.parse(e.target.dataset.order);
+    let ret = computeTrail(orderObj.source.position, orderObj.target);
+    if (typeof ret === 'undefined') return;
+    document.getElementById('projectileLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
+                    ret.sourceX * gameEngine.tileSize, ret.sourceY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * orderObj.source.position.x, gameEngine.tileSize * orderObj.source.position.y, gameEngine.tileSize, gameEngine.tileSize);
+    document.getElementById('projectileLayer').getContext('2d').drawImage(gameEngine.client.tilesetImg,
+                    ret.destX * gameEngine.tileSize, ret.destY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * orderObj.target.x, gameEngine.tileSize * orderObj.target.y, gameEngine.tileSize, gameEngine.tileSize);
+}
+
+function herobox_onMouseLeave(e) {
+    document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
 }
 // #endregion
 
@@ -434,7 +463,13 @@ function updateUI() {
         if (typeof winHero === 'undefined' || winHero === null) {
             let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
             let templateStr = /template/g;
-            winHero = document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
+            document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
+            document.getElementById('hero' + gameEngine.heros[i].guid + '-box').addEventListener('mouseenter', function (e) {
+                herobox_onMouseEnter(e);
+            }, false);
+            document.getElementById('hero' + gameEngine.heros[i].guid + '-box').addEventListener('mouseleave', function (e) {
+                herobox_onMouseLeave(e);
+            }, false);
         }
         let winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
         let color = "#000";
@@ -564,8 +599,8 @@ function topLayer_onMouseMove(hoveredTile, rightClick) {
         let check = gameEngine.checkOrder(order);
         if (check.valid) {
             if (order.command === 'move') {
-                window.requestAnimationFrame(function () {
-                    //drawTrail(order.source.position, order.target);
+                window.requestAnimationFrame(function (timestamp) {
+                    //queueTrail(timestamp, order.source.position, order.target);
                 });
             }
             else if (order.command === 'attack') {
@@ -646,6 +681,7 @@ function launchOrder(order) {
     let check = gameEngine.checkOrder(order);
     if (gameEngine.client.allowOrders) {
         if (check.valid) {
+            document.getElementById('hero' + order.source.guid + '-box').dataset.order = JSON.stringify(order);
             screenLog('>> order - ' + order.command);
             order.clean();
             gameEngine.client.ws.send(JSON.stringify({ service: 'order', payload: order }));
