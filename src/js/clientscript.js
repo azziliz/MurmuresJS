@@ -427,6 +427,10 @@ function updateUI() {
             let characterUiTemplate = document.getElementById('characterUiTemplate').innerHTML;
             let templateStr = /template/g;
             document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + gameEngine.level.uiMobCount.toString()));
+            document.getElementById('mob' + gameEngine.level.uiMobCount.toString() + '-fullLife').addEventListener('mousemove', function (e) {
+                // TODO  bug #136
+                //document.getElementById('mob' + gameEngine.level.uiMobCount.toString() + '-hptooltip').innerHTML = gameEngine.level.mobs[gameEngine.level.uiMobCount].hitPoints + '/' + gameEngine.level.mobs[gameEngine.level.uiMobCount].hitPointsMax;
+            }, false);
             gameEngine.level.uiMobCount++;
         }
         for (let i = 0; i < gameEngine.level.mobs.length; i++) {
@@ -470,11 +474,14 @@ function updateUI() {
             document.getElementById('hero' + gameEngine.heros[i].guid + '-box').addEventListener('mouseleave', function (e) {
                 herobox_onMouseLeave(e);
             }, false);
+            document.getElementById('hero' + gameEngine.heros[i].guid + '-fullLife').addEventListener('mousemove', function (e) {
+                document.getElementById('hero' + gameEngine.heros[i].guid + '-hptooltip').innerHTML = gameEngine.heros[i].hitPoints + '/' + gameEngine.heros[i].hitPointsMax;
+            }, false);
         }
         let winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
-        let color = "#000";
-        if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) color = "#f00";
-        if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS) color = "#0f0";
+        let color = "#222";
+        if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) color = "#800";
+        if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS) color = "#080";
         winChar.style.borderColor = color;
         
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];

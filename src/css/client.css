@@ -170,6 +170,7 @@ div#tabContent div {
         }
 
     .characterBox .characterLife {
+        position: relative;
         background-color: #888;
         height: 6px;
         width: calc(100% - 6px);
@@ -179,6 +180,25 @@ div#tabContent div {
             background-color: #d00;
             height: 6px;
             margin: 0;
+        }
+
+        .characterBox .characterLife .tooltip {
+            background-color: #222;
+            border: 1px solid #888;
+            border-radius: 5px;
+            padding: 2px;
+            position: absolute;
+            height: 16px;
+            top: -8px;
+            width: 40px;
+            left: calc(50% - 23px);
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .characterBox .characterLife:hover .tooltip {
+            opacity: 1;
         }
 
 .newLine {
