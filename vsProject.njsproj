@@ -35,15 +35,12 @@
     <Compile Include="src\js\test\moduleperf.js" />
     <Compile Include="src\js\test\servertest.js" />
     <Compile Include="src\js\test\vmperf.js" />
-    <Content Include="data\hero2.json" />
-    <Content Include="data\hero3.json" />
     <Content Include="data\locale\en.json" />
     <Content Include="data\locale\fr.json" />
     <Content Include="data\tmp.json" />
     <Content Include="package.json" />
     <Content Include="src\pages\client.html" />
     <Content Include="data\reference\assets.json" />
-    <Content Include="data\hero1.json" />
     <Content Include="data\staticlevels\level1.json" />
     <Content Include="data\staticlevels\level2.json" />
     <Content Include="data\staticlevels\level3.json" />

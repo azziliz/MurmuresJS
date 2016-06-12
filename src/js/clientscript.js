@@ -586,6 +586,7 @@ function registerEvents() {
 
 function topLayer_onMouseMove(hoveredTile, rightClick) {
     if (gameEngine.client.mouseMoveTarget.x !== hoveredTile.x || gameEngine.client.mouseMoveTarget.y !== hoveredTile.y) {
+        document.getElementById('debugDiv').innerHTML = '[ ' + hoveredTile.x + ' , ' + hoveredTile.y + ' ]';
         let order = new murmures.Order();
         let currentHero = getCurrentHero();
         order.source = currentHero;
@@ -719,7 +720,6 @@ function onOrderResponse(response) {
         if (gameEngine.state === murmures.C.STATE_ENGINE_DEATH) {
             screenLog('YOU DIE !');
         }
-        //document.getElementById('debugDiv').innerHTML = '[ ' + gameEngine.hero.position.x + ' , '+ gameEngine.hero.position.y + ' ]';
         screenLog('UI updated');
     }
 }

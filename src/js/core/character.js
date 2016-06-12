@@ -147,7 +147,7 @@ murmures.Character.prototype = {
     },
 
     setVision : function (tilesProcessed) {
-        murmures.serverLog("hero position " + this.position.x + "//" + this.position.y);
+        murmures.serverLog("hero position");
         let level = gameEngine.level;
         if (typeof tilesProcessed === 'undefined' || tilesProcessed === null) { tilesProcessed = []; }
         for (let xx=0; xx < level.width; xx++) {
