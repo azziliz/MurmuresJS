@@ -236,7 +236,6 @@ wss.on('connection', function (ws) {
                     murmures.serverLog('State saved');
                     gameEngine.saveOrder(clientOrder);
 
-                    murmures.serverLog('Order applied');
                     let ge = gameEngine.compare(beforeState);
                     let res = JSON.stringify({ fn: 'o', payload: ge });
                     murmures.serverLog('Response stringified');
