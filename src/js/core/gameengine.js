@@ -188,7 +188,7 @@ murmures.GameEngine.prototype = {
                 heroToCheck = hero;
             }
         }, this);
-
+        
         if (this.state === murmures.C.STATE_ENGINE_DEATH) return { valid : false, reason : 'You are dead!' };
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
