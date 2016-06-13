@@ -90,6 +90,7 @@ murmures.Character.prototype = {
         if (typeof src.canMove !== 'undefined') this.canMove = src.canMove;
         if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
         if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
+        if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
     },
 
     clone : function () {
@@ -104,6 +105,7 @@ murmures.Character.prototype = {
             canMove: this.canMove,
             onVision: this.onVision,
             stateOrder : this.stateOrder,
+            onVisionCharacters : this.onVisionCharacters,
         };
     },
 
@@ -131,6 +133,7 @@ murmures.Character.prototype = {
                 ret.canMove = this.canMove;
             }
         }
+        ret.onVisionCharacters = this.onVisionCharacters;
         for (let prop in ret) {
             // only returns ret if not empty
             ret.guid = this.guid;
@@ -162,12 +165,12 @@ murmures.Character.prototype = {
                 }
             }
         }
-
+/*
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             gameEngine.level.mobs[itMob].onVision = false;
             gameEngine.level.mobs[itMob].onVisionCharacters[this.guid] = false;
         }
-
+*/
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);
@@ -182,14 +185,7 @@ murmures.Character.prototype = {
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
                     let toProceed = (tilesProcessed.indexOf(level.tiles[oyy][oxx])<0);
-                    for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-                        let mob = gameEngine.level.mobs[itMob];
-                        if (mob.position.y == oyy && mob.position.x== oxx) {
-                            mob.charSpotted = true;
-                            mob.onVisionCharacters[this.guid]=true;
-                            mob.onVision = true;
-                        }
-                    }
+
                     let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
                     let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
                     if ((!groundLight || !propLight) && (j > 0)) {
@@ -198,6 +194,14 @@ murmures.Character.prototype = {
                     if(toProceed){
                       level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
                       tilesProcessed.push(level.tiles[oyy][oxx]);
+                      for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+                          let mob = gameEngine.level.mobs[itMob];
+                          if (mob.position.y == oyy && mob.position.x== oxx) {
+                              mob.charSpotted = true;
+                              mob.onVisionCharacters[this.guid]=true;
+                              mob.onVision = true;
+                          }
+                      }
                     }
 
                     ox += x;

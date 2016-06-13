@@ -201,7 +201,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'attack' && Math.abs(order.target.x - heroToCheck.position.x) > heroToCheck.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + heroToCheck.range };
         else if (order.command === 'attack' && Math.abs(order.target.y - heroToCheck.position.y) > heroToCheck.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + heroToCheck.range };
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
-        else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVision)) return { valid: false, reason: 'You cannot attack over an obstacle' };
+        else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') return { valid: true };
 
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
@@ -275,7 +275,7 @@ murmures.GameEngine.prototype = {
         }
         else {
             this.level.mobs.forEach(function (mob) {
-                if (mob.onVision && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                if (mob.onVisionCharacters[this.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     let tr1 = new murmures.TurnReport();
                     tr1.build({
                         effect: 'projectileMove',
@@ -301,6 +301,13 @@ murmures.GameEngine.prototype = {
             }, this);
         }
         murmures.serverLog('Moves / attacks done');
+        for (let itMob=0; itMob < this.level.mobs.length; itMob++) {
+            this.level.mobs[itMob].onVision = false;
+            for(let itHero=0;itHero < this.heros.length;itHero++){
+                this.level.mobs[itMob].onVisionCharacters[this.heros[itHero].guid] = false;
+            }
+
+        }
         let tilesProcessed = [];
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
             if (typeof tilesProcessed === 'undefined') {
