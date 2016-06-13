@@ -36,6 +36,8 @@ murmures.Character = function () {
     this.mobTemplate = '';
     /** @type {number} */
     this.hitPointsMax = 0 | 0;
+    /** @type {Object.<string, boolean>} */
+    this.onVisionCharacters={};
     /** @type {number} */
     this.hitPoints = 0 | 0;
     /** @type {number} */
@@ -163,6 +165,7 @@ murmures.Character.prototype = {
 
         for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
             gameEngine.level.mobs[itMob].onVision = false;
+            gameEngine.level.mobs[itMob].onVisionCharacters[this.guid] = false;
         }
 
         for (let i=0; i < 360; i++) {
@@ -179,7 +182,14 @@ murmures.Character.prototype = {
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
                     let toProceed = (tilesProcessed.indexOf(level.tiles[oyy][oxx])<0);
-
+                    for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+                        let mob = gameEngine.level.mobs[itMob];
+                        if (mob.position.y == oyy && mob.position.x== oxx) {
+                            mob.charSpotted = true;
+                            mob.onVisionCharacters[this.guid]=true;
+                            mob.onVision = true;
+                        }
+                    }
                     let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
                     let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
                     if ((!groundLight || !propLight) && (j > 0)) {
@@ -199,13 +209,6 @@ murmures.Character.prototype = {
             }
         }
 
-        for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-            let mob = gameEngine.level.mobs[itMob];
-            if (level.tiles[mob.position.y][mob.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
-                mob.charSpotted = true;
-                mob.onVision = true;
-            }
-        }
         return tilesProcessed;
     }
 };

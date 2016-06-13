@@ -35,7 +35,7 @@ murmures.GameEngine = function () {
     this.heros = [];
     /** @type {Array.<murmures.TurnReport>} */
     this.reportQueue = [];
-    
+
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
     this.levels = {};
@@ -52,7 +52,7 @@ murmures.GameEngine = function () {
 };
 
 murmures.GameEngine.prototype = {
-    
+
     /*
      * No build method here because initialization involves several Node-only functions.
      * We don't want to expose these functions to the client because they don't exist there.
@@ -90,7 +90,7 @@ murmures.GameEngine.prototype = {
         }
         this.state = src.state;
     },
-    
+
     /**
      * Synchronization method called on client side only.
      * This function receives a partial GameEngine as input and merges it into the client instance.
@@ -106,7 +106,7 @@ murmures.GameEngine.prototype = {
         }
         if (src.state !== 'undefined') {
             this.state = src.state;
-        }        
+        }
         if (typeof src.heros !== 'undefined') {
             src.heros.forEach(function (remoteHero) {
                 this.heros.forEach(function (localHero) {
@@ -125,7 +125,7 @@ murmures.GameEngine.prototype = {
             }, this);
         }
     },
-    
+
     clone : function (src) {
         let tempHeros = [];
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
@@ -138,14 +138,14 @@ murmures.GameEngine.prototype = {
             heros: tempHeros
         };
     },
-    
+
     compare : function (beforeState) {
         let ret = {};
         if (this.state != beforeState.state) {
             ret.state = this.state;
         }
         let level_ = this.level.compare(beforeState.level);
-        
+
         if (typeof level_ !== 'undefined') ret.level = level_;
         let heros_ = [];
         for (let itHero = 0; itHero < this.heros.length; itHero++) {
@@ -155,7 +155,7 @@ murmures.GameEngine.prototype = {
                     if (typeof hero_ !== 'undefined') heros_.push(hero_);
                 }
             }
-        }        
+        }
         if (heros_.length > 0) {
             ret.heros = heros_;
         }
@@ -168,13 +168,13 @@ murmures.GameEngine.prototype = {
         }
         // otherwise, no return = undefined
     },
-    
+
     getHeroByGuid: function (guid) {
         this.heros.forEach(function (hero) {
             if (hero.guid === guid) return hero;
         }, this);
     },
-    
+
     /**
      * This function is called on client and server side.
      * If the order is deemed valid on client side, it is then sent to the server by a websocket message.
@@ -188,7 +188,7 @@ murmures.GameEngine.prototype = {
                 heroToCheck = hero;
             }
         }, this);
-        
+
         if (this.state === murmures.C.STATE_ENGINE_DEATH) return { valid : false, reason : 'You are dead!' };
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
@@ -209,7 +209,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && (order.target.hasMob.code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true };
     },
-    
+
     saveOrder : function (order) {
         // This function is only called on server side
         let nbOrderDone = 0;
@@ -217,11 +217,11 @@ murmures.GameEngine.prototype = {
             if (this.heros[itHero].guid === order.source.guid) {
                 this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
                 if (typeof this.orderQueue === 'undefined') this.orderQueue = [];
-                murmures.serverLog(this.orderQueue);
+
                 this.orderQueue.push(order);
                 murmures.serverLog('Order saved');
             }
-            
+
             if (this.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) {
                 nbOrderDone += 1;
             }
@@ -243,7 +243,7 @@ murmures.GameEngine.prototype = {
             this.orderQueue = [];
             this.applyAI();
             murmures.serverLog('AI done');
-            
+
             for (let itHero = 0; itHero < this.heros.length ; itHero++) {
                 if (itHero === 0) {
                     this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
@@ -253,7 +253,7 @@ murmures.GameEngine.prototype = {
             }
         }
     },
-    
+
     applyOrder : function (order) {
         // This function is only called on server side
         if (order.command === 'move') {
@@ -310,7 +310,7 @@ murmures.GameEngine.prototype = {
         }
         murmures.serverLog('Vision done');
     },
-    
+
     applyAI : function () {
         let heros = this.heros;
         let level = this.level;
@@ -318,8 +318,13 @@ murmures.GameEngine.prototype = {
         this.level.mobs.forEach(function (mob) {
             if (mob.charSpotted) {
                 let fireOnHero = false;
+              /*
+                for(let itVi=0;itVi < heros.length;itVi++){
+                  murmures.serverLog(mob.onVisionCharacters[heros[itVi].guid] + "//" + heros[itVi].guid);
+                }
+              */
                 if (mob.onVision) {
-                    
+
                     for (let itHero = 0; itHero < heros.length; itHero++) {
                         if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
                             let tr1 = new murmures.TurnReport();
