@@ -275,7 +275,7 @@ murmures.GameEngine.prototype = {
         }
         else {
             this.level.mobs.forEach(function (mob) {
-                if (mob.onVisionCharacters[this.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     let tr1 = new murmures.TurnReport();
                     tr1.build({
                         effect: 'projectileMove',
