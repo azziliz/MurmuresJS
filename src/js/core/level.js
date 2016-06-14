@@ -66,7 +66,7 @@ murmures.Level.prototype = {
             }
         }
     },
-    
+
     /**
      * Initialization method reserved for the client.
      * Called everytime the client loads a new level.
@@ -100,7 +100,7 @@ murmures.Level.prototype = {
             }
         }
     },
-    
+
     /**
      * Synchronization method reserved for the client.
      * Called after each turn, when the client receives a server response.
@@ -137,7 +137,7 @@ murmures.Level.prototype = {
             }, this);
         }
     },
-    
+
     /**
      * Cloning method reserved for the server.
      * The whole game state is duplicated at the beginning of each turn by cascading clone methods.
@@ -160,7 +160,7 @@ murmures.Level.prototype = {
             mobs: mobs_,
         };
     },
-    
+
     /**
      * Comparison method reserved for the server.
      * This method is called at the end of each turn to identify the changes of the game state produced by orders.
@@ -219,8 +219,10 @@ murmures.Level.prototype = {
             ret.tiles = newLevel.tiles;
             let mobs_ = [];
             newLevel.mobs.forEach(function (newMob) {
-                if (newMob.onVision) {
+                for(let itVision in newMob.onVisionCharacters){
+                  if(newMob.onVisionCharacters[itVision]){
                     mobs_.push(newMob);
+                  }
                 }
             }, this);
             if (mobs_.length > 0) ret.mobs = mobs_;
@@ -231,7 +233,7 @@ murmures.Level.prototype = {
         }
         // otherwise, no return = undefined
     },
-    
+
     moveHeroToStartingPoint: function () {
         //temporary
         // TODO : find starting point from stairs
@@ -243,7 +245,7 @@ murmures.Level.prototype = {
             else gameEngine.heros[itHero].position = this.tiles[5][5];
         }
     },
-    
+
     getStartingPoint: function () {
         //temporary
         // TODO : find starting point from stairs
@@ -253,7 +255,7 @@ murmures.Level.prototype = {
         else if (this.id === 'level5') return this.tiles[15][2];
         else return this.tiles[5][5];
     },
-    
+
     clean : function () {
         delete this.guid;
         delete this.mobs;

@@ -188,7 +188,7 @@ murmures.GameEngine.prototype = {
                 heroToCheck = hero;
             }
         }, this);
-        
+
         if (this.state === murmures.C.STATE_ENGINE_DEATH) return { valid : false, reason : 'You are dead!' };
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
@@ -302,7 +302,6 @@ murmures.GameEngine.prototype = {
         }
         murmures.serverLog('Moves / attacks done');
         for (let itMob=0; itMob < this.level.mobs.length; itMob++) {
-            this.level.mobs[itMob].onVision = false;
             for(let itHero=0;itHero < this.heros.length;itHero++){
                 this.level.mobs[itMob].onVisionCharacters[this.heros[itHero].guid] = false;
             }
@@ -330,36 +329,38 @@ murmures.GameEngine.prototype = {
                   murmures.serverLog(mob.onVisionCharacters[heros[itVi].guid] + "//" + heros[itVi].guid);
                 }
               */
-                if (mob.onVision) {
+                //if (mob.onVision) {
 
                     for (let itHero = 0; itHero < heros.length; itHero++) {
-                        if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
-                            let tr1 = new murmures.TurnReport();
-                            tr1.build({
-                                effect: 'projectileMove',
-                                sourceTile: mob.position.coordinates,
-                                targetTile: heros[itHero].position.coordinates,
-                                priority: 120
-                            });
-                            this.reportQueue.push(tr1);
-                            let tr2 = new murmures.TurnReport();
-                            tr2.build({
-                                effect: 'damage',
-                                character: heros[itHero],
-                                value: mob.defaultDamageValue,
-                                priority: 130
-                            });
-                            this.reportQueue.push(tr2);
-                            heros[itHero].hitPoints -= mob.defaultDamageValue;
-                            fireOnHero = true;
-                            if (heros[itHero].hitPoints <= 0) {
-                                heros[itHero].hitPoints = 0;
-                                this.state = murmures.C.STATE_ENGINE_DEATH;
-                            }
-                            break;
-                        }
+                        if(mob.onVisionCharacters[heros[itHero].guid]){
+                          if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
+                              let tr1 = new murmures.TurnReport();
+                              tr1.build({
+                                  effect: 'projectileMove',
+                                  sourceTile: mob.position.coordinates,
+                                  targetTile: heros[itHero].position.coordinates,
+                                  priority: 120
+                              });
+                              this.reportQueue.push(tr1);
+                              let tr2 = new murmures.TurnReport();
+                              tr2.build({
+                                  effect: 'damage',
+                                  character: heros[itHero],
+                                  value: mob.defaultDamageValue,
+                                  priority: 130
+                              });
+                              this.reportQueue.push(tr2);
+                              heros[itHero].hitPoints -= mob.defaultDamageValue;
+                              fireOnHero = true;
+                              if (heros[itHero].hitPoints <= 0) {
+                                  heros[itHero].hitPoints = 0;
+                                  this.state = murmures.C.STATE_ENGINE_DEATH;
+                              }
+                              break;
+                          }
+                      }
                     }
-                }
+                //}
                 if (!fireOnHero) {
                 // TODO : move to hero
                 }
