@@ -84,7 +84,7 @@ function loadGrayscale() {
     screenLog('updated pixels');
     ctx.putImageData(imageData, 0, 2239);
     screenLog('putimage');
-    // Code below is slightly faster (than toDataURL) on chrome51 but breaks IE11 compatibility. 
+    // Code below is slightly faster (than toDataURL) on chrome51 but breaks IE11 compatibility.
     // Keeping it in comment for now.
     //canvas.toBlob(function (blob) {
     //    gameEngine.client.tilesetGray = window.URL.createObjectURL(blob);
@@ -451,7 +451,16 @@ function updateUI() {
             }
             let missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
             document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
-            if (gameEngine.level.mobs[i].hitPoints === 0 || !gameEngine.level.mobs[i].onVision) {
+
+            let mobIsSeen = false;
+            for(let itVision in gameEngine.level.mobs[i].onVisionCharacters){
+              if(gameEngine.level.mobs[i].onVisionCharacters[itVision]){
+                mobIsSeen = true;
+                break;
+              }
+            }
+
+            if (gameEngine.level.mobs[i].hitPoints === 0 || !mobIsSeen) {
                 document.getElementById('mob' + i + '-box').style.display = "none";
             }
             else {
@@ -460,7 +469,7 @@ function updateUI() {
             }
         }
     }
-    
+
     gameEngine.heros.sort(function (h1, h2) { return h1.stateOrder - h2.stateOrder; });
     for (let i = 0; i < gameEngine.heros.length; i++) {
         let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-box');
@@ -483,7 +492,7 @@ function updateUI() {
         if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) color = "#800";
         if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS) color = "#080";
         winChar.style.borderColor = color;
-        
+
         let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
         let locale = gameEngine.locale.fr.assets[gameEngine.heros[i].mobTemplate];
         let tilesetRank = ref.rank;
@@ -549,7 +558,7 @@ function registerEvents() {
             char = String.fromCharCode(e.which);
         onKeyPress(char);
     }, false);
-    
+
     let tabsLi = document.getElementById('tabs').childNodes;
     for (let liIter = 0; liIter < tabsLi.length; liIter++) {
         tabsLi[liIter].addEventListener('mousedown', function (e) {
@@ -557,7 +566,7 @@ function registerEvents() {
             let target = this.dataset.target;
             let contentDiv = document.getElementById('tabContent').childNodes;
             for (let contentIter=0; contentIter < contentDiv.length; contentIter++) {
-                if (typeof contentDiv[contentIter].dataset !== 'undefined' && 
+                if (typeof contentDiv[contentIter].dataset !== 'undefined' &&
                     contentDiv[contentIter].dataset.title === target) {
                     // target found
                     if (this.classList.contains('selected')) {
@@ -582,11 +591,11 @@ function registerEvents() {
     changeLevelButton.addEventListener('mousedown', function (e) {
         gameEngine.client.ws.send(JSON.stringify({ service: 'restart', payload: document.getElementById('levelSelect').value }));
     }, false);
-    
+
     window.addEventListener('heroAnimationEnded', function (e) {
         onHeroAnimationEnded(e.detail);
     }, false);
-    
+
     animationManager(0);
     gameEngine.client.eventsRegistered = true;
 }
@@ -628,7 +637,7 @@ function topLayer_onClick(hoveredTile, rightClick) {
     if (!rightClick) {
         // event is a left click
         // find hovered tile
-        
+
         let currentHero = getCurrentHero();
         if (hoveredTile.hasMob.code) {
             let attackOrder = new murmures.Order();

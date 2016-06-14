@@ -94,6 +94,10 @@ murmures.Character.prototype = {
     },
 
     clone : function () {
+        let beforeOnVisionCharacters = {};
+        for (let itVision in this.onVisionCharacters){
+          beforeOnVisionCharacters[itVision] = this.onVisionCharacters[itVision];
+        }
         return {
             guid: this.guid,
             position: this.position.coordinates,
@@ -105,7 +109,7 @@ murmures.Character.prototype = {
             canMove: this.canMove,
             onVision: this.onVision,
             stateOrder : this.stateOrder,
-            onVisionCharacters : this.onVisionCharacters,
+            onVisionCharacters : beforeOnVisionCharacters,
         };
     },
 
@@ -120,23 +124,23 @@ murmures.Character.prototype = {
         if (this.defaultDamageValue !== beforeState.defaultDamageValue) ret.defaultDamageValue = this.defaultDamageValue;
         if (this.canMove !== beforeState.canMove) ret.canMove = this.canMove;
         if (this.stateOrder !== beforeState.stateOrder) ret.stateOrder = this.stateOrder;
-        if (this.onVision !== beforeState.onVision) {
-            ret.onVision = this.onVision;
-            if (this.onVision) {
+        if (this.charSpotted !== beforeState.charSpotted) {
+            //ret.onVision = this.onVision;
+            //if (this.onVision) {
                 // client discovers the mob for the first time --> send everything
-                ret.position = this.position.coordinates;
-                ret.mobTemplate = this.mobTemplate;
-                ret.hitPointsMax = this.hitPointsMax;
-                ret.hitPoints = this.hitPoints;
-                ret.range = this.range;
-                ret.defaultDamageValue = this.defaultDamageValue;
-                ret.canMove = this.canMove;
-            }
+              ret.position = this.position.coordinates;
+              ret.mobTemplate = this.mobTemplate;
+              ret.hitPointsMax = this.hitPointsMax;
+              ret.hitPoints = this.hitPoints;
+              ret.range = this.range;
+              ret.defaultDamageValue = this.defaultDamageValue;
+              ret.canMove = this.canMove;
+            //}
         }
 
 
         for (let itMap in this.onVisionCharacters){
-          if(this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]){
+          if(this.onVisionCharacters[itMap] != beforeState.onVisionCharacters[itMap]){
               ret.onVisionCharacters = this.onVisionCharacters;
               break;
           }
