@@ -193,9 +193,9 @@ murmures.Character.prototype = {
                     }
                     for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
                         let mob = gameEngine.level.mobs[itMob];
-                        if (mob.position.y == oyy && mob.position.x== oxx) {
+                        if (mob.position.y == oyy && mob.position.x == oxx) {
                             mob.charSpotted = true;
-                            mob.onVisionCharacters[this.guid]=true;
+                            mob.onVisionCharacters[this.guid] = true;
                         }
                     }
 
