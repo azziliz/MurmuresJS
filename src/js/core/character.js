@@ -47,8 +47,6 @@ murmures.Character = function () {
     /** @type {boolean} */
     this.canMove = false; // unused for now
     /** @type {boolean} */
-    this.onVision = false; // hero is in sight
-    /** @type {boolean} */
     this.charSpotted = false; // hero is known because seen at least once
     /** @type {number} */
     this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
@@ -88,7 +86,6 @@ murmures.Character.prototype = {
         if (typeof src.range !== 'undefined') this.range = src.range;
         if (typeof src.defaultDamageValue !== 'undefined') this.defaultDamageValue = src.defaultDamageValue;
         if (typeof src.canMove !== 'undefined') this.canMove = src.canMove;
-        if (typeof src.onVision !== 'undefined') this.onVision = src.onVision;
         if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
     },
@@ -107,7 +104,6 @@ murmures.Character.prototype = {
             range: this.range,
             defaultDamageValue: this.defaultDamageValue,
             canMove: this.canMove,
-            onVision: this.onVision,
             stateOrder : this.stateOrder,
             onVisionCharacters : beforeOnVisionCharacters,
         };
@@ -125,8 +121,6 @@ murmures.Character.prototype = {
         if (this.canMove !== beforeState.canMove) ret.canMove = this.canMove;
         if (this.stateOrder !== beforeState.stateOrder) ret.stateOrder = this.stateOrder;
         if (this.charSpotted !== beforeState.charSpotted) {
-            //ret.onVision = this.onVision;
-            //if (this.onVision) {
                 // client discovers the mob for the first time --> send everything
               ret.position = this.position.coordinates;
               ret.mobTemplate = this.mobTemplate;
@@ -135,12 +129,11 @@ murmures.Character.prototype = {
               ret.range = this.range;
               ret.defaultDamageValue = this.defaultDamageValue;
               ret.canMove = this.canMove;
-            //}
         }
 
 
         for (let itMap in this.onVisionCharacters){
-          if(this.onVisionCharacters[itMap] != beforeState.onVisionCharacters[itMap]){
+          if(this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]){
               ret.onVisionCharacters = this.onVisionCharacters;
               break;
           }
@@ -177,12 +170,7 @@ murmures.Character.prototype = {
                 }
             }
         }
-/*
-        for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-            gameEngine.level.mobs[itMob].onVision = false;
-            gameEngine.level.mobs[itMob].onVisionCharacters[this.guid] = false;
-        }
-*/
+
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);
@@ -203,17 +191,17 @@ murmures.Character.prototype = {
                     if ((!groundLight || !propLight) && (j > 0)) {
                         breakObstacle = true;
                     }
+                    for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+                        let mob = gameEngine.level.mobs[itMob];
+                        if (mob.position.y == oyy && mob.position.x== oxx) {
+                            mob.charSpotted = true;
+                            mob.onVisionCharacters[this.guid]=true;
+                        }
+                    }
+
                     if(toProceed){
                       level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
                       tilesProcessed.push(level.tiles[oyy][oxx]);
-                      for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-                          let mob = gameEngine.level.mobs[itMob];
-                          if (mob.position.y == oyy && mob.position.x== oxx) {
-                              mob.charSpotted = true;
-                              mob.onVisionCharacters[this.guid]=true;
-                              mob.onVision = true;
-                          }
-                      }
                     }
 
                     ox += x;
