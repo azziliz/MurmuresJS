@@ -246,6 +246,18 @@ murmures.Level.prototype = {
         }
     },
 
+    moveHeroToUpperPoint: function () {
+        //temporary
+        // TODO : find starting point from stairs
+        for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
+            if (this.id === 'level1') gameEngine.heros[itHero].position = this.tiles[9][18];
+            else if (this.id === 'level2') gameEngine.heros[itHero].position = this.tiles[3][46];
+            else if (this.id === 'level4') gameEngine.heros[itHero].position = this.tiles[9][24];
+            else if (this.id === 'level5') gameEngine.heros[itHero].position = this.tiles[15][2];
+            else gameEngine.heros[itHero].position = this.tiles[5][5];
+        }
+    },
+
     getStartingPoint: function () {
         //temporary
         // TODO : find starting point from stairs

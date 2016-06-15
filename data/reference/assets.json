@@ -10248,13 +10248,19 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": ""
+                "params": "1"
             }
         }
     },
     "_b1_11_dngn_return.rl2": {
         "layerId": "11",
-        "rank": 1508
+        "rank": 1508,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": "-1"
+            }
+        }
     },
     "_b1_11_dngn_rock_stairs_down.conv": {
         "layerId": "11",
@@ -10262,13 +10268,19 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": ""
+                "params": "1"
             }
         }
     },
     "_b1_11_dngn_rock_stairs_up.conv": {
         "layerId": "11",
-        "rank": 1510
+        "rank": 1510,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": "-1"
+            }
+        }
     },
     "_b1_11_escape_hatch_down": {
         "layerId": "11",
@@ -10284,13 +10296,19 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": ""
+                "params": "1"
             }
         }
     },
     "_b1_11_ladder_up.rl1": {
         "layerId": "11",
-        "rank": 1514
+        "rank": 1514,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": "-1"
+            }
+        }
     },
     "_b1_11_rock_stairs_down": {
         "layerId": "11",
@@ -10298,17 +10316,29 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": ""
+                "params": "1"
             }
         }
     },
     "_b1_11_rock_stairs_up": {
         "layerId": "11",
-        "rank": 1516
+        "rank": 1516,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": "-1"
+            }
+        }
     },
     "_b1_11_staircase_up.rl1": {
         "layerId": "11",
-        "rank": 1517
+        "rank": 1517,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": "-1"
+            }
+        }
     },
     "_b1_11_stone_stairs_down": {
         "layerId": "11",
@@ -10322,7 +10352,13 @@
     },
     "_b1_11_stone_stairs_up": {
         "layerId": "11",
-        "rank": 1519
+        "rank": 1519,
+        "behavior": {
+            "move": {
+                "callback": "jumpToNextLevel",
+                "params": "-1"
+            }
+        }
     },
     "_b1_12_abyssal_stair": {
         "layerId": "12",
