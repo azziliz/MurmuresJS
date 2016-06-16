@@ -19,6 +19,7 @@ murmures.SkillBehavior = {
   attack : function (source,target,skillTplate,params){
     if(skillTplate.custom.damage !== "undefined"){
         target.hitPoints -= skillTplate.custom.damage;
+        murmures.serverLog("Hiiiit");
       return true;
     }
     return false;
@@ -41,7 +42,7 @@ murmures.SkillBehavior = {
     }
     return false;
   },
-  
+
   checkHeal : function(source,target,skillTplate,params){
     if(skillTplate.range !== "undefined"){
       if (Math.abs(target.x - source.position.x) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };

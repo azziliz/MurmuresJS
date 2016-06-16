@@ -639,7 +639,10 @@ function topLayer_onClick(hoveredTile, rightClick) {
         // find hovered tile
 
         let currentHero = getCurrentHero();
-        if (hoveredTile.hasMob.code) {
+        //TODO : hasmob return mob or hero same way. It is not considering if a hero is in move or not.
+        // In future version, hero must have command move, if the tile contains a hero going on another tile
+        // In next version, we have to check the skill... if it is a skll not applying to a hero, it is a move command
+        if (hoveredTile.hasMob.code && !hoveredTile.hasMob.isHero) {
             let attackOrder = new murmures.Order();
             attackOrder.command = 'attack';
             attackOrder.source = currentHero;
@@ -649,6 +652,11 @@ function topLayer_onClick(hoveredTile, rightClick) {
         else {
             let moveOrder = new murmures.Order();
             moveOrder.command = 'move';
+            if(hoveredTile.hasMob.code){
+              if(currentHero.skills[1].targetaudience!=murmures.C.TARGET_AUDIENCE_MOB){
+                moveOrder.command = 'attack';
+              }
+            }
             moveOrder.source = currentHero;
             moveOrder.target = hoveredTile;
             launchOrder(moveOrder);

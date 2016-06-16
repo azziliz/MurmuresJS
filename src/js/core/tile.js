@@ -12,7 +12,7 @@
  * A tile is a square on the game grid.
  *
  * It is rendered on client side by drawing several overlapping layers, each layer being one PNG image from the murmures tileset.
- * For static levels created by the editor, each tile of a given layer is initialized 
+ * For static levels created by the editor, each tile of a given layer is initialized
  * with a reference to the [physical body]{@link murmures.PhysicalBody} that is present on the tile.
  * The physical properties of these bodies may restrict movement and actions on the tile.
  *
@@ -47,7 +47,7 @@ murmures.Tile = function (x, y) {
 };
 
 murmures.Tile.prototype = {
-    
+
     build : function (src) {
         // TODO: allow undefined layers
         this.groundId = (typeof src.groundId === 'undefined') ? '' : src.groundId;
@@ -59,11 +59,11 @@ murmures.Tile.prototype = {
         this.effectId = (typeof src.effectId === 'undefined') ? '' : src.effectId;
         this.behavior = (typeof src.propId === 'undefined' || src.propId === '') ? {} : gameEngine.bodies[src.propId].behavior;
     },
-    
+
     initialize : function (src) {
         this.synchronize(src);
     },
-    
+
     synchronize : function (src) {
         if (typeof src === 'undefined') return;
         if (typeof src.state !== 'undefined') this.state = src.state;
@@ -76,7 +76,7 @@ murmures.Tile.prototype = {
         if (typeof src.effectId !== 'undefined') this.effectId = src.effectId;
         if (typeof src.behavior !== 'undefined') this.behavior = src.behavior;
     },
-    
+
     clone : function () {
         return {
             state: this.state,
@@ -89,7 +89,7 @@ murmures.Tile.prototype = {
             behavior: this.behavior,
         };
     },
-    
+
     compare : function (beforeState) {
         let ret = {};
         if (this.state !== beforeState.state) ret.state = this.state;
@@ -99,7 +99,7 @@ murmures.Tile.prototype = {
         if (this.propDeco !== beforeState.propDeco) ret.propDeco = this.propDeco;
         if (this.itemId !== beforeState.itemId) ret.itemId = this.itemId;
         if (this.effectId !== beforeState.effectId) ret.effectId = this.effectId;
-        if (this.propId !== beforeState.propId && 
+        if (this.propId !== beforeState.propId &&
         JSON.stringify(this.behavior) !== JSON.stringify(beforeState.behavior)) ret.behavior = this.behavior;
         for (let prop in ret) {
             // only returns ret if not empty
@@ -109,11 +109,11 @@ murmures.Tile.prototype = {
         }
         // otherwise, no return = undefined
     },
-    
+
     get coordinates() {
         return { x: this.x, y: this.y };
     },
-    
+
     clean: function () {
         delete this.x;
         delete this.y;
@@ -127,21 +127,30 @@ murmures.Tile.prototype = {
         if (this.charId === '') delete this.charId;
         if (this.effectId === '') delete this.effectId;
     },
-    
+
     get hasMob() {
         let ret = false;
         let retMob = null;
+        let heroRet = false;
         if (typeof gameEngine.level.mobs !== 'undefined') {
             gameEngine.level.mobs.forEach(function (mob) {
                 if (mob.position.x === this.x && mob.position.y === this.y && mob.hitPoints > 0) {
                     ret = true;
                     retMob = mob;
+                    heroRet = false;
+                }
+            }, this);
+            gameEngine.heros.forEach(function (mob) {
+                if (mob.position.x === this.x && mob.position.y === this.y && mob.hitPoints > 0) {
+                    ret = true;
+                    retMob = mob;
+                    heroRet = true;
                 }
             }, this);
         }
-        return { code : ret, mob : retMob };
+        return { code : ret, mob : retMob, isHero : heroRet };
     },
-    
+
     isWall : function () {
         let allowTerrestrialGround = (this.groundId === "") ? true : !gameEngine.bodies[this.groundId].hasPhysics ? true : !!gameEngine.bodies[this.groundId].allowTerrestrial;
         let allowTerrestrialProp = (this.propId === "") ? true : !gameEngine.bodies[this.propId].hasPhysics ? true : !!gameEngine.bodies[this.propId].allowTerrestrial;

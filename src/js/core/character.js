@@ -200,6 +200,12 @@ murmures.Character.prototype = {
                             mob.onVisionCharacters[this.guid] = true;
                         }
                     }
+                    for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
+                        let hero = gameEngine.heros[itHero];
+                        if (hero.position.y == oyy && hero.position.x == oxx) {
+                            hero.onVisionCharacters[this.guid] = true;
+                        }
+                    }
 
                     if(toProceed){
                       level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;

@@ -188,7 +188,6 @@ murmures.GameEngine.prototype = {
                 heroToCheck = hero;
             }
         }, this);
-
         if (this.state === murmures.C.STATE_ENGINE_DEATH) return { valid : false, reason : 'You are dead!' };
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
@@ -205,7 +204,7 @@ murmures.GameEngine.prototype = {
         }
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
-        else if (order.command === 'move' && (order.target.hasMob.code)) return { valid: false, reason: 'The target tile is occupied by a mob' };
+        else if (order.command === 'move' && (order.target.hasMob.code && !order.target.hasMob.isHero)) return { valid: false, reason: 'The target tile is occupied by a mob' };
         else return { valid: true };
     },
 
@@ -273,6 +272,7 @@ murmures.GameEngine.prototype = {
             }
         }
         else {
+            //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
             this.level.mobs.forEach(function (mob) {
                 if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     let tr1 = new murmures.TurnReport();
@@ -293,11 +293,15 @@ murmures.GameEngine.prototype = {
                     this.reportQueue.push(tr2);
 
                     murmures.SkillBehavior[order.source.skills[1].skillbehavior.apply.callback](order.source,mob,order.source.skills[1],order.source.skills[1].skillbehavior.apply.params);
-                    //mob.hitPoints -= order.source.defaultDamageValue;
                     if (mob.hitPoints <= 0) {
                         mob.hitPoints = 0;
                         mob.position.groundDeco = '_b1_02_blood_red00';
                     }
+                }
+            }, this);
+            this.heros.forEach(function (mob) {
+                if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                  murmures.SkillBehavior[order.source.skills[1].skillbehavior.apply.callback](order.source,mob,order.source.skills[1],order.source.skills[1].skillbehavior.apply.params);
                 }
             }, this);
         }
