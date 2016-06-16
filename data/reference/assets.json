@@ -10248,7 +10248,7 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": "1"
+                "params": ""
             }
         }
     },
@@ -10257,8 +10257,8 @@
         "rank": 1508,
         "behavior": {
             "move": {
-                "callback": "jumpToNextLevel",
-                "params": "-1"
+                "callback": "jumpToPreviousLevel",
+                "params": ""
             }
         }
     },
@@ -10268,7 +10268,7 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": "1"
+                "params": ""
             }
         }
     },
@@ -10277,8 +10277,8 @@
         "rank": 1510,
         "behavior": {
             "move": {
-                "callback": "jumpToNextLevel",
-                "params": "-1"
+                "callback": "jumpToPreviousLevel",
+                "params": ""
             }
         }
     },
@@ -10296,7 +10296,7 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": "1"
+                "params": ""
             }
         }
     },
@@ -10305,8 +10305,8 @@
         "rank": 1514,
         "behavior": {
             "move": {
-                "callback": "jumpToNextLevel",
-                "params": "-1"
+                "callback": "jumpToPreviousLevel",
+                "params": ""
             }
         }
     },
@@ -10316,7 +10316,7 @@
         "behavior": {
             "move": {
                 "callback": "jumpToNextLevel",
-                "params": "1"
+                "params": ""
             }
         }
     },
@@ -10325,8 +10325,8 @@
         "rank": 1516,
         "behavior": {
             "move": {
-                "callback": "jumpToNextLevel",
-                "params": "-1"
+                "callback": "jumpToPreviousLevel",
+                "params": ""
             }
         }
     },
@@ -10355,8 +10355,8 @@
         "rank": 1519,
         "behavior": {
             "move": {
-                "callback": "jumpToNextLevel",
-                "params": "-1"
+                "callback": "jumpToPreviousLevel",
+                "params": ""
             }
         }
     },

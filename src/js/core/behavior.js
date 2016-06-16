@@ -49,16 +49,8 @@ murmures.Behavior = {
      * @static
      */
     jumpToNextLevel: function (source, target, cb_params) {
-
-        /*if (gameEngine.activeLevel < gameEngine.levelIds.length - 1) {
+        if (gameEngine.activeLevel < gameEngine.levelIds.length - 1) {
             gameEngine.activeLevel++;
-            gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-            gameEngine.level.moveHeroToStartingPoint();
-        }*/
-        cb_params = parseInt(cb_params);
-        murmures.serverLog("cb_params " + cb_params);
-        if (((gameEngine.activeLevel+cb_params) < gameEngine.levelIds.length) && ((gameEngine.activeLevel+cb_params) >= 0) ) {
-            gameEngine.activeLevel += cb_params;
             gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
             gameEngine.level.moveHeroToStartingPoint();
         }
@@ -73,6 +65,10 @@ murmures.Behavior = {
      * @static
      */
     jumpToPreviousLevel: function (source, target, cb_params) {
-        //TODO
+      if (gameEngine.activeLevel >0) {
+          gameEngine.activeLevel--;
+          gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
+          gameEngine.level.moveHeroToEndPoint();
+      }
     }
 };

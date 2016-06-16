@@ -246,7 +246,7 @@ murmures.Level.prototype = {
         }
     },
 
-    moveHeroToUpperPoint: function () {
+    moveHeroToEndPoint: function () {
         //temporary
         // TODO : find starting point from stairs
         for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
