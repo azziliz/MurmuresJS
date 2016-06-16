@@ -18,14 +18,31 @@
 murmures.SkillBehavior = {
   attack : function (source,target,skillTplate,params){
     if(skillTplate.custom.damage !== "undefined"){
-      //TODO : apply damage to target
-      target.hitPoints -= skillTplate.custom.damage;
+        target.hitPoints -= skillTplate.custom.damage;
       return true;
     }
     return false;
   },
 
   checkAttack : function(source,target,skillTplate,params){
+    if(skillTplate.range !== "undefined"){
+      if (Math.abs(target.x - source.position.x) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
+      if (Math.abs(target.y - source.position.y) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
+      return {valid :true};
+    }
+
+    return {valid :false, reason :'bad skill applied'};
+  },
+
+  heal : function (source,target,skillTplate,params){
+    if(skillTplate.custom.heal !== "undefined"){
+      target.hitPoints += skillTplate.custom.heal;
+      return true;
+    }
+    return false;
+  },
+  
+  checkHeal : function(source,target,skillTplate,params){
     if(skillTplate.range !== "undefined"){
       if (Math.abs(target.x - source.position.x) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
       if (Math.abs(target.y - source.position.y) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };

@@ -81,7 +81,7 @@ var murmures = {
             hero1.skills[1] = gameEngine.skills[1];
             gameEngine.heros.push(hero1);
         }
-        gameEngine.heros[1].skills[1] = gameEngine.skills[2];
+        gameEngine.heros[1].skills[1] = gameEngine.skills[3];
         gameEngine.reportQueue = [];
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
     }

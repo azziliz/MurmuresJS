@@ -1,9 +1,10 @@
 murmures.Skill = function () {
   this.id  = '';
   this.name = '';
-  this.SkillBehavior = {};
+  this.skillbehavior = {};
   this.custom = {};
   this.range = 0;
+  this.targetaudience = 0;
 };
 
 murmures.Skill.prototype = {
@@ -13,5 +14,6 @@ murmures.Skill.prototype = {
       this.skillbehavior = src.skillbehavior;
       this.custom = src.custom;
       this.range = src.range;
+      this.targetaudience = src.targetaudience;
     }
 };
