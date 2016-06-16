@@ -1,0 +1,36 @@
+{
+  "sword":{
+    "id" : 1,
+    "range" : 1,
+    "custom" : {
+      "damage" : 2
+    },
+    "skillbehavior":{
+      "apply" : {
+        "callbacks" : "attack",
+        "params" : ""
+      },
+      "check" :{
+        "callbacks" : "checkAttack",
+        "params" : ""
+      }
+    }
+  },
+  "bow":{
+    "id" : 2,
+    "range" : 3,
+    "custom" : {
+      "damage" : 2
+    },
+    "skillbehavior":{
+      "apply" : {
+        "callbacks" : "attack",
+        "params" : ""
+      },
+      "check" :{
+        "callbacks" : "checkAttack",
+        "params" : ""
+      }
+    }
+  }
+}

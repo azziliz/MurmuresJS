@@ -120,7 +120,10 @@ murmures.serverLog('Loading classes');
     vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalbody.js' });
     let behaviorjs = fs.readFileSync('./src/js/core/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(behaviorjs, ctx, { filename: 'behavior.js' });
-
+    let skillbehaviorjs = fs.readFileSync('./src/js/core/skillbehavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(skillbehaviorjs, ctx, { filename: 'skillbehavior.js' });
+    let skilljs = fs.readFileSync('./src/js/core/skill.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(skilljs, ctx, { filename: 'skill.js' });
     let vmperfjs = fs.readFileSync('./src/js/test/vmperf.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(vmperfjs, ctx, { filename: 'vmperf.js' });
     let servertestjs = fs.readFileSync('./src/js/test/servertest.js', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -143,6 +146,10 @@ murmures.serverLog('Initializing game');
     gameEngine.locale = {};
     gameEngine.locale.fr = JSON.parse(localefrJson);
     gameEngine.locale.en = JSON.parse(localeenJson);
+
+    let localSkills = JSON.parse(fs.readFileSync('./data/reference/skill.json', 'utf8').toString().replace(/^\uFEFF/, ''));
+
+
 
     murmures.restartGame();
 })();
