@@ -3,15 +3,15 @@
     "id" : 1,
     "range" : 1,
     "custom" : {
-      "damage" : 2
+      "damage" : 10
     },
     "skillbehavior":{
       "apply" : {
-        "callbacks" : "attack",
+        "callback" : "attack",
         "params" : ""
       },
       "check" :{
-        "callbacks" : "checkAttack",
+        "callback" : "checkAttack",
         "params" : ""
       }
     }
@@ -24,11 +24,11 @@
     },
     "skillbehavior":{
       "apply" : {
-        "callbacks" : "attack",
+        "callback" : "attack",
         "params" : ""
       },
       "check" :{
-        "callbacks" : "checkAttack",
+        "callback" : "checkAttack",
         "params" : ""
       }
     }

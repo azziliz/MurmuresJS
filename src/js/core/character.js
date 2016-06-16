@@ -50,7 +50,7 @@ murmures.Character = function () {
     this.charSpotted = false; // hero is known because seen at least once
     /** @type {number} */
     this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-
+    this.skills={};
 };
 
 murmures.Character.prototype = {
@@ -70,6 +70,7 @@ murmures.Character.prototype = {
         this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in assets.json.
         this.canMove = ref.canMove || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+        this.skills[1] = gameEngine.skills[1];
     },
 
     initialize : function (src) {

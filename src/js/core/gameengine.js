@@ -35,7 +35,7 @@ murmures.GameEngine = function () {
     this.heros = [];
     /** @type {Array.<murmures.TurnReport>} */
     this.reportQueue = [];
-
+    this.skills = {};
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
     this.levels = {};
@@ -292,7 +292,9 @@ murmures.GameEngine.prototype = {
                         priority: 30
                     });
                     this.reportQueue.push(tr2);
-                    mob.hitPoints -= order.source.defaultDamageValue;
+
+                    murmures.SkillBehavior[order.source.skills[1].skillbehavior.apply.callback](order.source,mob,order.source.skills[1],order.source.skills[1].skillbehavior.apply.params);
+                    //mob.hitPoints -= order.source.defaultDamageValue;
                     if (mob.hitPoints <= 0) {
                         mob.hitPoints = 0;
                         mob.position.groundDeco = '_b1_02_blood_red00';

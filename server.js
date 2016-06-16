@@ -148,9 +148,11 @@ murmures.serverLog('Initializing game');
     gameEngine.locale.en = JSON.parse(localeenJson);
 
     let localSkills = JSON.parse(fs.readFileSync('./data/reference/skill.json', 'utf8').toString().replace(/^\uFEFF/, ''));
-
-
-
+    for (let skillName in localSkills){
+      let tempSkill = new murmures.Skill();
+      tempSkill.build(localSkills[skillName],skillName);
+      gameEngine.skills[tempSkill.id] = tempSkill;
+    }
     murmures.restartGame();
 })();
 

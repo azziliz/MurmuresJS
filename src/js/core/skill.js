@@ -10,7 +10,7 @@ murmures.Skill.prototype = {
     build : function (src,name) {
       this.id = src.id;
       this.name = name;
-      this.SkillBehavior = src.skillbehavior;
+      this.skillbehavior = src.skillbehavior;
       this.custom = src.custom;
       this.range = src.range;
     }

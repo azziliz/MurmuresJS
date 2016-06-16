@@ -16,16 +16,16 @@
  * @class
  */
 murmures.SkillBehavior = {
-  attack : function (source,target,params){
-    if(params.damage !== "undefined"){
+  attack : function (source,target,skillTplate,params){
+    if(skillTplate.custom.damage !== "undefined"){
       //TODO : apply damage to target
-
+      target.hitPoints -= skillTplate.custom.damage;
       return true;
     }
     return false;
   },
 
-  checkAttack : function(source,target,params){
+  checkAttack : function(source,target,skillTplate,params){
     if(params.range !== "undefined"){
       return true;
     }
