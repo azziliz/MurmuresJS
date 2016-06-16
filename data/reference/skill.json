@@ -1,9 +1,9 @@
 {
   "sword":{
     "id" : 1,
-    "range" : 1,
+    "range" : 4,
     "custom" : {
-      "damage" : 10
+      "damage" : 1
     },
     "skillbehavior":{
       "apply" : {

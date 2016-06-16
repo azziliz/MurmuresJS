@@ -26,10 +26,12 @@ murmures.SkillBehavior = {
   },
 
   checkAttack : function(source,target,skillTplate,params){
-    if(params.range !== "undefined"){
-      return true;
+    if(skillTplate.range !== "undefined"){
+      if (Math.abs(target.x - source.position.x) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
+      if (Math.abs(target.y - source.position.y) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
+      return {valid :true};
     }
 
-    return false;
+    return {valid :false, reason :'bad skill applied'};
   }
 };

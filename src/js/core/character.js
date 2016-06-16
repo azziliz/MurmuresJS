@@ -70,7 +70,7 @@ murmures.Character.prototype = {
         this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in assets.json.
         this.canMove = ref.canMove || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-        this.skills[1] = gameEngine.skills[1];
+        //this.skills[1] = gameEngine.skills[1];
     },
 
     initialize : function (src) {
@@ -89,6 +89,7 @@ murmures.Character.prototype = {
         if (typeof src.canMove !== 'undefined') this.canMove = src.canMove;
         if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
+        if (typeof src.skills !== 'undefined') this.skills = src.skills;
     },
 
     clone : function () {
