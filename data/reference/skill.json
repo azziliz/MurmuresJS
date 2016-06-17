@@ -2,6 +2,7 @@
   "sword":{
     "id" : 1,
     "range" : 4,
+    "asset" : "_b1_95_broadsword",
     "targetaudience" : 2,
     "custom" : {
       "damage" : 1
@@ -20,6 +21,7 @@
   "bow":{
     "id" : 2,
     "range" : 3,
+    "asset" : "_b1_95_crossbow",
     "targetaudience" : 2,
     "custom" : {
       "damage" : 2
@@ -38,6 +40,7 @@
   "heal":{
     "id" : 3,
     "range" : 3,
+    "asset" : "_b1_95_health-increase",
     "targetaudience" : 1,
     "custom" : {
       "heal" : 2

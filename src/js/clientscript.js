@@ -510,6 +510,18 @@ function updateUI() {
         }
         let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
         document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
+        var nbSkill=1;
+        for (let itSkill in gameEngine.heros[i].skills){
+          let skil = gameEngine.heros[i].skills[itSkill];
+          let ref = gameEngine.bodies[skil.asset];
+          let tilesetRank = ref.rank;
+          let tilesetX = tilesetRank % 64;
+          let tilesetY = (tilesetRank - tilesetX) / 64;
+          document.getElementById('hero' + gameEngine.heros[i].guid + '-skill' + nbSkill).style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
+          document.getElementById('hero' + gameEngine.heros[i].guid + '-skill' + nbSkill).style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+          document.getElementById('hero' + gameEngine.heros[i].guid + '-skill' + nbSkill).style.backgroundColor = "#ffffff";
+          nbSkill++;
+        }
         drawCharacter(gameEngine.heros[i]);
     }
 }
