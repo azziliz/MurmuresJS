@@ -79,6 +79,7 @@ var murmures = {
                 hero1.stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
             }
             hero1.skills[1] = gameEngine.skills[1];
+            hero1.activeSkill = 1;
             gameEngine.heros.push(hero1);
         }
         gameEngine.heros[1].skills[1] = gameEngine.skills[3];

@@ -16,15 +16,23 @@
  * @class
  */
 murmures.SkillBehavior = {
+
+  /*
+  * Function designed for standard attack
+  * Apply standard damage to target
+  */
   attack : function (source,target,skillTplate,params){
     if(skillTplate.custom.damage !== "undefined"){
         target.hitPoints -= skillTplate.custom.damage;
-        murmures.serverLog("Hiiiit");
       return true;
     }
     return false;
   },
 
+  /*
+  * Use to check if standard attack can be done (range test)
+  *
+  */
   checkAttack : function(source,target,skillTplate,params){
     if(skillTplate.range !== "undefined"){
       if (Math.abs(target.x - source.position.x) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
@@ -35,6 +43,10 @@ murmures.SkillBehavior = {
     return {valid :false, reason :'bad skill applied'};
   },
 
+
+  /*
+  * Function to resolve standard heal skill
+  */
   heal : function (source,target,skillTplate,params){
     if(skillTplate.custom.heal !== "undefined"){
       target.hitPoints += skillTplate.custom.heal;
@@ -42,6 +54,10 @@ murmures.SkillBehavior = {
     }
     return false;
   },
+
+  /*
+  * Function to check if standard heal can be applied
+  */
 
   checkHeal : function(source,target,skillTplate,params){
     if(skillTplate.range !== "undefined"){

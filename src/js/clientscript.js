@@ -517,9 +517,10 @@ function updateUI() {
           let tilesetRank = ref.rank;
           let tilesetX = tilesetRank % 64;
           let tilesetY = (tilesetRank - tilesetX) / 64;
-          document.getElementById('hero' + gameEngine.heros[i].guid + '-skill' + nbSkill).style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
-          document.getElementById('hero' + gameEngine.heros[i].guid + '-skill' + nbSkill).style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-          document.getElementById('hero' + gameEngine.heros[i].guid + '-skill' + nbSkill).style.backgroundColor = "#ffffff";
+          let skillWindow = document.getElementById('hero' + gameEngine.heros[i].guid + '-skill' + nbSkill);
+          skillWindow.style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
+          skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+          skillWindow.style.backgroundColor = "#ffffff";
           nbSkill++;
         }
         drawCharacter(gameEngine.heros[i]);
