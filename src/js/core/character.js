@@ -93,6 +93,7 @@ murmures.Character.prototype = {
         if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
         if (typeof src.skills !== 'undefined') this.skills = src.skills;
+
     },
 
     clone : function () {
