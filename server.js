@@ -78,12 +78,25 @@ var murmures = {
                 hero1.setVision();
                 hero1.stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
             }
-            hero1.skills[1] = gameEngine.skills[1];
-            hero1.skills[3] = gameEngine.skills[3];
-            hero1.activeSkill = 1;
+
+            let chosenSkill= [];
+            for(let loopSkill =0;loopSkill < 2;loopSkill ++){
+              let rd=1;
+              let nbSkill = 0;
+              for(let itSkill in gameEngine.skills) nbSkill ++;
+              do{
+                rd = (Math.floor(Math.random() *nbSkill) + 1)
+              }while (chosenSkill.indexOf(rd)>=0);
+              chosenSkill.push(rd);
+              if(loopSkill ==0){
+                hero1.activeSkill = rd;
+              }
+              hero1.skills[rd] = gameEngine.skills[rd];
+            }
+
             gameEngine.heros.push(hero1);
         }
-//        gameEngine.heros[1].skills[1] = gameEngine.skills[3];
+
         gameEngine.reportQueue = [];
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
     }
