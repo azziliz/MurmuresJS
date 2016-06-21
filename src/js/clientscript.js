@@ -510,7 +510,7 @@ function updateUI() {
         }
         let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
         document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
-        var nbSkill=1;
+/*        var nbSkill=1;
         for (let itSkill in gameEngine.heros[i].skills){
           let skil = gameEngine.heros[i].skills[itSkill];
           let ref = gameEngine.bodies[skil.asset];
@@ -521,16 +521,52 @@ function updateUI() {
           skillWindow.style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
           skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
           skillWindow.style.backgroundColor = "#ffffff";
-
+          skillWindow.addEventListener("click",function(){activeSkill(gameEngine.heros[i].guid,skil.id);});
           //TODO : change to css behavior
           if (gameEngine.heros[i].activeSkill == skil.id){
               skillWindow.style.border = "1px solid" ;
               skillWindow.style.borderColor = "#44DD44";
           }
           nbSkill++;
-        }
+        }*/
+        drawSkill(gameEngine.heros[i]);
         drawCharacter(gameEngine.heros[i]);
     }
+}
+
+function drawSkill(hero){
+  var nbSkill=1;
+  for (let itSkill in hero.skills){
+    let skil = hero.skills[itSkill];
+    let ref = gameEngine.bodies[skil.asset];
+    let tilesetRank = ref.rank;
+    let tilesetX = tilesetRank % 64;
+    let tilesetY = (tilesetRank - tilesetX) / 64;
+    let skillWindow = document.getElementById('hero' + hero.guid + '-skill' + nbSkill);
+    skillWindow.style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
+    skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+    skillWindow.style.backgroundColor = "#ffffff";
+    skillWindow.addEventListener("click",function(){activeSkill(hero.guid,skil.id);});
+    //TODO : change to css behavior
+    if (hero.activeSkill == skil.id){
+        skillWindow.style.border = "1px solid" ;
+        skillWindow.style.borderColor = "#44DD44";
+    }else{
+      skillWindow.style.border = "0px" ;
+    }
+    nbSkill++;
+  }
+
+}
+
+function activeSkill(heroGuid,skillId){
+  for(let h in gameEngine.heros){
+    if (gameEngine.heros[h].guid == heroGuid){
+      gameEngine.heros[h].activeSkill = skillId;
+      drawSkill(gameEngine.heros[h]);
+      break;
+    }
+  }
 }
 
 function clearCharacterLayer() {
