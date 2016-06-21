@@ -521,22 +521,13 @@ function updateUI() {
           skillWindow.style.backgroundImage = "url('" + gameEngine.client.tileset + "')";
           skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
           skillWindow.style.backgroundColor = "#ffffff";
-          //TODO : remove activeSkill loop... integrate it into character code
-          if(gameEngine.heros[i].activeSkill==0){
-            for(let k in gameEngine.heros[i].skills){
-              gameEngine.heros[i].activeSkill =gameEngine.heros[i].skills[k].id ;
-              break;
-            }
-          }
+
+          //TODO : change to css behavior
           if (gameEngine.heros[i].activeSkill == skil.id){
               skillWindow.style.border = "1px solid" ;
               skillWindow.style.borderColor = "#44DD44";
           }
           nbSkill++;
-
-          //skillWindow.style.solid = "#666" ;
-
-
         }
         drawCharacter(gameEngine.heros[i]);
     }
