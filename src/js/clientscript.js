@@ -708,7 +708,7 @@ function topLayer_onClick(hoveredTile, rightClick) {
             let moveOrder = new murmures.Order();
             moveOrder.command = 'move';
             if(hoveredTile.hasMob.code){
-              if(currentHero.skills[1].targetaudience!=murmures.C.TARGET_AUDIENCE_MOB){
+              if(currentHero.skills[currentHero.activeSkill].targetaudience!=murmures.C.TARGET_AUDIENCE_MOB){
                 moveOrder.command = 'attack';
               }
             }

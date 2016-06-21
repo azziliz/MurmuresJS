@@ -248,7 +248,6 @@ wss.on('connection', function (ws) {
                     let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
                     murmures.serverLog('State saved');
                     gameEngine.saveOrder(clientOrder);
-
                     let ge = gameEngine.compare(beforeState);
                     let res = JSON.stringify({ fn: 'o', payload: ge });
                     murmures.serverLog('Response stringified');

@@ -52,6 +52,7 @@ murmures.Order.prototype = {
         for (let itHero = 0; itHero < gameEngine.heros.length; itHero++){
           if (parseFloat(gameEngine.heros[itHero].guid) === parseFloat(src.source.guid)) {
             this.source = gameEngine.heros[itHero];
+            this.source.activeSkill = src.source.activeSkill;
             break;
           }
         }
@@ -65,7 +66,7 @@ murmures.Order.prototype = {
     },
 
     clean: function () {
-        this.source = { guid: this.source.guid };
+        this.source = { guid: this.source.guid, activeSkill : this.source.activeSkill};
         this.target = { x: this.target.x, y: this.target.y };
     }
 };

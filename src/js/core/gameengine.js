@@ -200,7 +200,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack'){
-          return murmures.SkillBehavior[order.source.skills[1].skillbehavior.check.callback](order.source,order.target,order.source.skills[1],order.source.skills[1].skillbehavior.check.params);
+          return murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.check.callback](order.source,order.target,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.check.params);
         }
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
@@ -292,7 +292,7 @@ murmures.GameEngine.prototype = {
                     });
                     this.reportQueue.push(tr2);
 
-                    murmures.SkillBehavior[order.source.skills[1].skillbehavior.apply.callback](order.source,mob,order.source.skills[1],order.source.skills[1].skillbehavior.apply.params);
+                    murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
                     if (mob.hitPoints <= 0) {
                         mob.hitPoints = 0;
                         mob.position.groundDeco = '_b1_02_blood_red00';
@@ -301,7 +301,7 @@ murmures.GameEngine.prototype = {
             }, this);
             this.heros.forEach(function (mob) {
                 if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
-                  murmures.SkillBehavior[order.source.skills[1].skillbehavior.apply.callback](order.source,mob,order.source.skills[1],order.source.skills[1].skillbehavior.apply.params);
+                  murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
                 }
             }, this);
         }
