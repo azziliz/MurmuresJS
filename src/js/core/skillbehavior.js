@@ -54,6 +54,7 @@ murmures.SkillBehavior = {
     if(target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO){
       if(skillTplate.custom.heal !== "undefined"){
         target.hitPoints += skillTplate.custom.heal;
+        target.hitPoints = target.hitPoints > target.hitPointsMax ? target.hitPointsMax : target.hitPoints;
         return true;
       }
     }
