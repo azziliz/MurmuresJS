@@ -192,10 +192,10 @@ murmures.GameEngine.prototype = {
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
         else if (order.command === null) return { valid: false, reason: 'Order command is not defined' };
-        else if (order.command !== 'move' && order.command !== 'attack') return { valid: false, reason: 'Order contains an unknown command' };
+        else if (order.command !== 'move' && order.command !== 'attack' && order.command !== 'changeSkill') return { valid: false, reason: 'Order contains an unknown command' };
         //else if ((order.source.guid !== this.heros[0].guid)) return { valid: false, reason: 'You can only give orders to your own hero' };
         else if (typeof heroToCheck === 'undefined' || heroToCheck === null) return { valid: false, reason : 'order sent for an invalid hero' };
-        else if (order.target.isWall()) return { valid: false, reason: 'You cannot target a wall' };
+        else if ((order.command === 'move' || order.command === 'attack') && order.target.isWall()) return { valid: false, reason: 'You cannot target a wall' };
 
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
@@ -205,50 +205,56 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (order.target.hasMob.code && !order.target.hasMob.isHero)) return { valid: false, reason: 'The target tile is occupied by a mob' };
+        else if (order.command === 'changeSkill' && (order.custom.activeSkill === 'undefined')) return {valid: false, reason: 'The skill is not defined'};
+        else if (order.command === 'changeSkill' && (order.source.hasSkill(order.custom.activeSkill) === false)) return {valid : false, resaon: 'Hero doesn t have such a skill'};
         else return { valid: true };
     },
 
     saveOrder : function (order) {
         // This function is only called on server side
-        let nbOrderDone = 0;
-        for (let itHero = 0; itHero < this.heros.length ; itHero++) {
-            if (this.heros[itHero].guid === order.source.guid) {
-                this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
-                if (typeof this.orderQueue === 'undefined') this.orderQueue = [];
+        if(order.command === 'changeSkill'){
+          if(order.source.hasSkill(order.custom.activeSkill)) order.source.activeSkill = order.custom.activeSkill;
+        }else{
+          let nbOrderDone = 0;
+          for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+              if (this.heros[itHero].guid === order.source.guid) {
+                  this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
+                  if (typeof this.orderQueue === 'undefined') this.orderQueue = [];
 
-                this.orderQueue.push(order);
-                murmures.serverLog('Order saved');
-            }
+                  this.orderQueue.push(order);
+                  murmures.serverLog('Order saved');
+              }
 
-            if (this.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) {
-                nbOrderDone += 1;
-            }
-        }
-        this.reportQueue = [];
-        if (this.heros.length !== nbOrderDone) {
-            for (let itHero = 0; itHero < this.heros.length ; itHero++) {
-                if (this.heros[itHero].stateOrder !== murmures.C.STATE_HERO_ORDER_GIVEN) {
-                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
-                    murmures.serverLog('Waiting for next order from following hero');
-                    break;
-                }
-            }
-        } else {
-            murmures.serverLog('Apply all orders');
-            for (let itOrders = 0; itOrders < this.orderQueue.length ; itOrders++) {
-                this.applyOrder(this.orderQueue[itOrders]);
-            }
-            this.orderQueue = [];
-            this.applyAI();
-            murmures.serverLog('AI done');
+              if (this.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) {
+                  nbOrderDone += 1;
+              }
+          }
+          this.reportQueue = [];
+          if (this.heros.length !== nbOrderDone) {
+              for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+                  if (this.heros[itHero].stateOrder !== murmures.C.STATE_HERO_ORDER_GIVEN) {
+                      this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+                      murmures.serverLog('Waiting for next order from following hero');
+                      break;
+                  }
+              }
+          } else {
+              murmures.serverLog('Apply all orders');
+              for (let itOrders = 0; itOrders < this.orderQueue.length ; itOrders++) {
+                  this.applyOrder(this.orderQueue[itOrders]);
+              }
+              this.orderQueue = [];
+              this.applyAI();
+              murmures.serverLog('AI done');
 
-            for (let itHero = 0; itHero < this.heros.length ; itHero++) {
-                if (itHero === 0) {
-                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
-                } else {
-                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-                }
-            }
+              for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+                  if (itHero === 0) {
+                      this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+                  } else {
+                      this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+                  }
+              }
+          }
         }
     },
 
@@ -273,37 +279,44 @@ murmures.GameEngine.prototype = {
         }
         else {
             //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
-            this.level.mobs.forEach(function (mob) {
-                if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
-                    let tr1 = new murmures.TurnReport();
-                    tr1.build({
-                        effect: 'projectileMove',
-                        sourceTile: order.source.position.coordinates,
-                        targetTile: order.target.coordinates,
-                        priority: 20
-                    });
-                    this.reportQueue.push(tr1);
-                    let tr2 = new murmures.TurnReport();
-                    tr2.build({
-                        effect: 'damage',
-                        character: mob,
-                        value: order.source.defaultDamageValue,
-                        priority: 30
-                    });
-                    this.reportQueue.push(tr2);
+            //if(order.source.skills[order.source..activeSkill].targetAudience == murmures.C.TARGET_AUDIENCE_MOB)
+            if([murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_MOB].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0){
+              this.level.mobs.forEach(function (mob) {
+                  if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                      let tr1 = new murmures.TurnReport();
+                      tr1.build({
+                          effect: 'projectileMove',
+                          sourceTile: order.source.position.coordinates,
+                          targetTile: order.target.coordinates,
+                          priority: 20
+                      });
+                      this.reportQueue.push(tr1);
+                      let tr2 = new murmures.TurnReport();
+                      tr2.build({
+                          effect: 'damage',
+                          character: mob,
+                          value: order.source.defaultDamageValue,
+                          priority: 30
+                      });
+                      this.reportQueue.push(tr2);
 
+                      murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
+                      if (mob.hitPoints <= 0) {
+                          mob.hitPoints = 0;
+                          mob.position.groundDeco = '_b1_02_blood_red00';
+                      }
+                  }
+              }, this);
+            }
+            murmures.serverLog("TOP " + [murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_HERO].indexOf(order.source.skills[order.source.activeSkill].targetaudience) + "//" + order.source.activeSkill + "//" + order.source.skills[order.source.activeSkill].targetaudience + "//" + order.source.skills[order.source.activeSkill]);
+            if([murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_HERO].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0){
+
+              this.heros.forEach(function (mob) {
+                  if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
-                    if (mob.hitPoints <= 0) {
-                        mob.hitPoints = 0;
-                        mob.position.groundDeco = '_b1_02_blood_red00';
-                    }
-                }
-            }, this);
-            this.heros.forEach(function (mob) {
-                if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
-                  murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
-                }
-            }, this);
+                  }
+              }, this);
+            }
         }
         murmures.serverLog('Moves / attacks done');
         for (let itMob=0; itMob < this.level.mobs.length; itMob++) {

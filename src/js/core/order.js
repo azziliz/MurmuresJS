@@ -30,6 +30,8 @@ murmures.Order = function () {
     this.source = {};
     /** @type {murmures.Tile} */
     this.target = {};
+    /** @type {Object.[String, String]}*/
+    this.custom = {};
 };
 
 murmures.Order.prototype = {
@@ -48,11 +50,11 @@ murmures.Order.prototype = {
      */
     build : function (src) {
         this.command = src.command;
+        if(src.custom !== 'undefined') this.custom = src.custom;
         this.source = undefined;
         for (let itHero = 0; itHero < gameEngine.heros.length; itHero++){
           if (parseFloat(gameEngine.heros[itHero].guid) === parseFloat(src.source.guid)) {
             this.source = gameEngine.heros[itHero];
-            this.source.activeSkill = src.source.activeSkill;
             break;
           }
         }
@@ -61,12 +63,18 @@ murmures.Order.prototype = {
             murmures.serverLog("Tech Error - Guid does not match any heroes- " + src.source.guid );
             return { valid: false, reason: 'Technical error - Guid does not match - Please refresh the page' };
         }
-        this.target = gameEngine.level.tiles[src.target.y|0][src.target.x|0];
+        if(typeof src.target !== 'undefined')
+          this.target = gameEngine.level.tiles[src.target.y|0][src.target.x|0];
         return { valid: true };
     },
 
     clean: function () {
-        this.source = { guid: this.source.guid, activeSkill : this.source.activeSkill};
-        this.target = { x: this.target.x, y: this.target.y };
+        if(this.command == "changeSkill"){
+            this.custom = {activeSkill : this.source.activeSkill};
+            this.source = {guid : this.source.guid};
+        }else{
+          this.source = { guid: this.source.guid};
+          this.target = { x: this.target.x, y: this.target.y };
+        }
     }
 };

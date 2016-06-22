@@ -1,11 +1,11 @@
 {
   "sword":{
     "id" : 1,
-    "range" : 4,
+    "range" : 1,
     "asset" : "_b1_95_broadsword",
     "targetaudience" : 2,
     "custom" : {
-      "damage" : 1
+      "damage" : 3
     },
     "skillbehavior":{
       "apply" : {
@@ -24,7 +24,7 @@
     "asset" : "_b1_95_crossbow",
     "targetaudience" : 2,
     "custom" : {
-      "damage" : 2
+      "damage" : 1
     },
     "skillbehavior":{
       "apply" : {
@@ -40,10 +40,29 @@
   "heal":{
     "id" : 3,
     "range" : 3,
-    "asset" : "_b1_95_health-increase",
+    "asset" : "_b1_95_health-normal",
     "targetaudience" : 1,
     "custom" : {
       "heal" : 2
+    },
+    "skillbehavior":{
+      "apply" : {
+        "callback" : "heal",
+        "params" : ""
+      },
+      "check" :{
+        "callback" : "checkHeal",
+        "params" : ""
+      }
+    }
+  },
+  "healplus":{
+    "id" : 4,
+    "range" : 3,
+    "asset" : "_b1_95_health-increase",
+    "targetaudience" : 1,
+    "custom" : {
+      "heal" : 4
     },
     "skillbehavior":{
       "apply" : {

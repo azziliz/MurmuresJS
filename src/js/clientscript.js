@@ -564,6 +564,11 @@ function activeSkill(heroGuid,skillId){
     if (gameEngine.heros[h].guid == heroGuid){
       gameEngine.heros[h].activeSkill = skillId;
       drawSkill(gameEngine.heros[h]);
+      let order = new murmures.Order();
+      order.command = 'changeSkill';
+      order.source = gameEngine.heros[h];
+      order.custom.activeSkill = skillId;
+      launchOrder(order);
       break;
     }
   }
@@ -758,6 +763,7 @@ function onKeyPress(char) {
 // #region Orders
 function launchOrder(order) {
     screenLog('checkOrder');
+    console.log(order);
     let check = gameEngine.checkOrder(order);
     if (gameEngine.client.allowOrders) {
         if (check.valid) {

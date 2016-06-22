@@ -54,6 +54,8 @@ murmures.Character = function () {
     this.skills={};
     /** @type {number} */
     this.activeSkill = 0;
+    /** @type {number} */
+    this.typeCharacter = murmures.C.TYPE_CHARACTER_MOB;
 };
 
 murmures.Character.prototype = {
@@ -94,7 +96,7 @@ murmures.Character.prototype = {
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
         if (typeof src.skills !== 'undefined') this.skills = src.skills;
         if (typeof src.activeSkill !== 'undefined') this.activeSkill = src.activeSkill;
-
+        if (typeof src.typeCharacter !== 'undefined') this.typeCharacter = src.typeCharacter;
     },
 
     clone : function () {
@@ -161,6 +163,15 @@ murmures.Character.prototype = {
     get isHero() {
         let ref = gameEngine.bodies[this.mobTemplate];
         return murmures.C.LAYERS[ref.layerId][0] === 'Hero';
+    },
+
+    hasSkill : function(skillId){
+      for (let s in this.skills){
+        if(this.skills[s].id == parseInt(skillId)){
+          return true;
+        }
+      }
+      return false;
     },
 
     setVision : function (tilesProcessed) {
