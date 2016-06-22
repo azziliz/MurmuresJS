@@ -74,6 +74,7 @@ var murmures = {
             chosenHeroesKeys.push(chosenHero);
             let hero1 = new murmures.Character();
             hero1.build(gameEngine.level.getStartingPoint(), chosenHero);
+            hero1.typeCharacter = murmures.C.TYPE_CHARACTER_HERO;
             if (loopCounter === 0) {
                 hero1.setVision();
                 hero1.stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;

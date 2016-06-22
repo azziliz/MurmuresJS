@@ -22,9 +22,11 @@ murmures.SkillBehavior = {
   * Apply standard damage to target
   */
   attack : function (source,target,skillTplate,params){
-    if(skillTplate.custom.damage !== "undefined"){
-        target.hitPoints -= skillTplate.custom.damage;
-      return true;
+    if(target.typeCharacter == murmures.C.TYPE_CHARACTER_MOB){
+      if(skillTplate.custom.damage !== "undefined"){
+          target.hitPoints -= skillTplate.custom.damage;
+        return true;
+      }
     }
     return false;
   },
@@ -37,6 +39,7 @@ murmures.SkillBehavior = {
     if(skillTplate.range !== "undefined"){
       if (Math.abs(target.x - source.position.x) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
       if (Math.abs(target.y - source.position.y) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
+      if(target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO) return {valid : false, reason: 'Invalid target. Target must be a mob'};
       return {valid :true};
     }
 
@@ -48,9 +51,11 @@ murmures.SkillBehavior = {
   * Function to resolve standard heal skill
   */
   heal : function (source,target,skillTplate,params){
-    if(skillTplate.custom.heal !== "undefined"){
-      target.hitPoints += skillTplate.custom.heal;
-      return true;
+    if(target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO){
+      if(skillTplate.custom.heal !== "undefined"){
+        target.hitPoints += skillTplate.custom.heal;
+        return true;
+      }
     }
     return false;
   },
@@ -63,6 +68,7 @@ murmures.SkillBehavior = {
     if(skillTplate.range !== "undefined"){
       if (Math.abs(target.x - source.position.x) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
       if (Math.abs(target.y - source.position.y) > skillTplate.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillTplate.range };
+      if(target.typeCharacter == murmures.C.TYPE_CHARACTER_MOB) return {valid : false, reason: 'Invalid target. Target must be an hero'};
       return {valid :true};
     }
 

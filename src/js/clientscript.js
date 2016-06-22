@@ -763,7 +763,6 @@ function onKeyPress(char) {
 // #region Orders
 function launchOrder(order) {
     screenLog('checkOrder');
-    console.log(order);
     let check = gameEngine.checkOrder(order);
     if (gameEngine.client.allowOrders) {
         if (check.valid) {

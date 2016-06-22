@@ -28,6 +28,13 @@ murmures.C = Object.freeze({
     STATE_ENGINE_DEATH: 3,
 
     /*
+    * Character's type
+    */
+    TYPE_CHARACTER_HERO : 1,
+    TYPE_CHARACTER_MOB  : 0,
+
+
+    /*
      * character state
     */
     STATE_HERO_WAITING_FOR_ORDER : 0,

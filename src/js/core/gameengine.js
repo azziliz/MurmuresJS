@@ -200,7 +200,12 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack'){
-          return murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.check.callback](order.source,order.target,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.check.params);
+          if(typeof order.target.guid === 'undefined'){
+            let retChar = order.target.hasMob;
+            return murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.check.callback](order.source,retChar.mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.check.params);
+          }else{
+            return murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.check.callback](order.source,order.target,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.check.params);
+          }
         }
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
@@ -308,9 +313,7 @@ murmures.GameEngine.prototype = {
                   }
               }, this);
             }
-            murmures.serverLog("TOP " + [murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_HERO].indexOf(order.source.skills[order.source.activeSkill].targetaudience) + "//" + order.source.activeSkill + "//" + order.source.skills[order.source.activeSkill].targetaudience + "//" + order.source.skills[order.source.activeSkill]);
             if([murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_HERO].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0){
-
               this.heros.forEach(function (mob) {
                   if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
                     murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
