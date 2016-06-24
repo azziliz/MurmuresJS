@@ -222,49 +222,47 @@ murmures.GameEngine.prototype = {
 
     saveOrder : function (order) {
         // This function is only called on server side
-        if(order.command === 'changeSkill'){
-          if(order.source.hasSkill(order.custom.activeSkill)) order.source.activeSkill = order.custom.activeSkill;
-        }else{
-          let nbOrderDone = 0;
-          for (let itHero = 0; itHero < this.heros.length ; itHero++) {
-              if (this.heros[itHero].guid === order.source.guid) {
-                  this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
-                  if (typeof this.orderQueue === 'undefined') this.orderQueue = [];
 
-                  this.orderQueue.push(order);
-                  murmures.serverLog('Order saved');
-              }
+        let nbOrderDone = 0;
+        for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+            if (this.heros[itHero].guid === order.source.guid) {
+                this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_GIVEN;
+                if (typeof this.orderQueue === 'undefined') this.orderQueue = [];
 
-              if (this.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) {
-                  nbOrderDone += 1;
-              }
-          }
-          this.reportQueue = [];
-          if (this.heros.length !== nbOrderDone) {
-              for (let itHero = 0; itHero < this.heros.length ; itHero++) {
-                  if (this.heros[itHero].stateOrder !== murmures.C.STATE_HERO_ORDER_GIVEN) {
-                      this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
-                      murmures.serverLog('Waiting for next order from following hero');
-                      break;
-                  }
-              }
-          } else {
-              murmures.serverLog('Apply all orders');
-              for (let itOrders = 0; itOrders < this.orderQueue.length ; itOrders++) {
-                  this.applyOrder(this.orderQueue[itOrders]);
-              }
-              this.orderQueue = [];
-              this.applyAI();
-              murmures.serverLog('AI done');
+                this.orderQueue.push(order);
+                murmures.serverLog('Order saved');
+            }
 
-              for (let itHero = 0; itHero < this.heros.length ; itHero++) {
-                  if (itHero === 0) {
-                      this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
-                  } else {
-                      this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-                  }
-              }
-          }
+            if (this.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) {
+                nbOrderDone += 1;
+            }
+        }
+        this.reportQueue = [];
+        if (this.heros.length !== nbOrderDone) {
+            for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+                if (this.heros[itHero].stateOrder !== murmures.C.STATE_HERO_ORDER_GIVEN) {
+                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+                    murmures.serverLog('Waiting for next order from following hero');
+                    break;
+                }
+            }
+        } else {
+            murmures.serverLog('Apply all orders');
+            for (let itOrders = 0; itOrders < this.orderQueue.length ; itOrders++) {
+                this.applyOrder(this.orderQueue[itOrders]);
+            }
+            this.orderQueue = [];
+            this.applyAI();
+            murmures.serverLog('AI done');
+
+            for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+                if (itHero === 0) {
+                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
+                } else {
+                    this.heros[itHero].stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+                }
+            }
+
         }
     },
 
