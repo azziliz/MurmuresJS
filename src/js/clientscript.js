@@ -564,11 +564,6 @@ function activeSkill(heroGuid,skillId){
     if (gameEngine.heros[h].guid == heroGuid){
       gameEngine.heros[h].activeSkill = skillId;
       drawSkill(gameEngine.heros[h]);
-      let order = new murmures.Order();
-      order.command = 'changeSkill';
-      order.source = gameEngine.heros[h];
-      order.custom.activeSkill = skillId;
-      launchOrder(order);
       break;
     }
   }

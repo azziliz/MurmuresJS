@@ -54,6 +54,7 @@ murmures.Order.prototype = {
         this.source = undefined;
         for (let itHero = 0; itHero < gameEngine.heros.length; itHero++){
           if (parseFloat(gameEngine.heros[itHero].guid) === parseFloat(src.source.guid)) {
+            if (src.source.activeSkill !== 'undefined') gameEngine.heros[itHero].activeSkill = src.source.activeSkill;
             this.source = gameEngine.heros[itHero];
             break;
           }
@@ -69,12 +70,8 @@ murmures.Order.prototype = {
     },
 
     clean: function () {
-        if(this.command == "changeSkill"){
-            this.custom = {activeSkill : this.source.activeSkill};
-            this.source = {guid : this.source.guid};
-        }else{
-          this.source = { guid: this.source.guid};
-          this.target = { x: this.target.x, y: this.target.y };
-        }
+        this.source = { guid: this.source.guid, activeSkill : this.source.activeSkill};
+        this.target = { x: this.target.x, y: this.target.y };
+
     }
 };
