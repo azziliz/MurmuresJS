@@ -30,6 +30,8 @@
     <Compile Include="src\js\core\order.js" />
     <Compile Include="src\js\core\physicalbody.js" />
     <Compile Include="src\js\core\player.js" />
+    <Compile Include="src\js\core\skill.js" />
+    <Compile Include="src\js\core\skillbehavior.js" />
     <Compile Include="src\js\core\tile.js" />
     <Compile Include="src\js\core\turnreport.js" />
     <Compile Include="src\js\test\moduleperf.js" />
@@ -37,6 +39,7 @@
     <Compile Include="src\js\test\vmperf.js" />
     <Content Include="data\locale\en.json" />
     <Content Include="data\locale\fr.json" />
+    <Content Include="data\reference\skill.json" />
     <Content Include="data\tmp.json" />
     <Content Include="package.json" />
     <Content Include="src\pages\client.html" />

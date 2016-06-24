@@ -10335,8 +10335,8 @@
         "rank": 1517,
         "behavior": {
             "move": {
-                "callback": "jumpToNextLevel",
-                "params": "-1"
+                "callback": "jumpToPreviousLevel",
+                "params": ""
             }
         }
     },
