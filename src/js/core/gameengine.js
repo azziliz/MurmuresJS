@@ -200,12 +200,17 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack'){
-          if(typeof order.target.guid === 'undefined'){
-            let retChar = order.target.hasMob;
-            return murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.check.callback](order.source,retChar.mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.check.params);
+          let target = order.target.guid === 'undefined' ? order.target.hasmob : order.target;
+          let skillToApply = order.source.skills[order.source.activeSkill];
+          if(skillToApply){
+            if (Math.abs(target.x - order.source.position.x) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
+            if (Math.abs(target.y - order.source.position.y) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
+            if((skillToApply.targetAudience ==murmures.C.TARGET_AUDIENCE_MOB) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO)) return {valid : false, reason: 'Invalid target. Target must be a mob'};
+            if((skillToApply.targetAudience ==murmures.C.TARGET_AUDIENCE_HERO) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_MOB)) return {valid : false, reason: 'Invalid target. Target must be a hero'};
           }else{
-            return murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.check.callback](order.source,order.target,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.check.params);
+            return {valid :false, reason : 'hero doesn t have such a skill'};
           }
+          return {valid : true};
         }
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
