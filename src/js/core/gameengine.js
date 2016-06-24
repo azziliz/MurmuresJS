@@ -308,7 +308,7 @@ murmures.GameEngine.prototype = {
                       });
                       this.reportQueue.push(tr2);
 
-                      murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
+                      order.source.skills[order.source.activeSkill].apply(mob);
                       if (mob.hitPoints <= 0) {
                           mob.hitPoints = 0;
                           mob.position.groundDeco = '_b1_02_blood_red00';
@@ -319,7 +319,7 @@ murmures.GameEngine.prototype = {
             if([murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_HERO].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0){
               this.heros.forEach(function (mob) {
                   if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
-                    murmures.SkillBehavior[order.source.skills[order.source.activeSkill].skillbehavior.apply.callback](order.source,mob,order.source.skills[order.source.activeSkill],order.source.skills[order.source.activeSkill].skillbehavior.apply.params);
+                    order.source.skills[order.source.activeSkill].apply(mob);
                   }
               }, this);
             }

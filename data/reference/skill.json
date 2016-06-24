@@ -4,76 +4,32 @@
     "range" : 1,
     "asset" : "_b1_95_broadsword",
     "targetaudience" : 2,
-    "custom" : {
-      "damage" : 3
-    },
-    "skillbehavior":{
-      "apply" : {
-        "callback" : "attack",
-        "params" : ""
-      },
-      "check" :{
-        "callback" : "checkAttack",
-        "params" : ""
-      }
-    }
+    "typeeffect" : "hpmodifier",
+    "modifier" : -4
   },
   "bow":{
     "id" : 2,
     "range" : 3,
     "asset" : "_b1_95_crossbow",
     "targetaudience" : 2,
-    "custom" : {
-      "damage" : 1
-    },
-    "skillbehavior":{
-      "apply" : {
-        "callback" : "attack",
-        "params" : ""
-      },
-      "check" :{
-        "callback" : "checkAttack",
-        "params" : ""
-      }
-    }
+    "typeeffect" : "hpmodifier",
+    "modifier" : -1
   },
   "heal":{
     "id" : 3,
     "range" : 3,
     "asset" : "_b1_95_health-normal",
     "targetaudience" : 1,
-    "custom" : {
-      "heal" : 2
-    },
-    "skillbehavior":{
-      "apply" : {
-        "callback" : "heal",
-        "params" : ""
-      },
-      "check" :{
-        "callback" : "checkHeal",
-        "params" : ""
-      }
-    }
-  },
+    "typeeffect" : "hpmodifier",
+    "modifier" : 2
+   },
   "healplus":{
     "id" : 4,
     "range" : 3,
     "asset" : "_b1_95_health-increase",
     "targetaudience" : 1,
-    "custom" : {
-      "heal" : 4
-    },
-    "skillbehavior":{
-      "apply" : {
-        "callback" : "heal",
-        "params" : ""
-      },
-      "check" :{
-        "callback" : "checkHeal",
-        "params" : ""
-      }
-    }
+    "typeeffect" : "hpmodifier",
+    "modifier" : 4
   }
 
 }

@@ -25,7 +25,8 @@ murmures.Skill = function () {
   this.id  = '';
   this.name = '';
   this.skillbehavior = {};
-  this.custom = {};
+  this.typeeffect = '';
+  this.modifer = '';
   this.range = 0;
   this.targetaudience = 0;
   this.asset = "";
@@ -39,13 +40,18 @@ murmures.Skill.prototype = {
       this.name = name;
       /** @type {Object.<string, Object.<string, string>>} */
       this.skillbehavior = src.skillbehavior;
-      /** @type {Object.<string, Object.<string, string>>} */
-      this.custom = src.custom;
+      this.typeeffect  = src.typeeffect;
+      this.modifier = src.modifier;
       /** @type {number} */
       this.range = src.range;
       /** @type {number} */
       this.targetaudience = src.targetaudience;
       /** @type {string} */
       this.asset = src.asset;
-    }
+    },
+   apply : function (target){
+     if(this.typeeffect === 'hpmodifier'){
+       target.hitPoints = (target.hitPoints + this.modifier) < 0 ? 0:((target.hitPoints + this.modifier) > target.hitPointsMax ? target.hitPointsMax : (target.hitPoints + this.modifier));
+     }
+   }
 };
