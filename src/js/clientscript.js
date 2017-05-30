@@ -28,8 +28,10 @@ gameEngine.client.ws.onmessage = function (event) {
 
 function screenLog(txt) {
     let now = new Date();
-    document.getElementById("screenLog").insertAdjacentHTML('afterbegin',
-        '<span class="channel-debug"><span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br></span>');
+    if (document.getElementById("screenLog") !== null) {
+        document.getElementById("screenLog").insertAdjacentHTML('afterbegin',
+            '<span class="channel-debug"><span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br></span>');
+    }
 }
 
 function onXhrError(e) {
@@ -43,13 +45,15 @@ function init() {
     xhr.addEventListener("error", onXhrError);
     xhr.addEventListener("abort", onXhrError);
     xhr.addEventListener("progress", function (evt) {
-        if (evt.lengthComputable) {
+        if (evt.lengthComputable && document.getElementById('tilesetLoadProgress') !== null) {
             let percentComplete = parseInt(100.0 * evt.loaded / evt.total);
             document.getElementById('tilesetLoadProgress').style.width = percentComplete + '%';
         }
     });
     xhr.addEventListener("load", function (evt) {
-        document.getElementById('tilesetLoadBg').style.display = 'none';
+        if (document.getElementById('tilesetLoadBg') !== null) {
+            document.getElementById('tilesetLoadBg').style.display = 'none';
+        }
         let img = new Image();
         img.onload = function () {
             gameEngine.client.tilesetImg = img;

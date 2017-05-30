@@ -1,0 +1,22 @@
+﻿body {
+    background: #666;
+    font-family: sans-serif;
+}
+
+#container {
+    max-height: 60vh;
+    overflow-y: scroll;
+    width: 1000px;
+}
+
+p {
+    display: table-row;
+}
+
+label {
+    display: table-cell;
+}
+
+input {
+    display: table-cell;
+}
