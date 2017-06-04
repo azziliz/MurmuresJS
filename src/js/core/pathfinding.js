@@ -16,7 +16,7 @@
 murmures.Pathfinding = {
     /**
      * Pathfinding function, using the A* algorithm.
-     * Cost heuristic is Max(x, y), which should never 
+     * Heuristic is Max(x, y), which should never overestimate the cost
      *
      * @param {murmures.Tile} source - The starting tile.
      * @param {murmures.Tile} target - The targeted tile.
