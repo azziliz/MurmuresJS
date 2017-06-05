@@ -35,52 +35,6 @@
     <div style="position:fixed; bottom:0; left:0; z-index:9999">
         <div id="debugDiv"></div>
     </div>
-    <script type="text/javascript">
-        'use strict';
-        // namespace
-        var murmures = {
-            serverLog: function (txt) {
-                console.log(''.concat((new Date()).toISOString(), ' - ', txt));
-            }
-        };
-    </script>
-    <script src="/src/js/core/constants.js"></script>
-    <script src="/src/js/core/skillbehavior.js"></script>
-    <script src="/src/js/core/skill.js"></script>
-    <script src="/src/js/core/character.js"></script>
-    <script src="/src/js/core/level.js"></script>
-    <script src="/src/js/core/order.js"></script>
-    <script src="/src/js/core/turnreport.js"></script>
-    <script src="/src/js/core/tile.js"></script>
-    <script src="/src/js/core/gameengine.js"></script>
-    <script src="/src/js/clientscript.js"></script>
-
-
-    <script type="text/html" id="characterUiTemplate">
-        <div id="template-box" class="characterBox bgColorMob" data-order="">
-            <div>
-                <div id="template-icon" class="uiIcon charIcon">
-                </div>
-                <div id="template-charname"  class="characterName">
-                    <div id="template-name">Chauve-souris</div>
-                </div>
-                <div id="template-fullLife" class="newLine characterLife">
-                    <div id="template-life"></div>
-                    <div id="template-hptooltip" class="tooltip">?/?</div>
-                </div>
-                <div id="template-skill1" class="newLine uiIcon"></div>
-                <div id="template-skill2" class="uiIcon"></div>
-                <div id="template-skill3" class="uiIcon"></div>
-                <div id="template-skill4" class="uiIcon"></div>
-                <div id="template-skill5" class="uiIcon"></div>
-                <div id="template-skill6" class="newLine uiIcon"></div>
-                <div id="template-skill7" class="uiIcon"></div>
-                <div id="template-skill8" class="uiIcon"></div>
-                <div id="template-skill9" class="uiIcon"></div>
-                <div id="template-skill10" class="uiIcon"></div>
-            </div>
-        </div>
-    </script>
     <!--
     <div id="fullScreen" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#e8e8e8; z-index:-20"></div>
     <div id="iPhone6" style="position:absolute; top:0; left:0; width:1334px; height:750px; background-color:#e8ffe8; z-index:-10"></div>
@@ -106,5 +60,51 @@
         <p style="position:absolute;left:150px;font-size:200%;" id="deathWindowTitle"></p>
         <p style="position:absolute;left:150px;top:200px;font-size:200%;"><a href="#" onclick="restartGame();" id="deathWindowRestartButton"></a></p>
     </div>
+    <script type="text/html" id="characterUiTemplate">
+        <div id="template-box" class="characterBox bgColorMob" data-order="">
+            <div>
+                <div id="template-icon" class="uiIcon charIcon">
+                </div>
+                <div id="template-charname" class="characterName">
+                    <div id="template-name">Chauve-souris</div>
+                </div>
+                <div id="template-fullLife" class="newLine characterLife">
+                    <div id="template-life"></div>
+                    <div id="template-hptooltip" class="tooltip">?/?</div>
+                </div>
+                <div id="template-skill1" class="newLine uiIcon"></div>
+                <div id="template-skill2" class="uiIcon"></div>
+                <div id="template-skill3" class="uiIcon"></div>
+                <div id="template-skill4" class="uiIcon"></div>
+                <div id="template-skill5" class="uiIcon"></div>
+                <div id="template-skill6" class="newLine uiIcon"></div>
+                <div id="template-skill7" class="uiIcon"></div>
+                <div id="template-skill8" class="uiIcon"></div>
+                <div id="template-skill9" class="uiIcon"></div>
+                <div id="template-skill10" class="uiIcon"></div>
+            </div>
+        </div>
+    </script>
+    <script type="text/javascript">
+        'use strict';
+        // namespace
+        var murmures = {
+            serverLog: function (txt) {
+                console.log(''.concat((new Date()).toISOString(), ' - ', txt));
+            }
+        };
+    </script>
+    <script src="/src/js/core/constants.js"></script>
+    <script src="/src/js/core/skillbehavior.js"></script>
+    <script src="/src/js/core/skill.js"></script>
+    <script src="/src/js/core/character.js"></script>
+    <script src="/src/js/core/level.js"></script>
+    <script src="/src/js/core/order.js"></script>
+    <script src="/src/js/core/turnreport.js"></script>
+    <script src="/src/js/core/tile.js"></script>
+    <script src="/src/js/core/gameengine.js"></script>
+    <script src="/src/js/clientscript.js"></script>
+    <!--<script src="/src/js/clientscript.js"></script>-->
+    <!--<script src="/allClient.js"></script>-->
 </body>
 </html>

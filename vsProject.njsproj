@@ -18,6 +18,10 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Compile Include="src\js\client\base.js" />
+    <Compile Include="src\js\client\client.js" />
+    <Compile Include="src\js\client\event.js" />
+    <Compile Include="src\js\client\renderer.js" />
     <Compile Include="src\js\core\behavior.js" />
     <Compile Include="src\js\core\character.js" />
     <Compile Include="src\js\clientScript.js">
@@ -28,6 +32,7 @@
     <Compile Include="src\js\core\gameengine.js" />
     <Compile Include="src\js\core\level.js" />
     <Compile Include="src\js\core\order.js" />
+    <Compile Include="src\js\core\pathfinding.js" />
     <Compile Include="src\js\core\physicalbody.js" />
     <Compile Include="src\js\core\player.js" />
     <Compile Include="src\js\core\skill.js" />
@@ -42,6 +47,7 @@
     <Content Include="data\reference\skill.json" />
     <Content Include="data\tmp.json" />
     <Content Include="package.json" />
+    <Content Include="src\css\editor.css" />
     <Content Include="src\pages\client.html" />
     <Content Include="data\reference\assets.json" />
     <Content Include="data\staticlevels\level1.json" />
@@ -54,6 +60,7 @@
     <Content Include="src\img\murmures.png" />
     <Content Include="src\css\client.css" />
     <Content Include="src\pages\leveleditor.html" />
+    <Content Include="src\pages\pathfinding.html" />
     <Content Include="src\pages\test.html" />
   </ItemGroup>
   <ItemGroup>

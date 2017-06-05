@@ -81,20 +81,19 @@ var murmures = {
             }
 
             let chosenSkill= [];
-            let nbSkill = Object.keys(gameEngine.skills).length;
-            //mainSkill is used to retrieve the min id of the skills of the hero in the aim to active the first skil on browser
-            //The skills are shown on browser in Id Order 
-            let mainSkill = -1;             
             for(let loopSkill =0;loopSkill < 2;loopSkill ++){
               let rd=1;
+              let nbSkill = 0;
+              for(let itSkill in gameEngine.skills) nbSkill ++;
               do{
                 rd = (Math.floor(Math.random() *nbSkill) + 1)
               }while (chosenSkill.indexOf(rd)>=0);
               chosenSkill.push(rd);
-              if (mainSkill == -1 || mainSkill > rd ) mainSkill = rd;
+              if(loopSkill ==0){
+                hero1.activeSkill = rd;
+              }
               hero1.skills[rd] = gameEngine.skills[rd];
             }
-            if (mainSkill != -1) hero1.activeSkill = mainSkill;
 
             gameEngine.heros.push(hero1);
         }
@@ -208,6 +207,26 @@ var server = http.createServer(function (request, response) {
     else if (request.url === '/') {
         response.writeHead(301, { 'Location': '/src/pages/client.html' });
         response.end();
+    }
+    else if (request.url === '/allClient.js') {
+        fs.readFile('./src/js/client/client.js', function (clientErr, clientFile) {
+            if (clientErr) throw clientErr;
+            fs.readFile('./src/js/client/event.js', function (eventErr, eventFile) {
+                if (eventErr) throw eventErr;
+                fs.readFile('./src/js/client/renderer.js', function (rendererErr, rendererFile) {
+                    if (rendererErr) throw rendererErr;
+                    fs.readFile('./src/js/client/base.js', function (baseErr, baseFile) {
+                        if (baseErr) throw baseErr;
+                        compressAndSend(request, response, 'application/javascript', '' 
+                        + baseFile.toString() + '\n\n' 
+                        + rendererFile.toString().replace(/^\uFEFF/, '') + '\n\n' // strip BOM
+                        + eventFile.toString().replace(/^\uFEFF/, '') + '\n\n' // strip BOM
+                        + clientFile.toString().replace(/^\uFEFF/, '') + '\n\n' // strip BOM
+                        );
+                    });
+                });
+            });
+        });
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages

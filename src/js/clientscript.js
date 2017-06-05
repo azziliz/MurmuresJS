@@ -76,6 +76,7 @@ function loadGrayscale() {
     ctx.drawImage(gameEngine.client.tilesetImg, 0, 0);
     screenLog('drawn');
     let imageData = ctx.getImageData(0, 2239, canvas.width, 2465 - 2239);
+    screenLog('drawn2');
     let data = imageData.data;
     screenLog('getdata');
     for (let i = 0; i < data.length; i += 4) {
