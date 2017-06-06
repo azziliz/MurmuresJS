@@ -101,7 +101,10 @@ var murmures = {
 
         gameEngine.reportQueue = [];
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
-    }
+    },
+
+    clientScripts : {},
+    coreScripts : {},
 };
 
 murmures.serverLog('Loading classes');
@@ -159,19 +162,28 @@ murmures.serverLog('Initializing game');
 (function () {
     let assetsJson = fs.readFileSync('./data/reference/assets.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.bodies = JSON.parse(assetsJson);
-
+    
     let localefrJson = fs.readFileSync('./data/locale/fr.json', 'utf8').toString().replace(/^\uFEFF/, '');
     let localeenJson = fs.readFileSync('./data/locale/en.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.locale = {};
     gameEngine.locale.fr = JSON.parse(localefrJson);
     gameEngine.locale.en = JSON.parse(localeenJson);
-
+    
     let localSkills = JSON.parse(fs.readFileSync('./data/reference/skill.json', 'utf8').toString().replace(/^\uFEFF/, ''));
-    for (let skillName in localSkills){
-      let tempSkill = new murmures.Skill();
-      tempSkill.build(localSkills[skillName],skillName);
-      gameEngine.skills[tempSkill.id] = tempSkill;
+    for (let skillName in localSkills) {
+        let tempSkill = new murmures.Skill();
+        tempSkill.build(localSkills[skillName], skillName);
+        gameEngine.skills[tempSkill.id] = tempSkill;
     }
+    
+    murmures.clientScripts = '\uFEFF'; // BOM
+    ['base', 'renderer', 'uiManager', 'event', 'client'].forEach(function (scriptName) {
+        murmures.clientScripts += fs.readFileSync('./src/js/client/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
+    }, this);
+    murmures.coreScripts = '\uFEFF'; // BOM
+    ['clientBase', 'constants', 'skillbehavior', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'gameengine'].forEach(function (scriptName) {
+        murmures.coreScripts += fs.readFileSync('./src/js/core/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
+    }, this);
     murmures.restartGame();
 })();
 
@@ -209,25 +221,11 @@ var server = http.createServer(function (request, response) {
         response.writeHead(301, { 'Location': '/src/pages/client.html' });
         response.end();
     }
+    else if (request.url === '/allCore.js') {
+        compressAndSend(request, response, 'application/javascript', murmures.coreScripts);
+    }
     else if (request.url === '/allClient.js') {
-        fs.readFile('./src/js/client/client.js', function (clientErr, clientFile) {
-            if (clientErr) throw clientErr;
-            fs.readFile('./src/js/client/event.js', function (eventErr, eventFile) {
-                if (eventErr) throw eventErr;
-                fs.readFile('./src/js/client/renderer.js', function (rendererErr, rendererFile) {
-                    if (rendererErr) throw rendererErr;
-                    fs.readFile('./src/js/client/base.js', function (baseErr, baseFile) {
-                        if (baseErr) throw baseErr;
-                        compressAndSend(request, response, 'application/javascript', '' 
-                        + baseFile.toString() + '\n\n' 
-                        + rendererFile.toString().replace(/^\uFEFF/, '') + '\n\n' // strip BOM
-                        + eventFile.toString().replace(/^\uFEFF/, '') + '\n\n' // strip BOM
-                        + clientFile.toString().replace(/^\uFEFF/, '') + '\n\n' // strip BOM
-                        );
-                    });
-                });
-            });
-        });
+        compressAndSend(request, response, 'application/javascript', murmures.clientScripts);
     }
     else if (request.url.startsWith('/src/')) {
         // #region Static Pages

@@ -1,8 +1,6 @@
 ﻿'use strict';
 
-
-gameEngine.classes.Renderer = function () {
-    
+gameEngine.classes.Renderer = function () {    
     this.tileset = {
         color: {
             imgElement: {},
@@ -16,8 +14,17 @@ gameEngine.classes.Renderer = function () {
 };
 
 gameEngine.classes.Renderer.prototype = {
-    init: function () {
-        loadTileset();
+    init : function () {
+        let instance = this;
+        window.addEventListener('requestTileset', function (e) {
+            instance.downloadColorTileset();
+        }, false);
+        window.addEventListener('colorTilesetReady', function (e) {
+            instance.generateGrayscaleTileset();
+        }, false);
+        window.addEventListener('grayscaleTilesetReady', function (e) {
+            gameEngine.client.eventManager.emitEmpytEvent('tilesetReady');
+        }, false);
     },
     
     downloadColorTileset : function () {
@@ -35,7 +42,7 @@ gameEngine.classes.Renderer.prototype = {
             let img = new Image();
             img.onload = function () {
                 instance.tileset.color.imgElement = img;
-                instance.generateGrayscaleTileset();
+                gameEngine.client.eventManager.emitEmpytEvent('colorTilesetReady');                
                 if (document.getElementById('tilesetLoadBg') !== null) {
                     document.getElementById('tilesetLoadBg').style.display = 'none';
                 }
@@ -80,10 +87,9 @@ gameEngine.classes.Renderer.prototype = {
         let img = new Image();
         img.onload = function () {
             instance.tileset.gray.imgElement = img;
-            tilesetLoaded();
+            gameEngine.client.eventManager.emitEmpytEvent('grayscaleTilesetReady');
         }
         instance.tileset.gray.blobUrl = canvas.toDataURL();
         img.src = instance.tileset.gray.blobUrl;
     },
-
 };

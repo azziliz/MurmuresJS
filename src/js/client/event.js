@@ -1,13 +1,16 @@
 ﻿'use strict';
 
-gameEngine.classes.EventManager = function () {
-    
+gameEngine.classes.EventManager = function () {    
     this.eventsRegistered = false;
-
 }
 
 gameEngine.classes.EventManager.prototype = {
-      
+    emitEmpytEvent : function (type) {
+        let event = document.createEvent('CustomEvent');
+        event.initCustomEvent(type, false, false, {});
+        window.dispatchEvent(event);
+    },
+    
     registerPermanentEvents : function () {
         if (this.eventsRegistered) return; // We want to resister events only once
         
@@ -26,7 +29,7 @@ gameEngine.classes.EventManager.prototype = {
         this.onXhrError = function (e) {
             gameEngine.client.log('<span style="color:#f66">' + 'ERROR - Vous avez été déconnecté du serveur</span>', 'general');
         }
-       
+        
         // IE11 returns decimal number for MouseEvent coordinates but Chrome43 always rounds down.
         // --> using floor() for consistency.
         // and retrieves the nearest pixel coordinates.    
@@ -34,7 +37,7 @@ gameEngine.classes.EventManager.prototype = {
         let topLayer = document.getElementById('topLayer');
         if (topLayer !== null) {
         }
-
+        
         this.eventsRegistered = true;
     }
 };

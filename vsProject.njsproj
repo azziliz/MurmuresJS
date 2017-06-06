@@ -22,12 +22,14 @@
     <Compile Include="src\js\client\client.js" />
     <Compile Include="src\js\client\event.js" />
     <Compile Include="src\js\client\renderer.js" />
+    <Compile Include="src\js\client\uiManager.js" />
     <Compile Include="src\js\core\behavior.js" />
     <Compile Include="src\js\core\character.js" />
     <Compile Include="src\js\clientScript.js">
       <SubType>Code</SubType>
       <TestFramework>ExportRunner</TestFramework>
     </Compile>
+    <Compile Include="src\js\core\clientBase.js" />
     <Compile Include="src\js\core\constants.js" />
     <Compile Include="src\js\core\gameengine.js" />
     <Compile Include="src\js\core\level.js" />
@@ -39,6 +41,7 @@
     <Compile Include="src\js\core\skillbehavior.js" />
     <Compile Include="src\js\core\tile.js" />
     <Compile Include="src\js\core\turnreport.js" />
+    <Compile Include="src\js\pages\crawler.js" />
     <Compile Include="src\js\test\moduleperf.js" />
     <Compile Include="src\js\test\servertest.js" />
     <Compile Include="src\js\test\vmperf.js" />
@@ -59,6 +62,7 @@
     <Compile Include="server.js" />
     <Content Include="src\img\murmures.png" />
     <Content Include="src\css\client.css" />
+    <Content Include="src\pages\crawler.html" />
     <Content Include="src\pages\leveleditor.html" />
     <Content Include="src\pages\pathfinding.html" />
     <Content Include="src\pages\test.html" />
@@ -74,6 +78,7 @@
     <Folder Include="src\js\" />
     <Folder Include="src\js\core\" />
     <Folder Include="src\js\client\" />
+    <Folder Include="src\js\pages\" />
     <Folder Include="src\js\test\" />
     <Folder Include="src\pages\" />
   </ItemGroup>
