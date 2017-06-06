@@ -81,19 +81,20 @@ var murmures = {
             }
 
             let chosenSkill= [];
+            let nbSkill = Object.keys(gameEngine.skills).length;
+            //mainSkill is used to retrieve the min id of the skills of the hero in the aim to active the first skil on browser
+            //The skills are shown on browser in Id Order 
+            let mainSkill = -1;
             for(let loopSkill =0;loopSkill < 2;loopSkill ++){
               let rd=1;
-              let nbSkill = 0;
-              for(let itSkill in gameEngine.skills) nbSkill ++;
               do{
                 rd = (Math.floor(Math.random() *nbSkill) + 1)
               }while (chosenSkill.indexOf(rd)>=0);
               chosenSkill.push(rd);
-              if(loopSkill ==0){
-                hero1.activeSkill = rd;
-              }
+              if (mainSkill == -1 || mainSkill > rd) mainSkill = rd;
               hero1.skills[rd] = gameEngine.skills[rd];
             }
+            if (mainSkill != -1) hero1.activeSkill = mainSkill;
 
             gameEngine.heros.push(hero1);
         }
