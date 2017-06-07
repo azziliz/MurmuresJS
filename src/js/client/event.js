@@ -5,29 +5,30 @@ gameEngine.classes.EventManager = function () {
 }
 
 gameEngine.classes.EventManager.prototype = {
-    emitEmpytEvent : function (type) {
+    emitEvent : function (type, payload) {
         let event = document.createEvent('CustomEvent');
-        event.initCustomEvent(type, false, false, {});
+        event.initCustomEvent(type, false, false, payload);
         window.dispatchEvent(event);
     },
     
-    registerPermanentEvents : function () {
+    init : function () {
         if (this.eventsRegistered) return; // We want to resister events only once
         
+        let instance = this;
         gameEngine.client.ws.onmessage = function (event) {
             let message = JSON.parse(event.data);
             if (message.fn === 'init') {
                 let ge = message.payload;
-                loadEngine(ge);
+                instance.emitEvent('engineReceivedFromServer', ge);
             }
             else if (message.fn === 'o') {
                 let orderResponse = message.payload;
-                onOrderResponse(orderResponse);
+                instance.emitEvent('orderResponseReceivedFromServer', orderResponse);
             }
         };
         
         this.onXhrError = function (e) {
-            gameEngine.client.log('<span style="color:#f66">' + 'ERROR - Vous avez été déconnecté du serveur</span>', 'general');
+            gameEngine.client.uiManager.log('<span style="color:#f66">' + 'ERROR - Vous avez été déconnecté du serveur</span>', 'general');
         }
         
         // IE11 returns decimal number for MouseEvent coordinates but Chrome43 always rounds down.
