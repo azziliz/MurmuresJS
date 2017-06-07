@@ -29,9 +29,9 @@ window.onload = function () {
     window.addEventListener('engineReceivedFromServer', function (e) {
         gameEngine.initialize(e.detail);
         gameEngine.client.eventManager.emitEvent('requestCrawlUi');
-        //clearUI();
-        //initUI();
-        //resetCanvas();
+    }, false);
+    window.addEventListener('mainWindowReady', function (e) {
+        gameEngine.client.eventManager.emitEvent('initializeCrawl');
         //drawTiles(gameEngine);
         //registerEvents();
     }, false);

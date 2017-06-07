@@ -32,6 +32,11 @@ gameEngine.classes.Renderer.prototype = {
         window.addEventListener('grayscaleTilesetReady', function (e) {
             gameEngine.client.eventManager.emitEvent('tilesetReady');
         }, false);
+        window.addEventListener('initializeCrawl', function (e) {
+            instance.resetCanvas();
+            instance.drawTiles(gameEngine);
+            instance.drawCharacters();
+        }, false);
     },
     
     // #region tileset
@@ -113,5 +118,126 @@ gameEngine.classes.Renderer.prototype = {
         gameEngine.client.eventManager.emitEvent('tilesetLoadProgress', 95);
     },
     // #endregion
+    
+    resetCanvas : function () {
+        
+        // TODO : have a window the size of the viewport that hides canvas overflow and centers on the heroes
+        // http://jsfiddle.net/NUNNf/4/
+        // https://www.kirupa.com/html5/clipping_content_using_css.htm
+        
+        [].forEach.call(document.getElementsByTagName('canvas'), function (canvas) {
+            canvas.width = gameEngine.level.width * gameEngine.tileSize; // This is a hard reset of all canvas and is quite time consumming.
+            canvas.height = gameEngine.level.height * gameEngine.tileSize;
+            let context = canvas.getContext('2d');
+            context.imageSmoothingEnabled = false;
+        });
+    },
+    
+    drawTiles : function (partialEngine) {
+        for (let y = 0; y < gameEngine.level.height; y++) {
+            for (let x = 0; x < gameEngine.level.width; x++) {
+                if (gameEngine.level.tiles[y][x].state === murmures.C.TILE_HIGHLIGHTED) {
+                    document.getElementById('fogOfWarLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+                }
+            }
+        }
+        if (typeof partialEngine !== 'undefined' && typeof partialEngine.level !== 'undefined' && typeof partialEngine.level.tiles !== 'undefined') {
+            partialEngine.level.tiles.forEach(function (tileRow) {
+                tileRow.forEach(function (tile) {
+                    this.drawOneTile(tile.x, tile.y);
+                }, this);
+            }, this);
+        }
+    },
+    
+    drawOneTile : function (x, y) {
+        if (gameEngine.level.tiles[y][x].state !== murmures.C.TILE_NOT_DISCOVERED) {
+            document.getElementById('tilesLayer').getContext('2d').clearRect(gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+            this.drawOneLayer(x, y, 'groundId');
+            this.drawOneLayer(x, y, 'groundDeco');
+            this.drawOneLayer(x, y, 'propId');
+            this.drawOneLayer(x, y, 'propDeco');
+            this.drawOneLayer(x, y, 'itemId');
+            this.drawOneLayer(x, y, 'effectId');
+        }
+        if (gameEngine.level.tiles[y][x].state === murmures.C.TILE_FOG_OF_WAR) {
+            this.drawOneSquare(document.getElementById('fogOfWarLayer').getContext('2d'), x, y, "#000000", true);
+        }
+    },
+    
+    drawOneLayer : function (x, y, layerId) {
+        if (gameEngine.level.tiles[y][x][layerId] !== '') {
+            let tilesetRank = gameEngine.bodies[gameEngine.level.tiles[y][x][layerId]].rank;
+            let tilesetX = tilesetRank % 64;
+            let tilesetY = (tilesetRank - tilesetX) / 64;
+            document.getElementById('tilesLayer').getContext('2d').drawImage(this.tileset.color.imgElement,
+                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * x, gameEngine.tileSize * y, gameEngine.tileSize, gameEngine.tileSize);
+        }
+    },
+    
+    drawOneSquare : function (context, x, y, color, filled) {
+        context.beginPath();
+        if (filled || y === 0) {
+            context.moveTo(gameEngine.tileSize * x, gameEngine.tileSize * y);
+            context.lineTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y);
+        }
+        else {
+            context.moveTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y);
+        }
+        context.lineTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y + gameEngine.tileSize);
+        context.lineTo(gameEngine.tileSize * x, gameEngine.tileSize * y + gameEngine.tileSize);
+        if (filled || x === 0) {
+            context.lineTo(gameEngine.tileSize * x, gameEngine.tileSize * y);
+        }
+        context.strokeStyle = color;
+        context.stroke();
+        if (filled) {
+            context.closePath();
+            context.fillStyle = color;
+            context.fill();
+        }
+    },
+    
+    clearCharacterLayer : function () {
+        document.getElementById('characterLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
+    },
+    
+    drawCharacters : function () {
+        if (typeof gameEngine.level.mobs != 'undefined') {
+            for (let i = 0; i < gameEngine.level.mobs.length; i++) {
+                // TODO : move mobIsSeen to murmures.Character
+                let mobIsSeen = false;
+                for (let itVision in gameEngine.level.mobs[i].onVisionCharacters) {
+                    if (gameEngine.level.mobs[i].onVisionCharacters[itVision]) {
+                        mobIsSeen = true;
+                        break;
+                    }
+                }
+                
+                if (gameEngine.level.mobs[i].hitPoints === 0 || !mobIsSeen) {
+                }
+                else {
+                    this.drawCharacter(gameEngine.level.mobs[i]);
+                }
+            }
+        }
+        for (let i = 0; i < gameEngine.heros.length; i++) {
+            this.drawCharacter(gameEngine.heros[i]);
+        }
+    },
+    
+    drawCharacter : function (character) {
+        let tilesetRank = gameEngine.bodies[character.mobTemplate].rank;
+        let tilesetX = tilesetRank % 64;
+        let tilesetY = (tilesetRank - tilesetX) / 64;
+        if (gameEngine.level.tiles[character.position.y][character.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
+            document.getElementById('characterLayer').getContext('2d').drawImage(
+                !character.isHero || character.stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS ? this.tileset.color.imgElement : this.tileset.gray.imgElement,
+                    tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
+                    gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);
+        }
+    },
+    
 
 };
