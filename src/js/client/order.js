@@ -1,0 +1,50 @@
+﻿'use strict';
+
+gameEngine.classes.OrderManager = function () {
+    this.allowOrders = true;
+}
+
+gameEngine.classes.OrderManager.prototype = {
+    init : function () {
+        let instance = this;
+        window.addEventListener('launchOrder', function (e) {
+            let order = e.detail;
+            let check = gameEngine.checkOrder(order);
+            if (instance.allowOrders) {
+                if (check.valid) {
+                    document.getElementById('hero' + order.source.guid + '-box').dataset.order = JSON.stringify(order);
+                    gameEngine.client.uiManager.log('>> order - ' + order.command);
+                    order.clean();
+                    gameEngine.client.ws.send(JSON.stringify({ service: 'order', payload: order }));
+                    instance.allowOrders = false;
+                }
+                else {
+                    gameEngine.client.uiManager.log('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
+                }
+            }
+            else {
+                gameEngine.client.uiManager.log('<span style="color:#f66">' + 'WARNING - Order was discarded - Waiting for server response </span>');
+            }
+        }, false);
+        window.addEventListener('orderResponseReceivedFromServer', function (e) {
+            instance.allowOrders = true;
+            let ge = e.detail;
+            if (typeof ge === 'undefined') return;
+            if (typeof ge.error !== 'undefined') {
+                gameEngine.client.uiManager.log('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
+            }
+            else {
+                let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
+                gameEngine.synchronize(ge);
+                if (isNewLevel) {
+                    gameEngine.client.eventManager.emitEvent('initializeCrawl');
+                }
+                else {
+                    gameEngine.client.eventManager.emitEvent('updateCrawlFromPartialGe', ge);
+                }
+                gameEngine.client.eventManager.emitEvent('requestRenderReportQueue');
+            }
+        }, false);
+
+    },
+};

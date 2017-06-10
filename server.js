@@ -25,7 +25,7 @@ var murmures = {
      * @private
      */
     startTime: process.hrtime(),
-
+    
     /**
      * Writes timestamped log to the console.
      * @public
@@ -38,7 +38,7 @@ var murmures = {
         }
         return fdiff;
     },
-
+    
     restartGame: function (targetLevel) {
         gameEngine.levels = [];
         gameEngine.activeLevel = 0;
@@ -56,14 +56,14 @@ var murmures = {
             loopCounter++;
         }, this);
         gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-
+        
         gameEngine.heros = [];
         let allHeroesKeys = [];
         for (let assetId in gameEngine.bodies) {
             let ref = gameEngine.bodies[assetId];
             if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') allHeroesKeys.push(assetId);
         }
-
+        
         let chosenHeroesKeys = [];
         let chosenHero;
         for (loopCounter = 0; loopCounter < 3; loopCounter++) {
@@ -79,30 +79,30 @@ var murmures = {
                 hero1.setVision();
                 hero1.stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
             }
-
+            
             let chosenSkill= [];
             let nbSkill = Object.keys(gameEngine.skills).length;
             //mainSkill is used to retrieve the min id of the skills of the hero in the aim to active the first skil on browser
             //The skills are shown on browser in Id Order 
             let mainSkill = -1;
-            for(let loopSkill =0;loopSkill < 2;loopSkill ++){
-              let rd=1;
-              do{
-                rd = (Math.floor(Math.random() *nbSkill) + 1)
-              }while (chosenSkill.indexOf(rd)>=0);
-              chosenSkill.push(rd);
-              if (mainSkill == -1 || mainSkill > rd) mainSkill = rd;
-              hero1.skills[rd] = gameEngine.skills[rd];
+            for (let loopSkill =0; loopSkill < 2; loopSkill++) {
+                let rd=1;
+                do {
+                    rd = (Math.floor(Math.random() * nbSkill) + 1)
+                } while (chosenSkill.indexOf(rd) >= 0);
+                chosenSkill.push(rd);
+                if (mainSkill == -1 || mainSkill > rd) mainSkill = rd;
+                hero1.skills[rd] = gameEngine.skills[rd];
             }
             if (mainSkill != -1) hero1.activeSkill = mainSkill;
-
+            
             gameEngine.heros.push(hero1);
         }
-
+        
         gameEngine.reportQueue = [];
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
     },
-
+    
     clientScripts : {},
     coreScripts : {},
 };
@@ -177,7 +177,7 @@ murmures.serverLog('Initializing game');
     }
     
     murmures.clientScripts = '\uFEFF'; // BOM
-    ['base', 'renderer', 'uiManager', 'event', 'client'].forEach(function (scriptName) {
+    ['base', 'renderer', 'ui', 'animation', 'order', 'input', 'event', 'client'].forEach(function (scriptName) {
         murmures.clientScripts += fs.readFileSync('./src/js/client/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.coreScripts = '\uFEFF'; // BOM
@@ -218,7 +218,7 @@ var server = http.createServer(function (request, response) {
         response.end();
     }
     else if (request.url === '/') {
-        response.writeHead(301, { 'Location': '/src/pages/client.html' });
+        response.writeHead(301, { 'Location': '/src/pages/crawler.html' });
         response.end();
     }
     else if (request.url === '/allCore.js') {

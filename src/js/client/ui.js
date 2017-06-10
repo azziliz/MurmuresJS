@@ -103,6 +103,9 @@ gameEngine.classes.UiManager.prototype = {
             instance.clearAllCharacters();
             instance.updateUI();
         }, false);
+        window.addEventListener('updateCrawlFromPartialGe', function (e) {
+            instance.updateUI();
+        }, false);
     },
     
     createElementFromTemplate : function (txt) {
@@ -156,7 +159,10 @@ gameEngine.classes.UiManager.prototype = {
         changeLevelButton.addEventListener('mousedown', function (e) {
             gameEngine.client.ws.send(JSON.stringify({ service: 'restart', payload: document.getElementById('levelSelect').value }));
         }, false);
-
+        window.addEventListener('newHoveredTile', function (e) {
+            let hoveredTile = e.detail;
+            document.getElementById('debugDiv').innerHTML = '[ ' + hoveredTile.x + ' , ' + hoveredTile.y + ' ]';
+        }, false);
     },
     
     log : function (txt, channel) {

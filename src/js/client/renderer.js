@@ -37,6 +37,11 @@ gameEngine.classes.Renderer.prototype = {
             instance.drawTiles(gameEngine);
             instance.drawCharacters();
         }, false);
+        window.addEventListener('updateCrawlFromPartialGe', function (e) {
+            instance.drawTiles(e.detail);
+            instance.clearCharacterLayer();
+            instance.drawCharacters();
+        }, false);
     },
     
     // #region tileset
