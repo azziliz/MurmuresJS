@@ -18,7 +18,7 @@ gameEngine.classes.UiManager = function () {
 test3<br>test4 \
 </div> \
 <div data-title="devTools"> \
-<a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br> \
+<a href="/src/pages/editor.html" style="float:left; clear: left;">level editor</a><br> \
 <a href="/src/pages/test.html" style="float:left; clear: left;">server benchmark</a><br> \
 <a href="/src/pages/pathfinding.html" style="float:left; clear: left;">pathfinding test page</a><br> \
 <select id="levelSelect"></select> \
@@ -36,6 +36,27 @@ test3<br>test4 \
         leftCharacterPanel : '<div id="leftCharacters" class="zUI" style="float:left"> \
 </div>',
         rightCharacterPanel : '<div id="rightCharacters" class="zUI" style="float:right"> \
+</div>',
+        editorPanel : '<div id="filer" style="float:left; width:10px; height:1px; margin:4px; z-index: -10;"> \
+</div> \
+<div id="leftPopup" style="position:fixed; width:4px; height:calc(100vh - 6px); border:3px solid #fff; z-index: 95;"> \
+</div> \
+<div id="leftCharacters" style="position:fixed; width:calc(80% - 15px); height:100vh; z-index: 101; background: #666; display:none; overflow-y: scroll; padding-left: 15px;"> \
+</div> \
+<div id="rightCharacters" style="position:fixed; width:calc(20% - 15px); height:100vh; z-index: 101; background: #666; display:none; overflow-y: hidden; padding-left: 15px; right: 0;"> \
+<div style="display: table;"> \
+<p><label>uniqueId</label><input type="text" id="uniqueId" readonly></p> \
+<p><label>layerId</label><input type="text" id="layerId" readonly></p> \
+<p><label>rank</label><input type="text" id="rank" readonly></p> \
+<p><label>hasPhysics</label><input type="checkbox" id="hasPhysics"></p> \
+<p><label>allowFlying</label><input type="checkbox" id="allowFlying"></p> \
+<p><label>allowTerrestrial</label><input type="checkbox" id="allowTerrestrial"></p> \
+<p><label>allowAquatic</label><input type="checkbox" id="allowAquatic"></p> \
+<p><label>allowUnderground</label><input type="checkbox" id="allowUnderground"></p> \
+<p><label>allowEthereal</label><input type="checkbox" id="allowEthereal"></p> \
+<p><label>behavior</label><input type="text" id="behavior"></p> \
+</div> \
+<button id="dumpButton">Dump</button> \
 </div>',
         crawlPanel : '<div id="crawl" style="position:relative; float:left;"> \
 <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas> \
@@ -72,6 +93,10 @@ test3<br>test4 \
 <div id="template-skill10" class="uiIcon"></div> \
 </div> \
 </div>',
+        tileUiTemplate : '<div id="template-tileContainer" style="float:left"> \
+<div id="template-icon" class="uiIcon charIcon"> \
+</div> \
+</div>',
 
     };
     // #endregion
@@ -98,6 +123,9 @@ gameEngine.classes.UiManager.prototype = {
         }, false);
         window.addEventListener('requestCrawlUi', function (e) {
             instance.drawCrawlUi();
+        }, false);
+        window.addEventListener('requestEditorUi', function (e) {
+            instance.drawEditorUi();
         }, false);
         window.addEventListener('initializeCrawl', function (e) {
             instance.clearAllCharacters();
@@ -236,6 +264,16 @@ gameEngine.classes.UiManager.prototype = {
         gameEngine.client.eventManager.emitEvent('mainWindowReady');
     },
     
+    drawEditorUi : function () {
+        if (!this.hasMainWindows()) {
+            this.drawMainWindow();
+            this.drawEditorPanel();
+            this.drawCrawlPanel();
+            this.fillLeftPanelLevelEditor();
+        }
+        gameEngine.client.eventManager.emitEvent('mainWindowReady');
+    },
+    
     drawMainWindow : function () {
         document.body.appendChild(this.createElementFromTemplate(this.template.mainWindow));
     },
@@ -248,12 +286,134 @@ gameEngine.classes.UiManager.prototype = {
         this.getMainWindows().appendChild(this.createElementFromTemplate(this.template.rightCharacterPanel));
     },
     
+    drawEditorPanel : function () {
+        this.getMainWindows().innerHTML = this.template.editorPanel;
+    },
+    
     drawCrawlPanel : function () {
         this.getMainWindows().appendChild(this.createElementFromTemplate(this.template.crawlPanel));
     },
     
     drawDeathWindow : function () {
         document.body.appendChild(this.createElementFromTemplate(this.template.deathWindow));
+    },
+    
+    fillLeftPanelLevelEditor : function () {
+        let tileUiTemplate = this.template.tileUiTemplate;
+        let templateStr = /template/g;
+        document.getElementById('leftCharacters').innerHTML = '';
+        
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Grounds</b></div>');
+        this.paintIcons('Surfaces', ['01']);
+        this.paintIcons('Walls', ['06']);
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Ground addons</b></div>');
+        this.paintIcons('Decorations', ['02', '07']);
+        this.paintIcons('Traps and marks', ['03', '04']);
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Props</b></div>');
+        this.paintIcons('Stairs and gates', ['11', '12']);
+        this.paintIcons('Other props', ['13', '14', '15']);
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Items</b></div>');
+        this.paintIcons('Various items', ['25']);
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div><b>Mobs</b></div>');
+        this.paintIcons('Aberrations', ['31']);
+        this.paintIcons('Beasts', ['32']);
+        this.paintIcons('Celestials', ['33']);
+        this.paintIcons('Constructs', ['34']);
+        this.paintIcons('Dragons', ['35']);
+        this.paintIcons('Elemental', ['36']);
+        this.paintIcons('Fey', ['37']);
+        this.paintIcons('Fiends', ['38']);
+        this.paintIcons('Giants', ['39']);
+        this.paintIcons('Humanoids', ['40']);
+        this.paintIcons('Monstrosities', ['41']);
+        this.paintIcons('Oozes', ['42']);
+        this.paintIcons('Plants', ['43']);
+        this.paintIcons('Undead', ['44']);
+        //paintIcons('Heroes', ['56']);
+        
+        let panels = document.getElementsByClassName("collapsible");
+        for (let i = 0; i < panels.length; i++) {
+            panels[i].addEventListener("mousedown", function () {
+                this.nextElementSibling.classList.toggle("show");
+            }, false);
+        }
+        
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><div>Selected</div>');
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'selectedBrush'));
+        let ref = gameEngine.bodies[selectedBrush.id];
+        let tilesetRank = ref.rank;
+        let tilesetX = tilesetRank % 64;
+        let tilesetY = (tilesetRank - tilesetX) / 64;
+        document.getElementById('selectedBrush' + '-icon').style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
+        document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+        document.getElementById('selectedBrush' + '-icon').addEventListener("mousedown", function (e) {
+            e.preventDefault();
+            document.getElementById("leftCharacters").style.display = "none";
+            document.getElementById("rightCharacters").style.display = "none";
+        }, false);
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><br><button id="exportButton">Export</button>');
+        document.getElementById('exportButton').addEventListener("mousedown", function (e) {
+            gameEngine.level.clean();
+            document.getElementById("screenLog").innerHTML = JSON.stringify(gameEngine.level);
+            document.getElementById("screenLog").style.display = "block";
+            //setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 10000);
+            //loadEngineLevelEditor(JSON.stringify(gameEngine));
+        }, false);
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend',
+                '<p><label>Id</label><input type="text" id="levelId"></p>' +
+                '<p><label>Width</label><input type="text" id="levelWidth"></p>' +
+                '<p><label>Height</label><input type="text" id="levelHeight"></p>' +
+                '<br><button id="newLevel">New level</button>');
+        document.getElementById('newLevel').addEventListener("mousedown", function (e) {
+            let newLvl = new murmures.Level();
+            newLvl.id = document.getElementById('levelId').value;
+            newLvl.width = parseInt(document.getElementById('levelWidth').value);
+            newLvl.height = parseInt(document.getElementById('levelHeight').value);
+            newLvl.layout = gameEngine.level.layout;
+            newLvl.tiles = [];
+            for (let y = 0; y < newLvl.height; y++) {
+                newLvl.tiles[y] = [];
+                for (let x = 0; x < newLvl.width; x++) {
+                    newLvl.tiles[y][x] = new murmures.Tile(x, y);
+                    newLvl.tiles[y][x][murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
+                }
+            }
+            gameEngine.level = newLvl;
+            gameEngine.initialize(JSON.parse(JSON.stringify(gameEngine)));
+            //resetCanvas();
+            //loadEngineLevelEditor(JSON.stringify(gameEngine));
+        }, false);
+        
+        document.getElementById('hasPhysics').addEventListener('change', saveBody);
+        document.getElementById('allowFlying').addEventListener('change', saveBody);
+        document.getElementById('allowTerrestrial').addEventListener('change', saveBody);
+        document.getElementById('allowAquatic').addEventListener('change', saveBody);
+        document.getElementById('allowUnderground').addEventListener('change', saveBody);
+        document.getElementById('allowEthereal').addEventListener('change', saveBody);
+        document.getElementById('behavior').addEventListener('change', saveBody);
+        document.getElementById('dumpButton').addEventListener('mousedown', function (event) {
+            //cleanup
+            for (let key in gameEngine.bodies) {
+                let body = gameEngine.bodies[key];
+                //if (['31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44'].indexOf(body.layerId) >= 0) {
+                //    body.isMob = true;
+                //}
+                //if (['56', ].indexOf(body.layerId) >= 0) {
+                //    body.isHero = true;
+                //}
+                if (!body.hasPhysics) delete body.hasPhysics;
+                if (!body.allowFlying) delete body.allowFlying;
+                if (!body.allowTerrestrial) delete body.allowTerrestrial;
+                if (!body.allowAquatic) delete body.allowAquatic;
+                if (!body.allowUnderground) delete body.allowUnderground;
+                if (!body.allowEthereal) delete body.allowEthereal;
+                if (JSON.stringify(body.behavior) === '{}') delete body.behavior;
+            }
+            document.getElementById("screenLog").innerHTML = JSON.stringify(gameEngine.bodies);
+            document.getElementById("screenLog").style.display = "block";
+            //setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 10000);
+            //loadEngineLevelEditor(JSON.stringify(gameEngine));
+        });
     },
     // #endregion
     
@@ -399,8 +559,56 @@ gameEngine.classes.UiManager.prototype = {
             }
         }
     },
+    
+    paintIcons : function (title, layerId) {
+        let tileUiTemplate = this.template.tileUiTemplate;
+        let templateStr = /template/g;
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div class="collapsible">' + title + '</div>');
+        document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div class="collapsiblepanel" id="subpanel.' + layerId[0] + '"></div>');
+        for (let groundId in gameEngine.bodies) {
+            let ref = gameEngine.bodies[groundId];
+            if (layerId.indexOf(ref.layerId) >= 0) {
+                let tilesetRank = ref.rank;
+                let tilesetX = tilesetRank % 64;
+                let tilesetY = (tilesetRank - tilesetX) / 64;
+                let groundCopy = groundId;
+                document.getElementById('subpanel.' + layerId[0]).insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, groundId));
+                document.getElementById(groundId + '-icon').style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
+                document.getElementById(groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+                document.getElementById(groundId + '-icon').addEventListener("mousedown", function (e) {
+                    e.preventDefault();
+                    if (e.button === 2) {
+                        for (let key in gameEngine.bodies) {
+                            if (gameEngine.bodies[key].rank === tilesetRank) {
+                                let body = gameEngine.bodies[key];
+                                document.getElementById('uniqueId').value = key;
+                                document.getElementById('layerId').value = body.layerId;
+                                document.getElementById('rank').value = body.rank;
+                                document.getElementById('hasPhysics').checked = body.hasPhysics;
+                                document.getElementById('allowFlying').checked = body.allowFlying;
+                                document.getElementById('allowTerrestrial').checked = body.allowTerrestrial;
+                                document.getElementById('allowAquatic').checked = body.allowAquatic;
+                                document.getElementById('allowUnderground').checked = body.allowUnderground;
+                                document.getElementById('allowEthereal').checked = body.allowEthereal;
+                                document.getElementById('behavior').value = typeof body.behavior === 'undefined' ? '{}' : JSON.stringify(body.behavior);
+                            }
+                        }
+                    }
+                    else {
+                        selectedBrush.id = groundCopy;
+                        selectedBrush.layerId = ref.layerId;
+                        document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
+                        document.getElementById("leftCharacters").style.display = "none";
+                        document.getElementById("rightCharacters").style.display = "none";
+                    }
+                }, false);
+                document.getElementById(groundId + '-icon').addEventListener("contextmenu", function (e) { // mouse right click
+                    e.preventDefault();
+                }, false);
+
+            }
+        }
+    },
     // #endregion
     
-
-
 };

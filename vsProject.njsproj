@@ -45,6 +45,7 @@
     <Compile Include="src\js\core\tile.js" />
     <Compile Include="src\js\core\turnreport.js" />
     <Compile Include="src\js\pages\crawler.js" />
+    <Compile Include="src\js\pages\editor.js" />
     <Compile Include="src\js\test\moduleperf.js" />
     <Compile Include="src\js\test\servertest.js" />
     <Compile Include="src\js\test\vmperf.js" />
@@ -66,6 +67,7 @@
     <Content Include="src\img\murmures.png" />
     <Content Include="src\css\client.css" />
     <Content Include="src\pages\crawler.html" />
+    <Content Include="src\pages\editor.html" />
     <Content Include="src\pages\leveleditor.html" />
     <Content Include="src\pages\pathfinding.html" />
     <Content Include="src\pages\test.html" />

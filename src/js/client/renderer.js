@@ -20,6 +20,9 @@ gameEngine.classes.Renderer.prototype = {
         window.addEventListener('requestTileset', function (e) {
             instance.downloadColorTileset();
         }, false);
+        window.addEventListener('requestHighlight', function (e) {
+            instance.highlightLevel();
+        }, false);
         window.addEventListener('colorTilesetReady', function (e) {
             instance.initGrayscaleTileset();
         }, false);
@@ -125,7 +128,6 @@ gameEngine.classes.Renderer.prototype = {
     // #endregion
     
     resetCanvas : function () {
-        
         // TODO : have a window the size of the viewport that hides canvas overflow and centers on the heroes
         // http://jsfiddle.net/NUNNf/4/
         // https://www.kirupa.com/html5/clipping_content_using_css.htm
@@ -138,6 +140,15 @@ gameEngine.classes.Renderer.prototype = {
         });
     },
     
+    highlightLevel : function () {
+        for (let x = 0; x < gameEngine.level.width; x++) {
+            for (let y = 0; y < gameEngine.level.height; y++) {
+                gameEngine.level.tiles[y][x].state = murmures.C.TILE_HIGHLIGHTED;
+            }
+        }
+    },
+    
+    // #region tiles
     drawTiles : function (partialEngine) {
         for (let y = 0; y < gameEngine.level.height; y++) {
             for (let x = 0; x < gameEngine.level.width; x++) {
@@ -203,7 +214,9 @@ gameEngine.classes.Renderer.prototype = {
             context.fill();
         }
     },
+    // #endregion
     
+    // #region characters
     clearCharacterLayer : function () {
         document.getElementById('characterLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
     },
@@ -243,6 +256,7 @@ gameEngine.classes.Renderer.prototype = {
                     gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);
         }
     },
+    // #endregion
     
 
 };
