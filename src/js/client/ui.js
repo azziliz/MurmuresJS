@@ -340,7 +340,7 @@ gameEngine.classes.UiManager.prototype = {
         
         document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><div>Selected</div>');
         document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'selectedBrush'));
-        let ref = gameEngine.bodies[selectedBrush.id];
+        let ref = gameEngine.bodies[gameEngine.client.editor.selectedBrush.id];
         let tilesetRank = ref.rank;
         let tilesetX = tilesetRank % 64;
         let tilesetY = (tilesetRank - tilesetX) / 64;
@@ -375,7 +375,7 @@ gameEngine.classes.UiManager.prototype = {
                 newLvl.tiles[y] = [];
                 for (let x = 0; x < newLvl.width; x++) {
                     newLvl.tiles[y][x] = new murmures.Tile(x, y);
-                    newLvl.tiles[y][x][murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
+                    newLvl.tiles[y][x][murmures.C.LAYERS[gameEngine.client.editor.selectedBrush.layerId][1]] = gameEngine.client.editor.selectedBrush.id;
                 }
             }
             gameEngine.level = newLvl;
@@ -384,13 +384,13 @@ gameEngine.classes.UiManager.prototype = {
             //loadEngineLevelEditor(JSON.stringify(gameEngine));
         }, false);
         
-        document.getElementById('hasPhysics').addEventListener('change', saveBody);
-        document.getElementById('allowFlying').addEventListener('change', saveBody);
-        document.getElementById('allowTerrestrial').addEventListener('change', saveBody);
-        document.getElementById('allowAquatic').addEventListener('change', saveBody);
-        document.getElementById('allowUnderground').addEventListener('change', saveBody);
-        document.getElementById('allowEthereal').addEventListener('change', saveBody);
-        document.getElementById('behavior').addEventListener('change', saveBody);
+        document.getElementById('hasPhysics').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowFlying').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowTerrestrial').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowAquatic').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowUnderground').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowEthereal').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('behavior').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
         document.getElementById('dumpButton').addEventListener('mousedown', function (event) {
             //cleanup
             for (let key in gameEngine.bodies) {
@@ -523,6 +523,9 @@ gameEngine.classes.UiManager.prototype = {
             document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
             this.drawSkill(gameEngine.heros[i]);
         }    },
+    
+    updateEditor : function () {
+    },
     
     drawSkill : function (hero) {
         let nbSkill = 1;
