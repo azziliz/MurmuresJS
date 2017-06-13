@@ -39,7 +39,8 @@ window.onload = function () {
         }
     }, false);
     window.addEventListener('mainWindowReady', function (e) {
-        gameEngine.client.eventManager.emitEvent('initializeCrawl');
+        gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
+        gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
         //drawTiles(gameEngine);
         //registerEvents();
     }, false);

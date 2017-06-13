@@ -127,11 +127,8 @@ gameEngine.classes.UiManager.prototype = {
         window.addEventListener('requestEditorUi', function (e) {
             instance.drawEditorUi();
         }, false);
-        window.addEventListener('initializeCrawl', function (e) {
+        window.addEventListener('requestRefreshCrawlUi', function (e) {
             instance.clearAllCharacters();
-            instance.updateUI();
-        }, false);
-        window.addEventListener('updateCrawlFromPartialGe', function (e) {
             instance.updateUI();
         }, false);
     },

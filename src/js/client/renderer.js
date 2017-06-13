@@ -35,12 +35,12 @@ gameEngine.classes.Renderer.prototype = {
         window.addEventListener('grayscaleTilesetReady', function (e) {
             gameEngine.client.eventManager.emitEvent('tilesetReady');
         }, false);
-        window.addEventListener('initializeCrawl', function (e) {
+        window.addEventListener('requestRenderFullEngine', function (e) {
             instance.resetCanvas();
             instance.drawTiles(gameEngine);
             instance.drawCharacters();
         }, false);
-        window.addEventListener('updateCrawlFromPartialGe', function (e) {
+        window.addEventListener('requestRenderPartialEngine', function (e) {
             instance.drawTiles(e.detail);
             instance.clearCharacterLayer();
             instance.drawCharacters();

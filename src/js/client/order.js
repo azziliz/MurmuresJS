@@ -37,10 +37,12 @@ gameEngine.classes.OrderManager.prototype = {
                 let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
                 gameEngine.synchronize(ge);
                 if (isNewLevel) {
-                    gameEngine.client.eventManager.emitEvent('initializeCrawl');
+                    gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
+                    gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
                 }
                 else {
-                    gameEngine.client.eventManager.emitEvent('updateCrawlFromPartialGe', ge);
+                    gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
+                    gameEngine.client.eventManager.emitEvent('requestRenderPartialEngine', ge);
                 }
                 gameEngine.client.eventManager.emitEvent('requestRenderReportQueue');
             }
