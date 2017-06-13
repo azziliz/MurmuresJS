@@ -7,6 +7,32 @@ gameEngine.classes.OrderManager = function () {
 gameEngine.classes.OrderManager.prototype = {
     init : function () {
         let instance = this;
+        window.addEventListener('leftClickOnTile', function (e) {
+            let hoveredTile = e.detail;
+            let currentHero = instance.getCurrentHero();
+            //TODO : hasmob return mob or hero same way. It is not considering if a hero is in move or not.
+            // In future version, hero must have command move, if the tile contains a hero going on another tile
+            // In next version, we have to check the skill... if it is a skll not applying to a hero, it is a move command
+            if (hoveredTile.hasMob.code && !hoveredTile.hasMob.isHero) {
+                let attackOrder = new murmures.Order();
+                attackOrder.command = 'attack';
+                attackOrder.source = currentHero;
+                attackOrder.target = hoveredTile;
+                gameEngine.client.eventManager.emitEvent('launchOrder', attackOrder);
+            }
+            else {
+                let moveOrder = new murmures.Order();
+                moveOrder.command = 'move';
+                if (hoveredTile.hasMob.code) {
+                    if (currentHero.skills[currentHero.activeSkill].targetaudience != murmures.C.TARGET_AUDIENCE_MOB) {
+                        moveOrder.command = 'attack';
+                    }
+                }
+                moveOrder.source = currentHero;
+                moveOrder.target = hoveredTile;
+                gameEngine.client.eventManager.emitEvent('launchOrder', moveOrder);
+            }
+        }, false);
         window.addEventListener('launchOrder', function (e) {
             let order = e.detail;
             let check = gameEngine.checkOrder(order);
@@ -47,6 +73,17 @@ gameEngine.classes.OrderManager.prototype = {
                 gameEngine.client.eventManager.emitEvent('requestRenderReportQueue');
             }
         }, false);
+    },
 
+    getCurrentHero : function () {
+        let heroToReturn = null;
+        let itHero = 0;
+        while (heroToReturn === null && itHero < gameEngine.heros.length) {
+            if (gameEngine.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS) {
+                heroToReturn = gameEngine.heros[itHero];
+            }
+            itHero++;
+        }
+        return heroToReturn;
     },
 };

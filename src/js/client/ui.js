@@ -411,6 +411,15 @@ gameEngine.classes.UiManager.prototype = {
             //setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 10000);
             //loadEngineLevelEditor(JSON.stringify(gameEngine));
         });
+
+        topLayer.addEventListener("contextmenu", function () { // mouse right click
+            event.preventDefault();
+        }, false);
+        document.getElementById("leftPopup").addEventListener("mouseover", function () {
+            document.getElementById("leftCharacters").style.display = "block";
+            document.getElementById("rightCharacters").style.display = "block";
+        }, false);
+
     },
     // #endregion
     
@@ -595,8 +604,8 @@ gameEngine.classes.UiManager.prototype = {
                         }
                     }
                     else {
-                        selectedBrush.id = groundCopy;
-                        selectedBrush.layerId = ref.layerId;
+                        gameEngine.client.editor.selectedBrush.id = groundCopy;
+                        gameEngine.client.editor.selectedBrush.layerId = ref.layerId;
                         document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
                         document.getElementById("leftCharacters").style.display = "none";
                         document.getElementById("rightCharacters").style.display = "none";

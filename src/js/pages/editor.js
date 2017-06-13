@@ -28,7 +28,7 @@ window.onload = function () {
         gameEngine.client.eventManager.emitEvent('requestEditorUi');
     }, false);
     window.addEventListener('mainWindowReady', function (e) {
-        gameEngine.client.eventManager.emitEvent('initializeEditor');
+        gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
     }, false);
     window.addEventListener('editorSave', function (e) {
         let body = {};
@@ -47,5 +47,16 @@ window.onload = function () {
         body.behavior = JSON.parse(document.getElementById('behavior').value);
         gameEngine.bodies[uniqueId] = body;
     }, false);
+    window.addEventListener('leftClickOnTile', function (e) {
+        let hoveredTile = e.detail;
+        hoveredTile[murmures.C.LAYERS[gameEngine.client.editor.selectedBrush.layerId][1]] = gameEngine.client.editor.selectedBrush.id;
+        gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+    }, false);
+    window.addEventListener('rightClickOnTile', function (e) {
+        let hoveredTile = e.detail;
+        hoveredTile[murmures.C.LAYERS[gameEngine.client.editor.selectedBrush.layerId][1]] = '';
+        gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+    }, false);
+
     gameEngine.client.eventManager.emitEvent('requestTileset');
 };
