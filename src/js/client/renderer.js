@@ -225,14 +225,14 @@ gameEngine.classes.Renderer.prototype = {
         if (typeof gameEngine.level.mobs != 'undefined') {
             for (let i = 0; i < gameEngine.level.mobs.length; i++) {
                 // TODO : move mobIsSeen to murmures.Character
-                let mobIsSeen = false;
-                for (let itVision in gameEngine.level.mobs[i].onVisionCharacters) {
-                    if (gameEngine.level.mobs[i].onVisionCharacters[itVision]) {
-                        mobIsSeen = true;
-                        break;
-                    }
-                }
-                
+                //let mobIsSeen = false;
+                //for (let itVision in gameEngine.level.mobs[i].onVisionCharacters) {
+                //    if (gameEngine.level.mobs[i].onVisionCharacters[itVision]) {
+                //        mobIsSeen = true;
+                //        break;
+                //    }
+                //}
+                let mobIsSeen = (gameEngine.level.mobs[i].position.state === murmures.C.TILE_HIGHLIGHTED);
                 if (gameEngine.level.mobs[i].hitPoints === 0 || !mobIsSeen) {
                 }
                 else {
