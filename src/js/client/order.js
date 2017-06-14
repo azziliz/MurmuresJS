@@ -7,6 +7,34 @@ gameEngine.classes.OrderManager = function () {
 gameEngine.classes.OrderManager.prototype = {
     init : function () {
         let instance = this;
+        window.addEventListener('newHoveredTile', function (e) {
+            let hoveredTile = e.detail;
+            let order = new murmures.Order();
+            let currentHero = instance.getCurrentHero();
+            order.source = currentHero;
+            order.target = hoveredTile;
+            if (hoveredTile.hasMob.code) {
+                order.command = 'attack';
+            }
+            else {
+                order.command = 'move';
+            }
+            let check = gameEngine.checkOrder(order);
+            if (check.valid) {
+                if (order.command === 'move') {
+                    window.requestAnimationFrame(function (timestamp) {
+                        gameEngine.client.animationManager.queueTrail(order.source.position, order.target, timestamp, timestamp + 200);
+                    });
+                }
+                else if (order.command === 'attack') {
+                    window.requestAnimationFrame(function (timestamp) {
+                        gameEngine.client.animationManager.queueProjectile(timestamp, order.source.position, order.target);
+                    });
+                }
+            }
+            else {
+            }
+        }, false);
         window.addEventListener('leftClickOnTile', function (e) {
             let hoveredTile = e.detail;
             let currentHero = instance.getCurrentHero();
