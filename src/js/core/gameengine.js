@@ -251,6 +251,14 @@ murmures.GameEngine.prototype = {
             for (let itOrders = 0; itOrders < this.orderQueue.length ; itOrders++) {
                 this.applyOrder(this.orderQueue[itOrders]);
             }
+            let tilesProcessed = [];
+            for (let itHero = 0; itHero < this.heros.length ; itHero++) {
+                if (typeof tilesProcessed === 'undefined') {
+                    tilesProcessed = [];
+                }
+                tilesProcessed = this.heros[itHero].setVision(tilesProcessed);
+            }
+            murmures.serverLog('Vision done');
             this.orderQueue = [];
             this.applyAI();
             murmures.serverLog('AI done');
@@ -331,14 +339,14 @@ murmures.GameEngine.prototype = {
             }
 
         }
-        let tilesProcessed = [];
+        /*let tilesProcessed = [];
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
             if (typeof tilesProcessed === 'undefined') {
                 tilesProcessed = [];
             }
             tilesProcessed = this.heros[itHero].setVision(tilesProcessed);
         }
-        murmures.serverLog('Vision done');
+        murmures.serverLog('Vision done');*/
     },
 
     applyAI : function () {
