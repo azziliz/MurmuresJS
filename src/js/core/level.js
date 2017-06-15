@@ -249,23 +249,22 @@ murmures.Level.prototype = {
     moveHeroToEndPoint: function () {
         //temporary
         // TODO : find starting point from stairs
+        let startingPoint = this.getStartingPoint();
         for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
-            if (this.id === 'level1') gameEngine.heros[itHero].position = this.tiles[9][18];
-            else if (this.id === 'level2') gameEngine.heros[itHero].position = this.tiles[3][46];
-            else if (this.id === 'level4') gameEngine.heros[itHero].position = this.tiles[9][24];
-            else if (this.id === 'level5') gameEngine.heros[itHero].position = this.tiles[15][2];
-            else gameEngine.heros[itHero].position = this.tiles[5][5];
+            gameEngine.heros[itHero].position = startingPoint;
         }
     },
 
     getStartingPoint: function () {
-        //temporary
-        // TODO : find starting point from stairs
-        if (this.id === 'level1') return this.tiles[9][1];
-        else if (this.id === 'level2') return this.tiles[15][3];
-        else if (this.id === 'level4') return this.tiles[20][5];
-        else if (this.id === 'level5') return this.tiles[15][2];
-        else return this.tiles[5][5];
+        let tilesStairUp=undefined;
+        for(let i=0;i<this.tiles.length && tilesStairUp==undefined;i++){
+            for(let j=0;j<this.tiles[i].length && tilesStairUp==undefined;j++){
+                if (this.tiles[i][j].propId.indexOf("stairs_up")>=0){
+                    tilesStairUp = this.tiles[i][j];
+                }
+            }
+        }
+        return tilesStairUp;
     },
 
     clean : function () {
