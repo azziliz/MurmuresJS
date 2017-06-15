@@ -7,16 +7,16 @@ gameEngine.classes.OrderManager = function () {
 gameEngine.classes.OrderManager.prototype = {
     init : function () {
         let instance = this;
-        window.addEventListener('newHoveredTile', function (e) {
+        window.addEventListener('tileEnter', function (e) {
             let hoveredTile = e.detail;
             let order = new murmures.Order();
             let currentHero = instance.getCurrentHero();
             order.source = currentHero;
             order.target = hoveredTile;
-            if (hoveredTile.hasMob.code) {
+            if (hoveredTile.hasMob.code && !hoveredTile.hasMob.isHero) {
                 order.command = 'attack';
             }
-            else {
+            else if (!hoveredTile.hasMob.code) {
                 order.command = 'move';
             }
             let check = gameEngine.checkOrder(order);
@@ -90,6 +90,7 @@ gameEngine.classes.OrderManager.prototype = {
             else {
                 let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
                 gameEngine.synchronize(ge);
+                gameEngine.client.ws.send(JSON.stringify({ service: 'consistencyCheck', payload: gameEngine }));
                 if (isNewLevel) {
                     gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
                     gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');

@@ -288,6 +288,8 @@ wss.on('connection', function (ws) {
                     wss.clients.forEach(function each(client) {
                         client.send(res);
                     });
+                    // cleaning
+                    gameEngine.reportQueue = [];
                 }
                 else {
                     ws.send(JSON.stringify({ fn: 'o', payload: { error: check.reason } }));
@@ -307,6 +309,17 @@ wss.on('connection', function (ws) {
         else if (message.service === 'test') {
             let test = new murmures.ServerTest();
             test.run(require);
+        }
+        else if (message.service === 'consistencyCheck') {
+            let clientGe = message.payload;
+            let diff = gameEngine.compare(clientGe);
+            if (typeof diff === 'undefined') {
+                murmures.serverLog('Consistency Check OK');
+            }
+            else {
+                murmures.serverLog('Consistency Check KO');
+                murmures.serverLog(JSON.stringify({ diff: diff }));
+            }
         }
         else {
             murmures.serverLog('Received an incorrect request:' + messageTxt.toString());

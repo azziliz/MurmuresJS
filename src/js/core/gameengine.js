@@ -104,7 +104,7 @@ murmures.GameEngine.prototype = {
         } else {
             this.level.synchronize(src.level);
         }
-        if (src.state !== 'undefined') {
+        if (typeof src.state !== 'undefined') {
             this.state = src.state;
         }
         if (typeof src.heros !== 'undefined') {
@@ -222,7 +222,6 @@ murmures.GameEngine.prototype = {
 
     saveOrder : function (order) {
         // This function is only called on server side
-
         let nbOrderDone = 0;
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
             if (this.heros[itHero].guid === order.source.guid) {

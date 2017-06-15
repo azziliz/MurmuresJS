@@ -34,9 +34,20 @@ gameEngine.classes.InputManager.prototype = {
                 e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
                 let hoveredTile = instance.getHoveredTile(e.offsetX, e.offsetY);
                 if (instance.mouseMoveTarget.x !== hoveredTile.x || instance.mouseMoveTarget.y !== hoveredTile.y) {
-                    gameEngine.client.eventManager.emitEvent('newHoveredTile', hoveredTile);
+                    gameEngine.client.eventManager.emitEvent('tileLeave', instance.mouseMoveTarget);
+                    gameEngine.client.eventManager.emitEvent('tileEnter', hoveredTile);
                     instance.mouseMoveTarget.x = hoveredTile.x;
                     instance.mouseMoveTarget.y = hoveredTile.y;
+                    if (instance.mouseIsDown) {
+                        if (e.button !== 2) {
+                            // event is a left click
+                            gameEngine.client.eventManager.emitEvent('leftClickOnTile', hoveredTile);
+                        }
+                        else {
+                            // event is a right click
+                            gameEngine.client.eventManager.emitEvent('rightClickOnTile', hoveredTile);
+                        }
+                    }
                 }
             }, false);
         }, false);
