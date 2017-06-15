@@ -30,7 +30,7 @@ murmures.Order = function () {
     this.source = {};
     /** @type {murmures.Tile} */
     this.target = {};
-    /** @type {Object.[String, String]}*/
+    /** @type {Object.<String, String>}*/
     this.custom = {};
 };
 

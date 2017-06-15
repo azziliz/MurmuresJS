@@ -127,11 +127,8 @@ gameEngine.classes.UiManager.prototype = {
         window.addEventListener('requestEditorUi', function (e) {
             instance.drawEditorUi();
         }, false);
-        window.addEventListener('initializeCrawl', function (e) {
+        window.addEventListener('requestRefreshCrawlUi', function (e) {
             instance.clearAllCharacters();
-            instance.updateUI();
-        }, false);
-        window.addEventListener('updateCrawlFromPartialGe', function (e) {
             instance.updateUI();
         }, false);
     },
@@ -187,7 +184,7 @@ gameEngine.classes.UiManager.prototype = {
         changeLevelButton.addEventListener('mousedown', function (e) {
             gameEngine.client.ws.send(JSON.stringify({ service: 'restart', payload: document.getElementById('levelSelect').value }));
         }, false);
-        window.addEventListener('newHoveredTile', function (e) {
+        window.addEventListener('tileEnter', function (e) {
             let hoveredTile = e.detail;
             document.getElementById('debugDiv').innerHTML = '[ ' + hoveredTile.x + ' , ' + hoveredTile.y + ' ]';
         }, false);
@@ -340,7 +337,7 @@ gameEngine.classes.UiManager.prototype = {
         
         document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<br><div>Selected</div>');
         document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, 'selectedBrush'));
-        let ref = gameEngine.bodies[selectedBrush.id];
+        let ref = gameEngine.bodies[gameEngine.client.editor.selectedBrush.id];
         let tilesetRank = ref.rank;
         let tilesetX = tilesetRank % 64;
         let tilesetY = (tilesetRank - tilesetX) / 64;
@@ -375,7 +372,7 @@ gameEngine.classes.UiManager.prototype = {
                 newLvl.tiles[y] = [];
                 for (let x = 0; x < newLvl.width; x++) {
                     newLvl.tiles[y][x] = new murmures.Tile(x, y);
-                    newLvl.tiles[y][x][murmures.C.LAYERS[selectedBrush.layerId][1]] = selectedBrush.id;
+                    newLvl.tiles[y][x][murmures.C.LAYERS[gameEngine.client.editor.selectedBrush.layerId][1]] = gameEngine.client.editor.selectedBrush.id;
                 }
             }
             gameEngine.level = newLvl;
@@ -384,13 +381,13 @@ gameEngine.classes.UiManager.prototype = {
             //loadEngineLevelEditor(JSON.stringify(gameEngine));
         }, false);
         
-        document.getElementById('hasPhysics').addEventListener('change', saveBody);
-        document.getElementById('allowFlying').addEventListener('change', saveBody);
-        document.getElementById('allowTerrestrial').addEventListener('change', saveBody);
-        document.getElementById('allowAquatic').addEventListener('change', saveBody);
-        document.getElementById('allowUnderground').addEventListener('change', saveBody);
-        document.getElementById('allowEthereal').addEventListener('change', saveBody);
-        document.getElementById('behavior').addEventListener('change', saveBody);
+        document.getElementById('hasPhysics').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowFlying').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowTerrestrial').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowAquatic').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowUnderground').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('allowEthereal').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('behavior').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
         document.getElementById('dumpButton').addEventListener('mousedown', function (event) {
             //cleanup
             for (let key in gameEngine.bodies) {
@@ -414,6 +411,15 @@ gameEngine.classes.UiManager.prototype = {
             //setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 10000);
             //loadEngineLevelEditor(JSON.stringify(gameEngine));
         });
+
+        topLayer.addEventListener("contextmenu", function () { // mouse right click
+            event.preventDefault();
+        }, false);
+        document.getElementById("leftPopup").addEventListener("mouseover", function () {
+            document.getElementById("leftCharacters").style.display = "block";
+            document.getElementById("rightCharacters").style.display = "block";
+        }, false);
+
     },
     // #endregion
     
@@ -524,6 +530,9 @@ gameEngine.classes.UiManager.prototype = {
             this.drawSkill(gameEngine.heros[i]);
         }    },
     
+    updateEditor : function () {
+    },
+    
     drawSkill : function (hero) {
         let nbSkill = 1;
         let instance = this;
@@ -595,8 +604,8 @@ gameEngine.classes.UiManager.prototype = {
                         }
                     }
                     else {
-                        selectedBrush.id = groundCopy;
-                        selectedBrush.layerId = ref.layerId;
+                        gameEngine.client.editor.selectedBrush.id = groundCopy;
+                        gameEngine.client.editor.selectedBrush.layerId = ref.layerId;
                         document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
                         document.getElementById("leftCharacters").style.display = "none";
                         document.getElementById("rightCharacters").style.display = "none";

@@ -35,12 +35,12 @@ gameEngine.classes.Renderer.prototype = {
         window.addEventListener('grayscaleTilesetReady', function (e) {
             gameEngine.client.eventManager.emitEvent('tilesetReady');
         }, false);
-        window.addEventListener('initializeCrawl', function (e) {
+        window.addEventListener('requestRenderFullEngine', function (e) {
             instance.resetCanvas();
             instance.drawTiles(gameEngine);
             instance.drawCharacters();
         }, false);
-        window.addEventListener('updateCrawlFromPartialGe', function (e) {
+        window.addEventListener('requestRenderPartialEngine', function (e) {
             instance.drawTiles(e.detail);
             instance.clearCharacterLayer();
             instance.drawCharacters();
@@ -225,14 +225,14 @@ gameEngine.classes.Renderer.prototype = {
         if (typeof gameEngine.level.mobs != 'undefined') {
             for (let i = 0; i < gameEngine.level.mobs.length; i++) {
                 // TODO : move mobIsSeen to murmures.Character
-                let mobIsSeen = false;
-                for (let itVision in gameEngine.level.mobs[i].onVisionCharacters) {
-                    if (gameEngine.level.mobs[i].onVisionCharacters[itVision]) {
-                        mobIsSeen = true;
-                        break;
-                    }
-                }
-                
+                //let mobIsSeen = false;
+                //for (let itVision in gameEngine.level.mobs[i].onVisionCharacters) {
+                //    if (gameEngine.level.mobs[i].onVisionCharacters[itVision]) {
+                //        mobIsSeen = true;
+                //        break;
+                //    }
+                //}
+                let mobIsSeen = (gameEngine.level.mobs[i].position.state === murmures.C.TILE_HIGHLIGHTED);
                 if (gameEngine.level.mobs[i].hitPoints === 0 || !mobIsSeen) {
                 }
                 else {

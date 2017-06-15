@@ -37,7 +37,7 @@ murmures.Character = function () {
     /** @type {number} */
     this.hitPointsMax = 0 | 0;
     /** @type {Object.<string, boolean>} */
-    this.onVisionCharacters={};
+    this.onVisionCharacters = {};
     /** @type {number} */
     this.hitPoints = 0 | 0;
     /** @type {number} */
@@ -50,8 +50,8 @@ murmures.Character = function () {
     this.charSpotted = false; // hero is known because seen at least once
     /** @type {number} */
     this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-    /** @type {Object.<integer, murmures.skill} */
-    this.skills={};
+    /** @type {Object.<integer, murmures.Skill>} */
+    this.skills = {};
     /** @type {number} */
     this.activeSkill = 0;
     /** @type {number} */
@@ -59,7 +59,7 @@ murmures.Character = function () {
 };
 
 murmures.Character.prototype = {
-
+    
     /**
      * It is expected that, when the server calls this function,
      * the Tile object in parameter is already built.
@@ -77,12 +77,12 @@ murmures.Character.prototype = {
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
 
     },
-
+    
     initialize : function (src) {
         this.guid = src.guid;
         this.synchronize(src);
     },
-
+    
     synchronize : function (src) {
         if (typeof src === 'undefined') return;
         if (typeof src.position !== 'undefined') this.move(src.position.x, src.position.y); // TODO position=null when mob becomes invisible?
@@ -98,11 +98,11 @@ murmures.Character.prototype = {
         if (typeof src.activeSkill !== 'undefined') this.activeSkill = src.activeSkill;
         if (typeof src.typeCharacter !== 'undefined') this.typeCharacter = src.typeCharacter;
     },
-
+    
     clone : function () {
         let beforeOnVisionCharacters = {};
-        for (let itVision in this.onVisionCharacters){
-          beforeOnVisionCharacters[itVision] = this.onVisionCharacters[itVision];
+        for (let itVision in this.onVisionCharacters) {
+            beforeOnVisionCharacters[itVision] = this.onVisionCharacters[itVision];
         }
         return {
             guid: this.guid,
@@ -113,11 +113,11 @@ murmures.Character.prototype = {
             range: this.range,
             defaultDamageValue: this.defaultDamageValue,
             canMove: this.canMove,
-            stateOrder :   this.stateOrder,
+            stateOrder : this.stateOrder,
             onVisionCharacters : beforeOnVisionCharacters,
         };
     },
-
+    
     compare : function (beforeState) {
         let ret = {};
         if (this.guid !== beforeState.guid) throw 'Character changed guid. This souldn\'t be happening';
@@ -130,24 +130,24 @@ murmures.Character.prototype = {
         if (this.canMove !== beforeState.canMove) ret.canMove = this.canMove;
         if (this.stateOrder !== beforeState.stateOrder) ret.stateOrder = this.stateOrder;
         if (this.charSpotted !== beforeState.charSpotted) {
-                // client discovers the mob for the first time --> send everything
-              ret.position = this.position.coordinates;
-              ret.mobTemplate = this.mobTemplate;
-              ret.hitPointsMax = this.hitPointsMax;
-              ret.hitPoints = this.hitPoints;
-              ret.range = this.range;
-              ret.defaultDamageValue = this.defaultDamageValue;
-              ret.canMove = this.canMove;
+            // client discovers the mob for the first time --> send everything
+            ret.position = this.position.coordinates;
+            ret.mobTemplate = this.mobTemplate;
+            ret.hitPointsMax = this.hitPointsMax;
+            ret.hitPoints = this.hitPoints;
+            ret.range = this.range;
+            ret.defaultDamageValue = this.defaultDamageValue;
+            ret.canMove = this.canMove;
         }
-
-
-        for (let itMap in this.onVisionCharacters){
-          if(this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]){
-              ret.onVisionCharacters = this.onVisionCharacters;
-              break;
-          }
+        
+        
+        for (let itMap in this.onVisionCharacters) {
+            if (this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]) {
+                ret.onVisionCharacters = this.onVisionCharacters;
+                break;
+            }
         }
-
+        
         for (let prop in ret) {
             // only returns ret if not empty
             ret.guid = this.guid;
@@ -155,32 +155,32 @@ murmures.Character.prototype = {
         }
         // otherwise, no return = undefined
     },
-
+    
     move : function (x, y) {
         this.position = gameEngine.level.tiles[y][x];
     },
-
+    
     get isHero() {
         let ref = gameEngine.bodies[this.mobTemplate];
         return murmures.C.LAYERS[ref.layerId][0] === 'Hero';
     },
-
-    hasSkill : function(skillId){
-      for (let s in this.skills){
-        if(this.skills[s].id == parseInt(skillId)){
-          return true;
+    
+    hasSkill : function (skillId) {
+        for (let s in this.skills) {
+            if (this.skills[s].id == parseInt(skillId)) {
+                return true;
+            }
         }
-      }
-      return false;
+        return false;
     },
-
+    
     setVision : function (tilesProcessed) {
         murmures.serverLog("hero position");
         let level = gameEngine.level;
         if (typeof tilesProcessed === 'undefined' || tilesProcessed === null) { tilesProcessed = []; }
         for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
-                let toProceed = (tilesProcessed.indexOf(level.tiles[yy][xx])<0);
+                let toProceed = (tilesProcessed.indexOf(level.tiles[yy][xx]) < 0);
                 if (toProceed) {
                     if (level.tiles[yy][xx].state === murmures.C.TILE_HIGHLIGHTED) {
                         level.tiles[yy][xx].state = murmures.C.TILE_FOG_OF_WAR;
@@ -188,7 +188,7 @@ murmures.Character.prototype = {
                 }
             }
         }
-
+        
         for (let i=0; i < 360; i++) {
             let x = Math.cos(i * 0.01745);
             let y = Math.sin(i * 0.01745);
@@ -196,14 +196,14 @@ murmures.Character.prototype = {
             let oy = this.position.y + 0.5;
             let j=0;
             let breakObstacle = false;
-            while((j<murmures.C.DEFAULT_RANGE_FOV ) && (breakObstacle===false)){
+            while ((j < murmures.C.DEFAULT_RANGE_FOV) && (breakObstacle === false)) {
                 let oxx = 0;
                 oxx = Math.floor(ox);
                 let oyy = 0;
                 oyy = Math.floor(oy);
                 if ((oxx >= 0) && (oxx < level.width) && (oyy >= 0) && (oyy < level.height)) {
-                    let toProceed = (tilesProcessed.indexOf(level.tiles[oyy][oxx])<0);
-
+                    let toProceed = (tilesProcessed.indexOf(level.tiles[oyy][oxx]) < 0);
+                    
                     let groundLight = (level.tiles[oyy][oxx].groundId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].groundId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].groundId].allowFlying;
                     let propLight = (level.tiles[oyy][oxx].propId === "") ? true : !gameEngine.bodies[level.tiles[oyy][oxx].propId].hasPhysics ? true : !!gameEngine.bodies[level.tiles[oyy][oxx].propId].allowFlying;
                     if ((!groundLight || !propLight) && (j > 0)) {
@@ -222,21 +222,21 @@ murmures.Character.prototype = {
                             hero.onVisionCharacters[this.guid] = true;
                         }
                     }
-
-                    if(toProceed){
-                      level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
-                      tilesProcessed.push(level.tiles[oyy][oxx]);
+                    
+                    if (toProceed) {
+                        level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
+                        tilesProcessed.push(level.tiles[oyy][oxx]);
                     }
-
+                    
                     ox += x;
                     oy += y;
-                }else{
-                  breakObstacle = true;
+                } else {
+                    breakObstacle = true;
                 }
-                j+=1;
+                j += 1;
             }
         }
-
+        
         return tilesProcessed;
     }
 };

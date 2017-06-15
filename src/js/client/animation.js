@@ -63,7 +63,7 @@ gameEngine.classes.AnimationManager.prototype = {
         if (heroMoves.length > 0) {
             heroMoves.forEach(function (report) {
                 window.requestAnimationFrame(function (timestamp) {
-                    instance.queueTrail(timestamp, report.sourceTile, report.targetTile);
+                    instance.queueTrail(report.sourceTile, report.targetTile, timestamp);
                 });
             }, this);
             gameEngine.reportQueue = gameEngine.reportQueue.filter(function (report) { return report.priority !== 10 });
@@ -109,12 +109,12 @@ gameEngine.classes.AnimationManager.prototype = {
         }
     },
     
-    queueTrail : function (start, sourceTile, destTile) {
+    queueTrail : function (sourceTile, destTile, start, end) {
         let ret = this.computeTrail(sourceTile, destTile);
         if (typeof ret === 'undefined') return;
         this.animationQueue.push({
             start: start,
-            end: start + 1500,
+            end: (typeof end !== 'undefined') ? end : (start + 1500),
             imgX: ret.sourceX,
             imgY: ret.sourceY,
             sourceTile: sourceTile,
@@ -122,7 +122,7 @@ gameEngine.classes.AnimationManager.prototype = {
         });
         this.animationQueue.push({
             start: start,
-            end: start + 1500,
+            end: (typeof end !== 'undefined') ? end : (start + 1500),
             imgX: ret.destX,
             imgY: ret.destY,
             sourceTile: destTile,
