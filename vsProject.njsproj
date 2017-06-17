@@ -46,6 +46,7 @@
     <Compile Include="src\js\core\turnreport.js" />
     <Compile Include="src\js\pages\crawler.js" />
     <Compile Include="src\js\pages\editor.js" />
+    <Compile Include="src\js\pages\pathfinding.js" />
     <Compile Include="src\js\test\moduleperf.js" />
     <Compile Include="src\js\test\servertest.js" />
     <Compile Include="src\js\test\vmperf.js" />

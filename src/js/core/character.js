@@ -74,6 +74,7 @@ murmures.Character.prototype = {
         this.range = (ref.range || (this.isHero ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in assets.json.
         this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in assets.json.
         this.canMove = ref.canMove || false;
+        this.charSpotted = ref.charSpotted || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
 
     },
@@ -92,6 +93,7 @@ murmures.Character.prototype = {
         if (typeof src.range !== 'undefined') this.range = src.range;
         if (typeof src.defaultDamageValue !== 'undefined') this.defaultDamageValue = src.defaultDamageValue;
         if (typeof src.canMove !== 'undefined') this.canMove = src.canMove;
+        if (typeof src.charSpotted !== 'undefined') this.charSpotted = src.charSpotted;
         if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
         if (typeof src.skills !== 'undefined') this.skills = src.skills;
@@ -113,6 +115,7 @@ murmures.Character.prototype = {
             range: this.range,
             defaultDamageValue: this.defaultDamageValue,
             canMove: this.canMove,
+            charSpotted: this.charSpotted,
             stateOrder : this.stateOrder,
             onVisionCharacters : beforeOnVisionCharacters,
         };
@@ -138,8 +141,8 @@ murmures.Character.prototype = {
             ret.range = this.range;
             ret.defaultDamageValue = this.defaultDamageValue;
             ret.canMove = this.canMove;
-        }
-        
+            ret.charSpotted = this.charSpotted;
+        }        
         
         for (let itMap in this.onVisionCharacters) {
             if (this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]) {

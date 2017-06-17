@@ -1,6 +1,5 @@
 ﻿'use strict';
 
-
 window.onload = function () {
     gameEngine.client.editor = {
         mouseIsDown : false,
@@ -50,11 +49,19 @@ window.onload = function () {
     window.addEventListener('leftClickOnTile', function (e) {
         let hoveredTile = e.detail;
         hoveredTile[murmures.C.LAYERS[gameEngine.client.editor.selectedBrush.layerId][1]] = gameEngine.client.editor.selectedBrush.id;
+        let newLvl = new murmures.Level();
+        newLvl.build(gameEngine.level); // this is mandatory to instanciate mobs from tiles.charId
+        gameEngine.level = newLvl;
+        gameEngine.client.eventManager.emitEvent('requestHighlight');
         gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
     }, false);
     window.addEventListener('rightClickOnTile', function (e) {
         let hoveredTile = e.detail;
         hoveredTile[murmures.C.LAYERS[gameEngine.client.editor.selectedBrush.layerId][1]] = '';
+        let newLvl = new murmures.Level();
+        newLvl.build(gameEngine.level); // this is mandatory to instanciate mobs from tiles.charId
+        gameEngine.level = newLvl;
+        gameEngine.client.eventManager.emitEvent('requestHighlight');
         gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
     }, false);
 

@@ -90,7 +90,7 @@ gameEngine.classes.OrderManager.prototype = {
             else {
                 let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
                 gameEngine.synchronize(ge);
-                gameEngine.client.ws.send(JSON.stringify({ service: 'consistencyCheck', payload: gameEngine }));
+                //gameEngine.client.ws.send(JSON.stringify({ service: 'consistencyCheck', payload: gameEngine }));
                 if (isNewLevel) {
                     gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
                     gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');

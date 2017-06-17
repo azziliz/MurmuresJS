@@ -181,7 +181,7 @@ murmures.serverLog('Initializing game');
         murmures.clientScripts += fs.readFileSync('./src/js/client/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.coreScripts = '\uFEFF'; // BOM
-    ['clientBase', 'constants', 'skillbehavior', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'gameengine'].forEach(function (scriptName) {
+    ['clientBase', 'constants', 'skillbehavior', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'pathfinding', 'gameengine'].forEach(function (scriptName) {
         murmures.coreScripts += fs.readFileSync('./src/js/core/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.restartGame();
@@ -198,7 +198,7 @@ function compressAndSend(request, response, contType, txt, callback) {
     if (acceptEncoding.match(/\bgzip\b/) && contType !== 'image/png') {
         zlib.gzip(txt, function (err, zipped) {
             if (err) throw err;
-            murmures.serverLog('Response compressed');
+            //murmures.serverLog('Response compressed');
             response.writeHead(200, { 'Content-Type': contType, 'Content-Encoding': 'gzip' });
             response.end(zipped, 'utf8', callback);
         });
@@ -232,8 +232,12 @@ var server = http.createServer(function (request, response) {
         try {
             let fileName = request.url;
             fs.readFile('.' + fileName, function (err, fileContent) {
-                if (err) throw err;
-                if (fileName.endsWith('.js')) {
+                if (err) {
+                    murmures.serverLog('Requested file not found:' + JSON.stringify({ err: err, requrl: fileName }));
+                    response.writeHead(400); // Bad Request
+                    response.end();
+                }
+                else if (fileName.endsWith('.js')) {
                     compressAndSend(request, response, 'application/javascript', fileContent.toString());
                 }
                 else if (fileName.endsWith('.css')) {
@@ -277,13 +281,13 @@ wss.on('connection', function (ws) {
                 let check = gameEngine.checkOrder(clientOrder);
                 if (check.valid) {
                     //gameEngine.gameTurn++;
-                    murmures.serverLog('Order checked');
+                    //murmures.serverLog('Order checked');
                     let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
-                    murmures.serverLog('State saved');
+                    //murmures.serverLog('State saved');
                     gameEngine.saveOrder(clientOrder);
                     let ge = gameEngine.compare(beforeState);
                     let res = JSON.stringify({ fn: 'o', payload: ge });
-                    murmures.serverLog('Response stringified');
+                    //murmures.serverLog('Response stringified');
                     // broadcast to all clients
                     wss.clients.forEach(function each(client) {
                         client.send(res);
@@ -314,15 +318,16 @@ wss.on('connection', function (ws) {
             let clientGe = message.payload;
             let diff = gameEngine.compare(clientGe);
             if (typeof diff === 'undefined') {
-                murmures.serverLog('Consistency Check OK');
+                //murmures.serverLog('Consistency Check OK');
             }
             else {
                 murmures.serverLog('Consistency Check KO');
                 murmures.serverLog(JSON.stringify({ diff: diff }));
+                fs.writeFileSync('./log/diff', JSON.stringify({diff: diff, client: clientGe, server: gameEngine }));
             }
         }
         else {
-            murmures.serverLog('Received an incorrect request:' + messageTxt.toString());
+            murmures.serverLog('Received an incorrect message from WS:' + messageTxt.toString());
         }
     });
 });

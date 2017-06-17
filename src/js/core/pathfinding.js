@@ -13,18 +13,26 @@
  *
  * @class
  */
-murmures.Pathfinding = {
+murmures.Pathfinding = function () {
+    /** @type {boolean} */
+    this.found = false;
+    /** @type {number} */
+    this.length = 0 | 0;
+    /** @type {Array.<murmures.Tile>} */
+    this.path = [];
+};
+
+murmures.Pathfinding.prototype = {
     /**
-     * Pathfinding function, using the A* algorithm.
+     * Compute path, using the A* algorithm.
      * Heuristic is Max(x, y), which should never overestimate the cost
      *
      * @param {murmures.Tile} source - The starting tile.
      * @param {murmures.Tile} target - The targeted tile.
      * @static
      */
-    findPath: function (source, target) {
+    compute: function (source, target) {
         murmures.serverLog("starting A*");
         let level = gameEngine.level;
-
     }
 };

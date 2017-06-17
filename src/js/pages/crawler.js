@@ -1,10 +1,7 @@
 ﻿'use strict';
 
-
-window.onload = function () {
-    
-    let debug = true;
-    
+window.onload = function () {    
+    let debug = true;    
     gameEngine.client.uiManager.init();
     if (debug) {
         gameEngine.client.eventManager.emitEvent('requestDevTools');
@@ -41,8 +38,6 @@ window.onload = function () {
     window.addEventListener('mainWindowReady', function (e) {
         gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
         gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
-        //drawTiles(gameEngine);
-        //registerEvents();
     }, false);
     gameEngine.client.eventManager.emitEvent('requestTileset');
 };

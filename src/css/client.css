@@ -161,7 +161,7 @@ div#tabContent div {
             }
 
     .characterBox .characterName {
-        width: calc(100% - 52px);
+        width: calc(100% - 56px);
         padding: 2px;
         border: 2px solid #000;
     }

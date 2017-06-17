@@ -2,89 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <title>MurmuresJS</title>
     <link rel="stylesheet" href="/src/css/client.css" media="screen">
 </head>
-<body onload="init()">
-    <header>
-        <ul id="tabs">
-            <li data-target="clientLog">Client log</li>
-            <li data-target="serverLog">Server log</li>
-            <li data-target="devTools">Dev tools</li>
-        </ul>
-    </header>
-    <div id="tabContent">
-        <div data-title="clientLog">
-            <code id="screenLog" style="margin: 3px 3px 3px 7px; height: 300px; z-index: 9999; color: white; overflow: auto; display: block;"></code>
-        </div>
-        <div data-title="serverLog">
-            test3<br>test4
-        </div>
-        <div data-title="devTools">
-            <a href="/src/pages/leveleditor.html" style="float:left; clear: left;">level editor</a><br>
-            <a href="/src/pages/test.html" style="float:left; clear: left;">server benchmark</a><br>
-            <select id="levelSelect"></select>
-            <button id="changeLevel">load</button><br>
-        </div>
-    </div>
-    <div id="tilesetLoadBg" class="tilesetLoad">
-        <div id="tilesetLoadProgress"></div>
-    </div>
-    <div style="position:fixed; bottom:0; left:0; z-index:9999">
-        <div id="debugDiv"></div>
-    </div>
-    <script type="text/javascript">
-        'use strict';
-        // namespace
-        var murmures = {
-            serverLog: function (txt) {
-                console.log(''.concat((new Date()).toISOString(), ' - ', txt));
-            }
-        };
-    </script>
-    <script src="/src/js/core/constants.js"></script>
-    <script src="/src/js/core/character.js"></script>
-    <script src="/src/js/core/level.js"></script>
-    <script src="/src/js/core/order.js"></script>
-    <script src="/src/js/core/turnreport.js"></script>
-    <script src="/src/js/core/tile.js"></script>
-    <script src="/src/js/core/gameengine.js"></script>
-    <script src="/src/js/clientscript.js"></script>
-    <script type="text/javascript">
-        'use strict';
-
-        //override
-        function loadEngine(engine) {
-            gameEngine.initialize(engine);
-            loadDevTools();
-            resetCanvas();
-            highlightLevel();
-            drawTiles(gameEngine);
-            registerEvents();
-        }
-
-        function highlightLevel() {
-            for (let x = 0; x < gameEngine.level.width; x++) {
-                for (let y = 0; y < gameEngine.level.height; y++) {
-                    gameEngine.level.tiles[y][x].state = murmures.C.TILE_FOG_OF_WAR;
-                }
-            }
-        }
-
-    </script>
-
-    <div style="float:left; position:relative;">
-        <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas>
-        <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas>
-        <canvas id="trailLayer" width="1400" height="840" style="z-index: 30"></canvas>
-        <canvas id="characterLayer" width="1400" height="840" style="z-index: 35"></canvas>
-        <canvas id="projectileLayer" width="1400" height="840" style="z-index: 40"></canvas>
-        <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas>
-    </div>
-    <div id="deathWindow" class="deathWindow" style="display:none;">
-        <p style="position:absolute;left:150px;font-size:200%;" id="deathWindowTitle"></p>
-        <p style="position:absolute;left:150px;top:200px;font-size:200%;"><a href="#" onclick="restartGame();" id="deathWindowRestartButton"></a></p>
-    </div>
+<body>
+    <script src="/allCore.js" defer></script>
+    <script src="/allClient.js" defer></script>
+    <script src="/src/js/pages/pathfinding.js" defer></script>
 </body>
 </html>
