@@ -52,7 +52,7 @@ murmures.Behavior = {
         if (gameEngine.activeLevel < gameEngine.levelIds.length - 1) {
             gameEngine.activeLevel++;
             gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-            gameEngine.level.moveHeroToStartingPoint();
+            gameEngine.level.moveHeroesToEntrance();
         }
     },
 
@@ -68,7 +68,7 @@ murmures.Behavior = {
       if (gameEngine.activeLevel >0) {
           gameEngine.activeLevel--;
           gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-          gameEngine.level.moveHeroToEndPoint();
+          gameEngine.level.moveHeroesToExit();
       }
     }
 };

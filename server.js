@@ -66,14 +66,14 @@ var murmures = {
         
         let chosenHeroesKeys = [];
         let chosenHero;
-        for (loopCounter = 0; loopCounter < 1; loopCounter++) {
+        for (loopCounter = 0; loopCounter < 3; loopCounter++) {
             do {
                 let rand = Math.floor(Math.random() * allHeroesKeys.length);
                 chosenHero = allHeroesKeys[rand];
             } while (chosenHeroesKeys.indexOf(chosenHero) >= 0); // This loop prevents duplicate heroes
             chosenHeroesKeys.push(chosenHero);
             let hero1 = new murmures.Character();
-            hero1.build(gameEngine.level.getStartingPoint(), chosenHero);
+            hero1.build(gameEngine.level.getEntrance(), chosenHero);
             hero1.typeCharacter = murmures.C.TYPE_CHARACTER_HERO;
             if (loopCounter === 0) {
                 hero1.setVision();

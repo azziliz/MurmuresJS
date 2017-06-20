@@ -2,7 +2,7 @@
 
 window.onload = function () {
     gameEngine.client.pathtest = {
-        origin : { x: 0, y: 0 },
+        origin : { x: 1, y: 1 },
     };
 
     gameEngine.client.uiManager.init();
@@ -26,7 +26,7 @@ window.onload = function () {
     window.addEventListener('tileEnter', function (e) {
         let hoveredTile = e.detail;
         let myPath = new murmures.Pathfinding();
-        myPath.compute(origin, hoveredTile);
+        console.log(myPath.compute(gameEngine.client.pathtest.origin , hoveredTile));
     }, false);
 
     gameEngine.client.eventManager.emitEvent('requestTileset');

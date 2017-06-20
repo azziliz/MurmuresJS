@@ -234,37 +234,40 @@ murmures.Level.prototype = {
         // otherwise, no return = undefined
     },
 
-    moveHeroToStartingPoint: function () {
-        //temporary
-        // TODO : find starting point from stairs
-        for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
-            if (this.id === 'level1') gameEngine.heros[itHero].position = this.tiles[9][1];
-            else if (this.id === 'level2') gameEngine.heros[itHero].position = this.tiles[15][3];
-            else if (this.id === 'level4') gameEngine.heros[itHero].position = this.tiles[20][5];
-            else if (this.id === 'level5') gameEngine.heros[itHero].position = this.tiles[15][2];
-            else gameEngine.heros[itHero].position = this.tiles[5][5];
-        }
+    moveHeroesToEntrance: function () {
+        let entrance = this.getEntrance();
+        gameEngine.heros.forEach(function (hero) {
+            hero.position = entrance;
+        }, this);
     },
 
-    moveHeroToEndPoint: function () {
-        //temporary
-        // TODO : find starting point from stairs
-        let startingPoint = this.getStartingPoint();
-        for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
-            gameEngine.heros[itHero].position = startingPoint;
-        }
+    moveHeroesToExit: function () {
+        let exit = this.getExit();
+        gameEngine.heros.forEach(function (hero) {
+            hero.position = exit;
+        }, this);
     },
-
-    getStartingPoint: function () {
-        let tilesStairUp=undefined;
-        for(let i=0;i<this.tiles.length && tilesStairUp==undefined;i++){
-            for(let j=0;j<this.tiles[i].length && tilesStairUp==undefined;j++){
-                if (this.tiles[i][j].propId.indexOf("stairs_up")>=0){
-                    tilesStairUp = this.tiles[i][j];
+    
+    getEntrance: function () {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let behavior = this.tiles[y][x].behavior;
+                if (typeof behavior !== 'undefined' && typeof behavior.move !== 'undefined' && typeof behavior.move.callback !== 'undefined' && behavior.move.callback === 'jumpToPreviousLevel') {
+                    return this.tiles[y][x];
                 }
             }
         }
-        return tilesStairUp;
+    },
+    
+    getExit: function () {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                let behavior = this.tiles[y][x].behavior;
+                if (typeof behavior !== 'undefined' && typeof behavior.move !== 'undefined' && typeof behavior.move.callback !== 'undefined' && behavior.move.callback === 'jumpToNextLevel') {
+                    return this.tiles[y][x];
+                }
+            }
+        }
     },
 
     clean : function () {
