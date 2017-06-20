@@ -47,6 +47,7 @@
     <Compile Include="src\js\pages\crawler.js" />
     <Compile Include="src\js\pages\editor.js" />
     <Compile Include="src\js\pages\pathfinding.js" />
+    <Compile Include="src\js\pages\serverlog.js" />
     <Compile Include="src\js\test\moduleperf.js" />
     <Compile Include="src\js\test\servertest.js" />
     <Compile Include="src\js\test\vmperf.js" />
@@ -71,6 +72,7 @@
     <Content Include="src\pages\editor.html" />
     <Content Include="src\pages\leveleditor.html" />
     <Content Include="src\pages\pathfinding.html" />
+    <Content Include="src\pages\serverlog.html" />
     <Content Include="src\pages\test.html" />
   </ItemGroup>
   <ItemGroup>

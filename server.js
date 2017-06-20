@@ -6,6 +6,7 @@ var fs = require('fs');
 var zlib = require('zlib');
 var http = require('http');
 var WebSocketServer = require("ws").Server
+var serverLoggers = [];
 
 /**
  * Declares the gameEngine variable for a later use.
@@ -30,12 +31,17 @@ var murmures = {
      * Writes timestamped log to the console.
      * @public
      */
-    serverLog: function (txt) {
+    serverLog: function (txt, details) {
         let diff = process.hrtime(this.startTime);
         let fdiff = diff[0] + diff[1] / 1e9;
         if (typeof txt !== 'undefined') {
             console.log(fdiff.toFixed(6) + ' - ' + txt);
         }
+        serverLoggers.forEach(function (ws) {
+            if (ws.readyState === 1) {
+                ws.send(JSON.stringify({ fn: 'log', payload: { timestamp: fdiff.toFixed(6), summary: txt, details: details } }));
+            }
+        }, this);
         return fdiff;
     },
     
@@ -266,11 +272,15 @@ var server = http.createServer(function (request, response) {
     }
 }).listen(process.env.PORT || 15881);
 
-var wss = new WebSocketServer({ server: server })
+var wss = new WebSocketServer({ server: server });
 wss.on('connection', function (ws) {
     ws.on('message', function (messageTxt) {
         let message = JSON.parse(messageTxt);
-        if (message.service === 'getLevel') {
+        if (message.service === 'registerServerLog') {
+            serverLoggers.push(ws);
+            murmures.serverLog('New server logger registered');
+        }
+        else if (message.service === 'getLevel') {
             ws.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
         }
         else if (message.service === 'order') {

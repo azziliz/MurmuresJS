@@ -25,6 +25,10 @@ gameEngine.classes.EventManager.prototype = {
                 let orderResponse = message.payload;
                 instance.emitEvent('orderResponseReceivedFromServer', orderResponse);
             }
+            else if (message.fn === 'log') {
+                let log = message.payload;
+                instance.emitEvent('logReceivedFromServer', log);
+            }
         };
         
         this.onXhrError = function (e) {

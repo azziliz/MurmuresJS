@@ -199,24 +199,24 @@ murmures.GameEngine.prototype = {
 
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
-        else if (order.command === 'attack'){
-          let target = order.target.guid === 'undefined' ? order.target.hasmob : order.target;
-          let skillToApply = order.source.skills[order.source.activeSkill];
-          if(skillToApply){
-            if (Math.abs(target.x - order.source.position.x) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
-            if (Math.abs(target.y - order.source.position.y) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
-            if((skillToApply.targetAudience ==murmures.C.TARGET_AUDIENCE_MOB) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO)) return {valid : false, reason: 'Invalid target. Target must be a mob'};
-            if((skillToApply.targetAudience ==murmures.C.TARGET_AUDIENCE_HERO) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_MOB)) return {valid : false, reason: 'Invalid target. Target must be a hero'};
-          }else{
-            return {valid :false, reason : 'hero doesn t have such a skill'};
-          }
-          return {valid : true};
+        else if (order.command === 'attack') {
+            let target = order.target.guid === 'undefined' ? order.target.hasmob : order.target;
+            let skillToApply = order.source.skills[order.source.activeSkill];
+            if (skillToApply) {
+                if (Math.abs(target.x - order.source.position.x) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
+                if (Math.abs(target.y - order.source.position.y) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
+                if ((skillToApply.targetAudience == murmures.C.TARGET_AUDIENCE_MOB) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO)) return { valid : false, reason: 'Invalid target. Target must be a mob' };
+                if ((skillToApply.targetAudience == murmures.C.TARGET_AUDIENCE_HERO) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_MOB)) return { valid : false, reason: 'Invalid target. Target must be a hero' };
+            } else {
+                return { valid : false, reason : 'hero doesn t have such a skill' };
+            }
+            return { valid : true };
         }
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (order.target.hasMob.code && !order.target.hasMob.isHero)) return { valid: false, reason: 'The target tile is occupied by a mob' };
-        else if (order.command === 'changeSkill' && (order.custom.activeSkill === 'undefined')) return {valid: false, reason: 'The skill is not defined'};
-        else if (order.command === 'changeSkill' && (order.source.hasSkill(order.custom.activeSkill) === false)) return {valid : false, resaon: 'Hero doesn t have such a skill'};
+        else if (order.command === 'changeSkill' && (order.custom.activeSkill === 'undefined')) return { valid: false, reason: 'The skill is not defined' };
+        else if (order.command === 'changeSkill' && (order.source.hasSkill(order.custom.activeSkill) === false)) return { valid : false, resaon: 'Hero doesn t have such a skill' };
         else return { valid: true };
     },
 
@@ -246,7 +246,7 @@ murmures.GameEngine.prototype = {
                 }
             }
         } else {
-            murmures.serverLog('Apply all orders');
+            murmures.serverLog('Apply all orders', { orderQueue : this.orderQueue, mobs: this.level.mobs });
             for (let itOrders = 0; itOrders < this.orderQueue.length ; itOrders++) {
                 this.applyOrder(this.orderQueue[itOrders]);
             }
@@ -295,45 +295,47 @@ murmures.GameEngine.prototype = {
         else {
             //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
             //if(order.source.skills[order.source..activeSkill].targetAudience == murmures.C.TARGET_AUDIENCE_MOB)
-            if([murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_MOB].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0){
-              this.level.mobs.forEach(function (mob) {
-                  if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
-                      let tr1 = new murmures.TurnReport();
-                      tr1.build({
-                          effect: 'projectileMove',
-                          sourceTile: order.source.position.coordinates,
-                          targetTile: order.target.coordinates,
-                          priority: 20
-                      });
-                      this.reportQueue.push(tr1);
-                      let tr2 = new murmures.TurnReport();
-                      tr2.build({
-                          effect: 'damage',
-                          character: mob,
-                          value: order.source.defaultDamageValue,
-                          priority: 30
-                      });
-                      this.reportQueue.push(tr2);
-
-                      order.source.skills[order.source.activeSkill].apply(mob);
-                      if (mob.hitPoints <= 0) {
-                          mob.hitPoints = 0;
-                          mob.position.groundDeco = '_b1_02_blood_red00';
-                      }
-                  }
-              }, this);
+            murmures.serverLog('debug1', { order : order, murmures: murmures });
+            if ([murmures.C.TARGET_AUDIENCE_ALL, murmures.C.TARGET_AUDIENCE_MOB].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0) {
+                this.level.mobs.forEach(function (mob) {
+                    murmures.serverLog('debug2', { mob : mob });
+                    if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                        let tr1 = new murmures.TurnReport();
+                        tr1.build({
+                            effect: 'projectileMove',
+                            sourceTile: order.source.position.coordinates,
+                            targetTile: order.target.coordinates,
+                            priority: 20
+                        });
+                        this.reportQueue.push(tr1);
+                        let tr2 = new murmures.TurnReport();
+                        tr2.build({
+                            effect: 'damage',
+                            character: mob,
+                            value: order.source.defaultDamageValue,
+                            priority: 30
+                        });
+                        this.reportQueue.push(tr2);
+                        
+                        order.source.skills[order.source.activeSkill].apply(mob);
+                        if (mob.hitPoints <= 0) {
+                            mob.hitPoints = 0;
+                            mob.position.groundDeco = '_b1_02_blood_red00';
+                        }
+                    }
+                }, this);
             }
-            if([murmures.C.TARGET_AUDIENCE_ALL,murmures.C.TARGET_AUDIENCE_HERO].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0){
-              this.heros.forEach(function (mob) {
-                  if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
-                    order.source.skills[order.source.activeSkill].apply(mob);
-                  }
-              }, this);
+            if ([murmures.C.TARGET_AUDIENCE_ALL, murmures.C.TARGET_AUDIENCE_HERO].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0) {
+                this.heros.forEach(function (mob) {
+                    if (mob.onVisionCharacters[order.source.guid] && mob.position.x === order.target.x && mob.position.y === order.target.y) {
+                        order.source.skills[order.source.activeSkill].apply(mob);
+                    }
+                }, this);
             }
         }
         murmures.serverLog('Moves / attacks done');
         for (let itMob=0; itMob < this.level.mobs.length; itMob++) {
-            for(let itHero=0;itHero < this.heros.length;itHero++){
+            for (let itHero=0; itHero < this.heros.length; itHero++) {
                 this.level.mobs[itMob].onVisionCharacters[this.heros[itHero].guid] = false;
             }
 
