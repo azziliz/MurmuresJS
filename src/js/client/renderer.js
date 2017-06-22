@@ -12,6 +12,7 @@ gameEngine.classes.Renderer = function () {
             blobUrl : {}
         },
     };
+    this.renderHeroes = true;
 };
 
 gameEngine.classes.Renderer.prototype = {
@@ -240,8 +241,10 @@ gameEngine.classes.Renderer.prototype = {
                 }
             }
         }
-        for (let i = 0; i < gameEngine.heros.length; i++) {
-            this.drawCharacter(gameEngine.heros[i]);
+        if (this.renderHeroes) {
+            for (let i = 0; i < gameEngine.heros.length; i++) {
+                this.drawCharacter(gameEngine.heros[i]);
+            }
         }
     },
     

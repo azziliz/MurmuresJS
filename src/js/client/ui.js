@@ -377,8 +377,8 @@ gameEngine.classes.UiManager.prototype = {
             }
             gameEngine.level = newLvl;
             gameEngine.initialize(JSON.parse(JSON.stringify(gameEngine)));
-            //resetCanvas();
-            //loadEngineLevelEditor(JSON.stringify(gameEngine));
+            gameEngine.client.eventManager.emitEvent('requestHighlight');
+            gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
         }, false);
         
         document.getElementById('hasPhysics').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });

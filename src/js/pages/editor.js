@@ -15,6 +15,7 @@ window.onload = function () {
     gameEngine.client.eventManager.emitEvent('requestDevTools');
     gameEngine.client.eventManager.init();
     gameEngine.client.renderer.init();
+    gameEngine.client.renderer.renderHeroes = false;
     gameEngine.client.inputManager.init();
     
     window.addEventListener('tilesetReady', function (e) {

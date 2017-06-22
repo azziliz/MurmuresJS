@@ -37,7 +37,7 @@ murmures.Pathfinding.prototype = {
      * @param {murmures.Tile} target - The targeted tile.
      * @static
      */
-    compute: function (source, target) {
+    compute: function (source, target, plane) {
         // This function declares local variable with 'var' keyword for performance reason
         // In V8, declarations with 'let' causes a bailout
         // See bug #5666 :
@@ -45,13 +45,14 @@ murmures.Pathfinding.prototype = {
         murmures.serverLog("starting A*");
         var level = gameEngine.level;
         
+        this.path = [];
         this.pathfindingTiles = [];
         for (var y = 0; y < level.height; y++) {
             this.pathfindingTiles[y] = [];
             for (var x = 0; x < level.width; x++) {
                 this.pathfindingTiles[y][x] = { x: x, y: y, fScore: Infinity, gScore : Infinity, cameFrom: {}, visited: false };
             }
-        }        
+        }      
         var currentFscore = 0;
         this.openSet[0] = [];
         this.openSet[0].push('' + source.x + ':' + source.y);
@@ -80,7 +81,7 @@ murmures.Pathfinding.prototype = {
             neighbors.forEach(function (neighbor) {
                 if (this.pathfindingTiles[neighbor.y][neighbor.x].visited) {
                 }
-                else if (level.tiles[neighbor.y][neighbor.x].isWall()) {
+                else if (level.tiles[neighbor.y][neighbor.x].isPlaneBlocker(plane)) {
                 }
                 else {
                     var tentative_gScore = this.pathfindingTiles[currentTileY][currentTileX].gScore + neighbor.cost;
@@ -103,13 +104,13 @@ murmures.Pathfinding.prototype = {
     },
     
     reconstruct_path: function (current) {
-        let total_path = [];
-        total_path.push(current);
+        this.path = [];
+        this.path.push(current);
         while (typeof this.pathfindingTiles[current.y][current.x].cameFrom !== 'undefined') {
             current = this.pathfindingTiles[current.y][current.x].cameFrom;
-            total_path.push(current);
+            this.path.push(current);
         }
-        console.log(JSON.stringify({ total_path: total_path }));
+        console.log(JSON.stringify({ total_path: this.path }));
     },
     
     heuristic_cost_estimate: function (t1, t2) {

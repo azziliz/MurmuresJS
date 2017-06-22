@@ -156,5 +156,78 @@ murmures.Tile.prototype = {
         let allowTerrestrialProp = (this.propId === "") ? true : !gameEngine.bodies[this.propId].hasPhysics ? true : !!gameEngine.bodies[this.propId].allowTerrestrial;
         let hasMoveBehavior = (typeof this.behavior !== 'undefined' && typeof this.behavior.move !== 'undefined');
         return (!allowTerrestrialGround || !allowTerrestrialProp) && !hasMoveBehavior;
-    }
+    },
+
+    isPlaneBlocker: function (plane) {
+        var groundPlanes;
+        if (this.groundId === "") {
+            groundPlanes = {
+                allowFlying: true,
+                allowTerrestrial: true,
+                allowAquatic: true,
+                allowUnderground: true,
+                allowEthereal: true,
+            };
+        }
+        else {
+            let groundBody = gameEngine.bodies[this.groundId];
+            if (!groundBody.hasPhysics) {
+                groundPlanes = {
+                    allowFlying: true,
+                    allowTerrestrial: true,
+                    allowAquatic: true,
+                    allowUnderground: true,
+                    allowEthereal: true,
+                };
+            }
+            else {
+                groundPlanes = {
+                    allowFlying: !!groundBody.allowFlying,
+                    allowTerrestrial: !!groundBody.allowTerrestrial,
+                    allowAquatic: !!groundBody.allowAquatic,
+                    allowUnderground: !!groundBody.allowUnderground,
+                    allowEthereal: !!groundBody.allowEthereal,
+                };
+            }
+        }
+        var propPlanes;
+        if (this.propId === "") {
+            propPlanes = {
+                allowFlying: true,
+                allowTerrestrial: true,
+                allowAquatic: true,
+                allowUnderground: true,
+                allowEthereal: true,
+            };
+        }
+        else {
+            let propBody = gameEngine.bodies[this.propId];
+            if (!propBody.hasPhysics) {
+                propPlanes = {
+                    allowFlying: true,
+                    allowTerrestrial: true,
+                    allowAquatic: true,
+                    allowUnderground: true,
+                    allowEthereal: true,
+                };
+            }
+            else {
+                propPlanes = {
+                    allowFlying: !!propBody.allowFlying,
+                    allowTerrestrial: !!propBody.allowTerrestrial,
+                    allowAquatic: !!propBody.allowAquatic,
+                    allowUnderground: !!propBody.allowUnderground,
+                    allowEthereal: !!propBody.allowEthereal,
+                };
+            }
+        }
+        if (plane.allowFlying && groundPlanes.allowFlying && propPlanes.allowFlying) return false;
+        if (plane.allowTerrestrial && groundPlanes.allowTerrestrial && propPlanes.allowTerrestrial) return false;
+        if (plane.allowAquatic && groundPlanes.allowAquatic && propPlanes.allowAquatic) return false;
+        if (plane.allowUnderground && groundPlanes.allowUnderground && propPlanes.allowUnderground) return false;
+        if (plane.allowEthereal && groundPlanes.allowEthereal && propPlanes.allowEthereal) return false;
+        let hasMoveBehavior = (typeof this.behavior !== 'undefined' && typeof this.behavior.move !== 'undefined');
+        if (hasMoveBehavior) return false;
+        return true;
+    },
 };
