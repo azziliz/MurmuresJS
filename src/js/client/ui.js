@@ -58,13 +58,15 @@ test3<br>test4 \
 </div> \
 <button id="dumpButton">Dump</button> \
 </div>',
-        crawlPanel : '<div id="crawl" style="position:relative; float:left;"> \
+        crawlPanel : '<div id="corridor" class="corridor"> \
+<div id="crawl" style="position:relative; float:left;"> \
 <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas> \
 <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas> \
 <canvas id="trailLayer" width="1400" height="840" style="z-index: 30"></canvas> \
 <canvas id="characterLayer" width="1400" height="840" style="z-index: 35"></canvas> \
 <canvas id="projectileLayer" width="1400" height="840" style="z-index: 40"></canvas> \
 <canvas id="topLayer" width="1400" height="840" style="z-index: 99"></canvas> \
+</div> \
 </div>',
         deathWindow : '<div id="deathWindow" class="deathWindow" style="display:none;"> \
 <p style="position:absolute;left:150px;font-size:200%;" id="deathWindowTitle"></p> \
