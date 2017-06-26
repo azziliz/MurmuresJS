@@ -35,7 +35,7 @@ murmures.Order = function () {
 murmures.Order.prototype = {
     /*
      * This class doesn't have initialize and synchronize methods because the server doesn't send orders to the client.
-     * Hence no need to rebuild the order object on client side.
+     * Hence no need to rebuild order objects on client side.
      */
 
     /**
@@ -70,6 +70,5 @@ murmures.Order.prototype = {
     clean: function () {
         this.source = { guid: this.source.guid, activeSkill : this.source.activeSkill };
         this.target = { x: this.target.x, y: this.target.y };
-
     }
 };

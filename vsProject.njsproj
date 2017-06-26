@@ -26,9 +26,10 @@
     <Compile Include="src\js\client\order.js" />
     <Compile Include="src\js\client\renderer.js" />
     <Compile Include="src\js\client\ui.js" />
+    <Compile Include="src\js\core\activation.js" />
     <Compile Include="src\js\core\behavior.js" />
     <Compile Include="src\js\core\character.js" />
-    <Compile Include="src\js\core\clientBase.js" />
+    <Compile Include="src\js\core\clientbase.js" />
     <Compile Include="src\js\core\constants.js" />
     <Compile Include="src\js\core\gameengine.js" />
     <Compile Include="src\js\core\level.js" />
@@ -38,6 +39,7 @@
     <Compile Include="src\js\core\player.js" />
     <Compile Include="src\js\core\skill.js" />
     <Compile Include="src\js\core\tile.js" />
+    <Compile Include="src\js\core\timeline.js" />
     <Compile Include="src\js\core\turnreport.js" />
     <Compile Include="src\js\pages\crawler.js" />
     <Compile Include="src\js\pages\editor.js" />

@@ -30,11 +30,26 @@ murmures.Skill = function () {
     this.typeeffect = '';
     /** @type {number} */
     this.modifier = 0;
-    /** @type {number} */
+    /** 
+     * Distance that the skill can reach around the caster
+     * @type {number} 
+     */
     this.range = 0;
-    /** @type {number} */
+    /** 
+     * Time needed to activate the skill ; unit is 0.001s (so 'activation = 3500' means 3.5 seconds)
+     * @type {number}
+     */
+    this.activation = 0;
+    /**
+     * What type of entity does the skill targets ? Can be a mob, a hero, the ground, ...
+     * Usually contains a constant of the form TARGET_AUDIENCE_* defined in core/constants.js
+     * @type {number}
+     */
     this.targetaudience = 0;
-    /** @type {string} */
+    /** 
+     * The skill icon. For consistency, this should reference an asset from layer 95, defined in assets.json.
+     * @type {string}
+     */
     this.asset = '';
 };
 

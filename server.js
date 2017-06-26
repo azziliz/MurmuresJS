@@ -184,7 +184,7 @@ murmures.serverLog('Initializing game');
         murmures.clientScripts += fs.readFileSync('./src/js/client/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.coreScripts = '\uFEFF'; // BOM
-    ['clientBase', 'constants', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'pathfinding', 'gameengine'].forEach(function (scriptName) {
+    ['clientbase', 'constants', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'pathfinding', 'gameengine'].forEach(function (scriptName) {
         murmures.coreScripts += fs.readFileSync('./src/js/core/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.restartGame();
@@ -289,7 +289,7 @@ wss.on('connection', function (ws) {
                 if (check.valid) {
                     //gameEngine.gameTurn++;
                     //murmures.serverLog('Order checked');
-                    let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
+                    let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn for better performances.
                     //murmures.serverLog('State saved');
                     gameEngine.saveOrder(clientOrder);
                     let ge = gameEngine.compare(beforeState);

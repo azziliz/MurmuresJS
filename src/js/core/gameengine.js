@@ -193,7 +193,6 @@ murmures.GameEngine.prototype = {
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
         else if (order.command === null) return { valid: false, reason: 'Order command is not defined' };
         else if (order.command !== 'move' && order.command !== 'attack') return { valid: false, reason: 'Order contains an unknown command' };
-        //else if ((order.source.guid !== this.heros[0].guid)) return { valid: false, reason: 'You can only give orders to your own hero' };
         else if (typeof heroToCheck === 'undefined' || heroToCheck === null) return { valid: false, reason : 'order sent for an invalid hero' };
         else if ((order.command === 'move' || order.command === 'attack') && order.target.isWall()) return { valid: false, reason: 'You cannot target a wall' };
 
@@ -213,7 +212,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (order.target.hasMob.code && !order.target.hasMob.isHero)) return { valid: false, reason: 'The target tile is occupied by a mob' };
-        else return { valid: true };
+        return { valid: true };
     },
     
     saveOrder : function (order) {
