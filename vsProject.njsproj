@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{f0c983f2-ecd3-4978-bbd6-335b25584b42}</ProjectGuid>
     <ProjectHome />
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
     <StartupFile>server.js</StartupFile>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -37,7 +37,6 @@
     <Compile Include="src\js\core\physicalbody.js" />
     <Compile Include="src\js\core\player.js" />
     <Compile Include="src\js\core\skill.js" />
-    <Compile Include="src\js\core\skillbehavior.js" />
     <Compile Include="src\js\core\tile.js" />
     <Compile Include="src\js\core\turnreport.js" />
     <Compile Include="src\js\pages\crawler.js" />

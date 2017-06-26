@@ -2,10 +2,10 @@
 
 gameEngine.client = {
     ws : new WebSocket(location.origin.replace(/^http/, 'ws')),
-    renderer : new gameEngine.classes.Renderer(),
-    eventManager : new gameEngine.classes.EventManager(),
-    uiManager : new gameEngine.classes.UiManager(),
-    animationManager : new gameEngine.classes.AnimationManager(),
-    orderManager : new gameEngine.classes.OrderManager(),
-    inputManager : new gameEngine.classes.InputManager(),
+    renderer : new murmures.Renderer(),
+    eventDispatcher : new murmures.EventDispatcher(),
+    uiBuilder : new murmures.UiBuilder(),
+    animationScheduler : new murmures.AnimationScheduler(),
+    orderHandler : new murmures.OrderHandler(),
+    inputHandler : new murmures.InputHandler(),
 };

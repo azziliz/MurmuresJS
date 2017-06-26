@@ -5,7 +5,7 @@ var vm = require('vm');
 var fs = require('fs');
 var zlib = require('zlib');
 var http = require('http');
-var WebSocketServer = require("ws").Server
+var WebSocketServer = require("ws").Server // this is a dependency. See package.json
 var serverLoggers = [];
 
 /**

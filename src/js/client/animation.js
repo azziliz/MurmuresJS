@@ -1,10 +1,10 @@
 ﻿'use strict';
 
-gameEngine.classes.AnimationManager = function () {
+murmures.AnimationScheduler = function () {
     this.animationQueue = [];
 }
 
-gameEngine.classes.AnimationManager.prototype = {
+murmures.AnimationScheduler.prototype = {
     init : function () {
         let instance = this;
         window.addEventListener('heroAnimationEnded', function (e) {
@@ -28,7 +28,7 @@ gameEngine.classes.AnimationManager.prototype = {
                 }
                 else {
                     if (typeof projectile.endEvent !== 'undefined') {
-                        gameEngine.client.eventManager.emitEvent(projectile.endEvent);
+                        gameEngine.client.eventDispatcher.emitEvent(projectile.endEvent);
                     }
                 }
             }, this);
@@ -78,7 +78,7 @@ gameEngine.classes.AnimationManager.prototype = {
             gameEngine.reportQueue = gameEngine.reportQueue.filter(function (report) { return report.priority !== 20 });
         }
         else {
-            gameEngine.client.eventManager.emitEvent('heroAnimationEnded');
+            gameEngine.client.eventDispatcher.emitEvent('heroAnimationEnded');
         }
     },
     

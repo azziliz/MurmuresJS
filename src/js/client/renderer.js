@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-gameEngine.classes.Renderer = function () {
+murmures.Renderer = function () {
     this.tileset = {
         color: {
             imgElement : {},
@@ -15,7 +15,7 @@ gameEngine.classes.Renderer = function () {
     this.renderHeroes = true;
 };
 
-gameEngine.classes.Renderer.prototype = {
+murmures.Renderer.prototype = {
     init : function () {
         let instance = this;
         window.addEventListener('requestTileset', function (e) {
@@ -34,7 +34,7 @@ gameEngine.classes.Renderer.prototype = {
             instance.storeGrayscaleTileset();
         }, false);
         window.addEventListener('grayscaleTilesetReady', function (e) {
-            gameEngine.client.eventManager.emitEvent('tilesetReady');
+            gameEngine.client.eventDispatcher.emitEvent('tilesetReady');
         }, false);
         window.addEventListener('requestRenderFullEngine', function (e) {
             instance.resetCanvas();
@@ -52,19 +52,19 @@ gameEngine.classes.Renderer.prototype = {
     downloadColorTileset : function () {
         let instance = this;
         let xhr = new XMLHttpRequest();
-        xhr.addEventListener("error", gameEngine.client.eventManager.onXhrError);
-        xhr.addEventListener("abort", gameEngine.client.eventManager.onXhrError);
+        xhr.addEventListener("error", gameEngine.client.eventDispatcher.onXhrError);
+        xhr.addEventListener("abort", gameEngine.client.eventDispatcher.onXhrError);
         xhr.addEventListener("progress", function (evt) {
             if (evt.lengthComputable) {
                 let percentComplete = parseInt(50.0 * evt.loaded / evt.total);
-                gameEngine.client.eventManager.emitEvent('tilesetLoadProgress', percentComplete);
+                gameEngine.client.eventDispatcher.emitEvent('tilesetLoadProgress', percentComplete);
             }
         });
         xhr.addEventListener("load", function (evt) {
             let img = new Image();
             img.onload = function () {
                 instance.tileset.color.imgElement = img;
-                gameEngine.client.eventManager.emitEvent('colorTilesetReady');
+                gameEngine.client.eventDispatcher.emitEvent('colorTilesetReady');
             }
             instance.tileset.color.blobUrl = window.URL.createObjectURL(this.response); // closure is needed, otherwise at this point 'this' would be xhr
             img.src = instance.tileset.color.blobUrl;
@@ -81,8 +81,8 @@ gameEngine.classes.Renderer.prototype = {
         canvas.height = this.tileset.color.imgElement.height;
         let ctx = canvas.getContext('2d');
         ctx.drawImage(this.tileset.color.imgElement, 0, 0);
-        gameEngine.client.eventManager.emitEvent('tilesetLoadProgress', 55);
-        window.setTimeout(function () { gameEngine.client.eventManager.emitEvent('grayscaleTilesetCreated') }, 0);
+        gameEngine.client.eventDispatcher.emitEvent('tilesetLoadProgress', 55);
+        window.setTimeout(function () { gameEngine.client.eventDispatcher.emitEvent('grayscaleTilesetCreated') }, 0);
     },
     
     paintGrayscaleTileset : function () {
@@ -98,8 +98,8 @@ gameEngine.classes.Renderer.prototype = {
             // do not change alpha value
         }
         ctx.putImageData(imageData, 0, 2239);
-        gameEngine.client.eventManager.emitEvent('tilesetLoadProgress', 80);
-        window.setTimeout(function () { gameEngine.client.eventManager.emitEvent('grayscaleTilesetPainted') }, 0);
+        gameEngine.client.eventDispatcher.emitEvent('tilesetLoadProgress', 80);
+        window.setTimeout(function () { gameEngine.client.eventDispatcher.emitEvent('grayscaleTilesetPainted') }, 0);
     },
     
     storeGrayscaleTileset : function () {
@@ -120,11 +120,11 @@ gameEngine.classes.Renderer.prototype = {
         let img = new Image();
         img.onload = function () {
             instance.tileset.gray.imgElement = img;
-            gameEngine.client.eventManager.emitEvent('grayscaleTilesetReady');
+            gameEngine.client.eventDispatcher.emitEvent('grayscaleTilesetReady');
         }
         instance.tileset.gray.blobUrl = canvas.toDataURL();
         img.src = instance.tileset.gray.blobUrl;
-        gameEngine.client.eventManager.emitEvent('tilesetLoadProgress', 95);
+        gameEngine.client.eventDispatcher.emitEvent('tilesetLoadProgress', 95);
     },
     // #endregion
     

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-gameEngine.classes.UiManager = function () {
+murmures.UiBuilder = function () {
     // #region templates
     this.template = {
         logHeader : '<header> \
@@ -104,7 +104,7 @@ test3<br>test4 \
     // #endregion
 }
 
-gameEngine.classes.UiManager.prototype = {
+murmures.UiBuilder.prototype = {
     init : function () {
         let instance = this;
         window.addEventListener('requestTileset', function (e) {
@@ -260,7 +260,7 @@ gameEngine.classes.UiManager.prototype = {
             this.drawRightCharacterPanel();
             this.drawDeathWindow();
         }
-        gameEngine.client.eventManager.emitEvent('mainWindowReady');
+        gameEngine.client.eventDispatcher.emitEvent('mainWindowReady');
     },
     
     drawEditorUi : function () {
@@ -270,7 +270,7 @@ gameEngine.classes.UiManager.prototype = {
             this.drawCrawlPanel();
             this.fillLeftPanelLevelEditor();
         }
-        gameEngine.client.eventManager.emitEvent('mainWindowReady');
+        gameEngine.client.eventDispatcher.emitEvent('mainWindowReady');
     },
     
     drawMainWindow : function () {
@@ -379,17 +379,17 @@ gameEngine.classes.UiManager.prototype = {
             }
             gameEngine.level = newLvl;
             gameEngine.initialize(JSON.parse(JSON.stringify(gameEngine)));
-            gameEngine.client.eventManager.emitEvent('requestHighlight');
-            gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+            gameEngine.client.eventDispatcher.emitEvent('requestHighlight');
+            gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
         }, false);
         
-        document.getElementById('hasPhysics').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowFlying').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowTerrestrial').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowAquatic').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowUnderground').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowEthereal').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('behavior').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('hasPhysics').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowFlying').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowTerrestrial').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowAquatic').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowUnderground').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowEthereal').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('behavior').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
         document.getElementById('dumpButton').addEventListener('mousedown', function (event) {
             //cleanup
             for (let key in gameEngine.bodies) {

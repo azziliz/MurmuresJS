@@ -49,9 +49,10 @@ murmures.Skill.prototype = {
         this.targetaudience = src.targetaudience;
         this.asset = src.asset;
     },
+    
     apply : function (target) {
         if (this.typeeffect === 'hpmodifier') {
             target.hitPoints = (target.hitPoints + this.modifier) < 0 ? 0:((target.hitPoints + this.modifier) > target.hitPointsMax ? target.hitPointsMax : (target.hitPoints + this.modifier));
         }
-    }
+    },
 };

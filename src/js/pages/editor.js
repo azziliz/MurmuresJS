@@ -11,12 +11,12 @@ window.onload = function () {
         },
     };
     
-    gameEngine.client.uiManager.init();
-    gameEngine.client.eventManager.emitEvent('requestDevTools');
-    gameEngine.client.eventManager.init();
+    gameEngine.client.uiBuilder.init();
+    gameEngine.client.eventDispatcher.emitEvent('requestDevTools');
+    gameEngine.client.eventDispatcher.init();
     gameEngine.client.renderer.init();
     gameEngine.client.renderer.renderHeroes = false;
-    gameEngine.client.inputManager.init();
+    gameEngine.client.inputHandler.init();
     
     window.addEventListener('tilesetReady', function (e) {
         gameEngine.client.ws.send(JSON.stringify({ service: 'getLevel' }));
@@ -24,11 +24,11 @@ window.onload = function () {
     window.addEventListener('engineReceivedFromServer', function (e) {
         gameEngine.initialize(e.detail);
         gameEngine.level.build(e.detail.level); // this is mandatory to instanciate mobs from tiles.charId
-        gameEngine.client.eventManager.emitEvent('requestHighlight');
-        gameEngine.client.eventManager.emitEvent('requestEditorUi');
+        gameEngine.client.eventDispatcher.emitEvent('requestHighlight');
+        gameEngine.client.eventDispatcher.emitEvent('requestEditorUi');
     }, false);
     window.addEventListener('mainWindowReady', function (e) {
-        gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+        gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
     }, false);
     window.addEventListener('editorSave', function (e) {
         let body = {};
@@ -53,8 +53,8 @@ window.onload = function () {
         let newLvl = new murmures.Level();
         newLvl.build(gameEngine.level); // this is mandatory to instanciate mobs from tiles.charId
         gameEngine.level = newLvl;
-        gameEngine.client.eventManager.emitEvent('requestHighlight');
-        gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+        gameEngine.client.eventDispatcher.emitEvent('requestHighlight');
+        gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
     }, false);
     window.addEventListener('rightClickOnTile', function (e) {
         let hoveredTile = e.detail;
@@ -62,9 +62,9 @@ window.onload = function () {
         let newLvl = new murmures.Level();
         newLvl.build(gameEngine.level); // this is mandatory to instanciate mobs from tiles.charId
         gameEngine.level = newLvl;
-        gameEngine.client.eventManager.emitEvent('requestHighlight');
-        gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+        gameEngine.client.eventDispatcher.emitEvent('requestHighlight');
+        gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
     }, false);
 
-    gameEngine.client.eventManager.emitEvent('requestTileset');
+    gameEngine.client.eventDispatcher.emitEvent('requestTileset');
 };
