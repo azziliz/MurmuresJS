@@ -54,6 +54,14 @@ murmures.Character = function () {
     this.skills = {};
     /** @type {number} */
     this.activeSkill = 0;
+    /** @type {number} */
+    this.dexterity = 0;
+    /** @type {number} */
+    this.intelligence = 0;
+    /** @type {number} */
+    this.strength = 0;
+    /** @type {number} */
+    this.initiative = 0;
 };
 
 murmures.Character.prototype = {
@@ -74,7 +82,10 @@ murmures.Character.prototype = {
         this.canMove = ref.canMove || false;
         this.charSpotted = ref.charSpotted || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-
+        this.intelligence = Math.floor(Math.random() * 10);
+        this.dexterity = Math.floor(Math.random() * 10);
+        this.strength = Math.floor(Math.random() * 10);
+        this.initiative = this.dexterity;
     },
     
     initialize : function (src) {
@@ -96,6 +107,10 @@ murmures.Character.prototype = {
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
         if (typeof src.skills !== 'undefined') this.skills = src.skills;
         if (typeof src.activeSkill !== 'undefined') this.activeSkill = src.activeSkill;
+        if (typeof src.dexterity !== 'undefined') this.dexterity = src.dexterity;
+        if (typeof src.intelligence !== 'undefined') this.intelligence = src.intelligence;
+        if (typeof src.strength !== 'undefined') this.strength = src.strength;
+        if (typeof src.initiative !== 'undefined') this.initiative = src.initiative;
     },
     
     clone : function () {
@@ -115,6 +130,10 @@ murmures.Character.prototype = {
             charSpotted: this.charSpotted,
             stateOrder : this.stateOrder,
             onVisionCharacters : beforeOnVisionCharacters,
+            dexterity : this.dexterity,
+            intelligence : this.intelligence,
+            strength : this.strength,
+            initiative : this.initiative
         };
     },
     
@@ -125,6 +144,10 @@ murmures.Character.prototype = {
         if (this.mobTemplate !== beforeState.mobTemplate) ret.mobTemplate = this.mobTemplate;
         if (this.hitPointsMax !== beforeState.hitPointsMax) ret.hitPointsMax = this.hitPointsMax;
         if (this.hitPoints !== beforeState.hitPoints) ret.hitPoints = this.hitPoints;
+        if (this.dexterity !== beforeState.dexterity) ret.dexterity = this.dexterity;
+        if (this.intelligence !== beforeState.intelligence) ret.intelligence = this.intelligence;
+        if (this.strength !== beforeState.strength) ret.strength = this.strength;
+        if (this.initiative !== beforeState.initiative) ret.initiative = this.initiative;
         if (this.range !== beforeState.range) ret.range = this.range;
         if (this.defaultDamageValue !== beforeState.defaultDamageValue) ret.defaultDamageValue = this.defaultDamageValue;
         if (this.canMove !== beforeState.canMove) ret.canMove = this.canMove;
@@ -139,7 +162,7 @@ murmures.Character.prototype = {
             ret.defaultDamageValue = this.defaultDamageValue;
             ret.canMove = this.canMove;
             ret.charSpotted = this.charSpotted;
-        }        
+        }
         
         for (let itMap in this.onVisionCharacters) {
             if (this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]) {
