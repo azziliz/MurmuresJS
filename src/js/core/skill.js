@@ -16,7 +16,7 @@
  *
  * A skill has two behavior function, one, which will check if the skill can be applied, second which will be applied in case of validation
  *
- * The targetAudience is defined if the skill can be applied on a mob, hero, (item) or everything
+ * targetaudience defines if the skill can be applied on a mob, hero, (item) or everything
  *
  * @class
  */
@@ -26,10 +26,10 @@ murmures.Skill = function () {
     this.id = '';
     /** @type {string} */
     this.name = '';
-    /** @type {Object.<string, Object.<string, string>>} */
-    this.skillbehavior = {};
     /** @type {string} */
     this.typeeffect = '';
+    /** @type {number} */
+    this.modifier = 0;
     /** @type {number} */
     this.range = 0;
     /** @type {number} */
@@ -42,7 +42,6 @@ murmures.Skill.prototype = {
     build : function (src, name) {
         this.id = src.id;
         this.name = name;
-        this.skillbehavior = src.skillbehavior;
         this.typeeffect = src.typeeffect;
         this.modifier = src.modifier;
         this.range = src.range;

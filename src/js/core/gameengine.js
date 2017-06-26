@@ -192,7 +192,7 @@ murmures.GameEngine.prototype = {
         if (order.source === null) return { valid: false, reason: 'Order source is not defined' };
         else if (order.target === null) return { valid: false, reason: 'Order target is not defined' };
         else if (order.command === null) return { valid: false, reason: 'Order command is not defined' };
-        else if (order.command !== 'move' && order.command !== 'attack' && order.command !== 'changeSkill') return { valid: false, reason: 'Order contains an unknown command' };
+        else if (order.command !== 'move' && order.command !== 'attack') return { valid: false, reason: 'Order contains an unknown command' };
         //else if ((order.source.guid !== this.heros[0].guid)) return { valid: false, reason: 'You can only give orders to your own hero' };
         else if (typeof heroToCheck === 'undefined' || heroToCheck === null) return { valid: false, reason : 'order sent for an invalid hero' };
         else if ((order.command === 'move' || order.command === 'attack') && order.target.isWall()) return { valid: false, reason: 'You cannot target a wall' };
@@ -200,23 +200,19 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') {
-            let target = order.target.guid === 'undefined' ? order.target.hasmob : order.target;
             let skillToApply = order.source.skills[order.source.activeSkill];
             if (skillToApply) {
-                if (Math.abs(target.x - order.source.position.x) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
-                if (Math.abs(target.y - order.source.position.y) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
-                if ((skillToApply.targetAudience == murmures.C.TARGET_AUDIENCE_MOB) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO)) return { valid : false, reason: 'Invalid target. Target must be a mob' };
-                if ((skillToApply.targetAudience == murmures.C.TARGET_AUDIENCE_HERO) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_MOB)) return { valid : false, reason: 'Invalid target. Target must be a hero' };
+                if (Math.abs(order.target.x - order.source.position.x) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
+                if (Math.abs(order.target.y - order.source.position.y) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
+                if ((skillToApply.targetaudience === murmures.C.TARGET_AUDIENCE_MOB) && (order.target.hasMob.isHero)) return { valid : false, reason: 'Invalid target. Target must be a mob' };
+                if ((skillToApply.targetaudience === murmures.C.TARGET_AUDIENCE_HERO) && (!order.target.hasMob.isHero)) return { valid : false, reason: 'Invalid target. Target must be a hero' };
             } else {
                 return { valid : false, reason : 'hero doesn t have such a skill' };
             }
-            return { valid : true };
         }
         else if (order.command === 'move' && Math.abs(order.target.x - heroToCheck.position.x) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && Math.abs(order.target.y - heroToCheck.position.y) > 1) return { valid: false, reason: 'Target is too far. Your moving range is: 1' };
         else if (order.command === 'move' && (order.target.hasMob.code && !order.target.hasMob.isHero)) return { valid: false, reason: 'The target tile is occupied by a mob' };
-        else if (order.command === 'changeSkill' && (order.custom.activeSkill === 'undefined')) return { valid: false, reason: 'The skill is not defined' };
-        else if (order.command === 'changeSkill' && (order.source.hasSkill(order.custom.activeSkill) === false)) return { valid : false, resaon: 'Hero doesn t have such a skill' };
         else return { valid: true };
     },
     
@@ -286,7 +282,7 @@ murmures.GameEngine.prototype = {
         }
         else {
             //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
-            //if(order.source.skills[order.source..activeSkill].targetAudience == murmures.C.TARGET_AUDIENCE_MOB)
+            //if(order.source.skills[order.source..activeSkill].targetaudience === murmures.C.TARGET_AUDIENCE_MOB)
             murmures.serverLog('debug1', { order : order, murmures: murmures });
             if ([murmures.C.TARGET_AUDIENCE_ALL, murmures.C.TARGET_AUDIENCE_MOB].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0) {
                 this.level.mobs.forEach(function (mob) {

@@ -548,10 +548,10 @@ murmures.UiBuilder.prototype = {
             skillWindow.style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
             skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
             skillWindow.style.backgroundColor = "#ffffff";
-            // TODO bug bug bug :  this add a new listener every time the selected skill is changed
-            skillWindow.addEventListener("click", function () { instance.activeSkill(hero.guid, skill.id); });
+            // TODO bug bug bug :  this adds a new listener every time the selected skill is changed
+            skillWindow.addEventListener("click", function () { instance.activateSkill(hero.guid, skill.id); });
             // TODO : change to css behavior
-            if (hero.activeSkill == skill.id) {
+            if (hero.activeSkill === skill.id) {
                 skillWindow.style.border = "1px solid";
                 skillWindow.style.borderColor = "#44DD44";
             } else {
@@ -561,9 +561,9 @@ murmures.UiBuilder.prototype = {
         }
     },
     
-    activeSkill : function (heroGuid, skillId) {
+    activateSkill : function (heroGuid, skillId) {
         for (let h in gameEngine.heros) {
-            if (gameEngine.heros[h].guid == heroGuid) {
+            if (gameEngine.heros[h].guid === heroGuid) {
                 gameEngine.heros[h].activeSkill = skillId;
                 this.drawSkill(gameEngine.heros[h]);
                 break;

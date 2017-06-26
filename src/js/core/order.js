@@ -30,8 +30,6 @@ murmures.Order = function () {
     this.source = {};
     /** @type {murmures.Tile} */
     this.target = {};
-    /** @type {Object.<String, String>}*/
-    this.custom = {};
 };
 
 murmures.Order.prototype = {
@@ -50,27 +48,27 @@ murmures.Order.prototype = {
      */
     build : function (src) {
         this.command = src.command;
-        if(src.custom !== 'undefined') this.custom = src.custom;
         this.source = undefined;
-        for (let itHero = 0; itHero < gameEngine.heros.length; itHero++){
-          if (parseFloat(gameEngine.heros[itHero].guid) === parseFloat(src.source.guid)) {
-            if (src.source.activeSkill !== 'undefined') gameEngine.heros[itHero].activeSkill = src.source.activeSkill;
-            this.source = gameEngine.heros[itHero];
-            break;
-          }
+        for (let itHero = 0; itHero < gameEngine.heros.length; itHero++) {
+            if (gameEngine.heros[itHero].guid === src.source.guid) {
+                if (typeof src.source.activeSkill !== 'undefined') gameEngine.heros[itHero].activeSkill = src.source.activeSkill;
+                this.source = gameEngine.heros[itHero];
+                break;
+            }
         }
-
-        if(typeof this.source === 'undefined') {
-            murmures.serverLog("Tech Error - Guid does not match any heroes- " + src.source.guid );
+        
+        if (typeof this.source === 'undefined') {
+            murmures.serverLog("Tech Error - Guid does not match any heroes- " + src.source.guid);
             return { valid: false, reason: 'Technical error - Guid does not match - Please refresh the page' };
         }
-        if(typeof src.target !== 'undefined')
-          this.target = gameEngine.level.tiles[src.target.y|0][src.target.x|0];
+        if (typeof src.target !== 'undefined') {
+            this.target = gameEngine.level.tiles[src.target.y | 0][src.target.x | 0];
+        }
         return { valid: true };
     },
-
+    
     clean: function () {
-        this.source = { guid: this.source.guid, activeSkill : this.source.activeSkill};
+        this.source = { guid: this.source.guid, activeSkill : this.source.activeSkill };
         this.target = { x: this.target.x, y: this.target.y };
 
     }
