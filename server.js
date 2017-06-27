@@ -35,7 +35,11 @@ var murmures = {
         let diff = process.hrtime(this.startTime);
         let fdiff = diff[0] + diff[1] / 1e9;
         if (typeof txt !== 'undefined') {
-            console.log(fdiff.toFixed(6) + ' - ' + txt);
+            if(typeof txt === 'object'){
+                console.log(fdiff.toFixed(6) + ' - %o' , txt);
+            }else{
+                console.log(fdiff.toFixed(6) + ' - ' + txt);
+            }
         }
         serverLoggers.forEach(function (ws) {
             if (ws.readyState === 1) {
