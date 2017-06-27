@@ -27,9 +27,9 @@ murmures.Level = function () {
     /** @type {string} */
     this.layout = '';
     /** @type {number} */
-    this.width = 0 | 0;
+    this.width = 0;
     /** @type {number} */
-    this.height = 0 | 0;
+    this.height = 0;
     /** @type {Array.<Array.<murmures.Tile>>} */
     this.tiles = [];
     /** @type {Array.<murmures.Character>} */

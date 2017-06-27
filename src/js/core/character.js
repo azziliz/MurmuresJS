@@ -35,15 +35,15 @@ murmures.Character = function () {
     /** @type {string} */
     this.mobTemplate = '';
     /** @type {number} */
-    this.hitPointsMax = 0 | 0;
+    this.hitPointsMax = 0;
     /** @type {Object.<string, boolean>} */
     this.onVisionCharacters = {};
     /** @type {number} */
-    this.hitPoints = 0 | 0;
+    this.hitPoints = 0;
     /** @type {number} */
-    this.range = 0 | 0;
+    this.range = 0;
     /** @type {number} */
-    this.defaultDamageValue = 0 | 0;
+    this.defaultDamageValue = 0;
     /** @type {boolean} */
     this.canMove = false; // unused for now
     /** @type {boolean} */

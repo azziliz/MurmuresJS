@@ -42,9 +42,9 @@ murmures.GameEngine = function () {
     /** @type {Array.<string>} */
     this.levelIds = {};
     /** @type {number} */
-    this.activeLevel = 0 | 0;
+    this.activeLevel = 0;
     /** @type {number} */
-    this.gameTurn = 0 | 0;
+    this.gameTurn = 0;
     /** @type {number} */
     this.state = murmures.C.STATE_ENGINE_INIT | 0;
     /** @type {Array.<murmures.Order>} */

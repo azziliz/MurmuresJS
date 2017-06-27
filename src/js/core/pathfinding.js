@@ -17,7 +17,7 @@ murmures.Pathfinding = function () {
     /** @type {boolean} */
     this.found = false;
     /** @type {number} */
-    this.length = 0 | 0;
+    this.length = 0;
     /** @type {Array.<murmures.Tile>} */
     this.path = [];
     
