@@ -141,7 +141,7 @@ murmures.GameEngine.prototype = {
     
     compare : function (beforeState) {
         let ret = {};
-        if (this.state != beforeState.state) {
+        if (this.state !== beforeState.state) {
             ret.state = this.state;
         }
         let level_ = this.level.compare(beforeState.level);

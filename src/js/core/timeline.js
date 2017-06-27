@@ -18,6 +18,12 @@ murmures.Timeline = function () {
     this.time = 0;
     /** @type {?} */
     this.activationQueue = {};
+    /** 
+     * This variable contains all 'times' when an influencial event (the end of an Activation, the start/end of an effect) is expected to happen.
+     * It is updated by the simulation after each tick.
+     * @type {Array.<number>} 
+     */
+    this.keyframes = [];
 };
 
 murmures.Timeline.prototype = {
@@ -28,6 +34,7 @@ murmures.Timeline.prototype = {
     build : function () {
         this.time = 0;
         this.activationQueue = {};
+        this.keyframes = [];
     },
 
     /**
@@ -38,6 +45,62 @@ murmures.Timeline.prototype = {
      */
     initialize : function (src) {
         this.time = src.time;
-        this.activationQueue = src.actionQueue;
+        // TODO
+    },
+    
+    /**
+     * Synchronization method reserved for the client.
+     */
+    synchronize : function (src) {
+        // TODO
+    },
+    
+    /**
+     * Cloning method reserved for the server.
+     */
+    clone : function () {
+        // TODO
+    },
+    
+    /**
+     * Comparison method reserved for the server.
+     */
+    compare : function (beforeState) {
+        // TODO
+    },
+    
+    /**
+     * Pushes the Activation passed in parameter into this queue.
+     * All heroes should have 1 Activation in this queue at all time (until they die).
+     * Mob Activations should be enqueued as soon as the mob become spotted by a hero.
+     * When an Activation is enqueued, the simulation becomes invalidated and has to run again
+     */
+    enqueue : function (activation) {
+        // TODO
+    },
+    
+    /**
+     * Pops the Activation passed in parameter from this queue and returns it.
+     */
+    dequeue : function (activation) {
+        // TODO
+    },
+    
+    /**
+     * Increases the time counter by 'tickCount' time units (1 unit = 0.1s), then updates all Activations in this queue.
+     * If an Activation expires, calls its 'applyOrder' function.
+     * This function should be called by the server, with a parameter set to reach the next keyframe.
+     */
+    tick : function (tickCount) {
+        // TODO
+    },
+    
+    /**
+     * Generate virtual ticks (ticks that do not actually update the Activations in this queue) until all Activations expire.
+     * Updates keyframes based on the results.
+     * This function is called after a tick and before the updated timeline is sent to the clients.
+     */
+    simulate : function () {
+        // TODO
     },
 };

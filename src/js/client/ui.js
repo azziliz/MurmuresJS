@@ -442,7 +442,7 @@ murmures.UiBuilder.prototype = {
         } else {
             document.getElementById('deathWindow').style.display = "none";
         }
-        if (typeof gameEngine.level.mobs != 'undefined') {
+        if (typeof gameEngine.level.mobs !== 'undefined') {
             while (gameEngine.level.mobs.length > gameEngine.level.uiMobCount) {
                 let characterUiTemplate = this.template.characterTemplate;
                 let templateStr = /template/g;
@@ -465,7 +465,7 @@ murmures.UiBuilder.prototype = {
                 let namedivwidth = window.getComputedStyle(namediv, null).width;
                 namediv.innerHTML = locale || 'Name Error';
                 let namefontsize = 100;
-                while (window.getComputedStyle(namediv, null).width != namedivwidth) {
+                while (window.getComputedStyle(namediv, null).width !== namedivwidth) {
                     namefontsize--;
                     namediv.style.fontSize = namefontsize.toString() + '%';
                 }
@@ -523,7 +523,7 @@ murmures.UiBuilder.prototype = {
             let namedivwidth = window.getComputedStyle(namediv, null).width;
             namediv.innerHTML = locale || 'Name Error';
             let namefontsize = 100;
-            while (window.getComputedStyle(namediv, null).width != namedivwidth) {
+            while (window.getComputedStyle(namediv, null).width !== namedivwidth) {
                 namefontsize--;
                 namediv.style.fontSize = namefontsize.toString() + '%';
             }

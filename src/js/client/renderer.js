@@ -223,7 +223,7 @@ murmures.Renderer.prototype = {
     },
     
     drawCharacters : function () {
-        if (typeof gameEngine.level.mobs != 'undefined') {
+        if (typeof gameEngine.level.mobs !== 'undefined') {
             for (let i = 0; i < gameEngine.level.mobs.length; i++) {
                 // TODO : move mobIsSeen to murmures.Character
                 //let mobIsSeen = false;

@@ -103,7 +103,7 @@ var murmures = {
                 if (mainSkill === -1 || mainSkill > rd) mainSkill = rd;
                 hero1.skills[rd] = gameEngine.skills[rd];
             }
-            if (mainSkill != -1) hero1.activeSkill = mainSkill;
+            if (mainSkill !== -1) hero1.activeSkill = mainSkill;
             
             gameEngine.heros.push(hero1);
         }
