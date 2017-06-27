@@ -205,8 +205,8 @@ murmures.GameEngine.prototype = {
             if (skillToApply) {
                 if (Math.abs(target.x - order.source.position.x) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
                 if (Math.abs(target.y - order.source.position.y) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
-                if ((skillToApply.targetAudience == murmures.C.TARGET_AUDIENCE_MOB) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_HERO)) return { valid : false, reason: 'Invalid target. Target must be a mob' };
-                if ((skillToApply.targetAudience == murmures.C.TARGET_AUDIENCE_HERO) && (target.typeCharacter == murmures.C.TYPE_CHARACTER_MOB)) return { valid : false, reason: 'Invalid target. Target must be a hero' };
+                if ((skillToApply.targetaudience == murmures.C.TARGET_AUDIENCE_MOB) && (order.target.hasMob.code == true && order.target.hasMob.isHero == true)) return { valid : false, reason: 'Invalid target. Target must be a mob' };
+                if ((skillToApply.targetaudience == murmures.C.TARGET_AUDIENCE_HERO) && (order.target.hasMob.code == true && order.target.hasMob.isHero == false)) return { valid : false, reason: 'Invalid target. Target must be a hero' };
             } else {
                 return { valid : false, reason : 'hero doesn t have such a skill' };
             }
