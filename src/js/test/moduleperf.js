@@ -2,8 +2,8 @@
 
 module.exports = {
     loopTenMillions : function () {
-        let modulePerfx = 0;
-        for (let loop = 0; loop < 10000000; loop++) {
+        var modulePerfx = 0;
+        for (var loop = 0; loop < 10000000; loop++) {
             modulePerfx = this.addOne(modulePerfx);
         }
         return modulePerfx;

@@ -1,10 +1,10 @@
 ﻿'use strict';
 
-gameEngine.classes.EventManager = function () {    
+murmures.EventDispatcher = function () {    
     this.eventsRegistered = false;
 }
 
-gameEngine.classes.EventManager.prototype = {
+murmures.EventDispatcher.prototype = {
     emitEvent : function (type, payload) {
         let event = document.createEvent('CustomEvent');
         event.initCustomEvent(type, false, false, payload);
@@ -31,8 +31,9 @@ gameEngine.classes.EventManager.prototype = {
             }
         };
         
+        // TODO : move this function to dispatcher prototype ?
         this.onXhrError = function (e) {
-            gameEngine.client.uiManager.log('<span style="color:#f66">' + 'ERROR - Vous avez été déconnecté du serveur</span>', 'general');
+            gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'ERROR - Vous avez été déconnecté du serveur</span>', 'general');
         }
         
         this.eventsRegistered = true;

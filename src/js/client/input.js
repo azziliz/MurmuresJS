@@ -1,11 +1,11 @@
 ﻿'use strict';
 
-gameEngine.classes.InputManager = function () {
+murmures.InputHandler = function () {
     this.mouseMoveTarget = { x: -1 | 0, y: -1 | 0 };
     this.mouseIsDown = false;
 }
 
-gameEngine.classes.InputManager.prototype = {
+murmures.InputHandler.prototype = {
     init : function () {
         let instance = this;
         window.addEventListener('mainWindowReady', function (e) {
@@ -19,11 +19,11 @@ gameEngine.classes.InputManager.prototype = {
                 let hoveredTile = instance.getHoveredTile(e.offsetX, e.offsetY);
                 if (e.button !== 2) {
                     // event is a left click
-                    gameEngine.client.eventManager.emitEvent('leftClickOnTile', hoveredTile);
+                    gameEngine.client.eventDispatcher.emitEvent('leftClickOnTile', hoveredTile);
                 }
                 else {
                     // event is a right click
-                    gameEngine.client.eventManager.emitEvent('rightClickOnTile', hoveredTile);
+                    gameEngine.client.eventDispatcher.emitEvent('rightClickOnTile', hoveredTile);
                 }
             }, false);
             topLayer.addEventListener('mouseup', function (e) {
@@ -34,18 +34,18 @@ gameEngine.classes.InputManager.prototype = {
                 e.preventDefault(); // usually, keeping the left mouse button down triggers a text selection or a drag & drop.
                 let hoveredTile = instance.getHoveredTile(e.offsetX, e.offsetY);
                 if (instance.mouseMoveTarget.x !== hoveredTile.x || instance.mouseMoveTarget.y !== hoveredTile.y) {
-                    gameEngine.client.eventManager.emitEvent('tileLeave', instance.mouseMoveTarget);
-                    gameEngine.client.eventManager.emitEvent('tileEnter', hoveredTile);
+                    gameEngine.client.eventDispatcher.emitEvent('tileLeave', instance.mouseMoveTarget);
+                    gameEngine.client.eventDispatcher.emitEvent('tileEnter', hoveredTile);
                     instance.mouseMoveTarget.x = hoveredTile.x;
                     instance.mouseMoveTarget.y = hoveredTile.y;
                     if (instance.mouseIsDown) {
                         if (e.button !== 2) {
                             // event is a left click
-                            gameEngine.client.eventManager.emitEvent('leftClickOnTile', hoveredTile);
+                            gameEngine.client.eventDispatcher.emitEvent('leftClickOnTile', hoveredTile);
                         }
                         else {
                             // event is a right click
-                            gameEngine.client.eventManager.emitEvent('rightClickOnTile', hoveredTile);
+                            gameEngine.client.eventDispatcher.emitEvent('rightClickOnTile', hoveredTile);
                         }
                     }
                 }

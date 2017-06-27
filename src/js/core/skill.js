@@ -16,7 +16,7 @@
  *
  * A skill has two behavior function, one, which will check if the skill can be applied, second which will be applied in case of validation
  *
- * The targetAudience is defined if the skill can be applied on a mob, hero, (item) or everything
+ * targetaudience defines if the skill can be applied on a mob, hero, (item) or everything
  *
  * @class
  */
@@ -26,15 +26,30 @@ murmures.Skill = function () {
     this.id = '';
     /** @type {string} */
     this.name = '';
-    /** @type {Object.<string, Object.<string, string>>} */
-    this.skillbehavior = {};
     /** @type {string} */
     this.typeeffect = '';
     /** @type {number} */
+    this.modifier = 0;
+    /** 
+     * Distance that the skill can reach around the caster
+     * @type {number} 
+     */
     this.range = 0;
-    /** @type {number} */
+    /** 
+     * Time needed to activate the skill ; unit is 0.001s (so 'activation = 3500' means 3.5 seconds)
+     * @type {number}
+     */
+    this.activation = 0;
+    /**
+     * What type of entity does the skill targets ? Can be a mob, a hero, the ground, ...
+     * Usually contains a constant of the form TARGET_AUDIENCE_* defined in core/constants.js
+     * @type {number}
+     */
     this.targetaudience = 0;
-    /** @type {string} */
+    /** 
+     * The skill icon. For consistency, this should reference an asset from layer 95, defined in assets.json.
+     * @type {string}
+     */
     this.asset = '';
 };
 
@@ -42,16 +57,16 @@ murmures.Skill.prototype = {
     build : function (src, name) {
         this.id = src.id;
         this.name = name;
-        this.skillbehavior = src.skillbehavior;
         this.typeeffect = src.typeeffect;
         this.modifier = src.modifier;
         this.range = src.range;
         this.targetaudience = src.targetaudience;
         this.asset = src.asset;
     },
+    
     apply : function (target) {
         if (this.typeeffect === 'hpmodifier') {
             target.hitPoints = (target.hitPoints + this.modifier) < 0 ? 0:((target.hitPoints + this.modifier) > target.hitPointsMax ? target.hitPointsMax : (target.hitPoints + this.modifier));
         }
-    }
+    },
 };

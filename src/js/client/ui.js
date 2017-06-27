@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-gameEngine.classes.UiManager = function () {
+murmures.UiBuilder = function () {
     // #region templates
     this.template = {
         logHeader : '<header> \
@@ -104,7 +104,7 @@ test3<br>test4 \
     // #endregion
 }
 
-gameEngine.classes.UiManager.prototype = {
+murmures.UiBuilder.prototype = {
     init : function () {
         let instance = this;
         window.addEventListener('requestTileset', function (e) {
@@ -260,7 +260,7 @@ gameEngine.classes.UiManager.prototype = {
             this.drawRightCharacterPanel();
             this.drawDeathWindow();
         }
-        gameEngine.client.eventManager.emitEvent('mainWindowReady');
+        gameEngine.client.eventDispatcher.emitEvent('mainWindowReady');
     },
     
     drawEditorUi : function () {
@@ -270,7 +270,7 @@ gameEngine.classes.UiManager.prototype = {
             this.drawCrawlPanel();
             this.fillLeftPanelLevelEditor();
         }
-        gameEngine.client.eventManager.emitEvent('mainWindowReady');
+        gameEngine.client.eventDispatcher.emitEvent('mainWindowReady');
     },
     
     drawMainWindow : function () {
@@ -379,17 +379,17 @@ gameEngine.classes.UiManager.prototype = {
             }
             gameEngine.level = newLvl;
             gameEngine.initialize(JSON.parse(JSON.stringify(gameEngine)));
-            gameEngine.client.eventManager.emitEvent('requestHighlight');
-            gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+            gameEngine.client.eventDispatcher.emitEvent('requestHighlight');
+            gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
         }, false);
         
-        document.getElementById('hasPhysics').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowFlying').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowTerrestrial').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowAquatic').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowUnderground').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('allowEthereal').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
-        document.getElementById('behavior').addEventListener('change', function () { gameEngine.client.eventManager.emitEvent('editorSave'); });
+        document.getElementById('hasPhysics').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowFlying').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowTerrestrial').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowAquatic').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowUnderground').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('allowEthereal').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
+        document.getElementById('behavior').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
         document.getElementById('dumpButton').addEventListener('mousedown', function (event) {
             //cleanup
             for (let key in gameEngine.bodies) {
@@ -548,10 +548,10 @@ gameEngine.classes.UiManager.prototype = {
             skillWindow.style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
             skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
             skillWindow.style.backgroundColor = "#ffffff";
-            // TODO bug bug bug :  this add a new listener every time the selected skill is changed
-            skillWindow.addEventListener("click", function () { instance.activeSkill(hero.guid, skill.id); });
+            // TODO bug bug bug :  this adds a new listener every time the selected skill is changed
+            skillWindow.addEventListener("click", function () { instance.activateSkill(hero.guid, skill.id); });
             // TODO : change to css behavior
-            if (hero.activeSkill == skill.id) {
+            if (hero.activeSkill === skill.id) {
                 skillWindow.style.border = "1px solid";
                 skillWindow.style.borderColor = "#44DD44";
             } else {
@@ -561,9 +561,9 @@ gameEngine.classes.UiManager.prototype = {
         }
     },
     
-    activeSkill : function (heroGuid, skillId) {
+    activateSkill : function (heroGuid, skillId) {
         for (let h in gameEngine.heros) {
-            if (gameEngine.heros[h].guid == heroGuid) {
+            if (gameEngine.heros[h].guid === heroGuid) {
                 gameEngine.heros[h].activeSkill = skillId;
                 this.drawSkill(gameEngine.heros[h]);
                 break;

@@ -26,9 +26,9 @@ murmures.TurnReport = function () {
     /** @type {murmures.Tile} */
     this.targetTile = {};
     /** @type {number} */
-    this.value = {};
+    this.value = 0;
     /** @type {number} */
-    this.priority = {};
+    this.priority = 0;
 };
 
 murmures.TurnReport.prototype = {

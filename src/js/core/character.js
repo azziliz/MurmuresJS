@@ -55,13 +55,13 @@ murmures.Character = function () {
     /** @type {number} */
     this.activeSkill = 0;
     /** @type {number} */
-    this.typeCharacter = murmures.C.TYPE_CHARACTER_MOB;
-    /** @type {number} */
     this.dexterity = 0;
     /** @type {number} */
     this.intelligence = 0;
     /** @type {number} */
     this.strength = 0;
+    /** @type {number} */
+    this.initiative = 0;
 };
 
 murmures.Character.prototype = {
@@ -82,12 +82,10 @@ murmures.Character.prototype = {
         this.canMove = ref.canMove || false;
         this.charSpotted = ref.charSpotted || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-
-        this.intelligence = Math.floor(Math.random()*10);
-        this.dexterity = Math.floor(Math.random()*10);
-        this.strength = Math.floor(Math.random()*10);
+        this.intelligence = Math.floor(Math.random() * 10);
+        this.dexterity = Math.floor(Math.random() * 10);
+        this.strength = Math.floor(Math.random() * 10);
         this.initiative = this.dexterity;
-
     },
     
     initialize : function (src) {
@@ -109,7 +107,6 @@ murmures.Character.prototype = {
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
         if (typeof src.skills !== 'undefined') this.skills = src.skills;
         if (typeof src.activeSkill !== 'undefined') this.activeSkill = src.activeSkill;
-        if (typeof src.typeCharacter !== 'undefined') this.typeCharacter = src.typeCharacter;
         if (typeof src.dexterity !== 'undefined') this.dexterity = src.dexterity;
         if (typeof src.intelligence !== 'undefined') this.intelligence = src.intelligence;
         if (typeof src.strength !== 'undefined') this.strength = src.strength;
@@ -165,7 +162,7 @@ murmures.Character.prototype = {
             ret.defaultDamageValue = this.defaultDamageValue;
             ret.canMove = this.canMove;
             ret.charSpotted = this.charSpotted;
-        }        
+        }
         
         for (let itMap in this.onVisionCharacters) {
             if (this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]) {
@@ -189,15 +186,6 @@ murmures.Character.prototype = {
     get isHero() {
         let ref = gameEngine.bodies[this.mobTemplate];
         return murmures.C.LAYERS[ref.layerId][0] === 'Hero';
-    },
-    
-    hasSkill : function (skillId) {
-        for (let s in this.skills) {
-            if (this.skills[s].id == parseInt(skillId)) {
-                return true;
-            }
-        }
-        return false;
     },
     
     setVision : function (tilesProcessed) {
@@ -237,14 +225,14 @@ murmures.Character.prototype = {
                     }
                     for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
                         let mob = gameEngine.level.mobs[itMob];
-                        if (mob.position.y == oyy && mob.position.x == oxx) {
+                        if (mob.position.y === oyy && mob.position.x === oxx) {
                             mob.charSpotted = true;
                             mob.onVisionCharacters[this.guid] = true;
                         }
                     }
                     for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
                         let hero = gameEngine.heros[itHero];
-                        if (hero.position.y == oyy && hero.position.x == oxx) {
+                        if (hero.position.y === oyy && hero.position.x === oxx) {
                             hero.onVisionCharacters[this.guid] = true;
                         }
                     }

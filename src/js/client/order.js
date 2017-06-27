@@ -1,10 +1,10 @@
 ﻿'use strict';
 
-gameEngine.classes.OrderManager = function () {
+murmures.OrderHandler = function () {
     this.allowOrders = true;
 }
 
-gameEngine.classes.OrderManager.prototype = {
+murmures.OrderHandler.prototype = {
     init : function () {
         let instance = this;
         window.addEventListener('tileEnter', function (e) {
@@ -23,12 +23,12 @@ gameEngine.classes.OrderManager.prototype = {
             if (check.valid) {
                 if (order.command === 'move') {
                     window.requestAnimationFrame(function (timestamp) {
-                        gameEngine.client.animationManager.queueTrail(order.source.position, order.target, timestamp, timestamp + 200);
+                        gameEngine.client.animationScheduler.queueTrail(order.source.position, order.target, timestamp, timestamp + 200);
                     });
                 }
                 else if (order.command === 'attack') {
                     window.requestAnimationFrame(function (timestamp) {
-                        gameEngine.client.animationManager.queueProjectile(timestamp, order.source.position, order.target);
+                        gameEngine.client.animationScheduler.queueProjectile(timestamp, order.source.position, order.target);
                     });
                 }
             }
@@ -46,7 +46,7 @@ gameEngine.classes.OrderManager.prototype = {
                 attackOrder.command = 'attack';
                 attackOrder.source = currentHero;
                 attackOrder.target = hoveredTile;
-                gameEngine.client.eventManager.emitEvent('launchOrder', attackOrder);
+                gameEngine.client.eventDispatcher.emitEvent('launchOrder', attackOrder);
             }
             else {
                 let moveOrder = new murmures.Order();
@@ -58,7 +58,7 @@ gameEngine.classes.OrderManager.prototype = {
                 }
                 moveOrder.source = currentHero;
                 moveOrder.target = hoveredTile;
-                gameEngine.client.eventManager.emitEvent('launchOrder', moveOrder);
+                gameEngine.client.eventDispatcher.emitEvent('launchOrder', moveOrder);
             }
         }, false);
         window.addEventListener('launchOrder', function (e) {
@@ -67,17 +67,17 @@ gameEngine.classes.OrderManager.prototype = {
             if (instance.allowOrders) {
                 if (check.valid) {
                     document.getElementById('hero' + order.source.guid + '-box').dataset.order = JSON.stringify(order);
-                    gameEngine.client.uiManager.log('>> order - ' + order.command);
+                    gameEngine.client.uiBuilder.log('>> order - ' + order.command);
                     order.clean();
                     gameEngine.client.ws.send(JSON.stringify({ service: 'order', payload: order }));
                     instance.allowOrders = false;
                 }
                 else {
-                    gameEngine.client.uiManager.log('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
+                    gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
                 }
             }
             else {
-                gameEngine.client.uiManager.log('<span style="color:#f66">' + 'WARNING - Order was discarded - Waiting for server response </span>');
+                gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'WARNING - Order was discarded - Waiting for server response </span>');
             }
         }, false);
         window.addEventListener('orderResponseReceivedFromServer', function (e) {
@@ -85,21 +85,21 @@ gameEngine.classes.OrderManager.prototype = {
             let ge = e.detail;
             if (typeof ge === 'undefined') return;
             if (typeof ge.error !== 'undefined') {
-                gameEngine.client.uiManager.log('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
+                gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
             }
             else {
                 let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
                 gameEngine.synchronize(ge);
                 //gameEngine.client.ws.send(JSON.stringify({ service: 'consistencyCheck', payload: gameEngine }));
                 if (isNewLevel) {
-                    gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
-                    gameEngine.client.eventManager.emitEvent('requestRenderFullEngine');
+                    gameEngine.client.eventDispatcher.emitEvent('requestRefreshCrawlUi');
+                    gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
                 }
                 else {
-                    gameEngine.client.eventManager.emitEvent('requestRefreshCrawlUi');
-                    gameEngine.client.eventManager.emitEvent('requestRenderPartialEngine', ge);
+                    gameEngine.client.eventDispatcher.emitEvent('requestRefreshCrawlUi');
+                    gameEngine.client.eventDispatcher.emitEvent('requestRenderPartialEngine', ge);
                 }
-                gameEngine.client.eventManager.emitEvent('requestRenderReportQueue');
+                gameEngine.client.eventDispatcher.emitEvent('requestRenderReportQueue');
             }
         }, false);
     },

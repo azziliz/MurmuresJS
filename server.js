@@ -5,7 +5,7 @@ var vm = require('vm');
 var fs = require('fs');
 var zlib = require('zlib');
 var http = require('http');
-var WebSocketServer = require("ws").Server
+var WebSocketServer = require("ws").Server // this is a dependency. See package.json
 var serverLoggers = [];
 
 /**
@@ -84,7 +84,6 @@ var murmures = {
             chosenHeroesKeys.push(chosenHero);
             let hero1 = new murmures.Character();
             hero1.build(gameEngine.level.getEntrance(), chosenHero);
-            hero1.typeCharacter = murmures.C.TYPE_CHARACTER_HERO;
             if (loopCounter === 0) {
                 hero1.setVision();
                 hero1.stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
@@ -101,7 +100,7 @@ var murmures = {
                     rd = (Math.floor(Math.random() * nbSkill) + 1)
                 } while (chosenSkill.indexOf(rd) >= 0);
                 chosenSkill.push(rd);
-                if (mainSkill == -1 || mainSkill > rd) mainSkill = rd;
+                if (mainSkill === -1 || mainSkill > rd) mainSkill = rd;
                 hero1.skills[rd] = gameEngine.skills[rd];
             }
             if (mainSkill != -1) hero1.activeSkill = mainSkill;
@@ -152,8 +151,6 @@ murmures.serverLog('Loading classes');
     vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalbody.js' });
     let behaviorjs = fs.readFileSync('./src/js/core/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(behaviorjs, ctx, { filename: 'behavior.js' });
-    let skillbehaviorjs = fs.readFileSync('./src/js/core/skillbehavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
-    vm.runInContext(skillbehaviorjs, ctx, { filename: 'skillbehavior.js' });
     let skilljs = fs.readFileSync('./src/js/core/skill.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(skilljs, ctx, { filename: 'skill.js' });
     let vmperfjs = fs.readFileSync('./src/js/test/vmperf.js', 'utf8').toString().replace(/^\uFEFF/, '');
@@ -191,7 +188,7 @@ murmures.serverLog('Initializing game');
         murmures.clientScripts += fs.readFileSync('./src/js/client/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.coreScripts = '\uFEFF'; // BOM
-    ['clientBase', 'constants', 'skillbehavior', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'pathfinding', 'gameengine'].forEach(function (scriptName) {
+    ['clientbase', 'constants', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'pathfinding', 'gameengine'].forEach(function (scriptName) {
         murmures.coreScripts += fs.readFileSync('./src/js/core/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.restartGame();
@@ -296,7 +293,7 @@ wss.on('connection', function (ws) {
                 if (check.valid) {
                     //gameEngine.gameTurn++;
                     //murmures.serverLog('Order checked');
-                    let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn.
+                    let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn for better performances.
                     //murmures.serverLog('State saved');
                     gameEngine.saveOrder(clientOrder);
                     let ge = gameEngine.compare(beforeState);
