@@ -1,12 +1,13 @@
-﻿'use strict';
-//debugger;
-
-/**
+﻿/**
  * @file TurnReport class. Part of the MurmuresJS project.
  * @author github.com/azziliz
  * @author github.com/thyshimrod
+ * {@link https://github.com/azziliz/MurmuresJS/ Project page}
  * @license MIT
  */
+
+'use strict';
+//debugger;
 
 /**
  * Turn reports are objects sent by the server to the client at the beginning of each turn.

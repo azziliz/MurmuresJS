@@ -1,12 +1,13 @@
-﻿'use strict';
-//debugger;
-
-/**
+﻿/**
  * @file Activation class. Part of the MurmuresJS project.
  * @author github.com/azziliz
  * @author github.com/thyshimrod
+ * {@link https://github.com/azziliz/MurmuresJS/ Project page}
  * @license MIT
  */
+
+'use strict';
+//debugger;
 
 /**
  * An Activation is a time lapse during which a Characters prepares a Skill for launch.

@@ -1,12 +1,13 @@
-'use strict';
-//debugger;
-
 /**
  * @file Skill class. Part of the MurmuresJS project.
  * @author github.com/azziliz
  * @author github.com/thyshimrod
+ * {@link https://github.com/azziliz/MurmuresJS/ Project page}
  * @license MIT
  */
+
+'use strict';
+//debugger;
 
 /**
  * A skill is a template grab from global skill.json

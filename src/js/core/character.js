@@ -1,12 +1,13 @@
-'use strict';
-//debugger;
-
 /**
  * @file Character class. Part of the MurmuresJS project.
  * @author github.com/azziliz
  * @author github.com/thyshimrod
+ * {@link https://github.com/azziliz/MurmuresJS/ Project page}
  * @license MIT
  */
+
+'use strict';
+//debugger;
 
 /**
  * Characters are entities that live, move and act inside a [level]{@link murmures.Level}.

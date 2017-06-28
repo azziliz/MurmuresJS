@@ -1,12 +1,13 @@
-'use strict';
-//debugger;
-
 /**
  * @file Level class. Part of the MurmuresJS project.
  * @author github.com/azziliz
  * @author github.com/thyshimrod
+ * {@link https://github.com/azziliz/MurmuresJS/ Project page}
  * @license MIT
  */
+
+'use strict';
+//debugger;
 
 /**
  * Level is a class that contains all necessary information to build a new game zone.
