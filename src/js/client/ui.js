@@ -102,6 +102,8 @@ test3<br>test4 \
 
     };
     // #endregion
+
+    this.crawlUiMobCount = 0;
 }
 
 murmures.UiBuilder.prototype = {
@@ -430,7 +432,7 @@ murmures.UiBuilder.prototype = {
         if (this.hasMainWindows()) {
             document.getElementById('leftCharacters').innerHTML = '';
             document.getElementById('rightCharacters').innerHTML = '';
-            gameEngine.level.uiMobCount = 0;
+            this.crawlUiMobCount = 0;
         }
     },
 
@@ -443,15 +445,15 @@ murmures.UiBuilder.prototype = {
             document.getElementById('deathWindow').style.display = "none";
         }
         if (typeof gameEngine.level.mobs !== 'undefined') {
-            while (gameEngine.level.mobs.length > gameEngine.level.uiMobCount) {
+            while (gameEngine.level.mobs.length > this.crawlUiMobCount) {
                 let characterUiTemplate = this.template.characterTemplate;
                 let templateStr = /template/g;
-                document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + gameEngine.level.uiMobCount.toString()));
-                document.getElementById('mob' + gameEngine.level.uiMobCount.toString() + '-fullLife').addEventListener('mousemove', function (e) {
+                document.getElementById('rightCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, 'mob' + this.crawlUiMobCount.toString()));
+                document.getElementById('mob' + this.crawlUiMobCount.toString() + '-fullLife').addEventListener('mousemove', function (e) {
                 // TODO  bug #136
-                //document.getElementById('mob' + gameEngine.level.uiMobCount.toString() + '-hptooltip').innerHTML = gameEngine.level.mobs[gameEngine.level.uiMobCount].hitPoints + '/' + gameEngine.level.mobs[gameEngine.level.uiMobCount].hitPointsMax;
+                //document.getElementById('mob' + this.crawlUiMobCount.toString() + '-hptooltip').innerHTML = gameEngine.level.mobs[this.crawlUiMobCount].hitPoints + '/' + gameEngine.level.mobs[this.crawlUiMobCount].hitPointsMax;
                 }, false);
-                gameEngine.level.uiMobCount++;
+                this.crawlUiMobCount++;
             }
             for (let i = 0; i < gameEngine.level.mobs.length; i++) {
                 let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
