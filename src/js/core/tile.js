@@ -101,7 +101,7 @@ murmures.Tile.prototype = {
         if (this.effectId !== beforeState.effectId) ret.effectId = this.effectId;
         if (this.propId !== beforeState.propId &&
         JSON.stringify(this.behavior) !== JSON.stringify(beforeState.behavior)) ret.behavior = this.behavior;
-        for (let prop in ret) {
+        if (Object.getOwnPropertyNames(ret).length > 0) {
             // only returns ret if not empty
             ret.x = this.x;
             ret.y = this.y;

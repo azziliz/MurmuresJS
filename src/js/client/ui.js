@@ -368,8 +368,8 @@ murmures.UiBuilder.prototype = {
         document.getElementById('newLevel').addEventListener("mousedown", function (e) {
             let newLvl = new murmures.Level();
             newLvl.id = document.getElementById('levelId').value;
-            newLvl.width = parseInt(document.getElementById('levelWidth').value);
-            newLvl.height = parseInt(document.getElementById('levelHeight').value);
+            newLvl.width = parseInt(document.getElementById('levelWidth').value, 10);
+            newLvl.height = parseInt(document.getElementById('levelHeight').value, 10);
             newLvl.layout = gameEngine.level.layout;
             newLvl.tiles = [];
             for (let y = 0; y < newLvl.height; y++) {
@@ -394,7 +394,7 @@ murmures.UiBuilder.prototype = {
         document.getElementById('behavior').addEventListener('change', function () { gameEngine.client.eventDispatcher.emitEvent('editorSave'); });
         document.getElementById('dumpButton').addEventListener('mousedown', function (event) {
             //cleanup
-            for (let key in gameEngine.bodies) {
+            Object.keys(gameEngine.bodies).forEach(function (key) {
                 let body = gameEngine.bodies[key];
                 //if (['31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44'].indexOf(body.layerId) >= 0) {
                 //    body.isMob = true;
@@ -409,7 +409,7 @@ murmures.UiBuilder.prototype = {
                 if (!body.allowUnderground) delete body.allowUnderground;
                 if (!body.allowEthereal) delete body.allowEthereal;
                 if (JSON.stringify(body.behavior) === '{}') delete body.behavior;
-            }
+            });
             document.getElementById("screenLog").innerHTML = JSON.stringify(gameEngine.bodies);
             document.getElementById("screenLog").style.display = "block";
             //setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 10000);
@@ -539,14 +539,14 @@ murmures.UiBuilder.prototype = {
     
     drawSkill : function (hero) {
         let nbSkill = 1;
-        let instance = this;
-        for (let itSkill in hero.skills) {
-            let skill = hero.skills[itSkill];
-            let ref = gameEngine.bodies[skill.asset];
-            let tilesetRank = ref.rank;
-            let tilesetX = tilesetRank % 64;
-            let tilesetY = (tilesetRank - tilesetX) / 64;
-            let skillWindow = document.getElementById('hero' + hero.guid + '-skill' + nbSkill);
+        const instance = this;
+        Object.keys(hero.skills).forEach(function (itSkill) {
+            const skill = hero.skills[itSkill];
+            const ref = gameEngine.bodies[skill.asset];
+            const tilesetRank = ref.rank;
+            const tilesetX = tilesetRank % 64;
+            const tilesetY = (tilesetRank - tilesetX) / 64;
+            const skillWindow = document.getElementById('hero' + hero.guid + '-skill' + nbSkill);
             skillWindow.style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
             skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
             skillWindow.style.backgroundColor = "#ffffff";
@@ -560,17 +560,16 @@ murmures.UiBuilder.prototype = {
                 skillWindow.style.border = "0px";
             }
             nbSkill++;
-        }
+        });
     },
     
     activateSkill : function (heroGuid, skillId) {
-        for (let h in gameEngine.heros) {
-            if (gameEngine.heros[h].guid === heroGuid) {
-                gameEngine.heros[h].activeSkill = skillId;
-                this.drawSkill(gameEngine.heros[h]);
-                break;
+        gameEngine.heros.forEach(function (hero) {
+            if (hero.guid === heroGuid) {
+                hero.activeSkill = skillId;
+                this.drawSkill(hero);
             }
-        }
+        }, this);
     },
     
     paintIcons : function (title, layerId) {
@@ -578,13 +577,13 @@ murmures.UiBuilder.prototype = {
         let templateStr = /template/g;
         document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div class="collapsible">' + title + '</div>');
         document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', '<div class="collapsiblepanel" id="subpanel.' + layerId[0] + '"></div>');
-        for (let groundId in gameEngine.bodies) {
-            let ref = gameEngine.bodies[groundId];
+        Object.keys(gameEngine.bodies).forEach(function (groundId) {
+            const ref = gameEngine.bodies[groundId];
             if (layerId.indexOf(ref.layerId) >= 0) {
-                let tilesetRank = ref.rank;
-                let tilesetX = tilesetRank % 64;
-                let tilesetY = (tilesetRank - tilesetX) / 64;
-                let groundCopy = groundId;
+                const tilesetRank = ref.rank;
+                const tilesetX = tilesetRank % 64;
+                const tilesetY = (tilesetRank - tilesetX) / 64;
+                const groundCopy = groundId;
                 document.getElementById('subpanel.' + layerId[0]).insertAdjacentHTML('beforeend', tileUiTemplate.replace(templateStr, groundId));
                 document.getElementById(groundId + '-icon').style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
                 document.getElementById(groundId + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
@@ -593,7 +592,7 @@ murmures.UiBuilder.prototype = {
                     if (e.button === 2) {
                         for (let key in gameEngine.bodies) {
                             if (gameEngine.bodies[key].rank === tilesetRank) {
-                                let body = gameEngine.bodies[key];
+                                const body = gameEngine.bodies[key];
                                 document.getElementById('uniqueId').value = key;
                                 document.getElementById('layerId').value = body.layerId;
                                 document.getElementById('rank').value = body.rank;
@@ -618,9 +617,8 @@ murmures.UiBuilder.prototype = {
                 document.getElementById(groundId + '-icon').addEventListener("contextmenu", function (e) { // mouse right click
                     e.preventDefault();
                 }, false);
-
             }
-        }
+        });
     },
     // #endregion
     

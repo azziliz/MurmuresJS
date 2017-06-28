@@ -56,7 +56,7 @@ murmures.Renderer.prototype = {
         xhr.addEventListener("abort", gameEngine.client.eventDispatcher.onXhrError);
         xhr.addEventListener("progress", function (evt) {
             if (evt.lengthComputable) {
-                let percentComplete = parseInt(50.0 * evt.loaded / evt.total);
+                let percentComplete = parseInt(50.0 * evt.loaded / evt.total, 10);
                 gameEngine.client.eventDispatcher.emitEvent('tilesetLoadProgress', percentComplete);
             }
         });

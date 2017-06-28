@@ -34,7 +34,7 @@ window.onload = function () {
         let body = {};
         let uniqueId = document.getElementById('uniqueId').value;
         body.layerId = document.getElementById('layerId').value;
-        body.rank = parseInt(document.getElementById('rank').value);
+        body.rank = parseInt(document.getElementById('rank').value, 10);
         let hasPhysics = document.getElementById('hasPhysics').checked;
         if (hasPhysics) {
             body.hasPhysics = true;

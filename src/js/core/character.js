@@ -163,15 +163,13 @@ murmures.Character.prototype = {
             ret.canMove = this.canMove;
             ret.charSpotted = this.charSpotted;
         }
-        
         for (let itMap in this.onVisionCharacters) {
             if (this.onVisionCharacters[itMap] !== beforeState.onVisionCharacters[itMap]) {
                 ret.onVisionCharacters = this.onVisionCharacters;
                 break;
             }
         }
-        
-        for (let prop in ret) {
+        if (Object.getOwnPropertyNames(ret).length > 0) {
             // only returns ret if not empty
             ret.guid = this.guid;
             return ret;

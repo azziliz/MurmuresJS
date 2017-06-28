@@ -227,7 +227,7 @@ murmures.Level.prototype = {
             }, this);
             if (mobs_.length > 0) ret.mobs = mobs_;
         }
-        for (let prop in ret) {
+        if (Object.getOwnPropertyNames(ret).length > 0) {
             // only returns ret if not empty
             return ret;
         }

@@ -1,12 +1,13 @@
-'use strict';
-//debugger;
-
 /**
  * @file GameEngine class. Part of the MurmuresJS project.
  * @author github.com/azziliz
  * @author github.com/thyshimrod
+ * {@link https://github.com/azziliz/MurmuresJS/ Project page}
  * @license MIT
  */
+
+'use strict';
+//debugger;
 
 /**
  * GameEngine is the main manager for all game objects.
@@ -162,7 +163,7 @@ murmures.GameEngine.prototype = {
         if (this.reportQueue.length > 0) {
             ret.reportQueue = this.reportQueue;
         }
-        for (let prop in ret) {
+        if (Object.getOwnPropertyNames(ret).length > 0) {
             // only returns ret if not empty
             return ret;
         }
@@ -339,8 +340,6 @@ murmures.GameEngine.prototype = {
     
     applyAI : function () {
         let heros = this.heros;
-        let level = this.level;
-        let bodies = this.bodies;
         this.level.mobs.forEach(function (mob) {
             if (mob.charSpotted) {
                 let fireOnHero = false;

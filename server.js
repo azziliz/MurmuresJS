@@ -69,10 +69,10 @@ var murmures = {
         
         gameEngine.heros = [];
         let allHeroesKeys = [];
-        for (let assetId in gameEngine.bodies) {
-            let ref = gameEngine.bodies[assetId];
+        Object.keys(gameEngine.bodies).forEach(function (assetId) {
+            const ref = gameEngine.bodies[assetId];
             if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') allHeroesKeys.push(assetId);
-        }
+        });
         
         let chosenHeroesKeys = [];
         let chosenHero;
@@ -177,11 +177,11 @@ murmures.serverLog('Initializing game');
     gameEngine.locale.en = JSON.parse(localeenJson);
     
     let localSkills = JSON.parse(fs.readFileSync('./data/reference/skill.json', 'utf8').toString().replace(/^\uFEFF/, ''));
-    for (let skillName in localSkills) {
+    Object.keys(localSkills).forEach(function (skillName) {
         let tempSkill = new murmures.Skill();
         tempSkill.build(localSkills[skillName], skillName);
         gameEngine.skills[tempSkill.id] = tempSkill;
-    }
+    });
     
     murmures.clientScripts = '\uFEFF'; // BOM
     ['base', 'renderer', 'ui', 'animation', 'order', 'input', 'event', 'client'].forEach(function (scriptName) {
@@ -300,7 +300,7 @@ wss.on('connection', function (ws) {
                     let res = JSON.stringify({ fn: 'o', payload: ge });
                     //murmures.serverLog('Response stringified');
                     // broadcast to all clients
-                    wss.clients.forEach(function each(client) {
+                    wss.clients.forEach(function (client) {
                         client.send(res);
                     });
                     // cleaning
@@ -317,7 +317,7 @@ wss.on('connection', function (ws) {
         }
         else if (message.service === 'restart') {
             murmures.restartGame(message.payload);
-            wss.clients.forEach(function each(client) {
+            wss.clients.forEach(function (client) {
                 client.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
             });
         }

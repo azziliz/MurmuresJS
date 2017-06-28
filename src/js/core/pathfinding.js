@@ -67,8 +67,8 @@ murmures.Pathfinding.prototype = {
                 if (currentFscore > 100000) this.throwUnexpected("currentFscore is too high");
             }
             var currentTile = this.openSet[currentFscore].pop();
-            var currentTileX = parseInt(currentTile.split(':')[0]);
-            var currentTileY = parseInt(currentTile.split(':')[1]);
+            var currentTileX = parseInt(currentTile.split(':')[0], 10);
+            var currentTileY = parseInt(currentTile.split(':')[1], 10);
             if (this.openSet[currentFscore].length === 0) delete this.openSet[currentFscore];
             this.openSetCount--;
             if (currentTileX === target.x && currentTileY === target.y) {
