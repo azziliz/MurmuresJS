@@ -34,35 +34,53 @@ murmures.Activation.prototype = {
      * Initialization method reserved for the server.
      */
     build : function (src) {
-        // TODO
+        this.startTick = (typeof src.startTick === 'undefined') ? '' : src.startTick;
+        this.endTick = (typeof src.endTick === 'undefined') ? '' : src.endTick;
+        this.remainingWork = (typeof src.remainingWork === 'undefined') ? '' : src.remainingWork;
+        this.order = (typeof src.order === 'undefined') ? '' : src.order;
     },
     
     /**
      * Initialization method reserved for the client.
      */
     initialize : function (src) {
-        // TODO
+        this.synchronize(src);
+
     },
     
     /**
      * Synchronization method reserved for the client.
      */
     synchronize : function (src) {
-        // TODO
+        if (typeof src === 'undefined') return;
+        if (typeof src.startTick !== 'undefined') this.startTick = src.startTick;
+        if (typeof src.endTick !== 'undefined') this.endTick = src.endTick;
+        if (typeof src.remainingWork !== 'undefined') this.remainingWork = src.remainingWork;
+        if (typeof src.order !== 'undefined') this.order = src.order;
     },
     
     /**
      * Cloning method reserved for the server.
      */
     clone : function () {
-        // TODO
+        return{
+            order : this.order,
+            startTick : this.startTick,
+            endTick : this.endTick,
+            remainingWork : this.remainingWork,
+        };
     },
     
     /**
      * Comparison method reserved for the server.
      */
     compare : function (beforeState) {
-        // TODO
+        let ret = {};
+        if (this.startTick !== beforeState.startTick) ret.startTick = this.startTick;
+        if (this.endTick !== beforeState.endTick) ret.endTick = this.endTick;
+        if (this.remainingWork !== beforeState.remainingWork) ret.remainingWork = this.remainingWork;
+        if (JSON.stringify(this.order) !== JSON.stringify(beforeState.order)) ret.order = this.order;
+        if(Object.getOwnPropertyNames(ret).length > 0) return ret;
     },
     
     /**
