@@ -64,7 +64,7 @@ murmures.Activation.prototype = {
      */
     clone : function () {
         return{
-            order : this.order,
+            order : this.order.clone(),
             startTick : this.startTick,
             endTick : this.endTick,
             remainingWork : this.remainingWork,
@@ -79,7 +79,8 @@ murmures.Activation.prototype = {
         if (this.startTick !== beforeState.startTick) ret.startTick = this.startTick;
         if (this.endTick !== beforeState.endTick) ret.endTick = this.endTick;
         if (this.remainingWork !== beforeState.remainingWork) ret.remainingWork = this.remainingWork;
-        if (JSON.stringify(this.order) !== JSON.stringify(beforeState.order)) ret.order = this.order;
+        const retOrder = this.order.compare(beforeState.order);
+        if (typeof retOrder !== 'undefined') ret.order = retOrder;
         if(Object.getOwnPropertyNames(ret).length > 0) return ret;
     },
     
