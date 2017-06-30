@@ -77,14 +77,45 @@ murmures.Timeline.prototype = {
      * When an Activation is enqueued, the simulation becomes invalidated and has to run again
      */
     enqueue : function (activation) {
-        // TODO
+        /**
+         * check hero has no other activation in progress
+         */
+        let found = "undefined";
+        for(let i=0;i<this.activationQueue.length && found === "undefined";i++){
+            if(activation.order.source.guid === activationQueue[i].order.source.guid){
+                found = activationQueue[i];
+            }
+        }
+        if (found !== "undefined"){
+            /**
+             * if another activation was found, check if it is solved or not
+             * if yes, dequeue it, and enqueue the new one
+             * if not, nothing to do, and no enqueue the new one
+             */ 
+            if (found.endTick > this.time){
+                this.dequeue(found);
+                this.activationQueue.push(activation);
+                this.simulate();
+            }
+        }else{
+            /**
+             * ordinary case, enqueue the activation
+             */
+            this.activationQueue.push(activation);
+            this.simulate();
+        }
+
     },
     
     /**
      * Pops the Activation passed in parameter from this queue and returns it.
      */
     dequeue : function (activation) {
-        // TODO
+        if (this.activationQueue.indexOf(activation)!=-1){
+            this.activationQueue.pop(activation);
+            return activation;
+        }
+        return;
     },
     
     /**

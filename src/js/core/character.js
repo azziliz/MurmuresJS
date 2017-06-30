@@ -234,33 +234,7 @@ murmures.Character.prototype = {
                         }
                     }
                     
-                    /*const mob = level.tiles[oyy][oxx].hasmob;
-                    murmures.serverLog(level.tiles[oyy][oxx]);
-                    if(this.isHero === false){
-                        if(mob.code && mob.isHero){
-                            this.charSpotted = true;
-                            this.onVisionCharacters[mob.mob.guid] = true;
-                        }
-                    }else{
-                        if(mob.code && mob.isHero){
-                            this.onVisionCharacters[mob.mob.guid] = true;
-                        }
-                    }*/
-                    /*for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
-                        let mob = gameEngine.level.mobs[itMob];
-                        if (mob.position.y === oyy && mob.position.x === oxx) {
-                            mob.charSpotted = true;
-                            mob.onVisionCharacters[this.guid] = true;
-                        }
-                    }
-                    for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
-                        let hero = gameEngine.heros[itHero];
-                        if (hero.position.y === oyy && hero.position.x === oxx) {
-                            hero.onVisionCharacters[this.guid] = true;
-                        }
-                    }*/
-                    
-                    if (toProceed && this.isHero === true) {
+                    if (toProceed && this.isHero) {
                         level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
                         tilesProcessed.push(level.tiles[oyy][oxx]);
                     }
