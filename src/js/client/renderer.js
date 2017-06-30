@@ -17,7 +17,7 @@ murmures.Renderer = function () {
 
 murmures.Renderer.prototype = {
     init : function () {
-        let instance = this;
+        const instance = this;
         window.addEventListener('requestTileset', function (e) {
             instance.downloadColorTileset();
         }, false);
@@ -50,7 +50,7 @@ murmures.Renderer.prototype = {
     
     // #region tileset
     downloadColorTileset : function () {
-        let instance = this;
+        const instance = this;
         let xhr = new XMLHttpRequest();
         xhr.addEventListener("error", gameEngine.client.eventDispatcher.onXhrError);
         xhr.addEventListener("abort", gameEngine.client.eventDispatcher.onXhrError);
@@ -116,7 +116,7 @@ murmures.Renderer.prototype = {
         //    }
         //    img.src = gameEngine.client.tilesetGray;
         //});
-        let instance = this;
+        const instance = this;
         let img = new Image();
         img.onload = function () {
             instance.tileset.gray.imgElement = img;

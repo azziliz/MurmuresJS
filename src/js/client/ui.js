@@ -108,7 +108,7 @@ test3<br>test4 \
 
 murmures.UiBuilder.prototype = {
     init : function () {
-        let instance = this;
+        const instance = this;
         window.addEventListener('requestTileset', function () {
             instance.drawProgressBar();
         }, false);

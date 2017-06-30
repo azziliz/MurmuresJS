@@ -6,7 +6,7 @@ murmures.OrderHandler = function () {
 
 murmures.OrderHandler.prototype = {
     init : function () {
-        let instance = this;
+        const instance = this;
         window.addEventListener('tileEnter', function (e) {
             let hoveredTile = e.detail;
             let order = new murmures.Order();

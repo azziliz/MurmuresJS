@@ -14,7 +14,7 @@ murmures.EventDispatcher.prototype = {
     init : function () {
         if (this.eventsRegistered) return; // We want to resister events only once
         
-        let instance = this;
+        const instance = this;
         gameEngine.client.ws.onmessage = function (event) {
             let message = JSON.parse(event.data);
             if (message.fn === 'init') {
