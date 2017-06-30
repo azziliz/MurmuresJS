@@ -109,10 +109,10 @@ test3<br>test4 \
 murmures.UiBuilder.prototype = {
     init : function () {
         let instance = this;
-        window.addEventListener('requestTileset', function (e) {
+        window.addEventListener('requestTileset', function () {
             instance.drawProgressBar();
         }, false);
-        window.addEventListener('requestDevTools', function (e) {
+        window.addEventListener('requestDevTools', function () {
             instance.drawFullLogHeader();
             window.addEventListener('engineReceivedFromServer', function (e) {
                 instance.loadDevTools(e.detail);
@@ -122,16 +122,16 @@ murmures.UiBuilder.prototype = {
         window.addEventListener('tilesetLoadProgress', function (e) {
             instance.updateProgressBar(e.detail);
         }, false);
-        window.addEventListener('grayscaleTilesetReady', function (e) {
+        window.addEventListener('grayscaleTilesetReady', function () {
             instance.hideProgressBar();
         }, false);
-        window.addEventListener('requestCrawlUi', function (e) {
+        window.addEventListener('requestCrawlUi', function () {
             instance.drawCrawlUi();
         }, false);
-        window.addEventListener('requestEditorUi', function (e) {
+        window.addEventListener('requestEditorUi', function () {
             instance.drawEditorUi();
         }, false);
-        window.addEventListener('requestRefreshCrawlUi', function (e) {
+        window.addEventListener('requestRefreshCrawlUi', function () {
             instance.clearAllCharacters();
             instance.updateUI();
         }, false);

@@ -8,7 +8,7 @@ murmures.InputHandler = function () {
 murmures.InputHandler.prototype = {
     init : function () {
         let instance = this;
-        window.addEventListener('mainWindowReady', function (e) {
+        window.addEventListener('mainWindowReady', function () {
             // IE11 returns decimal number for MouseEvent coordinates but Chrome43 always rounds down.
             // --> using floor() for consistency.
             // and retrieves the nearest pixel coordinates.

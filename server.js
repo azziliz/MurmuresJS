@@ -32,8 +32,8 @@ var murmures = {
      * @public
      */
     serverLog: function (txt, details) {
-        let diff = process.hrtime(this.startTime);
-        let fdiff = diff[0] + diff[1] / 1e9;
+        const diff = process.hrtime(this.startTime);
+        const fdiff = diff[0] + diff[1] / 1e9;
         if (typeof txt !== 'undefined') {
             if(typeof txt === 'object'){
                 console.log(fdiff.toFixed(6) + ' - %o' , txt);
@@ -55,8 +55,8 @@ var murmures = {
         gameEngine.levelIds = fs.readdirSync('./data/staticlevels/', 'utf8');
         let loopCounter = 0;
         gameEngine.levelIds.forEach(function (levelName) {
-            let level1Txt = fs.readFileSync('./data/staticlevels/' + levelName, 'utf8').toString().replace(/^\uFEFF/, '');
-            let level1 = new murmures.Level();
+            const level1Txt = fs.readFileSync('./data/staticlevels/' + levelName, 'utf8').toString().replace(/^\uFEFF/, '');
+            const level1 = new murmures.Level();
             level1.build(JSON.parse(level1Txt));
             level1.id = levelName.replace('.json', '');
             gameEngine.levels.push(level1);
@@ -68,17 +68,17 @@ var murmures = {
         gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
         
         gameEngine.heros = [];
-        let allHeroesKeys = [];
+        const allHeroesKeys = [];
         Object.keys(gameEngine.bodies).forEach(function (assetId) {
             const ref = gameEngine.bodies[assetId];
             if (murmures.C.LAYERS[ref.layerId][0] === 'Hero') allHeroesKeys.push(assetId);
         });
         
-        let chosenHeroesKeys = [];
+        const chosenHeroesKeys = [];
         let chosenHero;
         for (loopCounter = 0; loopCounter < 3; loopCounter++) {
             do {
-                let rand = Math.floor(Math.random() * allHeroesKeys.length);
+                const rand = Math.floor(Math.random() * allHeroesKeys.length);
                 chosenHero = allHeroesKeys[rand];
             } while (chosenHeroesKeys.indexOf(chosenHero) >= 0); // This loop prevents duplicate heroes
             chosenHeroesKeys.push(chosenHero);

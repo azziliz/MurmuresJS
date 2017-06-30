@@ -34,8 +34,8 @@ murmures.AnimationScheduler.prototype = {
             }, this);
             this.animationQueue = newAnimationQueue;
         }
-        window.requestAnimationFrame(function (timestamp) {
-            instance.animationTick(timestamp);
+        window.requestAnimationFrame(function (ts) {
+            instance.animationTick(ts);
         });
     },
     
