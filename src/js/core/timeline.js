@@ -111,7 +111,11 @@ murmures.Timeline.prototype = {
      * Pops the Activation passed in parameter from this queue and returns it.
      */
     dequeue : function (activation) {
-        // TODO
+        if (this.activationQueue.indexOf(activation)!=-1){
+            this.activationQueue.pop(activation);
+            return activation;
+        }
+        return;
     },
     
     /**
