@@ -59,7 +59,7 @@ test3<br>test4 \
 <button id="dumpButton">Dump</button> \
 </div>',
         crawlPanel : '<div id="corridor" class="corridor"> \
-<div id="crawl" style="position:relative; float:left;"> \
+<div id="crawl" style="position:relative;"> \
 <canvas id="tilesLayer" width="1400" height="840" style="z-index: 15"></canvas> \
 <canvas id="fogOfWarLayer" width="1400" height="840" style="z-index: 25; opacity:0.5"></canvas> \
 <canvas id="trailLayer" width="1400" height="840" style="z-index: 30"></canvas> \
@@ -104,6 +104,7 @@ test3<br>test4 \
     // #endregion
 
     this.crawlUiMobCount = 0;
+    this.timelineComponent = {};
 }
 
 murmures.UiBuilder.prototype = {
@@ -127,6 +128,8 @@ murmures.UiBuilder.prototype = {
         }, false);
         window.addEventListener('requestCrawlUi', function () {
             instance.drawCrawlUi();
+            instance.timelineComponent = new murmures.UiTimelineComponent();
+            instance.timelineComponent.init(instance);
         }, false);
         window.addEventListener('requestEditorUi', function () {
             instance.drawEditorUi();
@@ -246,6 +249,16 @@ murmures.UiBuilder.prototype = {
     // #endregion
     
     // #region draw main UI elements
+    centerCrawlPanel : function () {
+        const allStyles = window.getComputedStyle(document.getElementById('corridor'));
+        const midWidth = parseInt(allStyles.width, 10) / 2;
+        const hero0w = gameEngine.tileSize * (gameEngine.heros[0].position.x + 0.5);
+        document.getElementById('crawl').style.left = (midWidth - hero0w).toString() + 'px';
+        const midHeight = parseInt(allStyles.height, 10) / 2;
+        const hero0h = gameEngine.tileSize * (gameEngine.heros[0].position.y + 0.5);
+        document.getElementById('crawl').style.top = (midHeight - hero0h).toString() + 'px';
+    },
+    
     getMainWindows : function () {
         return document.getElementById('mainWindow');
     },
@@ -258,9 +271,10 @@ murmures.UiBuilder.prototype = {
         if (!this.hasMainWindows()) {
             this.drawMainWindow();
             this.drawLeftCharacterPanel();
-            this.drawCrawlPanel();
             this.drawRightCharacterPanel();
+            this.drawCrawlPanel();
             this.drawDeathWindow();
+            window.addEventListener('resize', this.centerCrawlPanel);
         }
         gameEngine.client.eventDispatcher.emitEvent('mainWindowReady');
     },
@@ -532,7 +546,9 @@ murmures.UiBuilder.prototype = {
             let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
             document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
             this.drawSkill(gameEngine.heros[i]);
-        }    },
+        }
+        this.centerCrawlPanel();
+    },
     
     updateEditor : function () {
     },
