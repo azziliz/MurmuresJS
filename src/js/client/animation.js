@@ -18,6 +18,7 @@ murmures.AnimationScheduler.prototype = {
     
     animationTick : function (timestamp) {
         const instance = this;
+        gameEngine.client.eventDispatcher.emitEvent('animationTick');
         if (this.animationQueue.length > 0) {
             const newAnimationQueue = [];
             document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);

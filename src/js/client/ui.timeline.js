@@ -4,6 +4,8 @@ murmures.UiTimelineComponent = function () {
     // #region templates
     this.template = {
         frame : '<div id="uitcFrame" class="uitcFrame"></div>',
+        mark : '<div id="uitcMark_{id}" class="uitcMark"></div>',
+        markicons : '<div id="uitcMarkIcons_{id}" class="uitcMark"></div>',
     };
     // #endregion
     this.parent = {};
@@ -24,16 +26,21 @@ murmures.UiTimelineComponent.prototype = {
         window.addEventListener('requestTimelineScroll', function () {
 
         }, false);
-        window.addEventListener('requestTimelineClick', function (e) {
+        window.addEventListener('requestTimelineClick', function () {
 
         }, false);
-        window.addEventListener('animationTick', function (e) {
-
+        window.addEventListener('animationTick', function () {
+            instance.refresh();
         }, false);
         this.drawFrame();
     },
     
     refresh : function () {
+        if (this.hasFrame()) {
+            this.getFrame().innerHTML = '';
+        }
+        //for (let activation in gameEngine.timeline.activationQueue) {
+        //}
     },
     
     // #region frame
@@ -47,9 +54,8 @@ murmures.UiTimelineComponent.prototype = {
     
     drawFrame : function () {
         if (!this.hasFrame()) {
-            this.parent.getMainWindows().insertBefore(
-                this.parent.createElementFromTemplate(this.template.frame),
-            this.parent.getMainWindows().lastChild);
+            this.parent.getMainWindows().appendChild(
+                this.parent.createElementFromTemplate(this.template.frame));
         }
     },
     // #endregion

@@ -230,7 +230,7 @@ div.collapsiblepanel {
     background-color:aquamarine;
     width: calc(100% - 450px);
     height: 75px;
-    margin: 0px auto 5px auto;
+    margin: 10px auto 5px auto;
 }
 
 .corridor {
