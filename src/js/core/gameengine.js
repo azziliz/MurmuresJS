@@ -341,7 +341,6 @@ murmures.GameEngine.prototype = {
     applyAI : function () {
         let heros = this.heros;
         this.level.mobs.forEach(function (mob) {
-            mob.setVision();
             if (mob.charSpotted) {
                 let fireOnHero = false;
                 for (let itHero = 0; itHero < heros.length; itHero++) {

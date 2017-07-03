@@ -191,7 +191,7 @@ murmures.Character.prototype = {
         murmures.serverLog("hero position");
         let level = gameEngine.level;
         if (typeof tilesProcessed === 'undefined' || tilesProcessed === null) { tilesProcessed = []; }
-        for (let xx=0; xx < level.width && this.isHero === true; xx++) {
+        for (let xx=0; xx < level.width; xx++) {
             for (let yy=0; yy < level.height; yy++) {
                 let toProceed = (tilesProcessed.indexOf(level.tiles[yy][xx]) < 0);
                 if (toProceed) {
@@ -222,19 +222,21 @@ murmures.Character.prototype = {
                     if ((!groundLight || !propLight) && (j > 0)) {
                         breakObstacle = true;
                     }
+                    for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+                        let mob = gameEngine.level.mobs[itMob];
+                        if (mob.position.y === oyy && mob.position.x === oxx) {
+                            mob.charSpotted = true;
+                            mob.onVisionCharacters[this.guid] = true;
+                        }
+                    }
                     for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
                         let hero = gameEngine.heros[itHero];
                         if (hero.position.y === oyy && hero.position.x === oxx) {
-                            if(this.isHero){
-                                this.onVisionCharacters[hero.guid] = true;
-                            }else{
-                                this.charSpotted = true;
-                                this.onVisionCharacters[hero.guid] = true;
-                            }
+                            hero.onVisionCharacters[this.guid] = true;
                         }
                     }
                     
-                    if (toProceed && this.isHero) {
+                    if (toProceed) {
                         level.tiles[oyy][oxx].state = murmures.C.TILE_HIGHLIGHTED;
                         tilesProcessed.push(level.tiles[oyy][oxx]);
                     }
