@@ -52,7 +52,7 @@ var murmures = {
     restartGame: function (targetLevel) {
         gameEngine.levels = [];
         gameEngine.activeLevel = 0;
-        gameEngine.levelIds = fs.readdirSync('./data/staticlevels/', 'utf8');
+        gameEngine.levelIds = fs.readdirSync('./data/staticlevels/', 'utf8').sort();
         let loopCounter = 0;
         gameEngine.levelIds.forEach(function (levelName) {
             const level1Txt = fs.readFileSync('./data/staticlevels/' + levelName, 'utf8').toString().replace(/^\uFEFF/, '');
@@ -184,7 +184,7 @@ murmures.serverLog('Initializing game');
     });
     
     murmures.clientScripts = '\uFEFF'; // BOM
-    ['base', 'renderer', 'ui', 'animation', 'order', 'input', 'event', 'client'].forEach(function (scriptName) {
+    ['base', 'renderer', 'ui', 'ui.timeline', 'animation', 'order', 'input', 'event', 'client'].forEach(function (scriptName) {
         murmures.clientScripts += fs.readFileSync('./src/js/client/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.coreScripts = '\uFEFF'; // BOM

@@ -225,3 +225,17 @@ div.collapsiblepanel {
     div.collapsiblepanel.show {
         max-height: 5000px;
     }
+
+.uitcFrame {
+    background-color:aquamarine;
+    width: calc(100% - 450px);
+    height: 75px;
+    margin: 10px auto 5px auto;
+}
+
+.corridor {
+    position: relative;
+    width: calc(100% - 450px);
+    height: calc(100vh - 150px);
+    overflow: hidden;
+}

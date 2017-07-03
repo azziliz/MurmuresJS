@@ -26,12 +26,14 @@
     <Compile Include="src\js\client\order.js" />
     <Compile Include="src\js\client\renderer.js" />
     <Compile Include="src\js\client\ui.js" />
+    <Compile Include="src\js\client\ui.timeline.js" />
     <Compile Include="src\js\core\activation.js" />
     <Compile Include="src\js\core\behavior.js" />
     <Compile Include="src\js\core\character.js" />
     <Compile Include="src\js\core\clientbase.js" />
     <Compile Include="src\js\core\constants.js" />
     <Compile Include="src\js\core\gameengine.js" />
+    <Compile Include="src\js\core\gamereference.js" />
     <Compile Include="src\js\core\level.js" />
     <Compile Include="src\js\core\order.js" />
     <Compile Include="src\js\core\pathfinding.js" />
@@ -51,6 +53,7 @@
     <Content Include="data\locale\en.json" />
     <Content Include="data\locale\fr.json" />
     <Content Include="data\reference\skill.json" />
+    <Content Include="data\staticlevels\fov1.json" />
     <Content Include="data\staticlevels\pathfindingtest.json" />
     <Content Include="data\tmp.json" />
     <Content Include="package.json" />

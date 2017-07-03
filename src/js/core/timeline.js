@@ -17,7 +17,11 @@
 murmures.Timeline = function () {
     /** @type {number} */
     this.time = 0;
-    /** @type {?} */
+    /** 
+     * The string keys in this variable should be defined to the guid of the character that is activating a skill
+     * The value is the matching Activation object
+     * @type {Object.<string, murmures.Activation>} 
+     */
     this.activationQueue = {};
     /** 
      * This variable contains all 'times' when an influencial event (the end of an Activation, the start/end of an effect) is expected to happen.
