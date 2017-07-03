@@ -341,40 +341,11 @@ murmures.GameEngine.prototype = {
     applyAI : function () {
         let heros = this.heros;
         this.level.mobs.forEach(function (mob) {
-            if (mob.charSpotted) {
-                let fireOnHero = false;
-                for (let itHero = 0; itHero < heros.length; itHero++) {
-                    if (mob.onVisionCharacters[heros[itHero].guid]) {
-                        if (Math.abs(mob.position.x - heros[itHero].position.x) <= mob.range && Math.abs(mob.position.y - heros[itHero].position.y) <= mob.range && mob.hitPoints > 0) {
-                            let tr1 = new murmures.TurnReport();
-                            tr1.build({
-                                effect: 'projectileMove',
-                                sourceTile: mob.position.coordinates,
-                                targetTile: heros[itHero].position.coordinates,
-                                priority: 120
-                            });
-                            this.reportQueue.push(tr1);
-                            let tr2 = new murmures.TurnReport();
-                            tr2.build({
-                                effect: 'damage',
-                                character: heros[itHero],
-                                value: mob.defaultDamageValue,
-                                priority: 130
-                            });
-                            this.reportQueue.push(tr2);
-                            heros[itHero].hitPoints -= mob.defaultDamageValue;
-                            fireOnHero = true;
-                            if (heros[itHero].hitPoints <= 0) {
-                                heros[itHero].hitPoints = 0;
-                                this.state = murmures.C.STATE_ENGINE_DEATH;
-                            }
-                            break;
-                        }
-                    }
-                }
-                
-                if (!fireOnHero) {
-                // TODO : move to hero
+            let ret = mob.applyAI(heros);
+            if (typeof ret.state !== "undefined" ) this.state = ret.state;
+            if(typeof ret.reportQueue !== "undefined"){
+                for(let i=0;i<ret.reportQueue.length;i++){
+                    this.reportQueue.push(ret.reportQueue[i]);
                 }
             }
         }, this);
