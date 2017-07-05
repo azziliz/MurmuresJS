@@ -40,7 +40,7 @@ murmures.Behavior = {
         gameEngine.level.tiles[target.y][target.x].propId = cb_params; // changes the prop on the tile from "closed door" to "open door"
         gameEngine.level.tiles[target.y][target.x].behavior = gameEngine.bodies[cb_params].behavior; // updates the callback accordingly --> we want the new prop to have a different behavior
     },
-
+    
     /**
      * This should be a default behavior for all staircases going down.
      *
@@ -56,7 +56,7 @@ murmures.Behavior = {
             gameEngine.level.moveHeroesToEntrance();
         }
     },
-
+    
     /**
      * This should be a default behavior for all staircases going up.
      *
@@ -66,10 +66,10 @@ murmures.Behavior = {
      * @static
      */
     jumpToPreviousLevel: function (source, target, cb_params) {
-      if (gameEngine.activeLevel >0) {
-          gameEngine.activeLevel--;
-          gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-          gameEngine.level.moveHeroesToExit();
-      }
-    }
+        if (gameEngine.activeLevel > 0) {
+            gameEngine.activeLevel--;
+            gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
+            gameEngine.level.moveHeroesToExit();
+        }
+    },
 };

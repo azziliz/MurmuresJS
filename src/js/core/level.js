@@ -47,7 +47,7 @@ murmures.Level.prototype = {
      * This parameter is expected to contain all tiles in a clean state and no mob.
      */
     build : function (src) {
-        this.guid = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+        this.guid = murmures.Utils.newGuid();
         this.id = src.id;
         this.layout = src.layout;
         this.width = src.width | 0;

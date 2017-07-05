@@ -72,7 +72,7 @@ murmures.Character.prototype = {
      * the Tile object in parameter is already built.
      */
     build : function (tile, template) {
-        this.guid = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+        this.guid = murmures.Utils.newGuid();
         this.position = tile;
         this.mobTemplate = template;
         let ref = gameEngine.bodies[template];

@@ -43,6 +43,7 @@
     <Compile Include="src\js\core\tile.js" />
     <Compile Include="src\js\core\timeline.js" />
     <Compile Include="src\js\core\turnreport.js" />
+    <Compile Include="src\js\core\utils.js" />
     <Compile Include="src\js\pages\crawler.js" />
     <Compile Include="src\js\pages\editor.js" />
     <Compile Include="src\js\pages\pathfinding.js" />

@@ -22,7 +22,7 @@
  *
  * @class
  */
-murmures.GameEngine = function () {
+murmures.GameEngine = function GameEngineImpl() {
     /* No guid on GameEngine ; we just want one */
     /** @type {number} */
     this.tileSize = 32 | 0;
@@ -32,10 +32,16 @@ murmures.GameEngine = function () {
     this.locale = {};
     /** @type {murmures.Level} */
     this.level = {};
+    /** @type {murmures.Timeline} */
+    this.timeline = {};
     /** @type {Array.<murmures.Character>} */
     this.heros = [];
     /** @type {Array.<murmures.TurnReport>} */
     this.reportQueue = [];
+    /**
+     * key is the skill Id
+     * @type {Object.<number, murmures.Skill>} 
+     */
     this.skills = {};
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
@@ -75,6 +81,8 @@ murmures.GameEngine.prototype = {
         this.levelIds = src.levelIds;
         this.level = new murmures.Level();
         this.level.initialize(src.level);
+        this.timeline = new murmures.Timeline();
+        this.timeline.initialize(src.timeline);
         this.heros = [];
         src.heros.forEach(function (hero) {
             let tempHero = new murmures.Character();
@@ -104,6 +112,9 @@ murmures.GameEngine.prototype = {
             this.level.initialize(src.level);
         } else {
             this.level.synchronize(src.level);
+        }
+        if (typeof src.timeline !== 'undefined') {
+            this.timeline.synchronize(src.timeline);
         }
         if (typeof src.state !== 'undefined') {
             this.state = src.state;
@@ -136,6 +147,7 @@ murmures.GameEngine.prototype = {
         return {
             state: this.state,
             level: this.level.clone(),
+            timeline: this.timeline.clone(),
             heros: tempHeros
         };
     },
@@ -146,8 +158,9 @@ murmures.GameEngine.prototype = {
             ret.state = this.state;
         }
         let level_ = this.level.compare(beforeState.level);
-        
         if (typeof level_ !== 'undefined') ret.level = level_;
+        let timeline_ = this.timeline.compare(beforeState.timeline);
+        if (typeof timeline_ !== 'undefined') ret.timeline = timeline_;
         let heros_ = [];
         for (let itHero = 0; itHero < this.heros.length; itHero++) {
             for (let itHero_ = 0; itHero_ < beforeState.heros.length; itHero_++) {

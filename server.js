@@ -35,9 +35,9 @@ var murmures = {
         const diff = process.hrtime(this.startTime);
         const fdiff = diff[0] + diff[1] / 1e9;
         if (typeof txt !== 'undefined') {
-            if(typeof txt === 'object'){
+            if (typeof txt === 'object') {
                 console.log(fdiff.toFixed(6) + ' - %o' , txt);
-            }else{
+            } else {
                 console.log(fdiff.toFixed(6) + ' - ' + txt);
             }
         }
@@ -66,6 +66,11 @@ var murmures = {
             loopCounter++;
         }, this);
         gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
+        
+        const timeline1 = new murmures.Timeline();
+        timeline1.build();
+        timeline1.nextKeyframe = 1;
+        gameEngine.timeline = timeline1;
         
         gameEngine.heros = [];
         const allHeroesKeys = [];
@@ -106,6 +111,20 @@ var murmures = {
             if (mainSkill !== -1) hero1.activeSkill = mainSkill;
             
             gameEngine.heros.push(hero1);
+            
+            const order1 = new murmures.Order();
+            order1.command = 'move';
+            order1.source = hero1;
+            order1.target = hero1.position;
+            order1.clean();
+            const activation1 = new murmures.Activation();
+            activation1.build({
+                startTick : 0,
+                endTick : loopCounter + 1,
+                remainingWork : 0,
+                order : order1
+            });
+            timeline1.activationQueue[hero1.guid] = activation1;
         }
         
         gameEngine.reportQueue = [];
@@ -128,34 +147,40 @@ murmures.serverLog('Loading classes');
     };
     vm.createContext(ctx);
 
-    let constantsjs = fs.readFileSync('./src/js/core/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const constantsjs = fs.readFileSync('./src/js/core/constants.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(constantsjs, ctx, { filename: 'constants.js' });
-    let gameEnginejs = fs.readFileSync('./src/js/core/gameengine.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const gameEnginejs = fs.readFileSync('./src/js/core/gameengine.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(gameEnginejs, ctx, { filename: 'gameengine.js' });
 
     ctx.gameEngine = new murmures.GameEngine();
 
-    let playerjs = fs.readFileSync('./src/js/core/player.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const utilsjs = fs.readFileSync('./src/js/core/utils.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(utilsjs, ctx, { filename: 'utils.js' });
+    const playerjs = fs.readFileSync('./src/js/core/player.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(playerjs, ctx, { filename: 'player.js' });
-    let tilejs = fs.readFileSync('./src/js/core/tile.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const tilejs = fs.readFileSync('./src/js/core/tile.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(tilejs, ctx, { filename: 'tile.js' });
-    let leveljs = fs.readFileSync('./src/js/core/level.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const leveljs = fs.readFileSync('./src/js/core/level.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(leveljs, ctx, { filename: 'level.js' });
-    let characterjs = fs.readFileSync('./src/js/core/character.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const characterjs = fs.readFileSync('./src/js/core/character.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(characterjs, ctx, { filename: 'character.js' });
-    let orderjs = fs.readFileSync('./src/js/core/order.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const orderjs = fs.readFileSync('./src/js/core/order.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(orderjs, ctx, { filename: 'order.js' });
-    let turnReportjs = fs.readFileSync('./src/js/core/turnreport.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const turnReportjs = fs.readFileSync('./src/js/core/turnreport.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(turnReportjs, ctx, { filename: 'turnreport.js' });
-    let physicalBodyjs = fs.readFileSync('./src/js/core/physicalbody.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const physicalBodyjs = fs.readFileSync('./src/js/core/physicalbody.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(physicalBodyjs, ctx, { filename: 'physicalbody.js' });
-    let behaviorjs = fs.readFileSync('./src/js/core/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const behaviorjs = fs.readFileSync('./src/js/core/behavior.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(behaviorjs, ctx, { filename: 'behavior.js' });
-    let skilljs = fs.readFileSync('./src/js/core/skill.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const skilljs = fs.readFileSync('./src/js/core/skill.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(skilljs, ctx, { filename: 'skill.js' });
-    let vmperfjs = fs.readFileSync('./src/js/test/vmperf.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const activationjs = fs.readFileSync('./src/js/core/activation.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(activationjs, ctx, { filename: 'activation.js' });
+    const timelinejs = fs.readFileSync('./src/js/core/timeline.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(timelinejs, ctx, { filename: 'timeline.js' });
+    const vmperfjs = fs.readFileSync('./src/js/test/vmperf.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(vmperfjs, ctx, { filename: 'vmperf.js' });
-    let servertestjs = fs.readFileSync('./src/js/test/servertest.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    const servertestjs = fs.readFileSync('./src/js/test/servertest.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(servertestjs, ctx, { filename: 'servertest.js' });
 
     gameEngine = ctx.gameEngine;
@@ -188,7 +213,7 @@ murmures.serverLog('Initializing game');
         murmures.clientScripts += fs.readFileSync('./src/js/client/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.coreScripts = '\uFEFF'; // BOM
-    ['clientbase', 'constants', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'pathfinding', 'gameengine'].forEach(function (scriptName) {
+    ['clientbase', 'constants', 'utils', 'skill', 'character', 'level', 'order', 'turnreport', 'tile', 'pathfinding', 'activation', 'timeline', 'gameengine'].forEach(function (scriptName) {
         murmures.coreScripts += fs.readFileSync('./src/js/core/' + scriptName + '.js', 'utf8').toString().replace(/^\uFEFF/, '') + '\n\n';
     }, this);
     murmures.restartGame();
@@ -291,6 +316,7 @@ wss.on('connection', function (ws) {
             if (parsing.valid) {
                 let check = gameEngine.checkOrder(clientOrder);
                 if (check.valid) {
+                    gameEngine.timeline.tick();
                     //gameEngine.gameTurn++;
                     //murmures.serverLog('Order checked');
                     let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn for better performances.

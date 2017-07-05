@@ -233,7 +233,7 @@ murmures.UiBuilder.prototype = {
         }
     },
     // #endregion
-
+    
     // #region dev tools
     loadDevTools : function (ge) {
         if (document.getElementById('levelSelect') !== null) {
@@ -250,12 +250,14 @@ murmures.UiBuilder.prototype = {
     
     // #region draw main UI elements
     centerCrawlPanel : function () {
+        const heroesAvgX = (gameEngine.heros[0].position.x + gameEngine.heros[1].position.x + gameEngine.heros[2].position.x) / 3.0;
+        const heroesAvgY = (gameEngine.heros[0].position.y + gameEngine.heros[1].position.y + gameEngine.heros[2].position.y) / 3.0;
         const allStyles = window.getComputedStyle(document.getElementById('corridor'));
         const midWidth = parseInt(allStyles.width, 10) / 2;
-        const hero0w = gameEngine.tileSize * (gameEngine.heros[0].position.x + 0.5);
+        const hero0w = gameEngine.tileSize * (heroesAvgX + 0.5);
         document.getElementById('crawl').style.left = (midWidth - hero0w).toString() + 'px';
         const midHeight = parseInt(allStyles.height, 10) / 2;
-        const hero0h = gameEngine.tileSize * (gameEngine.heros[0].position.y + 0.5);
+        const hero0h = gameEngine.tileSize * (heroesAvgY + 0.5);
         document.getElementById('crawl').style.top = (midHeight - hero0h).toString() + 'px';
     },
     
@@ -429,7 +431,7 @@ murmures.UiBuilder.prototype = {
             //setTimeout(function () { document.getElementById("screenLog").style.display = "none"; }, 10000);
             //loadEngineLevelEditor(JSON.stringify(gameEngine));
         });
-
+        
         topLayer.addEventListener("contextmenu", function () { // mouse right click
             event.preventDefault();
         }, false);
@@ -449,7 +451,7 @@ murmures.UiBuilder.prototype = {
             this.crawlUiMobCount = 0;
         }
     },
-
+    
     updateUI : function () {
         if (gameEngine.state === murmures.C.STATE_ENGINE_DEATH) {
             document.getElementById('deathWindowTitle').innerHTML = gameEngine.locale.fr.ui['death_window_title'];
