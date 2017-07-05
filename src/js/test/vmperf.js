@@ -7,7 +7,7 @@ murmures.VmPerf = function () {
 murmures.VmPerf.prototype = {
     loopTenMillions : function () {
         let x = 0;
-        for (let loop = 0; loop < 10000000; loop++) {
+        for (let loop = 0; loop < 1e8; loop++) {
             x = this.addOneA(x);
         }
         return x;
@@ -21,7 +21,7 @@ murmures.VmPerf.prototype = {
 murmures.VmPerfStatic = {
     loopTenMillions : function () {
         let y = 0;
-        for (let loop = 0; loop < 10000000; loop++) {
+        for (let loop = 0; loop < 1e8; loop++) {
             y = this.addOneB(y);
         }
         return y;

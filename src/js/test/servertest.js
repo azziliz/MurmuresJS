@@ -20,7 +20,7 @@ murmures.ServerTest.prototype = {
         murmures.serverLog('Result = ' + (endTime - startTime).toString());
         let vmPerfY = 0;
         startTime = murmures.serverLog('Calling test method from outside the class');
-        for (let loop = 0; loop < 10000000; loop++) {
+        for (let loop = 0; loop < 1e8; loop++) {
             vmPerfY = vmPerfX.addOneA(vmPerfY);
         }
         endTime = murmures.serverLog();
@@ -36,7 +36,7 @@ murmures.ServerTest.prototype = {
         murmures.serverLog('Result = ' + (endTime - startTime).toString());
         let vmStaticY = 0;
         startTime = murmures.serverLog('Calling test method from outside the class');
-        for (let loop = 0; loop < 10000000; loop++) {
+        for (let loop = 0; loop < 1e8; loop++) {
             vmStaticY = vmStatic.addOneB(vmStaticY);
         }
         endTime = murmures.serverLog();
@@ -52,7 +52,7 @@ murmures.ServerTest.prototype = {
         murmures.serverLog('Result = ' + (endTime - startTime).toString());
         let modulePerfY = 0;
         startTime = murmures.serverLog('Calling test method from outside the class');
-        for (let loop = 0; loop < 10000000; loop++) {
+        for (let loop = 0; loop < 1e8; loop++) {
             modulePerfY = modulePerf.addOne(modulePerfY);
         }
         endTime = murmures.serverLog();

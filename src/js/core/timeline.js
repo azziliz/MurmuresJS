@@ -24,11 +24,11 @@ murmures.Timeline = function () {
      */
     this.activationQueue = {};
     /** 
-     * This variable contains all 'times' when an influencial event (the end of an Activation, the start/end of an effect) is expected to happen.
-     * It is updated by the simulation after each tick.
-     * @type {Array.<number>} 
+     * This variable contains the time (tick) when the next influencial event (the end of an Activation, the start/end of an effect) is expected to happen.
+     * It is updated by the simulation after each time jump.
+     * @type {number} 
      */
-    this.keyframes = [];
+    this.nextKeyframe = 0;
 };
 
 murmures.Timeline.prototype = {
@@ -39,9 +39,9 @@ murmures.Timeline.prototype = {
     build : function () {
         this.time = 0;
         this.activationQueue = {};
-        this.keyframes = [];
+        this.nextKeyframe = 0;
     },
-
+    
     /**
      * Initialization method reserved for the client.
      * Called everytime the client loads a new timeline.
@@ -50,28 +50,48 @@ murmures.Timeline.prototype = {
      */
     initialize : function (src) {
         this.time = src.time;
-        // TODO
+        this.activationQueue = src.activationQueue; // TODO : cascade initialize (activation + order)
+        this.nextKeyframe = src.nextKeyframe;
     },
     
     /**
      * Synchronization method reserved for the client.
      */
     synchronize : function (src) {
-        // TODO
+        if (typeof src === 'undefined') return;
+        if (typeof src.time !== 'undefined') this.time = src.time;
+        if (typeof src.activationQueue !== 'undefined') this.activationQueue = src.activationQueue; // TODO : cascade synchronize (activation + order)
+        if (typeof src.nextKeyframe !== 'undefined') this.nextKeyframe = src.nextKeyframe;
     },
     
     /**
      * Cloning method reserved for the server.
      */
     clone : function () {
-        // TODO
+        return {
+            time: this.time,
+            activationQueue: this.activationQueue, // TODO : clone this
+            nextKeyframe: this.nextKeyframe
+        };
     },
     
     /**
      * Comparison method reserved for the server.
      */
     compare : function (beforeState) {
+        let ret = {};
+        if (this.time !== beforeState.time) ret.time = this.time;
+        if (this.activationQueue !== beforeState.activationQueue) ret.activationQueue = this.activationQueue;
+        if (this.nextKeyframe !== beforeState.nextKeyframe) ret.nextKeyframe = this.nextKeyframe;
         // TODO
+        if (true) ret.time = this.time;
+        if (true) ret.activationQueue = this.activationQueue;
+        if (true) ret.nextKeyframe = this.nextKeyframe;
+        if (Object.getOwnPropertyNames(ret).length > 0) {
+            // only returns ret if not empty
+            return ret;
+        }
+        // otherwise, no return = undefined
     },
     
     /**
@@ -84,8 +104,8 @@ murmures.Timeline.prototype = {
         /**
          * check hero has no other activation in progress
          */
-        if (typeof activation !== "undefined" && typeof activation.source !== "undefined"){
-            this.activationQueue[activation.source.guid]=activation;
+        if (typeof activation !== "undefined" && typeof activation.source !== "undefined") {
+            this.activationQueue[activation.source.guid] = activation;
             this.simulate();
         }
     },
@@ -103,13 +123,30 @@ murmures.Timeline.prototype = {
      * If an Activation expires, calls its 'applyOrder' function.
      * This function should be called by the server, with a parameter set to reach the next keyframe.
      */
-    tick : function (tickCount) {
-        // TODO
+    tick : function () {
+        const deltaTime = this.nextKeyframe - this.time;
+        // Activate skills further
+        for (let characterGuid in this.activationQueue) {
+            const activation = this.activationQueue[characterGuid];
+            activation.remainingWork -= deltaTime;
+        }
+        // Move the clock forward
+        this.time = this.nextKeyframe;
+        const allActivationsThisTick = Object.keys(this.activationQueue).filter(function (guid) { return this.activationQueue[guid].endTick === this.time; }, this);
+        if (allActivationsThisTick.length === 0) throw "no activation this tick ! boom !";
+        const firstActivationGuid = allActivationsThisTick[0];
+        //this.activationQueue[firstActivationGuid].applyOrder(); // TODO : uncomment this
+        //this.dequeue(this.activationQueue[firstActivationGuid]); // TODO : uncomment this
+        this.activationQueue[firstActivationGuid].endTick += 10; // TODO : this is temporary. Remove this when enqueue works
+        
+        // TODO : move the part below at the end of enqueue (or simulate?)
+        const nextTicks = Object.keys(this.activationQueue).map(function (guid) { return this.activationQueue[guid].endTick; }, this);
+        this.nextKeyframe = Math.min.apply(null, nextTicks);
     },
     
     /**
      * Generate virtual ticks (ticks that do not actually update the Activations in this queue) until all Activations expire.
-     * Updates keyframes based on the results.
+     * Updates nextKeyframe based on the results.
      * This function is called after a tick and before the updated timeline is sent to the clients.
      */
     simulate : function () {
