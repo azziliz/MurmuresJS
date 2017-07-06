@@ -44,6 +44,7 @@ murmures.Pathfinding.prototype = {
         // See bug #5666 :
         // https://bugs.chromium.org/p/v8/issues/detail?id=5666
         murmures.serverLog("starting A*");
+        
         var level = gameEngine.level;
         
         this.path = [];
@@ -111,7 +112,7 @@ murmures.Pathfinding.prototype = {
             current = this.pathfindingTiles[current.y][current.x].cameFrom;
             this.path.push(current);
         }
-        console.log(JSON.stringify({ total_path: this.path }));
+        //console.log(JSON.stringify({ total_path: this.path }));
     },
     
     heuristic_cost_estimate: function (t1, t2) {

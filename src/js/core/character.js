@@ -251,5 +251,57 @@ murmures.Character.prototype = {
         }
         
         return tilesProcessed;
+    },
+    applyAI : function(heros,reportQueue){
+        let ret={};
+        if (this.charSpotted) {
+            let fireOnHero = false;
+            for (let itHero = 0; itHero < heros.length; itHero++) {
+                if (this.onVisionCharacters[heros[itHero].guid]) {
+                    if (Math.abs(this.position.x - heros[itHero].position.x) <= this.range && Math.abs(this.position.y - heros[itHero].position.y) <= this.range && this.hitPoints > 0) {
+                        if (typeof ret.reportQueue === "undefined") ret.reportQueue = [];
+                        let tr1 = new murmures.TurnReport();
+                        tr1.build({
+                            effect: 'projectileMove',
+                            sourceTile: this.position.coordinates,
+                            targetTile: heros[itHero].position.coordinates,
+                            priority: 120
+                        });
+                        ret.reportQueue.push(tr1);
+                        let tr2 = new murmures.TurnReport();
+                        tr2.build({
+                            effect: 'damage',
+                            character: heros[itHero],
+                            value: this.defaultDamageValue,
+                            priority: 130
+                        });
+                        ret.reportQueue.push(tr2);
+                        heros[itHero].hitPoints -= this.defaultDamageValue;
+                        fireOnHero = true;
+                        if (heros[itHero].hitPoints <= 0) {
+                            heros[itHero].hitPoints = 0;
+                            ret.state = murmures.C.STATE_ENGINE_DEATH;
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            if (!fireOnHero) {
+            // TODO : move to hero
+                let myPath = new murmures.Pathfinding();
+                if (typeof this.position !== 'undefined' && typeof heros[0] !== 'undefined' && typeof heros[0].position !== "undefined"){
+                    myPath.compute(gameEngine.level.tiles[this.position.y][this.position.x] , gameEngine.level.tiles[heros[0].position.y][heros[0].position.x], {allowTerrestrial : true});
+                    if (myPath.path.length > 1 ){
+                        let order = new murmures.Order();
+                        order.source = this;
+                        order.target = gameEngine.level.tiles[myPath.path[myPath.path.length-2].y][myPath.path[myPath.path.length-2].x];
+                        order.command = 'move';
+                        gameEngine.orderQueue.push(order);
+                    }
+                }
+            }
+        }
+        return ret;
     }
 };

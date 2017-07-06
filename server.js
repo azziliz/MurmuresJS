@@ -81,7 +81,7 @@ var murmures = {
         
         const chosenHeroesKeys = [];
         let chosenHero;
-        for (loopCounter = 0; loopCounter < 3; loopCounter++) {
+        for (loopCounter = 0; loopCounter < 1; loopCounter++) {
             do {
                 const rand = Math.floor(Math.random() * allHeroesKeys.length);
                 chosenHero = allHeroesKeys[rand];
@@ -182,6 +182,8 @@ murmures.serverLog('Loading classes');
     vm.runInContext(vmperfjs, ctx, { filename: 'vmperf.js' });
     const servertestjs = fs.readFileSync('./src/js/test/servertest.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(servertestjs, ctx, { filename: 'servertest.js' });
+    const pathfindingjs = fs.readFileSync('./src/js/core/pathfinding.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(pathfindingjs, ctx, { filename: 'pathfinding.js' });
 
     gameEngine = ctx.gameEngine;
 })();
