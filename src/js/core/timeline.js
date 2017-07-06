@@ -60,7 +60,7 @@ murmures.Timeline.prototype = {
     synchronize : function (src) {
         if (typeof src === 'undefined') return;
         if (typeof src.time !== 'undefined') this.time = src.time;
-        if (typeof src.activationQueue !== 'undefined') this.activationQueue = src.activationQueue; // TODO : cascade synchronize (activation + order)
+        if (typeof src.activationQueue !== 'undefined') this.activationQueue = src.activationQueue; // TODO : cascade synchronize (activation + order). WARNING ! The queue may contain deleted value between calls. Make sure to delete them too during synchronization.
         if (typeof src.nextKeyframe !== 'undefined') this.nextKeyframe = src.nextKeyframe;
     },
     
@@ -119,7 +119,8 @@ murmures.Timeline.prototype = {
      */
     dequeue : function (guid) {
         const ret = this.activationQueue[guid];
-        this.activationQueue[guid] = undefined;
+        // We set this value to null to force the sending to the client. With 'undefined' it wouldn't be stringified and sent.
+        this.activationQueue[guid] = null;
         return ret;
     },
     

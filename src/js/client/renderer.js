@@ -254,7 +254,7 @@ murmures.Renderer.prototype = {
         let tilesetY = (tilesetRank - tilesetX) / 64;
         if (gameEngine.level.tiles[character.position.y][character.position.x].state === murmures.C.TILE_HIGHLIGHTED) {
             document.getElementById('characterLayer').getContext('2d').drawImage(
-                !character.isHero || character.stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS ? this.tileset.color.imgElement : this.tileset.gray.imgElement,
+                !character.isHero || character.guid === gameEngine.getCurrentHero().guid ? this.tileset.color.imgElement : this.tileset.gray.imgElement,
                     tilesetX * gameEngine.tileSize, tilesetY * gameEngine.tileSize, gameEngine.tileSize, gameEngine.tileSize,
                     gameEngine.tileSize * character.position.x, gameEngine.tileSize * character.position.y, gameEngine.tileSize, gameEngine.tileSize);
         }

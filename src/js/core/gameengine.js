@@ -363,5 +363,24 @@ murmures.GameEngine.prototype = {
                 }
             }
         }, this);
-    }
+    },
+
+    getCurrentHero : function () {
+        const aq = this.timeline.activationQueue;
+        const awaitingGuids = Object.keys(aq).filter(function (guid) { return aq[guid] === null; }, this);
+        if (awaitingGuids.length !== 1) {
+            console.log('gameEngine.timeline.activationQueue');
+            console.log(this.timeline.activationQueue);
+            throw 'cannot find the current hero 1';
+        }
+        const currentHeroGuid = awaitingGuids[0];
+        const heroesWithThisGuid = this.heros.filter(function (hero) { return hero.guid === currentHeroGuid; }, this);
+        if (heroesWithThisGuid.length !== 1) {
+            console.log('gameEngine.timeline.activationQueue');
+            console.log(this.timeline.activationQueue);
+            throw 'cannot find the current hero 2';
+        }
+        return heroesWithThisGuid[0];
+    },
+
 };

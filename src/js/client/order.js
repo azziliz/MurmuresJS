@@ -10,7 +10,7 @@ murmures.OrderHandler.prototype = {
         window.addEventListener('tileEnter', function (e) {
             let hoveredTile = e.detail;
             let order = new murmures.Order();
-            let currentHero = instance.getCurrentHero();
+            let currentHero = gameEngine.getCurrentHero();
             order.source = currentHero;
             order.target = hoveredTile;
             if (hoveredTile.hasMob.code && !hoveredTile.hasMob.isHero) {
@@ -37,7 +37,7 @@ murmures.OrderHandler.prototype = {
         }, false);
         window.addEventListener('leftClickOnTile', function (e) {
             let hoveredTile = e.detail;
-            let currentHero = instance.getCurrentHero();
+            let currentHero = gameEngine.getCurrentHero();
             //TODO : hasmob return mob or hero same way. It is not considering if a hero is in move or not.
             // In future version, hero must have command move, if the tile contains a hero going on another tile
             // In next version, we have to check the skill... if it is a skll not applying to a hero, it is a move command
@@ -102,17 +102,5 @@ murmures.OrderHandler.prototype = {
                 gameEngine.client.eventDispatcher.emitEvent('requestRenderReportQueue');
             }
         }, false);
-    },
-
-    getCurrentHero : function () {
-        let heroToReturn = null;
-        let itHero = 0;
-        while (heroToReturn === null && itHero < gameEngine.heros.length) {
-            if (gameEngine.heros[itHero].stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS) {
-                heroToReturn = gameEngine.heros[itHero];
-            }
-            itHero++;
-        }
-        return heroToReturn;
     },
 };

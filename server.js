@@ -50,6 +50,11 @@ var murmures = {
     },
     
     restartGame: function (targetLevel) {
+        const timeline1 = new murmures.Timeline();
+        timeline1.build();
+        timeline1.nextKeyframe = 1;
+        gameEngine.timeline = timeline1;
+        
         gameEngine.levels = [];
         gameEngine.activeLevel = 0;
         gameEngine.levelIds = fs.readdirSync('./data/staticlevels/', 'utf8').sort();
@@ -66,11 +71,21 @@ var murmures = {
             loopCounter++;
         }, this);
         gameEngine.level = gameEngine.levels[gameEngine.activeLevel];
-        
-        const timeline1 = new murmures.Timeline();
-        timeline1.build();
-        timeline1.nextKeyframe = 1;
-        gameEngine.timeline = timeline1;
+        gameEngine.level.mobs.forEach(function (mob) {
+            const order1 = new murmures.Order();
+            order1.command = 'move';
+            order1.source = mob;
+            order1.target = mob.position;
+            order1.clean();
+            const activation1 = new murmures.Activation();
+            activation1.build({
+                startTick : 0,
+                endTick : 9,
+                remainingWork : 0,
+                order : order1
+            });
+            timeline1.activationQueue[mob.guid] = activation1;
+        }, this);
         
         gameEngine.heros = [];
         const allHeroesKeys = [];
@@ -331,7 +346,7 @@ wss.on('connection', function (ws) {
                     gameEngine.timeline.enqueue(activation1);
                     gameEngine.timeline.tick();
                     //murmures.serverLog('State saved');
-                    gameEngine.saveOrder(clientOrder);
+                    //gameEngine.saveOrder(clientOrder);
                     let ge = gameEngine.compare(beforeState);
                     let res = JSON.stringify({ fn: 'o', payload: ge });
                     //murmures.serverLog('Response stringified');
