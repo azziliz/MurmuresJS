@@ -277,7 +277,6 @@ murmures.GameEngine.prototype = {
     applyOrder : function (order) {
         // This function is only called on server side
         if (order.command === 'move') {
-            murmures.serverLog(order.target);
             if (typeof order.target.behavior !== 'undefined' && typeof order.target.behavior.move !== 'undefined') {
                 murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
             }
@@ -343,6 +342,7 @@ murmures.GameEngine.prototype = {
 
         }
         let tilesProcessed = [];
+        murmures.serverLog("HERE " + this.heros.length);
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
             if (typeof tilesProcessed === 'undefined') {
                 tilesProcessed = [];
