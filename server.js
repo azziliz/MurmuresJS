@@ -81,7 +81,7 @@ var murmures = {
         
         const chosenHeroesKeys = [];
         let chosenHero;
-        for (loopCounter = 0; loopCounter < 2; loopCounter++) {
+        for (loopCounter = 0; loopCounter < 1; loopCounter++) {
             do {
                 const rand = Math.floor(Math.random() * allHeroesKeys.length);
                 chosenHero = allHeroesKeys[rand];

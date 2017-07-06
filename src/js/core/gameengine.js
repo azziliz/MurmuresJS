@@ -342,7 +342,6 @@ murmures.GameEngine.prototype = {
 
         }
         let tilesProcessed = [];
-        murmures.serverLog("HERE " + this.heros.length);
         for (let itHero = 0; itHero < this.heros.length ; itHero++) {
             if (typeof tilesProcessed === 'undefined') {
                 tilesProcessed = [];
