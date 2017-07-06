@@ -8,9 +8,9 @@ murmures.OrderHandler.prototype = {
     init : function () {
         const instance = this;
         window.addEventListener('tileEnter', function (e) {
-            let hoveredTile = e.detail;
-            let order = new murmures.Order();
-            let currentHero = gameEngine.getCurrentHero();
+            const hoveredTile = e.detail;
+            const order = new murmures.Order();
+            const currentHero = gameEngine.getCurrentHero();
             order.source = currentHero;
             order.target = hoveredTile;
             if (hoveredTile.hasMob.code && !hoveredTile.hasMob.isHero) {
@@ -19,7 +19,7 @@ murmures.OrderHandler.prototype = {
             else if (!hoveredTile.hasMob.code) {
                 order.command = 'move';
             }
-            let check = gameEngine.checkOrder(order);
+            const check = gameEngine.checkOrder(order);
             if (check.valid) {
                 if (order.command === 'move') {
                     window.requestAnimationFrame(function (timestamp) {
@@ -36,20 +36,20 @@ murmures.OrderHandler.prototype = {
             }
         }, false);
         window.addEventListener('leftClickOnTile', function (e) {
-            let hoveredTile = e.detail;
-            let currentHero = gameEngine.getCurrentHero();
+            const hoveredTile = e.detail;
+            const currentHero = gameEngine.getCurrentHero();
             //TODO : hasmob return mob or hero same way. It is not considering if a hero is in move or not.
             // In future version, hero must have command move, if the tile contains a hero going on another tile
             // In next version, we have to check the skill... if it is a skll not applying to a hero, it is a move command
             if (hoveredTile.hasMob.code && !hoveredTile.hasMob.isHero) {
-                let attackOrder = new murmures.Order();
+                const attackOrder = new murmures.Order();
                 attackOrder.command = 'attack';
                 attackOrder.source = currentHero;
                 attackOrder.target = hoveredTile;
                 gameEngine.client.eventDispatcher.emitEvent('launchOrder', attackOrder);
             }
             else {
-                let moveOrder = new murmures.Order();
+                const moveOrder = new murmures.Order();
                 moveOrder.command = 'move';
                 if (hoveredTile.hasMob.code) {
                     if (currentHero.skills[currentHero.activeSkill].targetaudience !== murmures.C.TARGET_AUDIENCE_MOB) {
@@ -62,8 +62,8 @@ murmures.OrderHandler.prototype = {
             }
         }, false);
         window.addEventListener('launchOrder', function (e) {
-            let order = e.detail;
-            let check = gameEngine.checkOrder(order);
+            const order = e.detail;
+            const check = gameEngine.checkOrder(order);
             if (instance.allowOrders) {
                 if (check.valid) {
                     document.getElementById('hero' + order.source.guid + '-box').dataset.order = JSON.stringify(order);
@@ -82,13 +82,13 @@ murmures.OrderHandler.prototype = {
         }, false);
         window.addEventListener('orderResponseReceivedFromServer', function (e) {
             instance.allowOrders = true;
-            let ge = e.detail;
+            const ge = e.detail;
             if (typeof ge === 'undefined') return;
             if (typeof ge.error !== 'undefined') {
                 gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
             }
             else {
-                let isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
+                const isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
                 gameEngine.synchronize(ge);
                 //gameEngine.client.ws.send(JSON.stringify({ service: 'consistencyCheck', payload: gameEngine }));
                 if (isNewLevel) {

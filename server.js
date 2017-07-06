@@ -76,7 +76,6 @@ var murmures = {
             order1.command = 'move';
             order1.source = mob;
             order1.target = mob.position;
-            order1.clean();
             const activation1 = new murmures.Activation();
             activation1.build({
                 startTick : 0,
@@ -131,7 +130,6 @@ var murmures = {
             order1.command = 'move';
             order1.source = hero1;
             order1.target = hero1.position;
-            order1.clean();
             const activation1 = new murmures.Activation();
             activation1.build({
                 startTick : 0,

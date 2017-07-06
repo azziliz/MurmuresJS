@@ -143,8 +143,26 @@ murmures.Timeline.prototype = {
         const firstActivationGuid = allActivationsThisTick[0];
         //this.activationQueue[firstActivationGuid].applyOrder(); // TODO : uncomment this
         const firstActivation = this.dequeue(firstActivationGuid); // TODO : uncomment this
+        firstActivation.order.apply();
         //firstActivation.endTick += 10; // TODO : this is temporary. Remove this when enqueue works
-        
+        const faosp = firstActivation.order.source.position;
+        const newTarget = gameEngine.level.tiles[faosp.y - 1 + Math.floor(Math.random() * 3)][faosp.x - 1 + Math.floor(Math.random() * 3)];
+        if (!firstActivation.order.source.isHero) {
+            const order1 = new murmures.Order();
+            order1.command = 'move';
+            order1.source = firstActivation.order.source;
+            order1.target = newTarget;
+            const activation1 = new murmures.Activation();
+            activation1.build({
+                startTick : 0,
+                endTick : this.time + 10,
+                remainingWork : 0,
+                order : order1
+            });
+            this.enqueue(activation1);
+            // keep ticking recursively while the next character in line is a monster
+            this.tick();
+        }
     },
     
     /**

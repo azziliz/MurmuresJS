@@ -71,5 +71,80 @@ murmures.Order.prototype = {
     clean: function () {
         this.source = { guid: this.source.guid, activeSkill : this.source.activeSkill };
         this.target = { x: this.target.x, y: this.target.y };
-    }
+    },
+
+    apply : function () {
+        // This function is only called on server side
+        if (this.command === 'move') {
+            if (typeof this.target.behavior !== 'undefined' && typeof this.target.behavior.move !== 'undefined') {
+                murmures.Behavior[this.target.behavior.move.callback](this.source, this.target, this.target.behavior.move.params);
+            }
+            else {
+                let tr1 = new murmures.TurnReport();
+                tr1.build({
+                    effect: 'characterMove',
+                    character: this.source,
+                    sourceTile: this.source.position.coordinates,
+                    targetTile: this.target.coordinates,
+                    priority: 10
+                });
+                gameEngine.reportQueue.push(tr1);
+                this.source.move(this.target.x, this.target.y);
+            }
+        }
+        else if (this.command === 'attack') {
+            //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
+            if ([murmures.C.TARGET_AUDIENCE_ALL, murmures.C.TARGET_AUDIENCE_MOB].indexOf(this.source.skills[this.source.activeSkill].targetaudience) >= 0) {
+                gameEngine.level.mobs.forEach(function (mob) {
+                    if (mob.onVisionCharacters[this.source.guid] && mob.position.x === this.target.x && mob.position.y === this.target.y) {
+                        let tr1 = new murmures.TurnReport();
+                        tr1.build({
+                            effect: 'projectileMove',
+                            sourceTile: this.source.position.coordinates,
+                            targetTile: this.target.coordinates,
+                            priority: 20
+                        });
+                        gameEngine.reportQueue.push(tr1);
+                        let tr2 = new murmures.TurnReport();
+                        tr2.build({
+                            effect: 'damage',
+                            character: mob,
+                            value: this.source.defaultDamageValue,
+                            priority: 30
+                        });
+                        gameEngine.reportQueue.push(tr2);
+                        
+                        this.source.skills[this.source.activeSkill].apply(mob);
+                        if (mob.hitPoints <= 0) {
+                            mob.hitPoints = 0;
+                            mob.position.groundDeco = '_b1_02_blood_red00';
+                        }
+                    }
+                }, this);
+            }
+            if ([murmures.C.TARGET_AUDIENCE_ALL, murmures.C.TARGET_AUDIENCE_HERO].indexOf(this.source.skills[this.source.activeSkill].targetaudience) >= 0) {
+                gameEngine.heros.forEach(function (mob) {
+                    if (mob.onVisionCharacters[this.source.guid] && mob.position.x === this.target.x && mob.position.y === this.target.y) {
+                        this.source.skills[this.source.activeSkill].apply(mob);
+                    }
+                }, this);
+            }
+        }
+        murmures.serverLog('Moves / attacks done');
+        for (let itMob=0; itMob < gameEngine.level.mobs.length; itMob++) {
+            for (let itHero=0; itHero < gameEngine.heros.length; itHero++) {
+                gameEngine.level.mobs[itMob].onVisionCharacters[gameEngine.heros[itHero].guid] = false;
+            }
+
+        }
+        let tilesProcessed = [];
+        for (let itHero = 0; itHero < gameEngine.heros.length ; itHero++) {
+            if (typeof tilesProcessed === 'undefined') {
+                tilesProcessed = [];
+            }
+            tilesProcessed = gameEngine.heros[itHero].setVision(tilesProcessed);
+        }
+        murmures.serverLog('Vision done');
+    },
+
 };
