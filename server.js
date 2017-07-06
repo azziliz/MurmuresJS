@@ -182,6 +182,8 @@ murmures.serverLog('Loading classes');
     vm.runInContext(vmperfjs, ctx, { filename: 'vmperf.js' });
     const servertestjs = fs.readFileSync('./src/js/test/servertest.js', 'utf8').toString().replace(/^\uFEFF/, '');
     vm.runInContext(servertestjs, ctx, { filename: 'servertest.js' });
+    const pathfindingjs = fs.readFileSync('./src/js/core/pathfinding.js', 'utf8').toString().replace(/^\uFEFF/, '');
+    vm.runInContext(pathfindingjs, ctx, { filename: 'pathfinding.js' });
 
     gameEngine = ctx.gameEngine;
 })();

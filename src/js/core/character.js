@@ -289,6 +289,17 @@ murmures.Character.prototype = {
             
             if (!fireOnHero) {
             // TODO : move to hero
+                let myPath = new murmures.Pathfinding();
+                if (typeof this.position !== 'undefined' && typeof heros[0] !== 'undefined' && typeof heros[0].position !== "undefined"){
+                    myPath.compute(gameEngine.level.tiles[this.position.y][this.position.x] , gameEngine.level.tiles[heros[0].position.y][heros[0].position.x], {allowTerrestrial : true});
+                    if (myPath.path.length > 1 ){
+                        let order = new murmures.Order();
+                        order.source = this;
+                        order.target = gameEngine.level.tiles[myPath.path[myPath.path.length-2].y][myPath.path[myPath.path.length-2].x];
+                        order.command = 'move';
+                        gameEngine.orderQueue.push(order);
+                    }
+                }
             }
         }
         return ret;
