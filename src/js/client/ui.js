@@ -250,8 +250,8 @@ murmures.UiBuilder.prototype = {
     
     // #region draw main UI elements
     centerCrawlPanel : function () {
-        const heroesAvgX = (gameEngine.heros[0].position.x + gameEngine.heros[1].position.x + gameEngine.heros[2].position.x) / 3.0;
-        const heroesAvgY = (gameEngine.heros[0].position.y + gameEngine.heros[1].position.y + gameEngine.heros[2].position.y) / 3.0;
+        const heroesAvgX = gameEngine.heros.reduce(function (sum, hero) { return sum + hero.position.x }, 0) / gameEngine.heros.length;
+        const heroesAvgY = gameEngine.heros.reduce(function (sum, hero) { return sum + hero.position.y }, 0) / gameEngine.heros.length;
         const allStyles = window.getComputedStyle(document.getElementById('corridor'));
         const midWidth = parseInt(allStyles.width, 10) / 2;
         const hero0w = gameEngine.tileSize * (heroesAvgX + 0.5);
