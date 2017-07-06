@@ -125,8 +125,8 @@ var murmures = {
                 order : order1
             });
             timeline1.activationQueue[hero1.guid] = activation1;
-        }
-        
+        }        
+        gameEngine.timeline.tick();        
         gameEngine.reportQueue = [];
         gameEngine.state = murmures.C.STATE_ENGINE_INIT;
     },
@@ -316,10 +316,18 @@ wss.on('connection', function (ws) {
             if (parsing.valid) {
                 let check = gameEngine.checkOrder(clientOrder);
                 if (check.valid) {
-                    gameEngine.timeline.tick();
                     //gameEngine.gameTurn++;
                     //murmures.serverLog('Order checked');
                     let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn for better performances.
+                    const activation1 = new murmures.Activation();
+                    activation1.build({
+                        startTick : 0,
+                        endTick : gameEngine.timeline.time + 10,
+                        remainingWork : 0,
+                        order : clientOrder
+                    });
+                    gameEngine.timeline.enqueue(activation1);
+                    gameEngine.timeline.tick();
                     //murmures.serverLog('State saved');
                     gameEngine.saveOrder(clientOrder);
                     let ge = gameEngine.compare(beforeState);

@@ -507,13 +507,13 @@ murmures.UiBuilder.prototype = {
             }
         }
         
-        gameEngine.heros.sort(function (h1, h2) { return h1.stateOrder - h2.stateOrder; });
+        //gameEngine.heros.sort(function (h1, h2) { return h1.stateOrder - h2.stateOrder; });
         for (let i = 0; i < gameEngine.heros.length; i++) {
             let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-box');
             if (typeof winHero === 'undefined' || winHero === null) {
                 let characterUiTemplate = this.template.characterTemplate;
                 let templateStr = /template/g;
-                document.getElementById('leftCharacters').insertAdjacentHTML('afterbegin', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
+                document.getElementById('leftCharacters').insertAdjacentHTML('beforeend', characterUiTemplate.replace(templateStr, ('hero' + gameEngine.heros[i].guid)).replace('bgColorMob', 'bgColorHero'));
                 document.getElementById('hero' + gameEngine.heros[i].guid + '-box').addEventListener('mouseenter', function (e) {
                     //herobox_onMouseEnter(e);
                 }, false);

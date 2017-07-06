@@ -22,7 +22,7 @@
  *
  * @class
  */
-murmures.GameEngine = function GameEngineImpl() {
+murmures.GameEngine = function () {
     /* No guid on GameEngine ; we just want one */
     /** @type {number} */
     this.tileSize = 32 | 0;

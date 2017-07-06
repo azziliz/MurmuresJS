@@ -113,9 +113,10 @@ murmures.Timeline.prototype = {
     /**
      * Pops the Activation passed in parameter from this queue and returns it.
      */
-    dequeue : function (activation) {
-        if (typeof activation !== "undefined" && typeof activation.source !== "undefined")
-            delete this.activationQueue[activation.source.guid];
+    dequeue : function (guid) {
+        const ret = this.activationQueue[guid];
+        this.activationQueue[guid] = undefined;
+        return ret;
     },
     
     /**
@@ -136,12 +137,9 @@ murmures.Timeline.prototype = {
         if (allActivationsThisTick.length === 0) throw "no activation this tick ! boom !";
         const firstActivationGuid = allActivationsThisTick[0];
         //this.activationQueue[firstActivationGuid].applyOrder(); // TODO : uncomment this
-        //this.dequeue(this.activationQueue[firstActivationGuid]); // TODO : uncomment this
-        this.activationQueue[firstActivationGuid].endTick += 10; // TODO : this is temporary. Remove this when enqueue works
+        const firstActivation = this.dequeue(firstActivationGuid); // TODO : uncomment this
+        //firstActivation.endTick += 10; // TODO : this is temporary. Remove this when enqueue works
         
-        // TODO : move the part below at the end of enqueue (or simulate?)
-        const nextTicks = Object.keys(this.activationQueue).map(function (guid) { return this.activationQueue[guid].endTick; }, this);
-        this.nextKeyframe = Math.min.apply(null, nextTicks);
     },
     
     /**
@@ -151,5 +149,7 @@ murmures.Timeline.prototype = {
      */
     simulate : function () {
         // TODO
+        const nextTicks = Object.keys(this.activationQueue).map(function (guid) { return this.activationQueue[guid].endTick || Infinity; }, this);
+        this.nextKeyframe = Math.min.apply(null, nextTicks);
     },
 };
