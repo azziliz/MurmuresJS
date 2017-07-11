@@ -13,9 +13,9 @@
 murmures.C = Object.freeze({
     SQUARE_TILES_LAYOUT : 'square',
     HEX_TILES_LAYOUT : 'hex',
-
+    
     DEFAULT_RANGE_FOV : 10,
-
+    
     /*
      * visibility of a tile
      */
@@ -31,14 +31,14 @@ murmures.C = Object.freeze({
     ENVIRONMENT_AQUATIC: 2,
     ENVIRONMENT_UNDERGROUND: 3,
     ENVIRONMENT_ETHEREAL: 4,
-
+    
     /*
      * skill target audience
      */
-    TARGET_AUDIENCE_ALL:0,
-    TARGET_AUDIENCE_HERO:1,
+    TARGET_AUDIENCE_ALL: 0,
+    TARGET_AUDIENCE_HERO: 1,
     TARGET_AUDIENCE_MOB: 2,
-
+    
     /*
      * state engine constants
      */
@@ -46,14 +46,7 @@ murmures.C = Object.freeze({
     STATE_ENGINE_PLAYER_REGISTERED: 1,
     STATE_ENGINE_PLAYING: 2,
     STATE_ENGINE_DEATH: 3,
-
-    /*
-     * character state
-     */
-    STATE_HERO_WAITING_FOR_ORDER : 0,
-    STATE_HERO_ORDER_GIVEN : 1,
-    STATE_HERO_ORDER_INPROGRESS : 2,
-
+    
     /* Format:
      * 'layerId' : ['layerName','TileGroup']
      */

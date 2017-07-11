@@ -49,8 +49,6 @@ murmures.Character = function () {
     this.canMove = false; // unused for now
     /** @type {boolean} */
     this.charSpotted = false; // hero is known because seen at least once
-    /** @type {number} */
-    this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
     /** 
      * key is the skill name, as defined in skill.json
      * @type {Object.<string, murmures.Skill>} 
@@ -85,7 +83,6 @@ murmures.Character.prototype = {
         this.defaultDamageValue = (ref.defaultDamageValue || (this.isHero ? 3 : 1)) | 0; // by default, heroes deal 3 damage per attack. Other mobs deal 1. This can be changed in assets.json.
         this.canMove = ref.canMove || false;
         this.charSpotted = ref.charSpotted || false;
-        this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
         
         // Attributes
         this.intelligence = Math.floor(Math.random() * 10);
@@ -126,7 +123,6 @@ murmures.Character.prototype = {
         if (typeof src.defaultDamageValue !== 'undefined') this.defaultDamageValue = src.defaultDamageValue;
         if (typeof src.canMove !== 'undefined') this.canMove = src.canMove;
         if (typeof src.charSpotted !== 'undefined') this.charSpotted = src.charSpotted;
-        if (typeof src.stateOrder !== 'undefined') this.stateOrder = src.stateOrder;
         if (typeof src.onVisionCharacters !== 'undefined') this.onVisionCharacters = src.onVisionCharacters;
         if (typeof src.skills !== 'undefined') this.skills = src.skills;
         if (typeof src.activeSkill !== 'undefined') this.activeSkill = src.activeSkill;
@@ -151,7 +147,6 @@ murmures.Character.prototype = {
             defaultDamageValue: this.defaultDamageValue,
             canMove: this.canMove,
             charSpotted: this.charSpotted,
-            stateOrder : this.stateOrder,
             onVisionCharacters : beforeOnVisionCharacters,
             dexterity : this.dexterity,
             intelligence : this.intelligence,
@@ -174,7 +169,6 @@ murmures.Character.prototype = {
         if (this.range !== beforeState.range) ret.range = this.range;
         if (this.defaultDamageValue !== beforeState.defaultDamageValue) ret.defaultDamageValue = this.defaultDamageValue;
         if (this.canMove !== beforeState.canMove) ret.canMove = this.canMove;
-        if (this.stateOrder !== beforeState.stateOrder) ret.stateOrder = this.stateOrder;
         if (this.charSpotted !== beforeState.charSpotted) {
             // client discovers the mob for the first time --> send everything
             ret.position = this.position.coordinates;

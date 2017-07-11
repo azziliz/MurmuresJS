@@ -105,7 +105,6 @@ var murmures = {
             hero1.build(gameEngine.level.getEntrance(), chosenHero, 2);
             if (loopCounter === 0) {
                 hero1.setVision();
-                hero1.stateOrder = murmures.C.STATE_HERO_ORDER_INPROGRESS;
             }            
             gameEngine.heros.push(hero1);
             
