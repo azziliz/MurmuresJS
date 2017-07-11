@@ -198,8 +198,7 @@ murmures.Renderer.prototype = {
         if (filled || y === 0) {
             context.moveTo(gameEngine.tileSize * x, gameEngine.tileSize * y);
             context.lineTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y);
-        }
-        else {
+        } else {
             context.moveTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y);
         }
         context.lineTo(gameEngine.tileSize * x + gameEngine.tileSize, gameEngine.tileSize * y + gameEngine.tileSize);
@@ -235,8 +234,7 @@ murmures.Renderer.prototype = {
                 //}
                 let mobIsSeen = (gameEngine.level.mobs[i].position.state === murmures.C.TILE_HIGHLIGHTED);
                 if (gameEngine.level.mobs[i].hitPoints === 0 || !mobIsSeen) {
-                }
-                else {
+                } else {
                     this.drawCharacter(gameEngine.level.mobs[i]);
                 }
             }

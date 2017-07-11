@@ -20,14 +20,13 @@ murmures.InputHandler.prototype = {
                 if (e.button !== 2) {
                     // event is a left click
                     gameEngine.client.eventDispatcher.emitEvent('leftClickOnTile', hoveredTile);
-                }
-                else {
+                } else {
                     // event is a right click
                     gameEngine.client.eventDispatcher.emitEvent('rightClickOnTile', hoveredTile);
                 }
             }, false);
             topLayer.addEventListener('mouseup', function (e) {
-                e.preventDefault(); 
+                e.preventDefault();
                 instance.mouseIsDown = false;
             }, false);
             topLayer.addEventListener('mousemove', function (e) {
@@ -42,8 +41,7 @@ murmures.InputHandler.prototype = {
                         if (e.button !== 2) {
                             // event is a left click
                             gameEngine.client.eventDispatcher.emitEvent('leftClickOnTile', hoveredTile);
-                        }
-                        else {
+                        } else {
                             // event is a right click
                             gameEngine.client.eventDispatcher.emitEvent('rightClickOnTile', hoveredTile);
                         }

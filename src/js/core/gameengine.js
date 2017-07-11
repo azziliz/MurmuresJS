@@ -283,8 +283,7 @@ murmures.GameEngine.prototype = {
         if (order.command === 'move') {
             if (typeof order.target.behavior !== 'undefined' && typeof order.target.behavior.move !== 'undefined') {
                 murmures.Behavior[order.target.behavior.move.callback](order.source, order.target, order.target.behavior.move.params);
-            }
-            else {
+            } else {
                 let tr1 = new murmures.TurnReport();
                 tr1.build({
                     effect: 'characterMove',
@@ -296,8 +295,7 @@ murmures.GameEngine.prototype = {
                 this.reportQueue.push(tr1);
                 order.source.move(order.target.x, order.target.y);
             }
-        }
-        else {
+        } else {
             //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
             //if(order.source.skills[order.source.activeSkill].targetaudience === murmures.C.TARGET_AUDIENCE_MOB)
             murmures.serverLog('debug1', { order : order, murmures: murmures });

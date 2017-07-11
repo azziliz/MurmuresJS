@@ -15,8 +15,7 @@ murmures.OrderHandler.prototype = {
             order.target = hoveredTile;
             if (hoveredTile.hasMob.code && !hoveredTile.hasMob.isHero) {
                 order.command = 'attack';
-            }
-            else if (!hoveredTile.hasMob.code) {
+            } else if (!hoveredTile.hasMob.code) {
                 order.command = 'move';
             }
             const check = gameEngine.checkOrder(order);
@@ -25,14 +24,13 @@ murmures.OrderHandler.prototype = {
                     window.requestAnimationFrame(function (timestamp) {
                         gameEngine.client.animationScheduler.queueTrail(order.source.position, order.target, timestamp, timestamp + 200);
                     });
-                }
-                else if (order.command === 'attack') {
+                } else if (order.command === 'attack') {
                     window.requestAnimationFrame(function (timestamp) {
                         gameEngine.client.animationScheduler.queueProjectile(timestamp, order.source.position, order.target);
                     });
                 }
-            }
-            else {
+            } else {
+                // TODO
             }
         }, false);
         window.addEventListener('leftClickOnTile', function (e) {
@@ -47,8 +45,7 @@ murmures.OrderHandler.prototype = {
                 attackOrder.source = currentHero;
                 attackOrder.target = hoveredTile;
                 gameEngine.client.eventDispatcher.emitEvent('launchOrder', attackOrder);
-            }
-            else {
+            } else {
                 const moveOrder = new murmures.Order();
                 moveOrder.command = 'move';
                 if (hoveredTile.hasMob.code) {
@@ -71,12 +68,10 @@ murmures.OrderHandler.prototype = {
                     order.clean();
                     gameEngine.client.ws.send(JSON.stringify({ service: 'order', payload: order }));
                     instance.allowOrders = false;
-                }
-                else {
+                } else {
                     gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'ERROR - Invalid order - ' + check.reason + '</span>');
                 }
-            }
-            else {
+            } else {
                 gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'WARNING - Order was discarded - Waiting for server response </span>');
             }
         }, false);
@@ -86,16 +81,14 @@ murmures.OrderHandler.prototype = {
             if (typeof ge === 'undefined') return;
             if (typeof ge.error !== 'undefined') {
                 gameEngine.client.uiBuilder.log('<span style="color:#f66">' + 'ERROR - ' + ge.error + '</span>');
-            }
-            else {
+            } else {
                 const isNewLevel = typeof ge.level !== 'undefined' && typeof ge.level.guid !== 'undefined' && gameEngine.level.guid !== ge.level.guid;
                 gameEngine.synchronize(ge);
                 //gameEngine.client.ws.send(JSON.stringify({ service: 'consistencyCheck', payload: gameEngine }));
                 if (isNewLevel) {
                     gameEngine.client.eventDispatcher.emitEvent('requestRefreshCrawlUi');
                     gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
-                }
-                else {
+                } else {
                     gameEngine.client.eventDispatcher.emitEvent('requestRefreshCrawlUi');
                     gameEngine.client.eventDispatcher.emitEvent('requestRenderPartialEngine', ge);
                 }

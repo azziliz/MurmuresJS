@@ -94,8 +94,7 @@ murmures.Activation.prototype = {
         if (this.order.command === 'move') {
             if (typeof this.order.target.behavior !== 'undefined' && typeof this.order.target.behavior.move !== 'undefined') {
                 murmures.Behavior[this.order.target.behavior.move.callback](this.order.source, order.target, this.order.target.behavior.move.params);
-            }
-            else {
+            } else {
                 //TODO : define a way to send the report
                 let tr1 = new murmures.TurnReport();
                 tr1.build({

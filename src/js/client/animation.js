@@ -26,8 +26,7 @@ murmures.AnimationScheduler.prototype = {
                 if (timestamp <= projectile.end) {
                     if (timestamp >= projectile.start) this.drawAnimation(projectile.start, projectile.end, timestamp, projectile.imgX, projectile.imgY, projectile.sourceTile, projectile.destTile);
                     newAnimationQueue.push(projectile);
-                }
-                else {
+                } else {
                     if (typeof projectile.endEvent !== 'undefined') {
                         gameEngine.client.eventDispatcher.emitEvent(projectile.endEvent);
                     }
@@ -77,8 +76,7 @@ murmures.AnimationScheduler.prototype = {
                 });
             }, this);
             gameEngine.reportQueue = gameEngine.reportQueue.filter(function (report) { return report.priority !== 20 });
-        }
-        else {
+        } else {
             gameEngine.client.eventDispatcher.emitEvent('heroAnimationEnded');
         }
     },

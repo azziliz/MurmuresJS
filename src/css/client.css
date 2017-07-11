@@ -227,7 +227,7 @@ div.collapsiblepanel {
     }
 
 .uitcFrame {
-    background-color: #222;
+    background-color: #000;
     width: calc(100% - 450px);
     height: 75px;
     margin: 10px auto 5px auto;

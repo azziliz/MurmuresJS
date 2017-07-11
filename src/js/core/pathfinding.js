@@ -82,14 +82,13 @@ murmures.Pathfinding.prototype = {
             var neighbors = this.getNeighbors(currentTileX, currentTileY);
             neighbors.forEach(function (neighbor) {
                 if (this.pathfindingTiles[neighbor.y][neighbor.x].visited) {
-                }
-                else if (level.tiles[neighbor.y][neighbor.x].isPlaneBlocker(plane)) {
-                }
-                else {
+                    // ignore
+                } else if (level.tiles[neighbor.y][neighbor.x].isPlaneBlocker(plane)) {
+                    // ignore too
+                } else {
                     var tentative_gScore = this.pathfindingTiles[currentTileY][currentTileX].gScore + neighbor.cost;
                     if (tentative_gScore >= this.pathfindingTiles[neighbor.y][neighbor.x].gScore) {
-                    }
-                    else {
+                    } else {
                         this.pathfindingTiles[neighbor.y][neighbor.x].cameFrom = { x: currentTileX, y: currentTileY, cost: neighbor.cost };
                         this.pathfindingTiles[neighbor.y][neighbor.x].gScore = tentative_gScore;
                         var newFscore = tentative_gScore + this.heuristic_cost_estimate(neighbor, target);
@@ -116,10 +115,10 @@ murmures.Pathfinding.prototype = {
     },
     
     heuristic_cost_estimate: function (t1, t2) {
-        let deltaX = Math.abs(t1.x - t2.x);
-        let deltaY = Math.abs(t1.y - t2.y);
+        const deltaX = Math.abs(t1.x - t2.x);
+        const deltaY = Math.abs(t1.y - t2.y);
         //let minCoord = (deltaX < deltaY) ? deltaX : deltaY;
-        let maxCoord = (deltaX < deltaY) ? deltaY : deltaX;
+        const maxCoord = (deltaX < deltaY) ? deltaY : deltaX;
         //return minCoord * 3 + (maxCoord - minCoord) * 2;
         //return (maxCoord + minCoord) * 2 - minCoord;
         //return (maxCoord + minCoord) + maxCoord;
@@ -127,8 +126,8 @@ murmures.Pathfinding.prototype = {
     },
     
     getNeighbors: function (x, y) {
-        let level = gameEngine.level;
-        let ret = [];
+        const level = gameEngine.level;
+        const ret = [];
         if (x < level.width - 1) ret.push({ x: x + 1, y: y, cost: 2 });
         if (x < level.width - 1 && y > 0) ret.push({ x: x + 1, y: y - 1, cost: 3 });
         if (y > 0) ret.push({ x: x, y: y - 1, cost: 2 });

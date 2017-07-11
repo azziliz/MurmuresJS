@@ -193,8 +193,7 @@ murmures.Level.prototype = {
                 }, this);
             }, this);
             if (mobs_.length > 0) ret.mobs = mobs_;
-        }
-        else {
+        } else {
             // hero used stairs to change level
             ret.guid = this.guid;
             ret.id = this.id;

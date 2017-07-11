@@ -80,8 +80,7 @@ murmures.Order.prototype = {
         if (this.command === 'move') {
             if (typeof this.target.behavior !== 'undefined' && typeof this.target.behavior.move !== 'undefined') {
                 murmures.Behavior[this.target.behavior.move.callback](this.source, this.target, this.target.behavior.move.params);
-            }
-            else {
+            } else {
                 let tr1 = new murmures.TurnReport();
                 tr1.build({
                     effect: 'characterMove',
@@ -93,8 +92,7 @@ murmures.Order.prototype = {
                 gameEngine.reportQueue.push(tr1);
                 this.source.move(this.target.x, this.target.y);
             }
-        }
-        else if (this.command === 'attack') {
+        } else if (this.command === 'attack') {
             //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
             if ([murmures.C.TARGET_AUDIENCE_ALL, murmures.C.TARGET_AUDIENCE_MOB].indexOf(this.source.skills[this.source.activeSkill].targetaudience) >= 0) {
                 gameEngine.level.mobs.forEach(function (mob) {

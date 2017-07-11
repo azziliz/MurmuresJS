@@ -190,18 +190,18 @@ murmures.serverLog('Initializing game');
  * Initializes game
  */
 (function () {
-    let assetsJson = fs.readFileSync('./data/reference/assets.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    const assetsJson = fs.readFileSync('./data/reference/assets.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.bodies = JSON.parse(assetsJson);
     
-    let localefrJson = fs.readFileSync('./data/locale/fr.json', 'utf8').toString().replace(/^\uFEFF/, '');
-    let localeenJson = fs.readFileSync('./data/locale/en.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    const localefrJson = fs.readFileSync('./data/locale/fr.json', 'utf8').toString().replace(/^\uFEFF/, '');
+    const localeenJson = fs.readFileSync('./data/locale/en.json', 'utf8').toString().replace(/^\uFEFF/, '');
     gameEngine.locale = {};
     gameEngine.locale.fr = JSON.parse(localefrJson);
     gameEngine.locale.en = JSON.parse(localeenJson);
     
-    let localSkills = JSON.parse(fs.readFileSync('./data/reference/skill.json', 'utf8').toString().replace(/^\uFEFF/, ''));
+    const localSkills = JSON.parse(fs.readFileSync('./data/reference/skill.json', 'utf8').toString().replace(/^\uFEFF/, ''));
     Object.keys(localSkills).forEach(function (skillName) {
-        let tempSkill = new murmures.Skill();
+        const tempSkill = new murmures.Skill();
         tempSkill.build(localSkills[skillName], skillName);
         gameEngine.skills[skillName] = tempSkill;
     });
@@ -246,18 +246,14 @@ var server = http.createServer(function (request, response) {
     if (request.url === '/favicon.ico') {
         response.writeHead(204); // No content
         response.end();
-    }
-    else if (request.url === '/') {
+    } else if (request.url === '/') {
         response.writeHead(301, { 'Location': '/src/pages/crawler.html' });
         response.end();
-    }
-    else if (request.url === '/allCore.js') {
+    } else if (request.url === '/allCore.js') {
         compressAndSend(request, response, 'application/javascript', murmures.coreScripts);
-    }
-    else if (request.url === '/allClient.js') {
+    } else if (request.url === '/allClient.js') {
         compressAndSend(request, response, 'application/javascript', murmures.clientScripts);
-    }
-    else if (request.url.startsWith('/src/')) {
+    } else if (request.url.startsWith('/src/')) {
         // #region Static Pages
         try {
             let fileName = request.url;
@@ -266,20 +262,15 @@ var server = http.createServer(function (request, response) {
                     murmures.serverLog('Requested file not found:' + JSON.stringify({ err: err, requrl: fileName }));
                     response.writeHead(400); // Bad Request
                     response.end();
-                }
-                else if (fileName.endsWith('.js')) {
+                } else if (fileName.endsWith('.js')) {
                     compressAndSend(request, response, 'application/javascript', fileContent.toString());
-                }
-                else if (fileName.endsWith('.css')) {
+                } else if (fileName.endsWith('.css')) {
                     compressAndSend(request, response, 'text/css', fileContent.toString());
-                }
-                else if (fileName.endsWith('.png')) {
+                } else if (fileName.endsWith('.png')) {
                     compressAndSend(request, response, 'image/png', fileContent);
-                }
-                else if (fileName.endsWith('.html')) {
+                } else if (fileName.endsWith('.html')) {
                     compressAndSend(request, response, 'text/html', fileContent.toString());
-                }
-                else {
+                } else {
                     response.writeHead(400); // Bad Request
                     response.end();
                 }
@@ -289,8 +280,7 @@ var server = http.createServer(function (request, response) {
             response.end();
         }
         // #endregion
-    }
-    else {
+    } else {
         response.writeHead(404);
         response.end();
     }
@@ -299,15 +289,13 @@ var server = http.createServer(function (request, response) {
 var wss = new WebSocketServer({ server: server });
 wss.on('connection', function (ws) {
     ws.on('message', function (messageTxt) {
-        let message = JSON.parse(messageTxt);
+        const message = JSON.parse(messageTxt);
         if (message.service === 'registerServerLog') {
             serverLoggers.push(ws);
             murmures.serverLog('New server logger registered');
-        }
-        else if (message.service === 'getLevel') {
+        } else if (message.service === 'getLevel') {
             ws.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
-        }
-        else if (message.service === 'order') {
+        } else if (message.service === 'order') {
             murmures.serverLog('Request received');
             let clientOrder = new murmures.Order();
             let parsing = clientOrder.build(message.payload);
@@ -337,39 +325,32 @@ wss.on('connection', function (ws) {
                     });
                     // cleaning
                     gameEngine.reportQueue = [];
-                }
-                else {
+                } else {
                     ws.send(JSON.stringify({ fn: 'o', payload: { error: check.reason } }));
                 }
-            }
-            else {
+            } else {
                 ws.send(JSON.stringify({ fn: 'o', payload: { error: parsing.reason } }));
             }
             murmures.serverLog('Response sent');
-        }
-        else if (message.service === 'restart') {
+        } else if (message.service === 'restart') {
             murmures.restartGame(message.payload);
             wss.clients.forEach(function (client) {
                 client.send(JSON.stringify({ fn: 'init', payload: gameEngine }));
             });
-        }
-        else if (message.service === 'test') {
-            let test = new murmures.ServerTest();
+        } else if (message.service === 'test') {
+            const test = new murmures.ServerTest();
             test.run(require);
-        }
-        else if (message.service === 'consistencyCheck') {
-            let clientGe = message.payload;
-            let diff = gameEngine.compare(clientGe);
+        } else if (message.service === 'consistencyCheck') {
+            const clientGe = message.payload;
+            const diff = gameEngine.compare(clientGe);
             if (typeof diff === 'undefined') {
                 //murmures.serverLog('Consistency Check OK');
-            }
-            else {
+            } else {
                 murmures.serverLog('Consistency Check KO');
                 murmures.serverLog(JSON.stringify({ diff: diff }));
                 fs.writeFileSync('./log/diff', JSON.stringify({diff: diff, client: clientGe, server: gameEngine }));
             }
-        }
-        else {
+        } else {
             murmures.serverLog('Received an incorrect message from WS:' + messageTxt.toString());
         }
     });

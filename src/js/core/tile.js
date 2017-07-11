@@ -169,8 +169,7 @@ murmures.Tile.prototype = {
                 allowUnderground: true,
                 allowEthereal: true,
             };
-        }
-        else {
+        } else {
             let groundBody = gameEngine.bodies[this.groundId];
             if (!groundBody.hasPhysics) {
                 groundPlanes = {
@@ -180,8 +179,7 @@ murmures.Tile.prototype = {
                     allowUnderground: true,
                     allowEthereal: true,
                 };
-            }
-            else {
+            } else {
                 groundPlanes = {
                     allowFlying: !!groundBody.allowFlying,
                     allowTerrestrial: !!groundBody.allowTerrestrial,
@@ -200,8 +198,7 @@ murmures.Tile.prototype = {
                 allowUnderground: true,
                 allowEthereal: true,
             };
-        }
-        else {
+        } else {
             let propBody = gameEngine.bodies[this.propId];
             if (!propBody.hasPhysics) {
                 propPlanes = {
@@ -211,8 +208,7 @@ murmures.Tile.prototype = {
                     allowUnderground: true,
                     allowEthereal: true,
                 };
-            }
-            else {
+            } else {
                 propPlanes = {
                     allowFlying: !!propBody.allowFlying,
                     allowTerrestrial: !!propBody.allowTerrestrial,

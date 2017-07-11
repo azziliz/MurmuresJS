@@ -20,12 +20,10 @@ murmures.EventDispatcher.prototype = {
             if (message.fn === 'init') {
                 let ge = message.payload;
                 instance.emitEvent('engineReceivedFromServer', ge);
-            }
-            else if (message.fn === 'o') {
+            } else if (message.fn === 'o') {
                 let orderResponse = message.payload;
                 instance.emitEvent('orderResponseReceivedFromServer', orderResponse);
-            }
-            else if (message.fn === 'log') {
+            } else if (message.fn === 'log') {
                 let log = message.payload;
                 instance.emitEvent('logReceivedFromServer', log);
             }

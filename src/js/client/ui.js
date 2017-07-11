@@ -172,8 +172,7 @@ murmures.UiBuilder.prototype = {
                         if (this.classList.contains('selected')) {
                             this.classList.remove('selected');
                             contentDiv[contentIter].classList.remove('show');
-                        }
-                        else {
+                        } else {
                             [].forEach.call(document.getElementById('tabs').childNodes, function (elt) {
                                 if (elt.nodeName === 'LI') elt.classList.remove('selected');
                             });
@@ -199,7 +198,7 @@ murmures.UiBuilder.prototype = {
     
     log : function (txt, channel) {
         if (this.hasLog()) {
-            let now = new Date();
+            const now = new Date();
             this.getLog().insertAdjacentHTML('afterbegin',
             '<span class="channel-debug"><span style="color:#ffa">' + now.toLocaleTimeString() + '.' + ('00' + now.getMilliseconds().toString()).substr(-3) + '</span> ' + txt + '<br></span>');
         }
@@ -500,8 +499,7 @@ murmures.UiBuilder.prototype = {
                 
                 if (gameEngine.level.mobs[i].hitPoints === 0 || !mobIsSeen) {
                     document.getElementById('mob' + i + '-box').style.display = "none";
-                }
-                else {
+                } else {
                     document.getElementById('mob' + i + '-box').style.display = "block";
                 }
             }
@@ -565,11 +563,15 @@ murmures.UiBuilder.prototype = {
             const tilesetX = tilesetRank % 64;
             const tilesetY = (tilesetRank - tilesetX) / 64;
             const skillWindow = document.getElementById('hero' + hero.guid + '-skill' + nbSkill);
+            // hack ! TODO : do something clean (draw only once)
+            if (skillWindow.style.backgroundPosition === '') {
+                skillWindow.addEventListener("click", function () { instance.activateSkill(hero.guid, skill.name); });
+            }
             skillWindow.style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
             skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-            skillWindow.className += ' skillIcon';
-            // TODO bug bug bug :  this adds a new listener every time the selected skill is changed
-            skillWindow.addEventListener("click", function () { instance.activateSkill(hero.guid, skill.name); });
+            if (skillWindow.className.indexOf(' skillIcon') === -1) {
+                skillWindow.className += ' skillIcon';
+            }
             // TODO : change to css behavior
             if (hero.activeSkill === skill.name) {
                 skillWindow.style.borderColor = "#4d4";
@@ -622,8 +624,7 @@ murmures.UiBuilder.prototype = {
                                 document.getElementById('behavior').value = typeof body.behavior === 'undefined' ? '{}' : JSON.stringify(body.behavior);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         gameEngine.client.editor.selectedBrush.id = groundCopy;
                         gameEngine.client.editor.selectedBrush.layerId = ref.layerId;
                         document.getElementById('selectedBrush' + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';

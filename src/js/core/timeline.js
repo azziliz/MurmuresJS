@@ -107,8 +107,7 @@ murmures.Timeline.prototype = {
         if (typeof activation !== "undefined" && typeof activation.order !== "undefined" && typeof activation.order.source !== "undefined") {
             this.activationQueue[activation.order.source.guid] = activation;
             this.simulate();
-        }
-        else {
+        } else {
             murmures.serverLog('Received an activation without a valid order. Discarding it.', activation);
             murmures.serverLog(JSON.stringify(activation));
         }
