@@ -314,11 +314,10 @@ wss.on('connection', function (ws) {
                     });
                     gameEngine.timeline.enqueue(activation1);
                     gameEngine.timeline.tick();
-                    //murmures.serverLog('State saved');
-                    //gameEngine.saveOrder(clientOrder);
+                    
                     let ge = gameEngine.compare(beforeState);
                     let res = JSON.stringify({ fn: 'o', payload: ge });
-                    //murmures.serverLog('Response stringified');
+                    
                     // broadcast to all clients
                     wss.clients.forEach(function (client) {
                         client.send(res);

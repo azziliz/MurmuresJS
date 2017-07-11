@@ -12,7 +12,7 @@
 /**
  * This class is a collection of static methods that may be called by the [game engine]{@link murmures.GameEngine}
  * when the [tile]{@link murmures.Tile} targeted by an [order]{@link murmures.Order} contains a callback.
- * Because behaviors are called from the [GameEngine.applyOrder]{@link murmures.GameEngine.applyOrder} function,
+ * Because behaviors are called from the [Order.apply]{@link murmures.Order.apply} function,
  * they only execute on the server.
  *
  * Callbacks are defined -on props only- inside assets.json.

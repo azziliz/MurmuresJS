@@ -125,7 +125,7 @@ murmures.Timeline.prototype = {
     
     /**
      * Increases the time counter by 'tickCount' time units (1 unit = 0.1s), then updates all Activations in this queue.
-     * If an Activation expires, calls its 'applyOrder' function.
+     * If an Activation expires, calls the 'apply' function of its order.
      * This function should be called by the server, with a parameter set to reach the next keyframe.
      */
     tick : function () {
@@ -140,7 +140,6 @@ murmures.Timeline.prototype = {
         const allActivationsThisTick = Object.keys(this.activationQueue).filter(function (guid) { return this.activationQueue[guid].endTick === this.time; }, this);
         if (allActivationsThisTick.length === 0) throw "no activation this tick ! boom !";
         const firstActivationGuid = allActivationsThisTick[0];
-        //this.activationQueue[firstActivationGuid].applyOrder(); // TODO : uncomment this
         const firstActivation = this.dequeue(firstActivationGuid); // TODO : uncomment this
         firstActivation.order.apply();
         //firstActivation.endTick += 10; // TODO : this is temporary. Remove this when enqueue works
