@@ -51,10 +51,13 @@ murmures.Character = function () {
     this.charSpotted = false; // hero is known because seen at least once
     /** @type {number} */
     this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
-    /** @type {Object.<integer, murmures.Skill>} */
+    /** 
+     * key is the skill name, as defined in skill.json
+     * @type {Object.<string, murmures.Skill>} 
+     */
     this.skills = {};
-    /** @type {number} */
-    this.activeSkill = 0;
+    /** @type {string} */
+    this.activeSkill = '';
     /** @type {number} */
     this.dexterity = 0;
     /** @type {number} */
@@ -71,11 +74,11 @@ murmures.Character.prototype = {
      * It is expected that, when the server calls this function,
      * the Tile object in parameter is already built.
      */
-    build : function (tile, template) {
+    build : function (tile, template, additionalSkills) {
         this.guid = murmures.Utils.newGuid();
         this.position = tile;
         this.mobTemplate = template;
-        let ref = gameEngine.bodies[template];
+        const ref = gameEngine.bodies[template];
         this.hitPointsMax = (ref.hitPointsMax || (this.isHero ? 20 : 10)) | 0; // by default, heroes start with 20 HP. Other mobs with 10. This can be changed in assets.json.
         this.hitPoints = this.hitPointsMax | 0;
         this.range = (ref.range || (this.isHero ? 3 : 2)) | 0; // by default, heroes start with a 3 tile range. Other mobs with 2. This can be changed in assets.json.
@@ -83,10 +86,29 @@ murmures.Character.prototype = {
         this.canMove = ref.canMove || false;
         this.charSpotted = ref.charSpotted || false;
         this.stateOrder = murmures.C.STATE_HERO_WAITING_FOR_ORDER;
+        
+        // Attributes
         this.intelligence = Math.floor(Math.random() * 10);
         this.dexterity = Math.floor(Math.random() * 10);
         this.strength = Math.floor(Math.random() * 10);
         this.initiative = this.dexterity;
+        
+        // Skills
+        // Adds 'move' to each character
+        // Then adds {additionalSkills} other skills. Usually: 1 for mobs ; 2 for heroes
+        const guidArray = Object.keys(gameEngine.skills);
+        const moveguid = guidArray[0];
+        this.skills[moveguid] = gameEngine.skills[moveguid];
+        this.activeSkill = moveguid;
+        
+        const skillLength = guidArray.length;
+        do {
+            const rand = Math.floor(Math.random() * skillLength);
+            const skillGuid = guidArray[rand];
+            if (!(skillGuid in this.skills)) {
+                this.skills[skillGuid] = gameEngine.skills[skillGuid];
+            }
+        } while (Object.keys(this.skills).length <= additionalSkills);
     },
     
     initialize : function (src) {

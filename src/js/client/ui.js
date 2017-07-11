@@ -74,7 +74,7 @@ test3<br>test4 \
 </div>',
         characterTemplate : '<div id="template-box" class="characterBox bgColorMob" data-order=""> \
 <div> \
-<div id="template-icon" class="uiIcon charIcon"> \
+<div id="template-icon" class="uiIcon"> \
 </div> \
 <div id="template-charname" class="characterName"> \
 <div id="template-name">Chauve-souris</div> \
@@ -96,7 +96,7 @@ test3<br>test4 \
 </div> \
 </div>',
         tileUiTemplate : '<div id="template-tileContainer" style="float:left"> \
-<div id="template-icon" class="uiIcon charIcon"> \
+<div id="template-icon" class="uiIcon"> \
 </div> \
 </div>',
 
@@ -472,22 +472,22 @@ murmures.UiBuilder.prototype = {
                 this.crawlUiMobCount++;
             }
             for (let i = 0; i < gameEngine.level.mobs.length; i++) {
-                let ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
-                let locale = gameEngine.locale.fr.assets[gameEngine.level.mobs[i].mobTemplate];
-                let tilesetRank = ref.rank;
-                let tilesetX = tilesetRank % 64;
-                let tilesetY = (tilesetRank - tilesetX) / 64;
+                const ref = gameEngine.bodies[gameEngine.level.mobs[i].mobTemplate];
+                const locale = gameEngine.locale.fr.assets[gameEngine.level.mobs[i].mobTemplate];
+                const tilesetRank = ref.rank;
+                const tilesetX = tilesetRank % 64;
+                const tilesetY = (tilesetRank - tilesetX) / 64;
                 document.getElementById('mob' + i + '-icon').style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
                 document.getElementById('mob' + i + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-                let namediv = document.getElementById('mob' + i + '-name');
-                let namedivwidth = window.getComputedStyle(namediv, null).width;
+                const namediv = document.getElementById('mob' + i + '-name');
+                const namedivwidth = window.getComputedStyle(namediv, null).width;
                 namediv.innerHTML = locale || 'Name Error';
                 let namefontsize = 100;
                 while (window.getComputedStyle(namediv, null).width !== namedivwidth) {
                     namefontsize--;
                     namediv.style.fontSize = namefontsize.toString() + '%';
                 }
-                let missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
+                const missingLife = parseFloat(gameEngine.level.mobs[i].hitPoints) / parseFloat(gameEngine.level.mobs[i].hitPointsMax) * 100.0;
                 document.getElementById('mob' + i + '-life').style.width = Math.round(missingLife).toString() + '%';
                 
                 let mobIsSeen = false;
@@ -526,8 +526,8 @@ murmures.UiBuilder.prototype = {
             }
             let winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
             let color = "#222";
-            if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) color = "#800";
-            if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_INPROGRESS) color = "#080";
+            //if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) color = "#800";
+            if (gameEngine.heros[i].guid === gameEngine.getCurrentHero().guid) color = "#080";
             winChar.style.borderColor = color;
             
             let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
@@ -567,15 +567,14 @@ murmures.UiBuilder.prototype = {
             const skillWindow = document.getElementById('hero' + hero.guid + '-skill' + nbSkill);
             skillWindow.style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
             skillWindow.style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-            skillWindow.style.backgroundColor = "#ffffff";
+            skillWindow.className += ' skillIcon';
             // TODO bug bug bug :  this adds a new listener every time the selected skill is changed
-            skillWindow.addEventListener("click", function () { instance.activateSkill(hero.guid, skill.id); });
+            skillWindow.addEventListener("click", function () { instance.activateSkill(hero.guid, skill.name); });
             // TODO : change to css behavior
-            if (hero.activeSkill === skill.id) {
-                skillWindow.style.border = "1px solid";
-                skillWindow.style.borderColor = "#44DD44";
+            if (hero.activeSkill === skill.name) {
+                skillWindow.style.borderColor = "#4d4";
             } else {
-                skillWindow.style.border = "0px";
+                skillWindow.style.borderColor = "#666";
             }
             nbSkill++;
         });

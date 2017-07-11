@@ -23,9 +23,10 @@
  */
 
 murmures.Skill = function () {
-    /** @type {number} */
-    this.id = '';
-    /** @type {string} */
+    /** 
+     * This is a unique identifier, defined in skill.json
+     * @type {string} 
+     */
     this.name = '';
     /** @type {string} */
     this.typeeffect = '';
@@ -56,7 +57,6 @@ murmures.Skill = function () {
 
 murmures.Skill.prototype = {
     build : function (src, name) {
-        this.id = src.id;
         this.name = name;
         this.typeeffect = src.typeeffect;
         this.modifier = src.modifier;

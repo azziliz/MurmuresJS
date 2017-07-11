@@ -52,8 +52,10 @@ murmures.Order.prototype = {
         this.source = undefined;
         for (let itHero = 0; itHero < gameEngine.heros.length; itHero++) {
             if (gameEngine.heros[itHero].guid === src.source.guid) {
-                if (typeof src.source.activeSkill !== 'undefined') gameEngine.heros[itHero].activeSkill = src.source.activeSkill;
                 this.source = gameEngine.heros[itHero];
+                if (typeof src.source.activeSkill !== 'undefined') {
+                    gameEngine.heros[itHero].activeSkill = src.source.activeSkill;
+                }
                 break;
             }
         }

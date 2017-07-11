@@ -39,8 +39,8 @@ murmures.GameEngine = function () {
     /** @type {Array.<murmures.TurnReport>} */
     this.reportQueue = [];
     /**
-     * key is the skill Id
-     * @type {Object.<number, murmures.Skill>} 
+     * key is the skill name
+     * @type {Object.<string, murmures.Skill>} 
      */
     this.skills = {};
     /* Server-only */
@@ -97,6 +97,7 @@ murmures.GameEngine.prototype = {
                 this.reportQueue.push(tempReport);
             }, this);
         }
+        this.skills = src.skills;
         this.state = src.state;
     },
     
@@ -184,9 +185,12 @@ murmures.GameEngine.prototype = {
     },
     
     getHeroByGuid: function (guid) {
-        this.heros.forEach(function (hero) {
-            if (hero.guid === guid) return hero;
-        }, this);
+        const matches = this.heros.filter(function (hero) { return hero.guid === guid });
+        if (matches.length !== 1) {
+            murmures.serverLog('error in getHeroByGuid', { guid : guid, heroes: this.heros });
+        } else {
+            return matches[0];
+        }
     },
     
     /**
@@ -213,7 +217,7 @@ murmures.GameEngine.prototype = {
         else if (order.command === 'attack' && (!order.target.hasMob.code)) return { valid: false, reason: 'You cannot attack an empty tile' };
         else if (order.command === 'attack' && (order.target.hasMob.code) && (!order.target.hasMob.mob.onVisionCharacters[order.source.guid])) return { valid: false, reason: 'You cannot attack over an obstacle' };
         else if (order.command === 'attack') {
-            let skillToApply = order.source.skills[order.source.activeSkill];
+            const skillToApply = order.source.skills[order.source.activeSkill];
             if (skillToApply) {
                 if (Math.abs(order.target.x - order.source.position.x) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
                 if (Math.abs(order.target.y - order.source.position.y) > skillToApply.range) return { valid: false, reason: 'Target is too far. Your attack range is: ' + skillToApply.range };
@@ -295,7 +299,7 @@ murmures.GameEngine.prototype = {
         }
         else {
             //TODO : two foreach for same thing but once on mobs, second on hero... certainly a better way to do this
-            //if(order.source.skills[order.source..activeSkill].targetaudience === murmures.C.TARGET_AUDIENCE_MOB)
+            //if(order.source.skills[order.source.activeSkill].targetaudience === murmures.C.TARGET_AUDIENCE_MOB)
             murmures.serverLog('debug1', { order : order, murmures: murmures });
             if ([murmures.C.TARGET_AUDIENCE_ALL, murmures.C.TARGET_AUDIENCE_MOB].indexOf(order.source.skills[order.source.activeSkill].targetaudience) >= 0) {
                 this.level.mobs.forEach(function (mob) {

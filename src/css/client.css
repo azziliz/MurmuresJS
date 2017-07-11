@@ -127,8 +127,8 @@ div#tabContent div {
     border: 1px solid #666;
 }
 
-.charIcon {
-    background-repeat: no-repeat;
+.skillIcon {
+    background-color: #fff;
 }
 
 .bgColorMob {
@@ -227,15 +227,20 @@ div.collapsiblepanel {
     }
 
 .uitcFrame {
-    background-color:aquamarine;
+    background-color: #222;
     width: calc(100% - 450px);
     height: 75px;
     margin: 10px auto 5px auto;
+    padding: 5px;
 }
 
 .corridor {
     position: relative;
-    width: calc(100% - 450px);
+    width: calc(100% - 430px);
     height: calc(100vh - 150px);
     overflow: hidden;
+}
+
+.uitcMark {
+    float: left;
 }

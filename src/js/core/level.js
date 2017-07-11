@@ -61,7 +61,7 @@ murmures.Level.prototype = {
                 this.tiles[y][x].build(src.tiles[y][x]);
                 if (this.tiles[y][x].charId !== '') {
                     let mob = new murmures.Character();
-                    mob.build(this.tiles[y][x], this.tiles[y][x].charId);
+                    mob.build(this.tiles[y][x], this.tiles[y][x].charId, 1);
                     this.mobs.push(mob);
                 }
             }
