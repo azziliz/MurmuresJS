@@ -70,7 +70,7 @@ test3<br>test4 \
 </div>',
         deathWindow : '<div id="deathWindow" class="deathWindow" style="display:none;"> \
 <p style="position:absolute;left:150px;font-size:200%;" id="deathWindowTitle"></p> \
-<p style="position:absolute;left:150px;top:200px;font-size:200%;"><a href="#" onclick="restartGame();" id="deathWindowRestartButton"></a></p> \
+<p style="position:absolute;left:150px;top:200px;font-size:200%;"><a href="#" onclick="gameEngine.client.ws.send(JSON.stringify({ service: \'restart\' }));" id="deathWindowRestartButton"></a></p> \
 </div>',
         characterTemplate : '<div id="template-box" class="characterBox bgColorMob" data-order=""> \
 <div> \
@@ -270,11 +270,11 @@ murmures.UiBuilder.prototype = {
     
     drawCrawlUi : function () {
         if (!this.hasMainWindows()) {
+            this.drawDeathWindow();
             this.drawMainWindow();
             this.drawLeftCharacterPanel();
             this.drawRightCharacterPanel();
             this.drawCrawlPanel();
-            this.drawDeathWindow();
             window.addEventListener('resize', this.centerCrawlPanel);
         }
         gameEngine.client.eventDispatcher.emitEvent('mainWindowReady');
@@ -505,7 +505,6 @@ murmures.UiBuilder.prototype = {
             }
         }
         
-        //gameEngine.heros.sort(function (h1, h2) { return h1.stateOrder - h2.stateOrder; });
         for (let i = 0; i < gameEngine.heros.length; i++) {
             let winHero = document.getElementById('hero' + gameEngine.heros[i].guid + '-box');
             if (typeof winHero === 'undefined' || winHero === null) {
@@ -522,28 +521,27 @@ murmures.UiBuilder.prototype = {
                     document.getElementById('hero' + gameEngine.heros[i].guid + '-hptooltip').innerHTML = gameEngine.heros[i].hitPoints + '/' + gameEngine.heros[i].hitPointsMax;
                 }, false);
             }
-            let winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
+            const winChar = document.getElementById('hero' + gameEngine.heros[i].guid + '-charname');
             let color = "#222";
-            //if (gameEngine.heros[i].stateOrder === murmures.C.STATE_HERO_ORDER_GIVEN) color = "#800";
             if (gameEngine.heros[i].guid === gameEngine.getCurrentHero().guid) color = "#080";
             winChar.style.borderColor = color;
             
-            let ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
-            let locale = gameEngine.locale.fr.assets[gameEngine.heros[i].mobTemplate];
-            let tilesetRank = ref.rank;
-            let tilesetX = tilesetRank % 64;
-            let tilesetY = (tilesetRank - tilesetX) / 64;
+            const ref = gameEngine.bodies[gameEngine.heros[i].mobTemplate];
+            const locale = gameEngine.locale.fr.assets[gameEngine.heros[i].mobTemplate];
+            const tilesetRank = ref.rank;
+            const tilesetX = tilesetRank % 64;
+            const tilesetY = (tilesetRank - tilesetX) / 64;
             document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundImage = "url('" + gameEngine.client.renderer.tileset.color.blobUrl + "')";
             document.getElementById('hero' + gameEngine.heros[i].guid + '-icon').style.backgroundPosition = '-' + gameEngine.tileSize * tilesetX + 'px -' + gameEngine.tileSize * tilesetY + 'px';
-            let namediv = document.getElementById('hero' + gameEngine.heros[i].guid + '-name');
-            let namedivwidth = window.getComputedStyle(namediv, null).width;
+            const namediv = document.getElementById('hero' + gameEngine.heros[i].guid + '-name');
+            const namedivwidth = window.getComputedStyle(namediv, null).width;
             namediv.innerHTML = locale || 'Name Error';
             let namefontsize = 100;
             while (window.getComputedStyle(namediv, null).width !== namedivwidth) {
                 namefontsize--;
                 namediv.style.fontSize = namefontsize.toString() + '%';
             }
-            let missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
+            const missingLife = parseFloat(gameEngine.heros[i].hitPoints) / parseFloat(gameEngine.heros[i].hitPointsMax) * 100.0;
             document.getElementById('hero' + gameEngine.heros[i].guid + '-life').style.width = Math.round(missingLife).toString() + '%';
             this.drawSkill(gameEngine.heros[i]);
         }
