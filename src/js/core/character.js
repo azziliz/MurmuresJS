@@ -269,8 +269,11 @@ murmures.Character.prototype = {
         return tilesProcessed;
     },
     
-    applyAI : function (heros) {
-        let ret={};
+    applyAI : function () {
+        const order1 = new murmures.Order();
+
+        let ret={}; // TODO : report queue ?
+        const heros = gameEngine.heros;
         if (this.charSpotted) {
             let fireOnHero = false;
             for (let itHero = 0; itHero < heros.length; itHero++) {
@@ -293,12 +296,15 @@ murmures.Character.prototype = {
                             priority: 130
                         });
                         ret.reportQueue.push(tr2);
-                        heros[itHero].hitPoints -= this.defaultDamageValue;
+                        //heros[itHero].hitPoints -= this.defaultDamageValue;
+                        order1.command = 'attack';
+                        order1.source = this;
+                        order1.target = heros[itHero].position;
                         fireOnHero = true;
-                        if (heros[itHero].hitPoints <= 0) {
-                            heros[itHero].hitPoints = 0;
-                            ret.state = murmures.C.STATE_ENGINE_DEATH;
-                        }
+                        //if (heros[itHero].hitPoints <= 0) {
+                        //    heros[itHero].hitPoints = 0;
+                        //    ret.state = murmures.C.STATE_ENGINE_DEATH;
+                        //}
                         break;
                     }
                 }
@@ -331,16 +337,15 @@ murmures.Character.prototype = {
                     if (typeof heroToGo !== "undefined") {
                         myPath.compute(gameEngine.level.tiles[this.position.y][this.position.x] , gameEngine.level.tiles[heroToGo.position.y][heroToGo.position.x], { allowTerrestrial : true });
                         if (myPath.path.length > 1) {
-                            let order = new murmures.Order();
-                            order.source = this;
-                            order.target = gameEngine.level.tiles[myPath.path[myPath.path.length - 2].y][myPath.path[myPath.path.length - 2].x];
-                            order.command = 'move';
-                            this.move(order.target.x, order.target.y);
+                            order1.command = 'move';
+                            order1.source = this;
+                            order1.target = gameEngine.level.tiles[myPath.path[myPath.path.length - 2].y][myPath.path[myPath.path.length - 2].x];
+                            //this.move(order.target.x, order.target.y);
                         }
                     }
                 }
             }
         }
-        return ret;
+        return order1;
     }
 };

@@ -146,10 +146,7 @@ murmures.Timeline.prototype = {
         const faosp = firstActivation.order.source.position;
         const newTarget = gameEngine.level.tiles[faosp.y - 1 + Math.floor(Math.random() * 3)][faosp.x - 1 + Math.floor(Math.random() * 3)];
         if (!firstActivation.order.source.isHero) {
-            const order1 = new murmures.Order();
-            order1.command = 'move';
-            order1.source = firstActivation.order.source;
-            order1.target = newTarget;
+            const order1 = firstActivation.order.source.applyAI();
             const activation1 = new murmures.Activation();
             activation1.build({
                 startTick : 0,

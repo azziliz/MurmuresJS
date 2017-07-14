@@ -229,7 +229,7 @@ murmures.GameEngine.prototype = {
         const heroesWithThisGuid = this.heros.filter(function (hero) { return hero.guid === guid });
         if (heroesWithThisGuid.length !== 1) {
             murmures.serverLog('error in getHeroByGuid', { guid : guid, heroes: this.heros });
-            murmures.serverLog('cannot a hero with the guid');
+            murmures.serverLog('cannot find a hero with the guid');
         } else {
             return heroesWithThisGuid[0];
         }
