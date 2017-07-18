@@ -147,10 +147,11 @@ murmures.Timeline.prototype = {
         const newTarget = gameEngine.level.tiles[faosp.y - 1 + Math.floor(Math.random() * 3)][faosp.x - 1 + Math.floor(Math.random() * 3)];
         if (!firstActivation.order.source.isHero) {
             const order1 = firstActivation.order.source.applyAI();
+            const sourceCharacter = order1.source;
             const activation1 = new murmures.Activation();
             activation1.build({
-                startTick : 0,
-                endTick : this.time + 10,
+                startTick : this.time,
+                endTick : this.time + sourceCharacter.skills[sourceCharacter.activeSkill].activation,
                 remainingWork : 0,
                 order : order1
             });

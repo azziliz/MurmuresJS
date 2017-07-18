@@ -305,9 +305,10 @@ wss.on('connection', function (ws) {
                     //murmures.serverLog('Order checked');
                     let beforeState = gameEngine.clone(); // TODO : clone AFTER the turn for better performances.
                     const activation1 = new murmures.Activation();
+                    const sourceCharacter = clientOrder.source;
                     activation1.build({
-                        startTick : 0,
-                        endTick : gameEngine.timeline.time + 10,
+                        startTick : gameEngine.timeline.time,
+                        endTick : gameEngine.timeline.time + sourceCharacter.skills[sourceCharacter.activeSkill].activation,
                         remainingWork : 0,
                         order : clientOrder
                     });

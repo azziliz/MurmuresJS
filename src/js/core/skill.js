@@ -61,6 +61,7 @@ murmures.Skill.prototype = {
         this.typeeffect = src.typeeffect;
         this.modifier = src.modifier;
         this.range = src.range;
+        this.activation = src.activation;
         this.targetaudience = src.targetaudience;
         this.asset = src.asset;
     },
