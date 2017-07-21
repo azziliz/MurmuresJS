@@ -43,7 +43,7 @@ murmures.Pathfinding.prototype = {
         // In V8, declarations with 'let' causes a bailout
         // See bug #5666 :
         // https://bugs.chromium.org/p/v8/issues/detail?id=5666
-        murmures.serverLog("starting A*");
+        //murmures.serverLog("starting A*");
         
         var level = gameEngine.level;
         
@@ -75,7 +75,7 @@ murmures.Pathfinding.prototype = {
             this.openSetCount--;
             if (currentTileX === target.x && currentTileY === target.y) {
                 this.reconstruct_path({ x: target.x, y: target.y });
-                murmures.serverLog("ending A*");
+                //murmures.serverLog("ending A*");
                 return "success";
             }
             this.pathfindingTiles[currentTileY][currentTileX].visited = true;
@@ -100,7 +100,7 @@ murmures.Pathfinding.prototype = {
                 }
             }, this);
         }
-        murmures.serverLog("ending A*");
+        //murmures.serverLog("ending A*");
         return "failure";
     },
     
@@ -128,14 +128,14 @@ murmures.Pathfinding.prototype = {
     getNeighbors: function (x, y) {
         const level = gameEngine.level;
         const ret = [];
-        if (x < level.width - 1) ret.push({ x: x + 1, y: y, cost: 2 });
         if (x < level.width - 1 && y > 0) ret.push({ x: x + 1, y: y - 1, cost: 3 });
-        if (y > 0) ret.push({ x: x, y: y - 1, cost: 2 });
         if (x > 0 && y > 0) ret.push({ x: x - 1, y: y - 1, cost: 3 });
-        if (x > 0) ret.push({ x: x - 1, y: y, cost: 2 });
         if (x > 0 && y < level.height - 1) ret.push({ x: x - 1, y: y + 1, cost: 3 });
-        if (y < level.height - 1) ret.push({ x: x, y: y + 1, cost: 2 });
         if (x < level.width - 1 && y < level.height - 1) ret.push({ x: x + 1, y: y + 1, cost: 3 });
+        if (x < level.width - 1) ret.push({ x: x + 1, y: y, cost: 2 });
+        if (y > 0) ret.push({ x: x, y: y - 1, cost: 2 });
+        if (x > 0) ret.push({ x: x - 1, y: y, cost: 2 });
+        if (y < level.height - 1) ret.push({ x: x, y: y + 1, cost: 2 });
         return ret;
     },
     

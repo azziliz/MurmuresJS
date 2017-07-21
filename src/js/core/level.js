@@ -67,7 +67,7 @@ murmures.Level.prototype = {
             }
         }
     },
-
+    
     /**
      * Initialization method reserved for the client.
      * Called everytime the client loads a new level.
@@ -101,7 +101,7 @@ murmures.Level.prototype = {
             }
         }
     },
-
+    
     /**
      * Synchronization method reserved for the client.
      * Called after each turn, when the client receives a server response.
@@ -138,7 +138,7 @@ murmures.Level.prototype = {
             }, this);
         }
     },
-
+    
     /**
      * Cloning method reserved for the server.
      * The whole game state is duplicated at the beginning of each turn by cascading clone methods.
@@ -161,7 +161,7 @@ murmures.Level.prototype = {
             mobs: mobs_,
         };
     },
-
+    
     /**
      * Comparison method reserved for the server.
      * This method is called at the end of each turn to identify the changes of the game state produced by orders.
@@ -219,10 +219,10 @@ murmures.Level.prototype = {
             ret.tiles = newLevel.tiles;
             let mobs_ = [];
             newLevel.mobs.forEach(function (newMob) {
-                for(let itVision in newMob.onVisionCharacters){
-                  if(newMob.onVisionCharacters[itVision]){
-                    mobs_.push(newMob);
-                  }
+                for (let itVision in newMob.onVisionCharacters) {
+                    if (newMob.onVisionCharacters[itVision]) {
+                        mobs_.push(newMob);
+                    }
                 }
             }, this);
             if (mobs_.length > 0) ret.mobs = mobs_;
@@ -233,14 +233,14 @@ murmures.Level.prototype = {
         }
         // otherwise, no return = undefined
     },
-
+    
     moveHeroesToEntrance: function () {
         let entrance = this.getEntrance();
         gameEngine.heros.forEach(function (hero) {
             hero.position = entrance;
         }, this);
     },
-
+    
     moveHeroesToExit: function () {
         let exit = this.getExit();
         gameEngine.heros.forEach(function (hero) {
@@ -269,7 +269,7 @@ murmures.Level.prototype = {
             }
         }
     },
-
+    
     clean : function () {
         delete this.guid;
         delete this.mobs;
@@ -278,5 +278,61 @@ murmures.Level.prototype = {
                 this.tiles[y][x].clean();
             }
         }
-    }
+    },
+    
+    /**
+     * Casts a ray between 2 tiles. Intended use: checks if a character is in the line of sight of another.
+     * Results should be symmetrical. castRay(a, b) === castRay(b, a)
+     *
+     * @param {murmures.Tile} tile1 - The source of the ray.
+     * @param {murmures.Tile} tile2 - The target of the ray. 
+     * @returns {boolean} True if we can draw a line between tile1 and tile2 without touching a wall.
+     */
+    castRay : function (tile1, tile2) {
+        if (tile1.x === tile2.x && tile1.y === tile2.y) {
+            return [{ x: tile1.x, y: tile1.y }];
+        } else {
+            const shiftedTarget = { x: tile2.x - tile1.x, y: tile2.y - tile1.y };
+            return this.computeRayShifted(shiftedTarget).map(function (elt) {
+                return { x: elt.x + tile1.x, y: elt.y + tile1.y };
+            });
+        }
+    },
+    
+    /**
+     * Internal - Casts a ray between [0, 0] and targetTile
+     */    
+    computeRayShifted : function (targetTile) {
+        if (targetTile.x < 0) {
+            return this.computeRayShifted({ x: -targetTile.x, y: targetTile.y }).map(function (elt) {
+                return { x: -elt.x, y: elt.y };
+            });
+        } else if (targetTile.y < 0) {
+            return this.computeRayShifted({ x: targetTile.x, y: -targetTile.y }).map(function (elt) {
+                return { x: elt.x, y: -elt.y };
+            });
+        } else if (targetTile.y > targetTile.x) {
+            return this.computeRayShifted({ x: targetTile.y, y: targetTile.x }).map(function (elt) {
+                return { x: elt.y, y: elt.x };
+            });
+        } else {
+            const path = [{ x: 0, y: 0 }];
+            const halfSlope = targetTile.y / (2 * targetTile.x);
+            let leftY = halfSlope + 0.5;
+            let rightY;
+            let x;
+            for (x = 1; x < targetTile.x; x++) {
+                rightY = halfSlope * (2 * x + 1) + 0.5;
+                const leftYInt = Math.floor(leftY);
+                path.push({ x: x, y: leftYInt });
+                if (rightY > leftYInt + 1) {
+                    path.push({ x: x, y: Math.floor(rightY) });
+                }
+                leftY = rightY;
+            }
+            path.push(targetTile);
+            return path;
+        }
+    },
+
 };

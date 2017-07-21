@@ -128,6 +128,8 @@ murmures.UiBuilder.prototype = {
         }, false);
         window.addEventListener('requestCrawlUi', function () {
             instance.drawCrawlUi();
+        }, false);
+        window.addEventListener('requestTimeline', function () {
             instance.timelineComponent = new murmures.UiTimelineComponent();
             instance.timelineComponent.init(instance);
         }, false);

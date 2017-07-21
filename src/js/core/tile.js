@@ -160,8 +160,8 @@ murmures.Tile.prototype = {
     },
 
     isPlaneBlocker: function (plane) {
-        var groundPlanes;
-        if (this.groundId === "") {
+        let groundPlanes;
+        if (this.groundId === '') {
             groundPlanes = {
                 allowFlying: true,
                 allowTerrestrial: true,
@@ -170,7 +170,7 @@ murmures.Tile.prototype = {
                 allowEthereal: true,
             };
         } else {
-            let groundBody = gameEngine.bodies[this.groundId];
+            const groundBody = gameEngine.bodies[this.groundId];
             if (!groundBody.hasPhysics) {
                 groundPlanes = {
                     allowFlying: true,
@@ -189,8 +189,8 @@ murmures.Tile.prototype = {
                 };
             }
         }
-        var propPlanes;
-        if (this.propId === "") {
+        let propPlanes;
+        if (this.propId === '') {
             propPlanes = {
                 allowFlying: true,
                 allowTerrestrial: true,
@@ -199,7 +199,7 @@ murmures.Tile.prototype = {
                 allowEthereal: true,
             };
         } else {
-            let propBody = gameEngine.bodies[this.propId];
+            const propBody = gameEngine.bodies[this.propId];
             if (!propBody.hasPhysics) {
                 propPlanes = {
                     allowFlying: true,
@@ -223,7 +223,7 @@ murmures.Tile.prototype = {
         if (plane.allowAquatic && groundPlanes.allowAquatic && propPlanes.allowAquatic) return false;
         if (plane.allowUnderground && groundPlanes.allowUnderground && propPlanes.allowUnderground) return false;
         if (plane.allowEthereal && groundPlanes.allowEthereal && propPlanes.allowEthereal) return false;
-        let hasMoveBehavior = (typeof this.behavior !== 'undefined' && typeof this.behavior.move !== 'undefined');
+        const hasMoveBehavior = (typeof this.behavior !== 'undefined' && typeof this.behavior.move !== 'undefined');
         if (hasMoveBehavior) return false;
         return true;
     },

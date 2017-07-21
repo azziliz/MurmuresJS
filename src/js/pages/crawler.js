@@ -29,6 +29,7 @@ window.onload = function () {
     window.addEventListener('engineReceivedFromServer', function (e) {
         gameEngine.initialize(e.detail);
         gameEngine.client.eventDispatcher.emitEvent('requestCrawlUi');
+        gameEngine.client.eventDispatcher.emitEvent('requestTimeline');
     }, false);
     window.addEventListener('orderResponseReceivedFromServer', function (e) {
         if (gameEngine.state === murmures.C.STATE_ENGINE_DEATH) {

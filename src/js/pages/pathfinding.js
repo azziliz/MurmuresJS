@@ -24,7 +24,11 @@ window.onload = function () {
     }, false);
     window.addEventListener('engineReceivedFromServer', function (e) {
         gameEngine.initialize(e.detail);
-        gameEngine.client.eventDispatcher.emitEvent('requestHighlight');
+        for (let x = 0; x < gameEngine.level.width; x++) {
+            for (let y = 0; y < gameEngine.level.height; y++) {
+                gameEngine.level.tiles[y][x].state = murmures.C.TILE_FOG_OF_WAR;
+            }
+        }
         gameEngine.client.eventDispatcher.emitEvent('requestCrawlUi');
     }, false);
     window.addEventListener('mainWindowReady', function (e) {
@@ -39,15 +43,38 @@ window.onload = function () {
         gameEngine.client.eventDispatcher.emitEvent('planechange');
     }, false);
     window.addEventListener('tileEnter', function (e) {
-        let hoveredTile = e.detail;
-        let myPath = new murmures.Pathfinding();
-        console.log(myPath.compute(gameEngine.level.getEntrance() , hoveredTile, gameEngine.client.pathtest.plane));
+        const hoveredTile = e.detail;
+        const myPath = new murmures.Pathfinding();
+        myPath.compute(gameEngine.level.getEntrance() , hoveredTile, gameEngine.client.pathtest.plane);
+        //murmures.serverLog('start castRay * 1e5');
+        //for (let i = 0; i < 1e5; i++) {
+        //    const myRay = gameEngine.level.castRay(gameEngine.level.getEntrance() , hoveredTile);
+        //}
+        //murmures.serverLog('end castRay');
+        const myLos = gameEngine.level.castRay(gameEngine.level.getEntrance() , hoveredTile);
         window.requestAnimationFrame(function (timestamp) {
             gameEngine.client.animationScheduler.animationQueue = [];
             if (myPath.path.length === 0) document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);
             for (let i = 0; i < myPath.path.length - 1; i++) {
                 gameEngine.client.animationScheduler.queueTrail(myPath.path[i + 1], myPath.path[i], timestamp, timestamp + 10000);
             }
+            for (let x = 0; x < gameEngine.level.width; x++) {
+                for (let y = 0; y < gameEngine.level.height; y++) {
+                    gameEngine.level.tiles[y][x].state = murmures.C.TILE_FOG_OF_WAR;
+                }
+            }
+            if (typeof myLos !== 'undefined' && myLos.length > 0) {
+                for (let i = 0; i < myLos.length; i++) {
+                    gameEngine.level.tiles[myLos[i].y][myLos[i].x].state = murmures.C.TILE_HIGHLIGHTED;
+                }
+            }
+            gameEngine.client.eventDispatcher.emitEvent('requestRenderFullEngine');
+            const context = document.getElementById('characterLayer').getContext('2d');
+            context.beginPath();
+            context.moveTo(gameEngine.tileSize * (hoveredTile.x + 0.5), gameEngine.tileSize * (hoveredTile.y + 0.5));
+            context.lineTo(gameEngine.tileSize * (gameEngine.level.getEntrance().x + 0.5), gameEngine.tileSize * (gameEngine.level.getEntrance().y + 0.5));
+            context.strokeStyle = '#f00';
+            context.stroke();
         });
     }, false);
     window.addEventListener('planechange', function (e) {
@@ -58,8 +85,8 @@ window.onload = function () {
             allowUnderground: document.getElementById('allowUnderground').checked,
             allowEthereal: document.getElementById('allowEthereal').checked,
         };
-        let myPath = new murmures.Pathfinding();
-        console.log(myPath.compute(gameEngine.level.getEntrance() , gameEngine.level.getExit(), gameEngine.client.pathtest.plane));
+        const myPath = new murmures.Pathfinding();
+        myPath.compute(gameEngine.level.getEntrance() , gameEngine.level.getExit(), gameEngine.client.pathtest.plane);
         window.requestAnimationFrame(function (timestamp) {
             gameEngine.client.animationScheduler.animationQueue = [];
             if (myPath.path.length === 0) document.getElementById('projectileLayer').getContext('2d').clearRect(0, 0, gameEngine.level.width * gameEngine.tileSize, gameEngine.level.height * gameEngine.tileSize);

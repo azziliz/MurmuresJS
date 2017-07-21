@@ -199,7 +199,7 @@ murmures.Character.prototype = {
     },
     
     get isHero() {
-        let ref = gameEngine.bodies[this.mobTemplate];
+        const ref = gameEngine.bodies[this.mobTemplate];
         return murmures.C.LAYERS[ref.layerId][0] === 'Hero';
     },
     
