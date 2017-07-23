@@ -326,7 +326,7 @@ murmures.Level.prototype = {
                 const leftYInt = Math.floor(leftY);
                 path.push({ x: x, y: leftYInt });
                 if (rightY > leftYInt + 1) {
-                    path.push({ x: x, y: Math.floor(rightY) });
+                    path.push({ x: x, y: leftYInt + 1 });
                 }
                 leftY = rightY;
             }

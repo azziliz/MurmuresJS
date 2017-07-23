@@ -109,7 +109,7 @@ var murmures = {
             gameEngine.heros.push(hero1);
             
             const order1 = new murmures.Order();
-            order1.command = 'move';
+            order1.command = 'wait';
             order1.source = hero1;
             order1.target = hero1.position;
             const activation1 = new murmures.Activation();
