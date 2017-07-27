@@ -36,9 +36,13 @@ murmures.Reference = function () {
      * key is the skill name
      * @type {Object.<string, murmures.Skill>} 
      */
-    this.skills = {};
-    /** @type {Array.<murmures.Level>} */
-    this.staticlevels = [];
+    this.skills = {'': new murmures.Skill()};
+    /**
+     * key is the level guid
+     * @type {Object.<string, murmures.Level>} 
+     */
+    this.staticlevels = {};
+    Object.defineProperty(this, "staticlevels", { enumerable : false });
     /** @type {Array.<string>} */
     this.levelIds = [];
 };
@@ -53,23 +57,37 @@ murmures.Reference.prototype = {
     
     /**
      * Synchronization method called on client side only.
-     * This function receives a partial GameEngine as input and merges it into the client instance.
+     * This function receives a partial Reference as input and merges it into the client instance.
      */
-    synchronize: function (src) {
-        if (typeof src === 'undefined') return;
-        if (src.guid !== this.guid) {
+    synchronize: function (to, from) {
+        if (typeof from === 'undefined') return;
+        if (from.guid !== to.guid) {
             // New object. We expect to receive all properties.
-            if (Object.keys(this).length !== Object.keys(src).length) {
-                murmures.serverLog('error in synchronize', { dst : this, src: src });
+            if (Object.keys(to).length !== Object.keys(from).length) {
+                murmures.serverLog('error in synchronize', { to : to, from: from });
                 throw 'error in synchronize - source and destination have different length';
             } else {
-                Object.keys(this).forEach(function (thiskey) {
-                    const thiskeyType = Object.prototype.toString.call(this[thiskey]);
-                    if (thiskeyType === '[object String]' 
-                        || thiskeyType === '[object Number]' 
-                        || thiskeyType === '[object Boolean]') {
-                        this[thiskey] = src[thiskey];
-                    } else if (thiskeyType === '[object Array]') { 
+                Object.keys(to).forEach(function (key) {
+                    const toKey = to[key];
+                    const toKeyType = Object.prototype.toString.call(toKey);
+                    if (toKeyType === '[object String]' 
+                        || toKeyType === '[object Number]' 
+                        || toKeyType === '[object Boolean]') {
+                        to[key] = from[key];
+                    } else if (toKeyType === '[object Array]') {
+                        murmures.serverLog('error in synchronize', { to : to, from: from });
+                        throw 'error in synchronize - arrays are not supported';
+                    } else if (toKeyType !== '[object Object]') {
+                        murmures.serverLog('error in synchronize', { to : to, from: from, toKeyType: toKeyType });
+                        throw 'error in synchronize - unknown type';
+                    } else {
+                        // type is '[object Object]'
+                        if (toKey instanceof murmures.Level) {
+                            synchronize(to[key], from[key]);
+                        } else {
+                            // type is '{Object.<string, murmures.Xxx>}'
+
+                        }
                     }
                 }, this);
             }

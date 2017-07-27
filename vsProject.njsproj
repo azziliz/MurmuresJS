@@ -33,7 +33,7 @@
     <Compile Include="src\js\core\clientbase.js" />
     <Compile Include="src\js\core\constants.js" />
     <Compile Include="src\js\core\gameengine.js" />
-    <Compile Include="src\js\core\reference.js" />
+    <Compile Include="src\js\core\dto\reference.js" />
     <Compile Include="src\js\core\level.js" />
     <Compile Include="src\js\core\order.js" />
     <Compile Include="src\js\core\pathfinding.js" />
@@ -86,6 +86,7 @@
     <Folder Include="src\js\" />
     <Folder Include="src\js\core\" />
     <Folder Include="src\js\client\" />
+    <Folder Include="src\js\core\dto\" />
     <Folder Include="src\js\pages\" />
     <Folder Include="src\js\test\" />
     <Folder Include="src\pages\" />
