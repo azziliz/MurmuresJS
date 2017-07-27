@@ -19,7 +19,7 @@
  * @class
  */
 murmures.Activation = function () {
-    /** @type {?} */
+    /** @type {murmures.Order} */
     this.order = {};
     /** @type {number} */
     this.startTick = 0;

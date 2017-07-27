@@ -45,7 +45,7 @@ murmures.GameEngine = function () {
     this.skills = {};
     /* Server-only */
     /** @type {Array.<murmures.Level>} */
-    this.levels = {};
+    this.levels = [];
     /** @type {Array.<string>} */
     this.levelIds = {};
     /** @type {number} */

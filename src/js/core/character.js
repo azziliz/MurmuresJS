@@ -32,7 +32,7 @@ murmures.Character = function () {
     /** @type {string} */
     this.guid = '';
     /** @type {murmures.Tile} */
-    this.position = null;
+    this.position = {};
     /** @type {string} */
     this.mobTemplate = '';
     /** @type {number} */
