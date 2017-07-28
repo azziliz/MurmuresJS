@@ -345,6 +345,10 @@ murmures.Character.prototype = {
                     }
                 }
             }
+        }else{
+            order1.command = 'wait';
+            order1.source = this;
+            order1.target = this.position;
         }
         return order1;
     }
