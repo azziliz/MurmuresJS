@@ -131,34 +131,51 @@ murmures.Timeline.prototype = {
     tick : function () {
         const deltaTime = this.nextKeyframe - this.time;
         // Activate skills further
+        
         for (let characterGuid in this.activationQueue) {
             const activation = this.activationQueue[characterGuid];
-            activation.remainingWork -= deltaTime;
+            if(activation != null) activation.remainingWork -= deltaTime;
         }
         // Move the clock forward
         this.time = this.nextKeyframe;
-        const allActivationsThisTick = Object.keys(this.activationQueue).filter(function (guid) { return this.activationQueue[guid].endTick === this.time; }, this);
-        if (allActivationsThisTick.length === 0) throw "no activation this tick ! boom !";
-        const firstActivationGuid = allActivationsThisTick[0];
-        const firstActivation = this.dequeue(firstActivationGuid); // TODO : uncomment this
-        firstActivation.order.apply();
-        //firstActivation.endTick += 10; // TODO : this is temporary. Remove this when enqueue works
-        const faosp = firstActivation.order.source.position;
-        const newTarget = gameEngine.level.tiles[faosp.y - 1 + Math.floor(Math.random() * 3)][faosp.x - 1 + Math.floor(Math.random() * 3)];
-        if (!firstActivation.order.source.isHero) {
-            const order1 = firstActivation.order.source.applyAI();
-            const sourceCharacter = order1.source;
-            const activation1 = new murmures.Activation();
-            activation1.build({
-                startTick : this.time,
-                endTick : this.time + sourceCharacter.skills[sourceCharacter.activeSkill].activation,
-                remainingWork : 0,
-                order : order1
-            });
-            this.enqueue(activation1);
-            // keep ticking recursively while the next character in line is a monster
+        const allActivationsThisTick = Object.keys(this.activationQueue).filter(function (guid) 
+        { 
+            if (this.activationQueue[guid] === null) return false;
+
+            return this.activationQueue[guid].endTick === this.time; 
+        }, this);
+        //if (allActivationsThisTick.length === 0) throw "no activation this tick ! boom !";
+        // if on the same tick than player, there is no more mobs or character to play, find further tick with activation
+        // if on further tick, there is only mobs (no player), the allActivationsThisTick variable will reach length of zeo, so find further tick with activation
+        if (allActivationsThisTick.length === 0) { 
+            this.simulate();
             this.tick();
+        }else{
+            const firstActivationGuid = allActivationsThisTick[0];
+            const firstActivation = this.dequeue(firstActivationGuid); // TODO : uncomment this
+            firstActivation.order.apply();
+            //firstActivation.endTick += 10; // TODO : this is temporary. Remove this when enqueue works
+            const faosp = firstActivation.order.source.position;
+            const newTarget = gameEngine.level.tiles[faosp.y - 1 + Math.floor(Math.random() * 3)][faosp.x - 1 + Math.floor(Math.random() * 3)];
+            if (!firstActivation.order.source.isHero) {
+                const order1 = firstActivation.order.source.applyAI();
+                if (order1.command !== ''){
+                    const sourceCharacter = order1.source;
+                    const activation1 = new murmures.Activation();
+                    
+                    activation1.build({
+                        startTick : this.time,
+                        endTick : this.time + sourceCharacter.skills[sourceCharacter.activeSkill].activation,
+                        remainingWork : 0,
+                        order : order1
+                    });
+                    this.enqueue(activation1);
+                }
+                // keep ticking recursively while the next character in line is a monster
+                this.tick();
+            }
         }
+        
     },
     
     /**
@@ -168,7 +185,10 @@ murmures.Timeline.prototype = {
      */
     simulate : function () {
         // TODO
-        const nextTicks = Object.keys(this.activationQueue).map(function (guid) { return this.activationQueue[guid].endTick || Infinity; }, this);
+        const nextTicks = Object.keys(this.activationQueue).map(function (guid) {
+            if (this.activationQueue[guid] == null) return Infinity;
+             return this.activationQueue[guid].endTick || Infinity; 
+            }, this);
         this.nextKeyframe = Math.min.apply(null, nextTicks);
     },
 };
