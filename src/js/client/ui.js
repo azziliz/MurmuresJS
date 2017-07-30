@@ -381,7 +381,7 @@ murmures.UiBuilder.prototype = {
                 '<p><label>Id</label><input type="text" id="levelId"></p>' +
                 '<p><label>Width</label><input type="text" id="levelWidth"></p>' +
                 '<p><label>Height</label><input type="text" id="levelHeight"></p>' +
-                '<br><button id="newLevel">New level</button>');
+                '<br><button id="newLevel">New level</button><br><br><br><br>');
         document.getElementById('newLevel').addEventListener("mousedown", function (e) {
             let newLvl = new murmures.Level();
             newLvl.id = document.getElementById('levelId').value;
