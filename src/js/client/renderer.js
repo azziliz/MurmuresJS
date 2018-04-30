@@ -69,7 +69,7 @@ murmures.Renderer.prototype = {
             instance.tileset.color.blobUrl = window.URL.createObjectURL(this.response); // closure is needed, otherwise at this point 'this' would be xhr
             img.src = instance.tileset.color.blobUrl;
         });
-        xhr.open('GET', '/src/img/murmures.png', true);
+        xhr.open('GET', './src/img/murmures.png', true);
         xhr.responseType = "blob";
         xhr.send(null);
     },
@@ -158,7 +158,7 @@ murmures.Renderer.prototype = {
                 }
             }
         }
-        if (typeof partialEngine !== 'undefined' && typeof partialEngine.level !== 'undefined' && typeof partialEngine.level.tiles !== 'undefined') {
+        if (typeof partialEngine !== 'undefined' && partialEngine !== null && typeof partialEngine.level !== 'undefined' && typeof partialEngine.level.tiles !== 'undefined') {
             partialEngine.level.tiles.forEach(function (tileRow) {
                 tileRow.forEach(function (tile) {
                     this.drawOneTile(tile.x, tile.y);
